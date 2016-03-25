@@ -35,6 +35,11 @@
             <tr ng-repeat="row in $data">
               <td ng-repeat="col in $columns" ng-bind-html="col.getValue(this, row)">{{row[col.field]}}</td>
             </tr>
+            <tr>
+              <td colspan="2" class="text-right">Sum</td>
+              <td>{{sum($data,"WEIGHTED_CONVERSIONS")}}</td>
+              <td>{{sum($data,"RATIO_TO_SPEND") * 100 | number:3}}%</td>
+            </tr>
           </table>
         </div>
       </uib-tab>
@@ -45,6 +50,12 @@
             <tr ng-repeat="row in $data">
               <td ng-repeat="col in $columns" ng-bind-html="col.getValue(this, row)">{{row[col.field]}}</td>
             </tr>
+            <tr>
+              <td colspan="2" class="text-right">Sum</td>
+              <td>{{sum($data,"WEIGHTED_CONVERSIONS")}}</td>
+              <td>-</td>
+            </tr>
+
           </table>
         </div>
       </uib-tab>

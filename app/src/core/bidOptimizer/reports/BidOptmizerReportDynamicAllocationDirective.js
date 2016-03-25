@@ -284,6 +284,9 @@ define(['./module', 'angular'], function (module, angular) {
                   scope.selectedAdGroup = scope.selectedEnvironment.adGroup;
                   scope.selectedCampaign = scope.selectedEnvironment.campaign;
 
+                  scope.sum = function(data, field){
+                        return _.sum(data, field);
+                      };
                   scope.refreshAdGroups();
                   changeAllocation(scope.selectedEnvironment);
                 });
