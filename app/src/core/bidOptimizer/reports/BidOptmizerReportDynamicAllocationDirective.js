@@ -285,7 +285,26 @@ define(['./module', 'angular'], function (module, angular) {
                   scope.selectedCampaign = scope.selectedEnvironment.campaign;
 
                   scope.sum = function(data, field){
-                        return _.sum(data, field);
+                  var filter = data.filter();
+                  var keys = Object.keys(filter);
+
+                  console.log('keys',keys);
+
+
+                  var filteredData = _.filter(scope.allocationsData, function(o){
+                  return  _.reduce(keys.map(function(key){
+                                                          console.log('value',o[key]);
+                                                          console.log('filter value',filter[key]);
+
+                                                        return o[key].indexOf(filter[key]) > -1;
+                                                      }) , function(memo, num){ return memo && num; } , true);
+                  });
+
+
+                  console.log('filteredData',filteredData.length);
+
+
+                        return _.sum(filteredData, field);
                       };
                   scope.refreshAdGroups();
                   changeAllocation(scope.selectedEnvironment);
