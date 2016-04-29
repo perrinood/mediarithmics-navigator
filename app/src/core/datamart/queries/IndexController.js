@@ -9,8 +9,10 @@ define(['./module'], function (module) {
 
         function ($scope, $stateParams, Restangular, $q, lodash, Session, Common, $uibModal, async, promiseUtils, $log, QueryContainer, moment, $rootScope, $location) {
 
-            var queryContainer = new QueryContainer(Session.getCurrentDatamartId());
-            $scope.queryContainer = queryContainer;            
+            new QueryContainer(Session.getCurrentDatamartId(), $stateParams.queryId).load().then(function(queryContainer){
+                 $scope.queryContainer = queryContainer;
+            });
+
 
             $scope.newSegment = function () {
                 var newScope = $scope.$new(true);

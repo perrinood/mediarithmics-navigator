@@ -133,6 +133,16 @@ define(['./module'], function (module) {
               selected: 'query'
             }
           }
+        })
+        .state('datamart/queries/id', {
+          url: '/:organisation_id/datamart/queries/:queryId',
+          templateUrl: 'src/core/datamart/queries/index.html',
+          data: {
+            sidebar: {
+              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              selected: 'query'
+            }
+          }
         });
     }
   ]);

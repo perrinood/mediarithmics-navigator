@@ -592,7 +592,7 @@ define(['./module'], function (module) {
               } else {
                 $log.warn("No queryId defined, nothing to load.");
                 var deferred = $q.defer();
-                deferred.resolve();
+                deferred.resolve(this);
                 return deferred.promise;
               }
             };
