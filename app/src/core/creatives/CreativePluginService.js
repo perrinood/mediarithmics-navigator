@@ -9,7 +9,7 @@ define(['./module'], function (module) {
     this.create_path = editor.create_path;
     this.Session = Session;
   }
-  
+
   CreativeEditor.prototype.getEditPath = function(creative) {
     return this.edit_path.replace(/{id}/g, creative.id).replace(/{organisation_id}/, creative.organisation_id).replace(/{datamart_id}/, this.Session.getCurrentWorkspace().datamart_id);
   };
@@ -59,6 +59,15 @@ define(['./module'], function (module) {
         editor: {
           create_path: "/{organisation_id}/creatives/video-ad/default-editor/create",
           edit_path: "/{organisation_id}/creatives/video-ad/default-editor/edit/{id}"
+        }
+      }, Session), new CreativeTemplate({
+        name: "Email Template",
+        editor_group_id: "com.mediarithmics.template.email",
+        editor_artifact_id: "default-editor",
+        image: "/images/plugins/creative-mcs-basic.png",
+        editor: {
+          create_path: "/{organisation_id}/creatives/email-template/default-editor/create",
+          edit_path: "/{organisation_id}/creatives/email-template/default-editor/edit/{id}"
         }
       }, Session)
         // UNCOMMENT TO ADD THE FACEBOOK AD EDITOR
@@ -136,4 +145,3 @@ define(['./module'], function (module) {
     }
   ]);
 });
-

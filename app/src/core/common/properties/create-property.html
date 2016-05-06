@@ -1,0 +1,45 @@
+<div>
+<form ng-submit="submit()">
+  <div class="modal-header">
+    <h1>Add a property</h1>
+  </div>
+
+  <div class="modal-body">
+
+    <div ng-show='error'>
+      <div class="alert alert-danger"  role="alert">{{error}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div mcs-form-group label-for="name" label-text="Name">
+          <input required class="form-control" ng-model="property.technical_name" type="text" id="name">
+        </div>
+
+        <br>
+
+        <div mcs-form-group="select" label-for="property.property_type" label-text="Type">
+          <select class="form-control" id="property.property_type" ng-model="property.property_type">
+            <option value="STRING">STRING</option>
+            <option value="INT">INT</option>
+            <option value="DOUBLE">DOUBLE</option>
+            <option value="BOOLEAN">BOOLEAN</option>
+          </select>
+        </div>
+
+        <br>
+
+        <div mcs-form-group label-for="value" label-text="Value">
+          <input required class="form-control" ng-model="property.value.value" type="text" id="value">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+    <button class="mics-btn mics-btn-finish">Save</button>
+  </div>
+</form>
+</div>

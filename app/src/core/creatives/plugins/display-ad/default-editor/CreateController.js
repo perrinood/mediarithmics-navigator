@@ -10,7 +10,7 @@ define(['./module'], function (module) {
         artifactId: ""
       };
 
-      CreativePluginService.getCreativeTemplateFromEditor("display-ad", "basic-editor").then(function (template) {
+      CreativePluginService.getCreativeTemplateFromEditor("com.mediarithmics.creative.display", "default-editor").then(function (template) {
         $scope.creativeTemplate = template;
       });
 
@@ -75,4 +75,3 @@ define(['./module'], function (module) {
     }
   ]);
 });
-
