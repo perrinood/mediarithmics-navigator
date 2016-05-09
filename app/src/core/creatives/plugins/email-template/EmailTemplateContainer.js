@@ -2,9 +2,9 @@ define(['./module'], function (module) {
   'use strict';
 
   module.factory("core/creatives/plugins/email-template/EmailTemplateContainer", [
-    "$q", "Restangular", "core/common/IdGenerator", "async", "core/creatives/plugins/email-template/EmailTemplatePropertyContainer", "$log",
+    "$q", "Restangular", "async", "core/creatives/plugins/email-template/EmailTemplatePropertyContainer", "$log",
     'core/common/auth/Session','lodash','core/common/promiseUtils',
-    function ($q, Restangular, IdGenerator, async, PropertyContainer, $log, Session, _, promiseUtils) {
+    function ($q, Restangular, async, PropertyContainer, $log, Session, _, promiseUtils) {
 
       function saveOrUpdatePropertyTask(propertyCtn, creativeId){
         return function (callback) {
@@ -38,21 +38,19 @@ define(['./module'], function (module) {
 
       EmailTemplateContainer.prototype.load = function (creativeId) {
         var root = Restangular.one('email_templates', creativeId);
-        // get the display ad
+
         var creativeResourceP = root.get();
-        // get the properties
+
         var propertiesP = root.getList('renderer_properties');
-        // get the audits
+
         var self = this;
         self.properties = [];
         var deferred = $q.defer();
 
         $q.all([creativeResourceP, propertiesP]).then(function (result) {
-          // set the display ad value
           self.value = result[0];
           self.id = self.value.id;
           var properties = result[1];
-          // this is a read-only value, no need to use a wrapper
 
           if (properties.length > 0) {
             for (var i = 0; i < properties.length; i++) {
@@ -75,34 +73,6 @@ define(['./module'], function (module) {
 
       EmailTemplateContainer.prototype.addProperty = function addProperty(property) {
         this.properties.push(new PropertyContainer(property));
-      };
-
-      EmailTemplateContainer.prototype.getOrCreatePropertyValueByTechnicalName = function getProperty(technicalName) {
-        // for (var i = 0; i < this.properties.length; i++) {
-        //   if (this.properties[i].value.technical_name === technicalName) {
-        //     return this.properties[i].value;
-        //   }
-        // }
-        // var propContainer = new PropertyContainer({
-        //   "technical_name": technicalName,
-        //   "value": {}
-        // });
-        // this.properties.push(propContainer);
-        // return propContainer.value;
-      };
-
-      EmailTemplateContainer.prototype.getProperty = function getProperty(id) {
-        // for (var i = 0; i < this.properties.length; i++) {
-        //   if (this.properties[i].id === id) {
-        //     return this.properties[i];
-        //   }
-        // }
-        // return null;
-      };
-
-
-      EmailTemplateContainer.prototype.getProperties = function getProperties() {
-        // return this.properties;
       };
 
       EmailTemplateContainer.prototype.persist = function persist() {

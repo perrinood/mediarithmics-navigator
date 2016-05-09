@@ -42,7 +42,7 @@ define(['./module'], function (module) {
         }
 
         createCreative(name, artifactId).then(function () {
-          $location.path(Session.getWorkspacePrefixUrl() + "/creatives");
+          $location.path(Session.getWorkspacePrefixUrl() + "/creatives/display-ad");
         });
       };
 
@@ -69,7 +69,7 @@ define(['./module'], function (module) {
       };
 
       $scope.cancel = function () {
-        $location.path(Session.getWorkspacePrefixUrl() + "/creatives");
+        $location.path(Session.getWorkspacePrefixUrl() + "/creatives/display-ad");
       };
 
     }

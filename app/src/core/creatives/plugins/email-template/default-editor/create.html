@@ -19,7 +19,7 @@
         </div>
 
         <div ng-repeat="renderer in emailTemplateRenderers">
-          <label><input type="radio" name="{{renderer.id}}" ng-model="wrapper.selectedRenderer" ng-value="renderer">{{renderer.group_id}}.{{renderer.artifact_id}}</label><br>
+          <label><input type="radio" name="{{renderer.id}}" ng-model="wrapper.selectedRenderer" ng-value="renderer"> {{getRendererLabel(renderer)}}</label><br>
         </div>
       </div>
     </div>

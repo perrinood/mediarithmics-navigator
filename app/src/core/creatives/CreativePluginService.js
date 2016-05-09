@@ -24,6 +24,7 @@ define(['./module'], function (module) {
     this.editor_artifact_id = template.editor_artifact_id;
     this.image = template.image;
     this.editor= new CreativeEditor(template.editor, Session);
+    this.creative_type = template.creative_type;
 
   }
 
@@ -32,6 +33,7 @@ define(['./module'], function (module) {
     function ($log, $q, _, Session) {
 
       var creativeTemplates = [new CreativeTemplate({
+        creative_type: "DISPLAY_AD",
         name: "Banner Quick Upload",
         editor_group_id: "com.mediarithmics.creative.display",
         editor_artifact_id: "basic-editor",
@@ -43,6 +45,7 @@ define(['./module'], function (module) {
           edit_path: "/{organisation_id}/creatives/display-ad/basic-editor/edit/{id}"
         }
       }, Session), new CreativeTemplate({
+        creative_type: "DISPLAY_AD",
         name: "Banner Expert Mode",
         editor_group_id: "com.mediarithmics.creative.display",
         editor_artifact_id: "default-editor",
@@ -52,6 +55,7 @@ define(['./module'], function (module) {
           edit_path: "/{organisation_id}/creatives/display-ad/default-editor/edit/{id}"
         }
       }, Session), new CreativeTemplate({
+        creative_type: "VIDEO_AD",
         name: "Video Mode",
         editor_group_id: "com.mediarithmics.creative.video",
         editor_artifact_id: "default-editor",
@@ -61,6 +65,7 @@ define(['./module'], function (module) {
           edit_path: "/{organisation_id}/creatives/video-ad/default-editor/edit/{id}"
         }
       }, Session), new CreativeTemplate({
+        creative_type: "EMAIL_TEMPLATE",
         name: "Email Template",
         editor_group_id: "com.mediarithmics.template.email",
         editor_artifact_id: "default-editor",
@@ -92,11 +97,19 @@ define(['./module'], function (module) {
          * Get all the creative templates, asynchronously.
          * @return {$q.promise} the promise with the templates.
          */
-        getAllCreativeTemplates: function () {
+        getAllCreativeTemplates: function (creativeType) {
           var deferred = $q.defer();
 
           setTimeout(function () {
-            deferred.resolve(creativeTemplates);
+            var result;
+            if (creativeType){
+              result = creativeTemplates.filter(function(elm){
+                return elm.creative_type === creativeType;
+              });
+            } else {
+              result = creativeTemplates;
+            }
+            deferred.resolve(result);
           }, 0);
 
           return deferred.promise;

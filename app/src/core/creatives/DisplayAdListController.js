@@ -5,7 +5,7 @@ define(['./module'], function (module) {
    * Creative list controller
    */
 
-  module.controller('core/creatives/ListController', [
+  module.controller('core/creatives/DisplayAdListController', [
     '$scope', '$location', '$log', 'Restangular', 'core/common/auth/Session', '$uibModal', '$state', '$stateParams', 'core/creatives/CreativePluginService', 'lodash', '$filter', 'core/configuration',
     function ($scope, $location, $log, Restangular, Session, $uibModal, $state, $stateParams, creativePluginService, _, $filter, configuration) {
       /**
@@ -16,9 +16,10 @@ define(['./module'], function (module) {
       $scope.itemsPerPage = 10;
       // Archived
       $scope.displayArchived = false;
-      var archivedParams = {
+      var options = {
         max_results: 200,
-        organisation_id: Session.getCurrentWorkspace().organisation_id
+        organisation_id: Session.getCurrentWorkspace().organisation_id,
+        creative_type: 'DISPLAY_AD'
       };
       // Identify administrator
       $scope.organisationName = function (id) {
@@ -26,7 +27,7 @@ define(['./module'], function (module) {
       };
       $scope.administrator = Session.getCurrentWorkspace().administrator;
       // Creative Templates
-      creativePluginService.getAllCreativeTemplates().then(function (templates) {
+      creativePluginService.getAllCreativeTemplates('DISPLAY_AD').then(function (templates) {
         $scope.creativeTemplates = templates;
       });
       // Quick Creative Upload Options
@@ -67,9 +68,9 @@ define(['./module'], function (module) {
        */
       $scope.$watch('displayArchived', function (newValue, oldValue, scope) {
         // uncomment to filter archived
-        archivedParams.archived = newValue;
+        options.archived = newValue;
 
-        Restangular.all('creatives').getList(archivedParams).then(function (creatives) {
+        Restangular.all('creatives').getList(options).then(function (creatives) {
           $scope.creatives = creatives;
         });
       });

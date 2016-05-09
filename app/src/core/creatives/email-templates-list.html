@@ -1,7 +1,7 @@
-<div class="mics-creative-list mcs-default-container" ng-controller="core/creatives/ListController">
+<div class="mics-creative-list mcs-default-container" ng-controller="core/creatives/EmailTemplateListController">
   <div class="mcs-default-content">
     <div class="mcs-default-heading">
-      <h1>All Creatives</h1>
+      <h1>Email Templates</h1>
     </div>
 
     <div class="mics-table-toolbar">
@@ -17,16 +17,8 @@
           </ul>
         </div>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-5">
         <!-- <label><input type="checkbox" ng-model="displayArchived"> Display archived</label> -->
-      </div>
-      <div class="form-group col-md-3">
-        <select
-            class="form-control"
-            ng-model="creativeformat"
-            ng-options="creative.format as creative.format for creative in creatives | unique:'format' | orderBy:'format'">
-          <option value="">All Sizes</option>
-        </select>
       </div>
       <div class="form-group col-md-3">
         <input
@@ -40,36 +32,20 @@
     <table class="mics-table js-auto-hide-actions table-hover">
       <thead>
       <tr>
-        <th></th>
         <th>Name</th>
         <th>Type</th>
-        <th>Subtype</th>
-        <th>Audit Status</th>
+        <th>Renderer</th>
+        <th>Creation Date</th>
         <th ng-if="administrator">Organisation</th>
         <th class="actions">Actions</th>
       </tr>
       </thead>
       <tbody>
       <tr ng-repeat="creative in filteredCreatives()|offset: (currentPageCreative - 1)*itemsPerPage | limitTo: itemsPerPage">
-        <td>
-          <div class="mics-small-thumbnail">
-            <a href="#{{getEditUrlForCreative(creative).url}}">
-              <img creative-thumbnail="creative.id" fetch-display-ad-renderer-properties="creative.id as properties" title="{{properties.destination_url.value.url}}"/>
-              <span class="caption">{{creative.format}}</span>
-            </a>
-          </div>
-        </td>
-        <!--<td class="mics-small-thumbnail">-->
-        <!--<a href="#{{getEditUrlForCreative(creative).url}}">-->
-        <!--<img creative-thumbnail="creative.id" fetch-display-ad-renderer-properties="creative.id as properties"-->
-        <!--title="{{properties.destination_url.value.url}}"/>-->
-        <!--<span class="caption">{{creative.format}}</span>-->
-        <!--</a>-->
-        <!--</td>-->
         <td><a href="#{{getEditUrlForCreative(creative).url}}">{{creative.name}}</a></td>
         <td>{{creative.type}}</td>
-        <td>{{creative.subtype}}</td>
-        <td>{{creative.audit_status}}</td>
+        <td>{{getRendererLabel(creative.renderer_group_id, creative.renderer_artifact_id)}}</td>
+        <td>{{creative.creation_date | date}}</td>
         <td ng-if="administrator">{{organisationName(creative.organisation_id)}}</td>
         <td class="actions">
           <a class="mics-btn mics-btn-action" href="#{{getEditUrlForCreative(creative).url}}">Edit</a>

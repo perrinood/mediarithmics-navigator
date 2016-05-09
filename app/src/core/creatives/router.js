@@ -5,18 +5,27 @@ define(['./module'], function (module) {
     "$stateProvider",
     function ($stateProvider) {
       $stateProvider
-        // list creatives
-        .state('creatives', {
-          url: '/{organisation_id}/creatives',
-          templateUrl: 'src/core/creatives/list.html',
+        .state('display_creatives', {
+          url: '/{organisation_id}/creatives/display-ad',
+          templateUrl: 'src/core/creatives/display-ads-list.html',
           data: {
+            category: 'creatives',
             sidebar: {
               templateUrl : 'src/core/creatives/creatives-sidebar.html',
-              selected: 'all_creatives'
+              selected: 'display_ads'
+            }
+          }
+        }).state('email_creatives', {
+          url: '/{organisation_id}/creatives/email-template',
+          templateUrl: 'src/core/creatives/email-templates-list.html',
+          data: {
+            category: 'creatives',
+            sidebar: {
+              templateUrl : 'src/core/creatives/creatives-sidebar.html',
+              selected: 'email_templates'
             }
           }
         });
     }
   ]);
 });
-

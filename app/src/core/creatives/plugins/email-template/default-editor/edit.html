@@ -25,7 +25,7 @@
       <!-- Format -->
       <div class="col-md-3">
         <div mcs-form-group="full" label-for="Renderer" label-text="Renderer">
-          <input ng-disabled="true" ng-model="emailTemplateCtn.value.renderer_artifact_id" type="text" class="form-control input-lg" id="name">
+          <input ng-disabled="true" ng-model="getRendererLabel(emailTemplateCtn.value.renderer_group_id,emailTemplateCtn.value.renderer_artifact_id)" type="text" class="form-control input-lg" id="name">
         </div>
       </div>
     </div>
@@ -43,12 +43,30 @@
           <mcs-data-file-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'DATA_FILE'"></mcs-data-file-property>
           <mcs-asset-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ASSET'"></mcs-asset-property>
           <mcs-text-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'STRING'"></mcs-text-property>
-          <mcs-ad-layout-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" plugin-id="displayAd.renderer_plugin_id" plugin-version-id="displayAd.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
+          <mcs-recommender-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ITEM_RECOMMENDER'"></mcs-recommender-property>
+          <mcs-ad-layout-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" plugin-id="emailTemplateCtn.value.renderer_plugin_id" plugin-version-id="emailTemplateCtn.value.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
           <mcs-style-sheet-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
         </div>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-6">
         <h3>Preview</h3>
+        <div ng-show="previewError" class="alert alert-danger" role="alert">{{previewError}}</div>
+        <uib-tabset class="breakdown" ng-show="emailRenderResponse">
+            <uib-tab heading="Rich media">
+              <br>
+              <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-html"></iframe>
+            </uib-tab>
+            <uib-tab heading="Text">
+              <br>
+              <span ng-show="!emailRenderResponse.content.text">No Content</span>
+              <span ng-show="emailRenderResponse.content.text">{{emailRenderResponse.content.text}}</span>
+            </uib-tab>
+            <uib-tab heading="Data">
+              <br>
+              <pre>{{emailRenderResponse.data | json}}</pre>
+            </uib-tab>
+        </uib-tabset>
+
       </div>
     </div>
 
