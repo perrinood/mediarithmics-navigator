@@ -2,5 +2,6 @@
   "restangular",
   "core/datamart/segments/report",
   "checklist-model",
-  "core/datamart/queries"
+  "core/datamart/queries", 
+  "core/common/properties"
 ]}

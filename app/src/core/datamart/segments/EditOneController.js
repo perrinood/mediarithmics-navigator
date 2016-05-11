@@ -3,12 +3,16 @@ define(['./module'], function (module) {
   'use strict';
 
 
+
   module.controller('core/datamart/segments/EditOneController', [
     '$scope', '$log', 'Restangular', 'core/common/auth/Session', 'lodash', '$stateParams', '$location', '$uibModal','moment',
-    'core/datamart/queries/QueryContainer',
-    function($scope, $log, Restangular, Session, _, $stateParams, $location, $uibModal, moment, QueryContainer) {
+    'core/datamart/queries/QueryContainer','$q','core/common/properties/PluginInstanceContainer',
+    function($scope, $log, Restangular, Session, _, $stateParams, $location, $uibModal, moment, QueryContainer,$q, PluginInstanceContainer) {
       var segmentId = $stateParams.segment_id;
       var type = $stateParams.type;
+
+
+
 
       $scope.isCreationMode = !segmentId;
 
@@ -50,6 +54,18 @@ define(['./module'], function (module) {
           } else {
             $scope.segmentLifetime = "never";
           }
+          segment.all('external_feeds').getList().then(function(feeds) {
+            var pluginContainers = [];
+            
+            for(var i = 0; i<feeds.length; i++) {
+              var pic = new PluginInstanceContainer(feeds[i]);
+              pic.loadProperties($q);
+              pluginContainers.push(pic);
+            }
+
+            $scope.activations = pluginContainers;
+            
+          });
 
         });
       }
@@ -70,7 +86,23 @@ define(['./module'], function (module) {
           $scope.segment.query_id = queryId;
           promise = Restangular.all('audience_segments').post($scope.segment, {organisation_id: Session.getCurrentWorkspace().organisation_id});
         }
-        promise.then(function success(){
+        
+        promise.then(function(audienceSegment) {
+          var promises = [];
+          if($scope.activations) {
+            for(var i=0; i < $scope.activations.length; i++) {
+              var activation = $scope.activations[i];
+              var p = activation.save();
+              promises.push(p);
+            }
+            return $q.all(promises);
+          } else {
+            return audienceSegment;
+          }
+        }, function failure() {
+          $scope.error = 'There was an error while saving segment';
+          $log.info("failure");
+        }).then(function success(){
           $log.info("success");
           $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments");
         }, function failure(){
@@ -79,10 +111,10 @@ define(['./module'], function (module) {
         });
       };
 
-      $scope.activations = [];
       $scope.goals = [];
 
-      $scope.$on("mics-audience-segment:activation-added", function (event, activation) {
+      $scope.$on("mics-audience-segment:external-feed-added", function (event, activation) {
+        $log.info("new external feed added : ", activation);
         if ($scope.activations.indexOf(activation) === -1){
           $scope.activations.push(activation);
         }
@@ -99,8 +131,11 @@ define(['./module'], function (module) {
       });
 
       $scope.addActivation = function () {
+        var endpoint = $scope.segment.all('external_feeds');
         var newScope = $scope.$new(true);
-        newScope.activation = {};
+        
+        newScope.activation = new PluginInstanceContainer({}, endpoint);
+
         $uibModal.open({
             templateUrl: 'src/core/datamart/segments/add-activation.html',
             scope : newScope,
@@ -129,6 +164,7 @@ define(['./module'], function (module) {
       $scope.editActivation = function (activation) {
         var newScope = $scope.$new(true);
         newScope.activation = activation;
+
         $uibModal.open({
           templateUrl: 'src/core/datamart/segments/add-activation.html',
           scope : newScope,

@@ -188,9 +188,9 @@
       <br>
     </div>
 
-
+    <div ng-if="!isCreationMode">
     <div class="mics-block-heading">
-      <span>External programmatic activation</span>
+      <span>Audience External Feed</span>
       <div class="btn-group">
         <a class="mics-btn mics-btn-add" ng-click="addActivation()">Add an activation</a>
       </div>
@@ -198,19 +198,21 @@
     <table class="mics-table" ng-show="activations.length">
       <thead>
       <tr>
-        <th>Host</th>
-        <th>User Account Id</th>
-        <th>Segment Id</th>
-        <th>Comment</th>
+        <th>Audience segment feed connector</th>
+        <th>Properties</th>
+        <th>Status</th>
         <th class="actions">Action</th>
       </tr>
       </thead>
       <tbody>
       <tr ng-repeat="activation in activations">
-        <td>{{activation.host}}</td>
-        <td>{{activation.user_account_id}}</td>
-        <td>{{activation.segment_id}}</td>
-        <td>{{activation.comment}}</td>
+        <td>{{activation.value.artifact_id}}</td>
+        <td>
+            <ul>
+                <li ng-repeat="property in activation.properties">{{property.value.technical_name}}: {{property.value.value.value}}</li>
+            </ul>
+        </td>
+        <td ><span mics-segment-external-feed-status="activation.value"></span></td>
         <td class="actions">
           <a class="mics-btn mics-btn-action" ng-click="editActivation(activation)">Edit</a>
           <a class="mics-btn mics-btn-delete" ng-click="removeActivation(activation)">Remove</a>
@@ -218,7 +220,7 @@
       </tr>
       </tbody>
     </table>
-
+    </div>
     <br>
 
     <div class="panel-group" id="accordion">

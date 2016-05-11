@@ -1,0 +1,13 @@
+<div class="updatable-item-status updatable-item-status-{{externalFeed.status}}" uib-dropdown>
+  <button class="updatable-item-status-state mics-btn btn-xs" uib-dropdown-toggle>
+    <span></span>
+    {{externalFeed.status}}
+    &nbsp;
+    <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li><a ng-click="activateExternalFeed(externalFeed)">Activate External Feed</a></li>
+    <li><a ng-click="pauseExternalFeed(externalFeed)">Pause External Feed</a></li>
+  </ul>
+</div>
+
