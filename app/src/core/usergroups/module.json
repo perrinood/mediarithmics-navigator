@@ -1,4 +1,0 @@
-{"name": "core/usergroups", "dependencies": [
-  "restangular",
-  "checklist-model"
-]}
