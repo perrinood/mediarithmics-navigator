@@ -31,24 +31,7 @@ define(['./module'], function (module) {
       creativePluginService.getAllCreativeTemplates('EMAIL_TEMPLATE').then(function (templates) {
         $scope.creativeTemplates = templates;
       });
-      // Quick Creative Upload Options
-      $scope.pluploadOptions = {
-        multi_selection: true,
-        url: configuration.ADS_UPLOAD_URL + "?organisation_id=" + Session.getCurrentWorkspace().organisation_id,
-        filters: {
-          mime_types: [
-            {title: "Image files", extensions: "jpg,jpeg,png,gif"},
-            {title: "Flash files", extensions: "swf"}
-          ],
-          max_file_size: "200kb"
-        }
-      };
-      $scope.uploadOptions = {
-        files: $scope.assets,
-        automaticUpload: false,
-        filesOverride: false,
-        uploadedFiles: []
-      };
+      
       // Creative Edit Url
       $scope.getEditUrlForCreative = _.memoize(function (creative) {
         var result = {url: ""};
