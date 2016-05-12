@@ -32,7 +32,7 @@ define(['./module'], function(module) {
             PRODUCT: "Product",
             PRODUCT_AND_CATEGORY: "Product And Category"
           };
-          scope.hashFunctions = ["SHA_256", "MD5"];
+          scope.hashFunctions = ["SHA_256", "MD5", "NO_HASH"];
           scope.originPropertySources = ["URL", "EVENT_PROPERTY", "REFERRER"];
 
 
