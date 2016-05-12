@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
-
+npm update
 npm install;
+bower update
 bower install;
 grunt build $@;
 
