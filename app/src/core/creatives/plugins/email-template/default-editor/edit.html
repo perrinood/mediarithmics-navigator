@@ -25,7 +25,7 @@
       <!-- Format -->
       <div class="col-md-3">
         <div mcs-form-group="full" label-for="Renderer" label-text="Renderer">
-          <input ng-disabled="true" ng-model="getRendererLabel(emailTemplateCtn.value.renderer_group_id,emailTemplateCtn.value.renderer_artifact_id)" type="text" class="form-control input-lg" id="name">
+          <input ng-disabled="true" value="{{getRendererLabel(emailTemplateCtn.value.renderer_group_id,emailTemplateCtn.value.renderer_artifact_id)}}" type="text" class="form-control input-lg" id="name">
         </div>
       </div>
     </div>
@@ -50,7 +50,9 @@
       </div>
       <div class="col-md-6">
         <h3>Preview</h3>
-        <div ng-show="previewError" class="alert alert-danger" role="alert">{{previewError}}</div>
+        <div ng-show="!emailRenderResponse">
+          <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-error"></iframe>
+        </div>
         <uib-tabset class="breakdown" ng-show="emailRenderResponse">
             <uib-tab heading="Rich media">
               <br>
@@ -58,8 +60,7 @@
             </uib-tab>
             <uib-tab heading="Text">
               <br>
-              <span ng-show="!emailRenderResponse.content.text">No Content</span>
-              <span ng-show="emailRenderResponse.content.text">{{emailRenderResponse.content.text}}</span>
+              <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-text"></iframe>
             </uib-tab>
             <uib-tab heading="Data">
               <br>
@@ -69,30 +70,7 @@
 
       </div>
     </div>
-
-    <!-- <div class="row">
-      <div class="col-md-12">
-        <h3>Preview</h3>
-        <iframe class="creative-preview" frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" ng-src="{{previewUrl}}"></iframe>
-      </div>
-    </div> -->
-
-
-    <!-- <div class="row">
-      <div class="col-md-12">
-        <h3>Properties</h3>
-        <div ng-repeat="property in properties">
-          <mcs-number-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'INT'"></mcs-number-property>
-          <mcs-url-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'URL'"></mcs-url-property>
-          <mcs-pixel-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'PIXEL_TAG'"></mcs-pixel-property>
-          <mcs-data-file-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'DATA_FILE'"></mcs-data-file-property>
-          <mcs-asset-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ASSET'"></mcs-asset-property>
-          <mcs-text-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'STRING'"></mcs-text-property>
-          <mcs-ad-layout-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" plugin-id="displayAd.renderer_plugin_id" plugin-version-id="displayAd.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
-          <mcs-style-sheet-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
-        </div>
-      </div>
-    </div> -->
+  
     <!-- save or cancel -->
     <div class="mcs-actions-group">
       <button class="mics-btn mics-btn-finish" ng-click="save()">Done</button>

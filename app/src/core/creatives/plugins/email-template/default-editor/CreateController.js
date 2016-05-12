@@ -2,9 +2,9 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller('core/creatives/plugins/email-template/default-editor/CreateController', [
-    '$scope', '$location', 'core/common/auth/Session', 'core/creatives/CreativePluginService', '$log', "core/creatives/plugins/email-template/EmailTemplateContainer", '$q',
-    "Restangular", 'core/creatives/plugins/email-template/EmailTemplateService',
-    function ($scope, $location, Session, CreativePluginService, $log, EmailTemplateContainer, $q, Restangular, EmailTemplateService) {
+    '$scope', '$location', 'core/common/auth/Session', 'core/creatives/CreativePluginService', '$log', '$q',
+    "Restangular", 'core/creatives/plugins/email-template/EmailTemplateService','core/common/properties/RendererPluginInstanceContainer',
+    function ($scope, $location, Session, CreativePluginService, $log, $q, Restangular, EmailTemplateService, RendererPluginInstanceContainer) {
 
       $scope.wrapper = {
         emailTemplateName: "",
@@ -21,20 +21,20 @@ define(['./module'], function (module) {
       });
 
       function createCreative(name, renderer) {
-        var options = {
-          renderer: {
-            groupId: renderer.group_id,
-            artifactId: renderer.artifact_id
-          },
-          editor: {
-            groupId: "com.mediarithmics.template.email",
-            artifactId: "default-editor"
-          }
+        var pluginInstance = {
+          name: name,
+          type: "EMAIL_TEMPLATE",
+          organisation_id: Session.getCurrentWorkspace().organisation_id,
+          renderer_group_id: renderer.group_id,
+          renderer_artifact_id: renderer.artifact_id,
+          editor_group_id: "com.mediarithmics.template.email",
+          editor_artifact_id: "default-editor"
         };
 
-        var creativeContainer = new EmailTemplateContainer(name, options);
+        var endpoint = Restangular.all('email_templates');
+        var creativeContainer = new RendererPluginInstanceContainer(pluginInstance, endpoint);
 
-        return creativeContainer.persist();
+        return creativeContainer.save();
       }
 
       $scope.done = function () {
@@ -68,18 +68,13 @@ define(['./module'], function (module) {
         $q.all(promises).then(function (results) {
           var editor = results[0];
           var creative = results[1];
-          var url = editor.getEditPath(creative);
+          var url = editor.getEditPath(creative.value);
           $location.path(url);
         });
       };
 
       $scope.cancel = function () {
         $location.path(Session.getWorkspacePrefixUrl() + "/creatives/email-template");
-      };
-
-      var rendererLabels = {
-          "com.mediarithmics.template.email.dynamic-template": "Dynamic template",
-          "com.ividence.email-renderer":"Custom template"
       };
 
       $scope.getRendererLabel = function(renderer) {
