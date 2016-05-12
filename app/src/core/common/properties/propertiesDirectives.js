@@ -63,6 +63,25 @@ define(['./module'], function (module) {
     }
   ]);
 
+  // Recommender property
+  module.directive('mcsRecommenderProperty', [
+    function () {
+      return {
+        restrict: 'E',
+        scope: {
+          labelText: "@",
+          labelFor: '@',
+          property: '=',
+          ngDisabled: '='
+        },
+        templateUrl: '/src/core/common/properties/recommender-property.html',
+        link: function (scope, element, attrs) {
+        }
+      };
+    }
+  ]);
+
+
   // Ad Layout property
   module.directive('mcsAdLayoutProperty', ['Restangular', '$uibModal', '$log',
     function (Restangular, $uibModal, $log) {

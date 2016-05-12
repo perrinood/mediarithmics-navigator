@@ -10,7 +10,7 @@ define(['./module'], function (module) {
         artifactId: ""
       };
 
-      CreativePluginService.getCreativeTemplateFromEditor("display-ad", "basic-editor").then(function (template) {
+      CreativePluginService.getCreativeTemplateFromEditor("com.mediarithmics.creative.display", "default-editor").then(function (template) {
         $scope.creativeTemplate = template;
       });
 
@@ -42,7 +42,7 @@ define(['./module'], function (module) {
         }
 
         createCreative(name, artifactId).then(function () {
-          $location.path(Session.getWorkspacePrefixUrl() + "/creatives");
+          $location.path(Session.getWorkspacePrefixUrl() + "/creatives/display-ad");
         });
       };
 
@@ -69,10 +69,9 @@ define(['./module'], function (module) {
       };
 
       $scope.cancel = function () {
-        $location.path(Session.getWorkspacePrefixUrl() + "/creatives");
+        $location.path(Session.getWorkspacePrefixUrl() + "/creatives/display-ad");
       };
 
     }
   ]);
 });
-
