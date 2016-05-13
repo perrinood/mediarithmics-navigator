@@ -261,9 +261,9 @@ define(['./module'], function (module) {
                     //to get rid of those if and constructor checks
                     $scope.displayValue = function (value, dataType) {
                         if (dataType === 'DATE'){
-                            if (value.constructor === Array){
+                            if (Array.isArray(value)){
                                 return value.map(function (v){
-                                  if (v.constructor === Array){
+                                  if (Array.isArray(v)){
                                     return v.map(function(w){
                                       return moment(w).format('DD/MM/YYYY');
                                     });
