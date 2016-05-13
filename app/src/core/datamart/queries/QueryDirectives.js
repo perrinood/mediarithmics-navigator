@@ -257,11 +257,19 @@ define(['./module'], function (module) {
                         return moment.duration(duration, 'ms').format("d [days] h [hours] m [minutes] s [seconds] S [ms]");
                     };
 
+                    //TODO [later release] add dataEvaluationType (SCALAR/ARRAY/TABLE)
+                    //to get rid of those if and constructor checks
                     $scope.displayValue = function (value, dataType) {
                         if (dataType === 'DATE'){
                             if (value.constructor === Array){
                                 return value.map(function (v){
-                                   return moment(v).format('DD/MM/YYYY');
+                                  if (v.constructor === Array){
+                                    return v.map(function(w){
+                                      return moment(w).format('DD/MM/YYYY');
+                                    });
+                                  }else{
+                                    return moment(v).format('DD/MM/YYYY');
+                                  }
                                 });
                             } else {
                                 return moment(value).format('DD/MM/YYYY');
