@@ -2,25 +2,35 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller('core/campaigns/emails/ChooseExistingEmailRoutersController', [
-    '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session', 'core/common/ads/AdService',
-    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService) {
+    '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session', 'core/common/ads/AdService','lodash',
+    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService, _) {
       $scope.currentPage = 1;
       $scope.itemsPerPage = 10;
 
-      $scope.emailRouters = Restangular.all("email_routers").getList({
+      Restangular.all("email_routers").getList({
         organisation_id : Session.getCurrentWorkspace().organisation_id
-      }).$object;
+      }).then(function(result){
+        $scope.emailRouters = result;
 
-      $scope.selectedRouters = [];
+        if ($scope.selectedRouters && $scope.selectedRouters.length > 0){
+          var selectedIds = _.map($scope.selectedRouters, function(r){
+            return r.email_router_id;
+          });
+          var selectedRouters = _.filter($scope.emailRouters, function(r){
+            return selectedIds.indexOf(r.id) !== -1;
+          });
+          $scope.selectedRouters = selectedRouters;
+        }else{
+          $scope.selectedRouters = [];
+        }
+
+      });
+
 
       $scope.done = function () {
-        var router;
-        for (var i = 0; i < $scope.selectedRouters.length; i++) {
-          router = $scope.selectedRouters[i];
-          $scope.$emit("mics-email-router:selected", {
-            router: router
-          });
-        }
+        $scope.$emit("mics-email-router:selected", {
+          routers: $scope.selectedRouters
+        });        
         $uibModalInstance.close();
       };
 

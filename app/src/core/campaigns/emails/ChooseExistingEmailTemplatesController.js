@@ -2,26 +2,34 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller('core/campaigns/emails/ChooseExistingEmailTemplatesController', [
-    '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session', 'core/common/ads/AdService',
-    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService) {
+    '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session', 'core/common/ads/AdService', 'lodash',
+    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService, _) {
       $scope.currentPage = 1;
       $scope.itemsPerPage = 10;
 
-      $scope.emailTemplates = Restangular.all("creatives").getList({
+      Restangular.all("creatives").getList({
         max_results : 200,
         creative_type : 'EMAIL_TEMPLATE',
         archived : false,
         organisation_id : Session.getCurrentWorkspace().organisation_id
-      }).$object;
+      }).then(function(result){
+        $scope.emailTemplates = result;
 
-      $scope.selectedTemplates = [];
+        if ($scope.selectedTemplate){
+          var selected = _.find($scope.emailTemplates, function(t){
+            return t.id === $scope.selectedTemplate.email_template_id;
+          });
+          $scope.selected = {template:selected};
+        }else{
+          $scope.selected = {};
+        }
+
+      });
 
       $scope.done = function () {
-        var template;
-        for (var i = 0; i < $scope.selectedTemplates.length; i++) {
-          template = $scope.selectedTemplates[i];
+        if ($scope.selected.template){
           $scope.$emit("mics-email-template:selected", {
-            template: template
+            template: $scope.selected.template
           });
         }
         $uibModalInstance.close();

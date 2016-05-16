@@ -108,7 +108,12 @@ define(['./module'], function (module) {
       };
 
       EmailCampaignContainer.prototype.addEmailRouter = function addEmailRouter(router) {
-        this.emailRouters.push(router);
+        var existingRouter = _.find(this.emailRouters, function(r){
+          return r.email_router_id === router.email_router_id;
+        });
+        if (!existingRouter){
+          this.emailRouters.push(router);
+        }
       };
 
       function saveEmailRouterTask(router, campaignId) {
@@ -152,6 +157,7 @@ define(['./module'], function (module) {
       };
 
       EmailCampaignContainer.prototype.addEmailTemplate = function addEmailTemplate(template) {
+        this.emailTemplates = [];
         this.emailTemplates.push(template);
       };
 
