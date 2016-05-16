@@ -377,7 +377,7 @@ define(['./module'], function (module) {
                     singleDatePicker: true,
                     showDropdowns: true,
                     startDate: scope.datefield.from ? scope.datefield.from : moment(),
-                    minDate: moment("1970-01-01"),
+                    minDate: moment("1900-01-01"),
                     maxDate: moment().add(10,'y')
                 });
 
@@ -389,7 +389,7 @@ define(['./module'], function (module) {
                     singleDatePicker: true,
                     showDropdowns: true,
                     startDate: scope.datefield.to ? scope.datefield.to : moment(),
-                    minDate: moment("1970-01-01"),
+                    minDate: moment("1900-01-01"),
                     maxDate: moment().add(10,'y')
                 });
 
@@ -422,7 +422,7 @@ define(['./module'], function (module) {
                     singleDatePicker: true,
                     showDropdowns: true,
                     startDate: scope.datefield.date ? scope.datefield.date : moment(),
-                    minDate: moment("1970-01-01"),
+                    minDate: moment("1900-01-01"),
                     maxDate: moment().add(10,'y')
                 });
 
