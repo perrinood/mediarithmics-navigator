@@ -32,7 +32,11 @@ define(['./module'], function (module) {
 
         }, function error(reason){
           var ifrmError = document.getElementById('email-preview-error');
-          writeToIfrm(ifrmError, reason.data);
+          if (reason.data && reason.data.error_id){
+            writeToIfrm(ifrmError, "error_id:"+reason.data.error_id);
+          }else{
+            writeToIfrm(ifrmError, reason.data);
+          }
         });
 
       }
