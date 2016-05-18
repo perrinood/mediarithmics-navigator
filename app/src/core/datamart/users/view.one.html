@@ -165,6 +165,27 @@
                               </tr>
                             </tbody>
                           </table>
+                        </li>                        
+                        <li ng-show="device.providers && device.providers.length > 0">
+                          <strong>Providers :</strong>
+                          <table class="mics-table">
+                            <thead>
+                              <tr>
+                                <th>Technical name</th>
+                                <th>Creation date</th>
+                                <th>Last activity date</th>
+                                <th>Expiration date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="provider in device.providers">
+                                <td>{{provider.technical_name}}</td>
+                                <td>{{provider.creation_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.expiration_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </li>
                       </ul>
                     </div>
