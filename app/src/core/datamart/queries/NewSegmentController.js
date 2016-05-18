@@ -16,7 +16,8 @@ define(['./module'], function (module) {
                 var segment = {
                     name : $scope.segment.name,
                     type : "USER_QUERY",
-                    query_id : queryId
+                    query_id : queryId,
+                    datamart_id: Session.getCurrentDatamartId()
                 };
 
                 Restangular.all('audience_segments').post(segment, {organisation_id: Session.getCurrentWorkspace().organisation_id}).then(function success(){
@@ -34,7 +35,8 @@ define(['./module'], function (module) {
                 var segment = {
                     name : $scope.segment.name,
                     type : "USER_QUERY",
-                    query_id : queryId
+                    query_id : queryId,
+                    datamart_id: Session.getCurrentDatamartId()
                 };
 
                 Restangular.all('audience_segments').post(segment, {organisation_id: Session.getCurrentWorkspace().organisation_id}).then(function success(){
