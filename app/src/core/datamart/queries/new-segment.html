@@ -6,13 +6,21 @@
         </div>
 
         <div class="modal-body">
-            <div class="col-md-12" ng-show='error'>
-                <div class="alert alert-danger"  role="alert">{{error}}</div>
-            </div>
 
-            <div mcs-form-group label-for="name" label-text="Name">
-                <input required class="input-lg" ng-model="segment.name" type="text" id="name">
+          <div ng-show='error'>
+            <div class="alert alert-danger"  role="alert">{{error}}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div mcs-form-group label-for="name" label-text="Name">
+                  <input required class="form-control" ng-model="segment.name" type="text" id="name">
+              </div>
             </div>
+          </div>
+
+
+
 
         </div>
 
