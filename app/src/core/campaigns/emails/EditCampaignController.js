@@ -39,6 +39,7 @@ define(['./module', 'moment'], function (module, moment) {
 
       $scope.selectExistingEmailTemplates = function() {
         var newScope = $scope.$new(true);
+        newScope.selectedTemplate = campaignCtn.emailTemplates[0];
         $uibModal.open({
           templateUrl: 'src/core/campaigns/emails/chooseExistingEmailTemplates.html',
           scope : newScope,
@@ -50,6 +51,7 @@ define(['./module', 'moment'], function (module, moment) {
 
       $scope.addEmailRouters = function() {
         var newScope = $scope.$new(true);
+        newScope.selectedRouters = campaignCtn.emailRouters;
         $uibModal.open({
           templateUrl: 'src/core/campaigns/emails/chooseExistingEmailRouters.html',
           scope : newScope,
@@ -78,8 +80,12 @@ define(['./module', 'moment'], function (module, moment) {
       });
 
       $scope.$on("mics-email-router:selected", function (event, params) {
-        var routerSelection = {email_router_id: params.router.id, email_router_version_id: params.router.version_id};
-        campaignCtn.addEmailRouter(routerSelection);
+        campaignCtn.emailRouters = [];
+        params.routers.map(function(r){
+          var routerSelection = {email_router_id: r.id, email_router_version_id: r.version_id};
+          campaignCtn.addEmailRouter(routerSelection);
+        });
+
       });
 
       $scope.removeRouter = function(router) {

@@ -62,6 +62,7 @@ define(['./module'], function (module) {
           {operator:"LT", label:"<"},
           {operator:"LTE", label:"<="}],
         "DATE": [
+          {operator:"EQUAL", label:"is"},
           {operator:"GT", label:"after"},
           {operator:"GTE", label:"after or equal"},
           {operator:"LT", label:"before"},

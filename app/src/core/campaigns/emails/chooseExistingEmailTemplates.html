@@ -18,7 +18,7 @@
               </thead>
               <tbody>
                 <tr ng-repeat="template in emailTemplates | offset: (currentPageCreative - 1)*itemsPerPage | limitTo: itemsPerPage">
-                  <td><input type="checkbox" checklist-model="selectedTemplates" checklist-value="template"></td>
+                  <td><input type="radio" name="email-template-selection" ng-model="selected.template" ng-value="template"></td>
                   <td>{{template.name}}</td>
                   <td>{{template.creation_date|date:'shortDate'}}</td>
                 </tr>
@@ -32,7 +32,7 @@
   </div>
 
   <div class="modal-footer">
-    <a class="mics-btn mics-btn-finish" ng-show="selectedTemplates.length" ng-click="done()">Done</a>
+    <a class="mics-btn mics-btn-finish" ng-show="selected.template" ng-click="done()">Done</a>
     <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
   </div>
 </div>
