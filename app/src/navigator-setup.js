@@ -24,7 +24,6 @@ define(['angular'], function () {
       'core/layout',
       'core/keywords',
       'core/adgroups',
-      'core/usergroups',
       'core/campaigns',
       'core/creatives',
       'core/scenarios',

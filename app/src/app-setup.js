@@ -35,7 +35,6 @@ define([
   'core/keywords/index',
   'core/creatives/index',
   'core/adgroups/index',
-  'core/usergroups/index',
   'core/campaigns/index',
   'core/placementlists/index',
   'core/login/index',

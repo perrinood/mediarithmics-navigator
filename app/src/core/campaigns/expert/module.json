@@ -7,7 +7,6 @@
     "core/adgroups",
     "core/bidOptimizer",
     "core/plugin",
-    "core/usergroups",
     "ui.bootstrap",
     "core/keywords",
     "core/placementlists",

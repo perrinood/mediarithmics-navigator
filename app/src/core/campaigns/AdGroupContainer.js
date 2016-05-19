@@ -210,7 +210,7 @@ define(['./module'], function (module) {
       }
 
       /**
-       * Create a task (to be used by async.series) to save the given user group.
+       * Create a task (to be used by async.series) to save the given audience segment.
        * @param {Object} segment the audience segment to save.
        * @param {String} campaignId the id of the current campaign.
        * @param {String} adGroupId the id of the current ad group.
@@ -222,7 +222,7 @@ define(['./module'], function (module) {
           $log.info("saving audience segment", segment.id);
           var promise;
           if ((segment.id && segment.id.indexOf('T') === -1) || (typeof(segment.modified) !== "undefined")) {
-            // update the user group
+            // update the audience segment
             promise = segment.put();
 
           } else {
