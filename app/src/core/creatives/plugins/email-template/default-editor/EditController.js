@@ -24,11 +24,13 @@ define(['./module'], function (module) {
         .then(function(emailRenderResponse){
           $scope.emailRenderResponse = emailRenderResponse;
 
-          var ifrmHtml = document.getElementById('email-preview-html');
-          writeToIfrm(ifrmHtml, emailRenderResponse.content.html);
+          if (emailRenderResponse.content){
+            var ifrmHtml = document.getElementById('email-preview-html');
+            writeToIfrm(ifrmHtml, emailRenderResponse.content.html);
 
-          var ifrmText = document.getElementById('email-preview-text');
-          writeToIfrm(ifrmText, emailRenderResponse.content.text);
+            var ifrmText = document.getElementById('email-preview-text');
+            writeToIfrm(ifrmText, emailRenderResponse.content.text);            
+          }
 
         }, function error(reason){
           var ifrmError = document.getElementById('email-preview-error');
