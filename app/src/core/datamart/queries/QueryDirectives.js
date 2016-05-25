@@ -101,6 +101,9 @@ define(['./module'], function (module) {
                         queryContainer.addGroupContainer();
                     };
 
+                    $scope.copyGroup = function (queryContainer, conditionGroupContainer) {
+                        queryContainer.copyGroupContainer(conditionGroupContainer);
+                    };
                     $scope.removeGroup = function (queryContainer, conditionGroupContainer) {
                         queryContainer.removeGroupContainer(conditionGroupContainer);
                     };
