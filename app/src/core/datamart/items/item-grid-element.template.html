@@ -2,16 +2,15 @@
 <a href="{{urlPrefix + '/' + element.catalog_id+'/' + element.item_id}}" class="list-group-item" ng-repeat="element in data">
   <div class="clearfix">
     <!-- image -->
-    <img ng-src="{{ element.images !== null && element.images }}" width="130" alt="" class="pull-left" style="margin-right:10px">
+    <img ng-src="{{ element.properties.image_link !== null && element.properties.image_link }}" width="130" alt="" class="pull-left" style="margin-right:10px">
     <!-- some properties -->
     <div class="pull-left">
-      <div><strong>{{ element.title }}</strong></div>
-      <div>Brand: <strong>{{ element.manufacturer_brand}}</strong></div>
-      <div>Price: <strong>{{ element.price }}</strong></div>
-      <div>{{ element.description }}</div>
-      <div>
-        Defined for: Catalog {{ element.catalog_id }}
-      </div>
+      <div><strong>{{ element.properties.title }}</strong></div>
+      <br/>
+      <div>Brand: <strong>{{ element.properties.brand}}</strong></div>
+      <div>Price: <strong>{{ element.properties.price }}</strong></div>
+      <div>Description: {{ element.properties.description }}</div>
+      <div>Catalog: {{ element.catalog_id }}</div>
     </div>
   </div>
 </a>
