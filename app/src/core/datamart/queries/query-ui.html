@@ -99,6 +99,11 @@
                   <div ng-class="{'panel panel-success':!groupContainer.value.excluded, 'panel panel-danger':groupContainer.value.excluded}">
                     <div class="panel-heading">
                       <div class="pull-right">
+
+                        <button type="button" class="btn btn-default btn-xs" aria-label="copy"
+                                ng-click="copyGroup(queryContainer,groupContainer)">
+                          <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
+                        </button>
                         <button type="button" class="btn btn-default btn-xs" aria-label="remove"
                                 ng-click="removeGroup(queryContainer,groupContainer)">
                           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
