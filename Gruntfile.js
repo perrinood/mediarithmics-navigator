@@ -204,7 +204,7 @@ module.exports = function (grunt) {
         src: ['<%= yeoman.app %>/index.html'],
         exclude: [
           'bower_components/bootstrap/dist/css/bootstrap.css', // this is `@import`ed in the scss file
-          'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/*' // already included in the file bower_components/bootstrap/dist/js/bootstrap.js
+          'bower_components/bootstrap-sass/assets/javascripts/bootstrap/*' // already included in the file bower_components/bootstrap/dist/js/bootstrap.js
         ]
       }
     },

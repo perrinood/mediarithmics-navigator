@@ -95,6 +95,23 @@ define(['./module'], function (module) {
               elementContainerCopy.selectedIndexOptionLabel = this.selectedIndexOptionLabel;
               return elementContainerCopy;
             };
+            
+            ElementContainer.prototype.clone = function (groupContainer) {
+              var elementContainerCopy = new ElementContainer(groupContainer);
+              elementContainerCopy.conditions = this.conditions.map(function(condition){
+                return condition.copy();
+              });
+              elementContainerCopy.removedConditions = this.removedConditions.map(function(condition){
+                return condition.copy();
+              });
+              elementContainerCopy.selectorsFamily = this.selectorsFamily;
+              elementContainerCopy.familyParameter = this.familyParameter;
+              elementContainerCopy.family = this.family;
+              elementContainerCopy.indexOptions = this.indexOptions;
+              elementContainerCopy.selectedIndexOptionId = this.selectedIndexOptionId;
+              elementContainerCopy.selectedIndexOptionLabel = this.selectedIndexOptionLabel;
+              return elementContainerCopy;
+            };
 
             ElementContainer.prototype.hasIndexSelector = function () {
               var self = this;
@@ -314,6 +331,13 @@ define(['./module'], function (module) {
               });
               groupContainerCopy.removedElementContainers = this.removedElementContainers.map(function(elementContainer){
                 return elementContainer.copy(groupContainerCopy);
+              });
+              return groupContainerCopy;
+            }; 
+            GroupContainer.prototype.clone = function(queryContainer) {
+              var groupContainerCopy = new GroupContainer(queryContainer);
+              groupContainerCopy.elementContainers = this.elementContainers.map(function(elementContainer){
+                return elementContainer.clone(groupContainerCopy);
               });
               return groupContainerCopy;
             };
@@ -571,6 +595,10 @@ define(['./module'], function (module) {
 
             QueryContainer.prototype.addGroupContainer = function () {
                 this.groupContainers.push(new GroupContainer(this));
+            };
+            
+            QueryContainer.prototype.copyGroupContainer = function (groupToCopy) {
+                this.groupContainers.push(groupToCopy.clone(this));
             };
 
             QueryContainer.prototype.removeGroupContainer = function (groupContainer) {
