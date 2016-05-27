@@ -5,8 +5,8 @@ define(['./module', 'moment-duration-format'], function (module) {
 
   module.controller('core/datamart/users/ViewOneController', [
     '$scope', '$stateParams', 'Restangular', 'core/datamart/common/Common', 'jquery', 'core/common/auth/Session',
-    'lodash', 'moment', '$log',
-    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log) {
+    'lodash', 'moment', '$log', '$location',
+    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location) {
 
       $scope.INITIAL_VISITS = 10;
 
@@ -17,20 +17,41 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.activities = [];
       $scope.userEndpoint = Restangular.one('datamarts', $scope.datamartId);
 
+      $scope.toggle = {showPlatform:false};
+
+      if ($stateParams.activity_type){
+
+        if ($stateParams.activity_type === 'ALL'){
+          $scope.toggle = {showPlatform:true};
+        }
+
+        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', {live: $stateParams.live === "true", type: $stateParams.activity_type}).then(function (timelines) {
+          $scope.timelines = timelines;
+        });
+      } else {
+        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', {live: $stateParams.live === "true"}).then(function (timelines) {
+          $scope.timelines = timelines;
+        });
+      }
+
+      $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
+        if (newValue !== oldValue){
+          if (newValue){
+            $location.search('activity_type', 'ALL');
+          } else {
+            $location.search('activity_type', null);
+          }
+        }
+      });
+
       if ($stateParams.property) {
         $scope.userEndpoint.customGET('user_profiles/' + $stateParams.property + '=' + $stateParams.value).then(function (user) {
           $scope.user = Restangular.stripRestangular(user);
         });
 
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', {live: $stateParams.live === "true"}).then(function (timelines) {
-          $scope.timelines = timelines;
-        });
       } else {
         $scope.userEndpoint.one('user_profiles', $stateParams.userPointId).get().then(function (user) {
           $scope.user = Restangular.stripRestangular(user);
-        });
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.userPointId + '/user_activities', {live: $stateParams.live === "true"}).then(function (timelines) {
-          $scope.timelines = timelines;
         });
       }
 

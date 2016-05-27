@@ -12,6 +12,17 @@
 
     <uib-tabset class="breakdown">
         <uib-tab heading="Timeline">
+            <div class="col-md-12 mics-timeline-menu">
+              <div class="pull-right">
+                <div class="mics-timeline-toggle-block">
+                  <div class="toggle-text toggle-text-target">Show Platform activities</div>
+                  <div class="mics-timeline-toggle" ng-class="toggle.showPlatform ? 'mics-timeline-toggle-checked' : 'mics-timeline-toggle-unchecked'">
+                    <input type="checkbox" id="toggleShowPlatform" name="check" ng-model="toggle.showPlatform" />
+                    <label for="toggleShowPlatform"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <mcs-timeline timelines="timelines" load-more-actions="loadMoreActions" show-more="showMore"
                           organisation-id="organisationId" debug="debug"></mcs-timeline>
         </uib-tab>
@@ -165,7 +176,7 @@
                               </tr>
                             </tbody>
                           </table>
-                        </li>                        
+                        </li>
                         <li ng-show="device.providers && device.providers.length > 0">
                           <strong>Providers :</strong>
                           <table class="mics-table">

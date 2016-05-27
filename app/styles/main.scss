@@ -1856,7 +1856,7 @@ a.category-item {
  */
 
 .datamart-timeline {
-  margin-top: 30px;
+  margin-top: 10px;
   padding: 0;
   list-style: none;
   position: relative;
@@ -2053,6 +2053,61 @@ a.category-item {
     //    overflow: auto;
   }
 
+}
+
+.mics-timeline-menu {
+  margin-top: 10px
+}
+
+.mics-timeline-toggle-block {
+
+  .toggle-text-target {
+    color: $mcs-grey;
+  }
+  .toggle-text-exclude {
+    color: $mcs-red;
+  }
+
+  & > * {
+    display: inline-block;
+  }
+  .mics-timeline-toggle {
+    width: 50px;
+    height: 24px;
+    position: relative;
+    @include border-radius(50px);
+    label {
+      display: block;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      z-index: 1;
+      background: #fff;
+      @include border-radius(100%);
+      @include transition(all .4s ease);
+
+      &:hover {
+        background: $dark-blue;
+      }
+    }
+    input[type=checkbox] {
+      visibility: hidden;
+      &:checked + label {
+        left: 29px;
+      }
+    }
+
+    &.mics-timeline-toggle-checked {
+      background: $mcs-light-blue;
+    }
+
+    &.mics-timeline-toggle-unchecked {
+      background: $mcs-light-grey;
+    }
+  }
 }
 
 /* User activity timeline: media query for smaller screens */
