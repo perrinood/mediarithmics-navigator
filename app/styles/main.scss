@@ -1855,158 +1855,6 @@ a.category-item {
  * ------------------------------------------------ User Activity Timeline ---------------------------------------------------
  */
 
-.datamart-timeline {
-  margin-top: 10px;
-  padding: 0;
-  list-style: none;
-  position: relative;
-  margin-right: 10%;
-}
-
-.datamart-timeline:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 13.5%;
-  bottom: 0;
-  width: 2px;
-  background: $mcs-light-grey;
-  margin-left: -10px;
-}
-
-.datamart-timeline > li {
-  position: relative;
-}
-
-.datamart-timeline > li .datamart-timeline-datetime {
-  display: block;
-  width: 7%;
-  position: absolute;
-  font-size: 1em;
-  color: $dark-blue;
-}
-
-.datamart-timeline > li .datamart-timeline-datetime span {
-  display: block;
-  text-align: right;
-  color: $dark-blue;
-}
-
-.datamart-timeline > li .datamart-timeline-content {
-  margin: 0 0 15px 15%;
-  background: $mcs-light-grey;
-  color: $dark-blue;
-  padding: 1.2em;
-  position: relative;
-  border-left: 6px solid #cccccc;
-  left: 35px;
-  transition: left 0.2s;
-}
-
-.datamart-timeline > li.with_action .datamart-timeline-content {
-  border-left: 6px solid $mcs-light-blue;
-}
-
-.datamart-timeline > li.with_purchase .datamart-timeline-content {
-  border-left: 6px solid $mcs-red;
-}
-
-.datamart-timeline-content-header {
-  .live-event-header {
-    @extend .label;
-    @extend .label-success;
-    float: right;
-  }
-
-  .user-activity-title {
-    margin-top: 0
-  }
-}
-
-.datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header {
-  padding: 0 0 10px 0;
-}
-
-.datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header h2 {
-  margin-top: 0;
-}
-
-.datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header h2 description {
-  padding-left: 10px;
-  color: rgba($dark-blue, 0.2);
-  visibility: hidden;
-}
-
-.datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header:hover h2 description {
-  visibility: visible;
-}
-
-.datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-details {
-  padding-top: 15px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.datamart-timeline > li .datamart-timeline-content:after {
-  right: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-right-color: #cccccc;
-  border-width: 16px;
-  top: 4px;
-}
-
-.datamart-timeline > li.with_action .datamart-timeline-content:after {
-  border-right-color: $mcs-light-blue !important;
-}
-
-.datamart-timeline > li.with_purchase .datamart-timeline-content:after {
-  border-right-color: $mcs-red !important;
-}
-
-.datamart-timeline > li .datamart-timeline-icon {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  color: #fff;
-  background: #cccccc;
-  line-height: 40px;
-  border-radius: 50%;
-  text-align: center;
-  left: 12%;
-  top: 0;
-  margin: 0 0 0 -15px;
-}
-
-.datamart-timeline > li.with_action .datamart-timeline-icon {
-  background: $mcs-light-blue !important;
-}
-
-.datamart-timeline > li.with_purchase .datamart-timeline-icon {
-  background: $mcs-red !important;
-}
-
-.datamart-timeline > li.datamart-timeline-footer-node {
-  margin-top: 50px;
-
-  .datamart-timeline-content {
-    display: inline-block;
-    padding: 10px !important;
-    margin-bottom: 0;
-    background: $mcs-light-grey;
-    border-color: $mcs-light-grey;
-    cursor: pointer;
-    color: $dark-blue;
-
-    &:after {
-      border-right-color: $mcs-light-grey;
-    }
-  }
-}
-
 .user-overview {
   ul {
     list-style-type: none;
@@ -2053,61 +1901,213 @@ a.category-item {
     //    overflow: auto;
   }
 
-}
-
-.mics-timeline-menu {
-  margin-top: 10px
-}
-
-.mics-timeline-toggle-block {
-
-  .toggle-text-target {
-    color: $mcs-grey;
-  }
-  .toggle-text-exclude {
-    color: $mcs-red;
-  }
-
-  & > * {
-    display: inline-block;
-  }
-  .mics-timeline-toggle {
-    width: 50px;
-    height: 24px;
+  .datamart-timeline {
+    margin-top: 10px;
+    padding: 0;
+    list-style: none;
     position: relative;
-    @include border-radius(50px);
-    label {
-      display: block;
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      z-index: 1;
-      background: #fff;
-      @include border-radius(100%);
-      @include transition(all .4s ease);
+    margin-right: 10%;
+  }
 
-      &:hover {
-        background: $dark-blue;
-      }
-    }
-    input[type=checkbox] {
-      visibility: hidden;
-      &:checked + label {
-        left: 29px;
-      }
+  .datamart-timeline:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 13.5%;
+    bottom: 0;
+    width: 2px;
+    background: $mcs-light-grey;
+    margin-left: -10px;
+  }
+
+  .datamart-timeline > li {
+    position: relative;
+  }
+
+  .datamart-timeline > li .datamart-timeline-datetime {
+    display: block;
+    width: 7%;
+    position: absolute;
+    font-size: 1em;
+    color: $dark-blue;
+  }
+
+  .datamart-timeline > li .datamart-timeline-datetime span {
+    display: block;
+    text-align: right;
+    color: $dark-blue;
+  }
+
+  .datamart-timeline > li .datamart-timeline-content {
+    margin: 0 0 15px 15%;
+    background: $mcs-light-grey;
+    color: $dark-blue;
+    padding: 1.2em;
+    position: relative;
+    border-left: 6px solid #cccccc;
+    left: 35px;
+    transition: left 0.2s;
+  }
+
+  .datamart-timeline > li.with_action .datamart-timeline-content {
+    border-left: 6px solid $mcs-light-blue;
+  }
+
+  .datamart-timeline > li.with_purchase .datamart-timeline-content {
+    border-left: 6px solid $mcs-red;
+  }
+
+  .datamart-timeline-content-header {
+    .live-event-header {
+      @extend .label;
+      @extend .label-success;
+      float: right;
     }
 
-    &.mics-timeline-toggle-checked {
-      background: $mcs-light-blue;
-    }
-
-    &.mics-timeline-toggle-unchecked {
-      background: $mcs-light-grey;
+    .user-activity-title {
+      margin-top: 0
     }
   }
+
+  .datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header {
+    padding: 0 0 10px 0;
+  }
+
+  .datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header h2 {
+    margin-top: 0;
+  }
+
+  .datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header h2 description {
+    padding-left: 10px;
+    color: rgba($dark-blue, 0.2);
+    visibility: hidden;
+  }
+
+  .datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-header:hover h2 description {
+    visibility: visible;
+  }
+
+  .datamart-timeline > li .datamart-timeline-content .datamart-timeline-content-details {
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .datamart-timeline > li .datamart-timeline-content:after {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: #cccccc;
+    border-width: 16px;
+    top: 4px;
+  }
+
+  .datamart-timeline > li.with_action .datamart-timeline-content:after {
+    border-right-color: $mcs-light-blue !important;
+  }
+
+  .datamart-timeline > li.with_purchase .datamart-timeline-content:after {
+    border-right-color: $mcs-red !important;
+  }
+
+  .datamart-timeline > li .datamart-timeline-icon {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    color: #fff;
+    background: #cccccc;
+    line-height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    left: 12%;
+    top: 0;
+    margin: 0 0 0 -15px;
+  }
+
+  .datamart-timeline > li.with_action .datamart-timeline-icon {
+    background: $mcs-light-blue !important;
+  }
+
+  .datamart-timeline > li.with_purchase .datamart-timeline-icon {
+    background: $mcs-red !important;
+  }
+
+  .datamart-timeline > li.datamart-timeline-footer-node {
+    margin-top: 50px;
+
+    .datamart-timeline-content {
+      display: inline-block;
+      padding: 10px !important;
+      margin-bottom: 0;
+      background: $mcs-light-grey;
+      border-color: $mcs-light-grey;
+      cursor: pointer;
+      color: $dark-blue;
+
+      &:after {
+        border-right-color: $mcs-light-grey;
+      }
+    }
+  }
+
+  .mics-timeline-menu {
+    margin-top: 10px
+  }
+
+  .mics-timeline-toggle-block {
+
+    .toggle-text-target {
+      color: $mcs-grey;
+    }
+    .toggle-text-exclude {
+      color: $mcs-red;
+    }
+
+    & > * {
+      display: inline-block;
+    }
+    .mics-timeline-toggle {
+      width: 50px;
+      height: 24px;
+      position: relative;
+      @include border-radius(50px);
+      label {
+        display: block;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        z-index: 1;
+        background: #fff;
+        @include border-radius(100%);
+        @include transition(all .4s ease);
+
+        &:hover {
+          background: $dark-blue;
+        }
+      }
+      input[type=checkbox] {
+        visibility: hidden;
+        &:checked + label {
+          left: 29px;
+        }
+      }
+
+      &.mics-timeline-toggle-checked {
+        background: $mcs-light-blue;
+      }
+
+      &.mics-timeline-toggle-unchecked {
+        background: $mcs-light-grey;
+      }
+    }
+  }
+
 }
 
 /* User activity timeline: media query for smaller screens */
