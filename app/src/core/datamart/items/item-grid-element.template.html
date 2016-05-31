@@ -1,15 +1,15 @@
 <!-- List element -->
-<a href="{{urlPrefix + '/' + element.catalog_id+'/' + element.item_id}}" class="list-group-item" ng-repeat="element in data">
+<a ng-click='showItem(element.item_id)' class="list-group-item" ng-repeat="element in data">
   <div class="clearfix">
     <!-- image -->
-    <img ng-src="{{ element.properties.image_link !== null && element.properties.image_link }}" width="130" alt="" class="pull-left" style="margin-right:10px">
+    <img ng-src="{{ element.properties.$image_link !== null && element.properties.$image_link }}" width="130" alt="" class="pull-left" style="margin-right:10px">
     <!-- some properties -->
     <div class="pull-left">
-      <div><strong>{{ element.properties.title }}</strong></div>
+      <div><strong>{{ element.properties.$title }}</strong></div>
       <br/>
-      <div>Brand: <strong>{{ element.properties.brand}}</strong></div>
-      <div>Price: <strong>{{ element.properties.price }}</strong></div>
-      <div>Description: {{ element.properties.description }}</div>
+      <div ng-show="element.properties.$brand">Brand: <strong>{{ element.properties.$brand}}</strong></div>
+      <div>Price: <strong>{{ element.properties.$price }}</strong></div>
+      <div>Description: {{ element.properties.$description }}</div>
       <div>Catalog: {{ element.catalog_id }}</div>
     </div>
   </div>

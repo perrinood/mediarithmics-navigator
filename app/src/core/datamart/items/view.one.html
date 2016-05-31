@@ -2,86 +2,62 @@
   <div class="clearfix" style="margin: 20px 0;">
 
     <!-- Left floated image -->
-    <img ng-src="{{ datasheet.images !== null && datasheet.images }}" width="200"  alt="" class="pull-left" ng-hide="datasheet.images == null">
+    <img ng-src="{{ itemProperties.$image_link !== null && itemProperties.$image_link }}" width="200" alt="" class="pull-left" ng-hide="itemProperties.$image_link == null">
 
     <!--  Left floated textual content -->
     <div class="col-md-6">
       <table class="datamart table table-hover">
-        <tr ng-hide="datasheet.title == null">
+        <tr ng-hide="itemProperties.$title == null">
           <td>Title</td>
-          <td><strong>{{ datasheet.title }}</strong></td>
+          <td><strong>{{ itemProperties.$title }}</strong></td>
         </tr>
-        <tr ng-hide="datasheet.description == null">
+        <tr ng-hide="itemProperties.$description == null">
           <td>Description</td>
-          <td>{{ datasheet.description }}</td>
+          <td>{{ itemProperties.$description }}</td>
         </tr>
-        <tr ng-hide="datasheet.manufacturer_brand == null">
+        <tr ng-hide="itemProperties.$brand == null">
           <td>Brand</td>
-          <td>{{ datasheet.manufacturer_brand }}</td>
+          <td>{{ itemProperties.$brand }}</td>
         </tr>
-        <tr ng-hide="datasheet.mpn == null">
+        <tr ng-hide="itemProperties.$mpn == null">
           <td>MPN</td>
-          <td><code>{{ datasheet.mpn }}</code></td>
+          <td><code>{{ itemProperties.$mpn }}</code></td>
         </tr>
-        <tr ng-hide="datasheet.gtin == null">
+        <tr ng-hide="itemProperties.$gtin == null">
           <td>GTIN</td>
-          <td><code>{{ datasheet.gtin }}</code></td>
+          <td><code>{{ itemProperties.$gtin }}</code></td>
         </tr>
-        <tr ng-hide="datasheet.item_id == null">
-          <td>Item ID</td>
-          <td><code>{{ datasheet.item_id }}</code></td>
+        <tr ng-hide="item.$item_id == null">
+          <td>item ID</td>
+          <td><code>{{ item.$item_id }}</code></td>
         </tr>
-        <tr ng-hide="datasheet.link == null">
+        <tr ng-hide="itemProperties.$link == null">
           <td>Link</td>
-          <td><a href="{{ datasheet.link }}" target="_blank">link</a></td>
+          <td><a href="{{ itemProperties.$link }}" target="_blank">link</a></td>
         </tr>
-        <tr ng-hide="datasheet.gender == null">
-          <td>Gender</td>
-          <td>{{ datasheet.gender }}</td>
-        </tr>
-        <tr ng-hide="datasheet.color == null">
-          <td>Color</td>
-          <td>{{ datasheet.color }}</td>
-        </tr>
-        <tr ng-hide="datasheet.size == null">
+        <tr ng-hide="itemProperties.$size == null">
           <td>Size</td>
-          <td>{{ datasheet.size }}</td>
+          <td>{{ itemProperties.$size }}</td>
         </tr>
-        <tr ng-hide="datasheet.condition == null">
-          <td>Condition</td>
-          <td>{{ datasheet.condition }}</td>
-        </tr>
-        <tr ng-hide="datasheet.availability == null">
+        <tr ng-hide="itemProperties.$availability == null">
           <td>Availability</td>
-          <td>{{ datasheet.availability }}</td>
+          <td>{{ itemProperties.$availability }}</td>
         </tr>
-        <tr ng-hide="datasheet.price == null">
+        <tr ng-hide="itemProperties.$price == null">
           <td>Price</td>
-          <td>{{ datasheet.price }}</td>
+          <td>{{ itemProperties.$price }}</td>
         </tr>
-        <tr ng-hide="datasheet.sale_price == null">
+        <tr ng-hide="itemProperties.$sale_price == null">
           <td>Sale price</td>
-          <td>{{ datasheet.sale_price }}</td>
-        </tr>
-        <tr ng-hide="datasheet.sale_price_start_date == null">
-          <td>Sale price starts</td>
-          <td>{{ datasheet.sale_price_start_date }}</td>
-        </tr>
-        <tr ng-hide="datasheet.sale_price_end_date == null">
-          <td>Sale price ends</td>
-          <td>{{ datasheet.sale_price_end_date }}</td>
+          <td>{{ itemProperties.$sale_price }}</td>
         </tr>
         <tr>
           <td>Defined for</td>
-          <td><strong>Catalog {{ datasheet.catalog_id }}</strong></td>
+          <td><strong>{{ catalogToken }}</strong></td>
         </tr>
         <tr>
-          <td>Categories</td>
-          <td>
-            <span ng-repeat="category in categories">
-              <a ng-href="{{ categoryUrl + '/' + category.category_id }}">{{ category.category_id }}</a><span ng-hide="$last">,</span>
-            </span>
-          </td>
+          <td>Category</td>
+          <td>{{ itemProperties.$product_type }}</td>
         </tr>
       </table>
     </div>

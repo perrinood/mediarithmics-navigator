@@ -1,30 +1,29 @@
-
 <div class="mcs-default-container " ng-controller="core/datamart/items/ViewAllController">
   <div class="mcs-default-content">
-        <div class="mics-table-toolbar">
-          <div class="col-md-12" >
-              <!-- Search form -->
-              <form class="datamart clearfix" role="form">
+    <div class="mics-table-toolbar">
+      <div class="col-md-12">
+        <!-- Search form -->
+        <form class="datamart clearfix" role="form">
 
-                <div class="form-group pull-left right-spaced not-bottom-spaced">
-                  <label for="catalogSelect">Catalog</label>
-                  <select id="catalogSelect" class="form-control" ng-model="catalog" ng-options="m.$catalog_id for m in catalogs" ng-change="refreshDatasheets()">
-                    <option value="">Select a catalog</option>
-                  </select>
-                </div>
-
-                <div class="form-group pull-left not-bottom-spaced">
-                  <label for="searchTermInput">Search</label>
-                  <input type="search" class="form-control" id="searchTermInput" placeholder="Search" ng-model="searchTerms" ng-change="refreshDatasheets()">
-                </div>
-
-              </form>
-
-          </div>
+          <div class="form-group pull-left right-spaced not-bottom-spaced">
+            <label for="catalogSelect">Catalog</label>
+            <select id="catalogSelect" class="form-control" ng-model="catalog" ng-options="c.token for c in catalogs" ng-change="refreshDatasheets()">
+              <option value="">Select a catalog</option>
+            </select>
           </div>
 
-      <!-- Grid -->
-      <div mics-datamart-grid element-template="'src/core/datamart/items/item-grid-element.template.html'" data="datasheets" refresh="refreshDatasheets" url-prefix="baseUrl"></div>
+          <div class="form-group pull-left not-bottom-spaced">
+            <label for="searchTermInput">Search</label>
+            <input type="search" class="form-control" id="searchTermInput" placeholder="Search" ng-model="searchTerms" ng-change="refreshDatasheets()">
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div mics-datamart-grid element-template="'src/core/datamart/items/item-grid-element.template.html'" data="datasheets" refresh="refreshDatasheets" url-prefix="baseUrl"></div>
 
   </div>
 </div>

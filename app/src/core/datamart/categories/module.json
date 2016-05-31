@@ -1,3 +1,5 @@
-{"name": "core/datamart/categories", "dependencies": [
-
-]}
+{
+  "name": "core/datamart/categories",
+  "dependencies": [
+  ]
+}
