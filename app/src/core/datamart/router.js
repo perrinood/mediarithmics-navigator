@@ -94,7 +94,7 @@ define(['./module'], function (module) {
           }
         })
         .state('datamart/users/:userPointId', {
-          url: '/:organisation_id/datamart/users/:userPointId?live&debug',
+          url: '/:organisation_id/datamart/users/:userPointId?live&debug&activity_type',
           templateUrl: 'src/core/datamart/users/view.one.html',
           data: {
             sidebar: {
@@ -104,7 +104,7 @@ define(['./module'], function (module) {
           }
         })
         .state('datamart/users/:property/:value', {
-          url: '/:organisation_id/datamart/users/:property/:value?live&debug',
+          url: '/:organisation_id/datamart/users/:property/:value?live&debug&activity_type',
           templateUrl: 'src/core/datamart/users/view.one.html',
           data: {
             sidebar: {

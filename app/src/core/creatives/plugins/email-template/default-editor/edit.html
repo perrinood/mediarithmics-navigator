@@ -43,7 +43,7 @@
           <mcs-data-file-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'DATA_FILE'"></mcs-data-file-property>
           <mcs-asset-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ASSET'"></mcs-asset-property>
           <mcs-text-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'STRING'"></mcs-text-property>
-          <mcs-recommender-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ITEM_RECOMMENDER'"></mcs-recommender-property>
+          <mcs-recommender-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'RECOMMENDER'"></mcs-recommender-property>
           <mcs-ad-layout-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" plugin-id="emailTemplateCtn.value.renderer_plugin_id" plugin-version-id="emailTemplateCtn.value.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
           <mcs-style-sheet-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
         </div>

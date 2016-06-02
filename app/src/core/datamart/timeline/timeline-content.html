@@ -30,7 +30,7 @@
                 <div class="datamart-timeline-content-details" >
 
                      <div ng-if="timelineEvent.$origin" >
-                         Origin: 
+                         Origin:
                          <ul>
                           <li ng-if="timelineEvent.$origin.$channel">channel: {{timelineEvent.$origin.$channel}}</li>
                           <li ng-if="timelineEvent.$origin.$campaign_name">campaign: {{timelineEvent.$origin.$campaign_name}}</li>
@@ -42,13 +42,13 @@
                      </div>
                      <div ng-if="!timelineEvent.$origin">Origin: Direct</div>
                       <div ng-if="timelineEvent.$topics" >
-                         Topics: 
+                         Topics:
                          <ul>
                               <li ng-repeat="key in getMapKeys(timelineEvent.$topics)">
-                                  {{key}} : 
+                                  {{key}} :
                                 <ul>
                                     <li ng-repeat="value in getMapKeys(timelineEvent.$topics[key],key)">
-                                        {{value}} : 
+                                        {{value}} :
                                         {{""+timelineEvent.$topics[key][value]}} <!-- ""+ is for casting in string in order to display null value -->
                                     </li>
                                 </ul>
