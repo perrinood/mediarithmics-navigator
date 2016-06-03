@@ -19,20 +19,28 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       $scope.toggle = {showPlatform:false};
 
+      var options = {};
       if ($stateParams.activity_type){
 
-        if ($stateParams.activity_type === 'ALL'){
+        if ($stateParams.activity_type === 'ALL') {
           $scope.toggle = {showPlatform:true};
         }
 
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', {live: $stateParams.live === "true", type: $stateParams.activity_type}).then(function (timelines) {
+        options = {live: $stateParams.live === "true", type: $stateParams.activity_type};
+      } else {
+        options = {live: $stateParams.live === "true"};
+      }
+
+      if ($stateParams.property){
+        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', options).then(function (timelines) {
           $scope.timelines = timelines;
         });
       } else {
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', {live: $stateParams.live === "true"}).then(function (timelines) {
+        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.userPointId + '/user_activities', options).then(function (timelines) {
           $scope.timelines = timelines;
         });
       }
+
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
         if (newValue !== oldValue){
