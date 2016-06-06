@@ -1,0 +1,64 @@
+<!-- datetime -->
+<time class="datamart-timeline-datetime" datetime="{{ timelineActivity.$ts | date : 'yyyy-MM-ddTHH:mm:ssTZD' }}">
+    <span>{{ timelineActivity.$ts | date : 'mediumDate' }}</span>
+    <span>{{ timelineActivity.$ts | date : 'shortTime' }}</span>
+</time>
+           <!-- icon -->
+<div class="datamart-timeline-icon">
+    <!--<img src="images/datamart/device_phone.svg" width="24" height="24" ng-show="activity.agent.device_type == 'smartphone'" />-->
+    <!--<img src="images/datamart/device_tablet.svg" width="24" height="24" ng-show="activity.agent.device_type == 'tablet'" />-->
+    <img src="images/datamart/device_pc.svg" width="24" height="24"  />
+</div>
+
+<!--&lt;!&ndash; content -->
+<div class="datamart-timeline-content">
+    <div class="datamart-timeline-content-header">
+        <h3 class="user-activity-title">{{ typePrettyFormat(timelineActivity.$type) }}</h3>
+    </div>
+
+    <div class="datamart-timeline-content-details" >
+
+      <span>Recommender Id : {{timelineActivity.$recommender_id}}</span><br />
+      <span>Recommender Plugin Version Id : {{timelineActivity.$recommender_plugin_version_id}}</span><br />
+
+      <br />
+    </div>
+
+    <!-- actions during visit -->
+    <div class="datamart-timeline-content-details" ng-if="timelineActivity.$proposals.length > 0">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="proposal in timelineActivity.$proposals" ng-switch="proposal.$type">
+
+              <span ng-switch-when="ITEM_PROPOSAL_SUMMARY">
+                <strong>Item proposal</strong>
+                <ul>
+                  <li>
+                    <ul class="item-properties">
+                      <li>
+                        <span ng-show="proposal.$item_id"><mcs-timeline-event-key key="'$item_id'"></mcs-timeline-event-key> : {{proposal.$item_id}}</span>
+                      </li>
+                      <li>
+                        <span ng-show="proposal.$price"><mcs-timeline-event-key key="'$price'"></mcs-timeline-event-key> : {{proposal.$price}}</span>
+                      </li>
+                      <li>
+                        <span ng-show="proposal.$sale_price"><mcs-timeline-event-key key="'$sale_price'"></mcs-timeline-event-key> : {{proposal.$sale_price}}</span>
+                      </li>
+                      <li>
+                        <span ng-show="proposal.$discount_percentage"><mcs-timeline-event-key key="'$discount_percentage'"></mcs-timeline-event-key> : {{proposal.$discount_percentage}}</span>
+                      </li>
+                      <li>
+                        <span ng-show="proposal.$currency"><mcs-timeline-event-key key="'$currency'"></mcs-timeline-event-key> : {{proposal.$currency}}</span>
+                      </li>                      
+                    </ul>
+                  </li>
+                </ul>
+              </span>
+
+              <span ng-switch-default>
+                <strong>{{ proposal.$type }}</strong>
+              </span>
+            </li>
+        </ul>
+    </div>
+
+</div>

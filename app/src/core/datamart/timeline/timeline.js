@@ -157,8 +157,12 @@ define(['./module'], function (module) {
                 return "Display Ad";
               case "STOPWATCH":
                 return "Stopwatch";
+              case "RECOMMENDER":
+                return "Recommender";
+              default:
+                return type;
             }
-          };
+          };      
 
           // prevent dropdown from closing on checkbox interaction
           element.find('.dropdown-menu').click(function (e) {
@@ -173,6 +177,3 @@ define(['./module'], function (module) {
 
 
 });
-
-
-
