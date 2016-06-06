@@ -2,8 +2,8 @@ define(['./module'], function(module) {
   'use strict';
 
   module.directive('mcsBidOptimizerDynamicAllocationReport', [
-    'core/common/auth/Session','Restangular', 'moment', 'ngTableParams', '$filter', '$interpolate', 'lodash', '$q',
-    function(Session,Restangular, moment, NgTableParams, $filter, $interpolate, _, $q) {
+    'core/common/auth/Session','Restangular', 'moment', 'ngTableParams', '$filter', '$interpolate', 'lodash', '$q','$location',
+    function(Session,Restangular, moment, NgTableParams, $filter, $interpolate, _, $q, $location) {
       return {
         restrict: 'E',
         scope: {
@@ -11,7 +11,7 @@ define(['./module'], function(module) {
         },
         link: function link(scope, element, attrs) {
           scope.organisationId = Session.getCurrentWorkspace().organisation_id;
-
+          scope.workspace = Session.getWorkspacePrefixUrl();
           /*
            functions for formatting cells in the table
           */
