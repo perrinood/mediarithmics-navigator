@@ -19,8 +19,8 @@ define(['./module'], function (module) {
       $scope.refresh = function () {
         updateStatistics($scope, AudienceSegmentAnalyticsReportService);
       };
-      $scope.reportDateRange = AudienceSegmentAnalyticsReportService.getDateRange();
-      $scope.reportDefaultDateRanges = AudienceSegmentAnalyticsReportService.getDefaultDateRanges();
+      $scope.reportDateRange = {startDate: moment(), endDate: moment()};
+      $scope.reportDefaultDateRanges = {startDate: moment(), endDate: moment()};
 
       $scope.$watch('reportDateRange', function (newRange) {
         if (!newRange) {

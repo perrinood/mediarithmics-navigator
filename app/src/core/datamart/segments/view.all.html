@@ -28,15 +28,7 @@
 
         </div>
       </div>
-      <!-- Date picker -->
-      <div class="col-md-6">
-        <div class="segment-list-date-controller pull-right">
-          <form class="form-inline pull-right" role="form">
-            <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
-          </form>
-
-        </div>
-      </div>
+      
     </div>
     <table class="mics-table table-hover clickableRow js-auto-hide-actions" ng-show="segments.length">
       <thead>
@@ -51,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-      <tr ng-click="editAudienceSegment(segment, $event)" ng-repeat="segment in segments">
+      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in segments">
         <td>{{segment.name}}</td>
         <td>{{segment.technical_name}}</td>
         <td>{{segment.type}}</td>
