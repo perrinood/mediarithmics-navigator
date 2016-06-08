@@ -1,7 +1,6 @@
 <div class="mcs-default-container " ng-controller="core/datamart/categories/BrowseController">
   <div class="mcs-default-content">
 
-
     <!-- Search form -->
     <div class="mics-table-toolbar">
       <div class="col-md-12">
@@ -11,7 +10,6 @@
 
           <!-- Search form -->
           <form class="datamart clearfix" role="form">
-
             <div class="form-group pull-left right-spaced not-bottom-spaced">
               <label for="catalogSelect">Catalog</label>
               <select id="catalogSelect" class="form-control" ng-model="catalog" ng-options="c.token for c in catalogs" ng-change="changeCatalog()">
@@ -19,14 +17,6 @@
               </select>
             </div>
           </form>
-
-          <!--<div class="vertically-spaced">-->
-          <!--<label class="blue">Available catalogs</label>-->
-          <!--<div class="category-item" ng-repeat="catalog in catalogs">-->
-          <!--<span class="glyphicon glyphicon-th"></span> <a href="{{catalogBase  + catalog.$catalog_id}}" > {{catalog.$catalog_id}}</a>-->
-          <!--</div>-->
-          <!--</div>-->
-
         </div>
 
         <!-- Single category view -->

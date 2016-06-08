@@ -17,35 +17,27 @@ define(['./module'], function (module) {
 
         $scope.refreshCategories = function () {
           // get parent categories
-          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('parent_categories').getList({
-            sameMarket: true,
-            sameLanguage: true
-          }).then(function (result) {
+          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('parent_categories').getList().then(function (result) {
             $scope.parents = result;
             if ($scope.parents.length === 0) {
               $scope.parents = [{id: '', name: 'Catalog'}];
             }
           });
           // get sub-categories
-          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('sub_categories').getList({
-            sameMarket: true,
-            sameLanguage: true
-          }).then(function (result) {
+          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('sub_categories').getList().then(function (result) {
             $scope.categories = result;
           });
         };
 
         $scope.refreshDatasheets = function () {
-          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('catalog_items').getList({
-            sameMarket: true,
-            sameLanguage: true
-          }).then(function (result) {
+          Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).all('items').getList().then(function (result) {
             $scope.datasheets = result;
           });
         };
 
         Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).get().then(function (result) {
           $scope.currentCategory = result;
+          console.log("CURRENT CATEGORY =>", $scope.currentCategory);
           $scope.refreshCategories();
           $scope.refreshDatasheets();
         });
