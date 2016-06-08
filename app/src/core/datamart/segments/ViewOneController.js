@@ -56,14 +56,11 @@ define(['./module'], function (module) {
           $scope.breakDownData = [];
           for (var metricIdx = 0; metricIdx < metricsBreakDown.length; metricIdx++) {
 
-            console.log(report);
-            console.log(report[metricIdx].key);
-            console.log("value", report[metricIdx].values[report[metricIdx].values.length -1 ]);
             switch (report[metricIdx].key) {
-              case "user_points" : $scope.statistics.total = report[metricIdx].values[report[metricIdx].values.length -1 ].y;
-              case "user_accounts" : $scope.statistics.hasUserAccountId= report[metricIdx].values[report[metricIdx].values.length -1 ].y;
-              case "emails" : $scope.statistics.hasEmail = report[metricIdx].values[report[metricIdx].values.length -1 ].y;
-              case "desktop_cookie_ids" : $scope.statistics.hasCookie = report[metricIdx].values[report[metricIdx].values.length -1 ].y;
+              case "user_points" : $scope.statistics.total = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "user_accounts" : $scope.statistics.hasUserAccountId= report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "emails" : $scope.statistics.hasEmail = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "desktop_cookie_ids" : $scope.statistics.hasCookie = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
 
             }
             $scope.statsError = null;
