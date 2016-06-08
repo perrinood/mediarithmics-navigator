@@ -56,10 +56,19 @@ define(['./module'], function (module) {
           $scope.breakDownData = [];
           for (var metricIdx = 0; metricIdx < metricsBreakDown.length; metricIdx++) {
 
+            switch (report[metricIdx].key) {
+              case "user_points" : $scope.statistics.total = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "user_accounts" : $scope.statistics.hasUserAccountId= report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "emails" : $scope.statistics.hasEmail = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "desktop_cookie_ids" : $scope.statistics.hasCookie = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+
+            }
+            $scope.statsError = null;
+            $scope.statsLoading = false;
+
             //quick fix to remove underscore in legend
             report[metricIdx].key = legendPrettyPrint(report[metricIdx].key);
             $scope.breakDownData.push(report[metricIdx]);
-
           }
         });
 
@@ -73,7 +82,6 @@ define(['./module'], function (module) {
             if (metricsAdditionsDeletions[metricIdx] === 'user_point_deletions') {
 
               for (var i = 0; i < report[metricIdx].values.length; i++) {
-                report[metricIdx].values[i].y = report[metricIdx].values[i].y * -1 ;
                 report[metricIdx].color =  "#FE5858";
               }
               $scope.dataCreationSuppression.push(report[metricIdx]);
@@ -89,25 +97,6 @@ define(['./module'], function (module) {
 
       Restangular.one('audience_segments', $scope.segmentId).get().then(function (segment) {
         $scope.segment = segment;
-
-        AudienceSegmentAnalyticsReportService.getSegmentStatsLive(segment.id, $scope.datamartId).then(function (result){
-          $scope.statistics.total = result.total;
-          $scope.statistics.hasEmail = result.hasEmail;
-          $scope.statistics.hasUserAccountId = result.hasUserAccountId;
-          $scope.statistics.hasCookie = result.hasCookie;
-          $scope.statistics.executionTimeInMs = result.executionTimeInMs;
-          $scope.statsError = null;
-          $scope.statsLoading = false;
-        }, function () {
-          $scope.statistics.total = 0;
-          $scope.statistics.hasEmail = 0;
-          $scope.statistics.hasUserAccountId = 0;
-          $scope.statistics.hasCookie = 0;
-          $scope.statistics.executionTimeInMs = 0;
-          $scope.statsError = "There was an error executing query";
-          $scope.statsLoading = false;
-        });
-
       });
 
 
@@ -134,7 +123,7 @@ define(['./module'], function (module) {
           yAxis: {
             axisLabelDistance: -20,
             tickFormat: function (d) {
-              return d3.format(',.1f')(Math.abs(d));
+              return d3.format(',.0f')(Math.abs(d));
             }
           }
         }
@@ -166,7 +155,7 @@ define(['./module'], function (module) {
           },
           yAxis: {
             tickFormat: function (d) {
-              return  d.toFixed(3);
+              return  d3.format(',.0f')(d);
             },
             axisLabelDistance: -0.01
           }

@@ -8,8 +8,8 @@ define(['./module'], function (module) {
   };
 
   module.controller('core/datamart/segments/EditAllController', [
-    '$scope', 'Restangular', 'core/common/auth/Session', '$location', '$uibModal', 'core/datamart/segments/report/AudienceSegmentAnalyticsReportService',
-    function ($scope, Restangular, Session, $location, $uibModal, AudienceSegmentAnalyticsReportService) {
+    '$scope', 'Restangular', 'core/common/auth/Session', '$location', '$uibModal', 'core/datamart/segments/report/AudienceSegmentAnalyticsReportService', 'moment',
+    function ($scope, Restangular, Session, $location, $uibModal, AudienceSegmentAnalyticsReportService, moment) {
       var organisationId = Session.getCurrentWorkspace().organisation_id;
       Restangular.all('audience_segments').getList({organisation_id: organisationId}).then(function (segments) {
         $scope.segments = segments;
@@ -19,8 +19,8 @@ define(['./module'], function (module) {
       $scope.refresh = function () {
         updateStatistics($scope, AudienceSegmentAnalyticsReportService);
       };
-      $scope.reportDateRange = AudienceSegmentAnalyticsReportService.getDateRange();
-      $scope.reportDefaultDateRanges = AudienceSegmentAnalyticsReportService.getDefaultDateRanges();
+      $scope.reportDateRange = {startDate: moment(), endDate: moment()};
+      $scope.reportDefaultDateRanges = {startDate: moment(), endDate: moment()};
 
       $scope.$watch('reportDateRange', function (newRange) {
         if (!newRange) {
