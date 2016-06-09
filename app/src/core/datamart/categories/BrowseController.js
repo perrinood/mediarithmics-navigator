@@ -37,7 +37,6 @@ define(['./module'], function (module) {
 
         Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).one('categories', $stateParams.categoryId).get().then(function (result) {
           $scope.currentCategory = result;
-          console.log("CURRENT CATEGORY =>", $scope.currentCategory);
           $scope.refreshCategories();
           $scope.refreshDatasheets();
         });

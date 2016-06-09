@@ -2,54 +2,54 @@
   <div class="clearfix" style="margin: 20px 0;">
 
     <!-- Left floated image -->
-    <img ng-src="{{ itemProperties.$image_link !== null && itemProperties.$image_link }}" width="200" alt="" class="pull-left" ng-hide="itemProperties.$image_link == null">
+    <img ng-src="{{ item.properties.$image_link !== null && item.properties.$image_link }}" width="200" alt="" class="pull-left" ng-hide="item.properties.$image_link == null">
 
     <!--  Left floated textual content -->
     <div class="col-md-6">
       <table class="datamart table table-hover">
-        <tr ng-hide="itemProperties.$title == null">
+        <tr ng-hide="item.properties.$title == null">
           <td>Title</td>
-          <td><strong>{{ itemProperties.$title }}</strong></td>
+          <td><strong>{{ item.properties.$title }}</strong></td>
         </tr>
-        <tr ng-hide="itemProperties.$description == null">
+        <tr ng-hide="item.properties.$description == null">
           <td>Description</td>
-          <td>{{ itemProperties.$description }}</td>
+          <td>{{ item.properties.$description }}</td>
         </tr>
-        <tr ng-hide="itemProperties.$brand == null">
+        <tr ng-hide="item.properties.$brand == null">
           <td>Brand</td>
-          <td>{{ itemProperties.$brand }}</td>
+          <td>{{ item.properties.$brand }}</td>
         </tr>
-        <tr ng-hide="itemProperties.$mpn == null">
+        <tr ng-hide="item.properties.$mpn == null">
           <td>MPN</td>
-          <td><code>{{ itemProperties.$mpn }}</code></td>
+          <td><code>{{ item.properties.$mpn }}</code></td>
         </tr>
-        <tr ng-hide="itemProperties.$gtin == null">
+        <tr ng-hide="item.properties.$gtin == null">
           <td>GTIN</td>
-          <td><code>{{ itemProperties.$gtin }}</code></td>
+          <td><code>{{ item.properties.$gtin }}</code></td>
         </tr>
-        <tr ng-hide="item.$item_id == null">
+        <tr ng-hide="item.item_id == null">
           <td>item ID</td>
-          <td><code>{{ item.$item_id }}</code></td>
+          <td><code>{{ item.item_id }}</code></td>
         </tr>
-        <tr ng-hide="itemProperties.$link == null">
+        <tr ng-hide="item.properties.$link == null">
           <td>Link</td>
-          <td><a href="{{ itemProperties.$link }}" target="_blank">link</a></td>
+          <td><a href="{{ item.properties.$link }}" target="_blank">link</a></td>
         </tr>
-        <tr ng-hide="itemProperties.$size == null">
+        <tr ng-hide="item.properties.$size == null">
           <td>Size</td>
-          <td>{{ itemProperties.$size }}</td>
+          <td>{{ item.properties.$size }}</td>
         </tr>
-        <tr ng-hide="itemProperties.$availability == null">
+        <tr ng-hide="item.properties.$availability == null">
           <td>Availability</td>
-          <td>{{ itemProperties.$availability }}</td>
+          <td>{{ item.properties.$availability }}</td>
         </tr>
-        <tr ng-hide="itemProperties.$price == null">
+        <tr ng-hide="item.properties.$price == null">
           <td>Price</td>
-          <td>{{ itemProperties.$price }}</td>
+          <td>{{ item.properties.$price }}</td>
         </tr>
-        <tr ng-hide="itemProperties.$sale_price == null">
+        <tr ng-hide="item.properties.$sale_price == null">
           <td>Sale price</td>
-          <td>{{ itemProperties.$sale_price }}</td>
+          <td>{{ item.properties.$sale_price }}</td>
         </tr>
         <tr>
           <td>Defined for</td>
@@ -57,7 +57,7 @@
         </tr>
         <tr>
           <td>Category</td>
-          <td>{{ itemProperties.$product_type }}</td>
+          <td>{{ item.properties.$product_type }}</td>
         </tr>
       </table>
     </div>
