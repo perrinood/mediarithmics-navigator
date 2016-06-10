@@ -26,7 +26,7 @@ define(['./module'], function (module) {
          });
 
 
-      var metricsBreakDown = ['user_points', 'user_accounts', 'emails', 'desktop_cookie_ids'];
+      var metricsBreakDown = ['user_points', 'user_accounts', 'emails', 'desktop_cookie_ids' ,'mobile_cookie_ids'];
       var metricsAdditionsDeletions = ['user_point_deletions', 'user_point_additions'];
 
       var legendPrettyPrint = function(legend){
@@ -37,6 +37,7 @@ define(['./module'], function (module) {
           case "desktop_cookie_ids" : return "Desktop cookie ids";
           case "user_point_deletions" : return "User point deletions";
           case "user_point_additions" : return "User point additions";
+          case "mobile_cookie_ids" : return "Mobile cookies ids";
 
         }
 
@@ -61,6 +62,7 @@ define(['./module'], function (module) {
               case "user_accounts" : $scope.statistics.hasUserAccountId= report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
               case "emails" : $scope.statistics.hasEmail = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
               case "desktop_cookie_ids" : $scope.statistics.hasCookie = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+              case "mobile_cookie_ids" : $scope.statistics.hasCookie = $scope.statistics.hasCookie + report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
 
             }
             $scope.statsError = null;
@@ -123,7 +125,7 @@ define(['./module'], function (module) {
           yAxis: {
             axisLabelDistance: -20,
             tickFormat: function (d) {
-              return d3.format(',.0f')(Math.abs(d));
+              return d3.format(',.0f')(d);
             }
           }
         }
