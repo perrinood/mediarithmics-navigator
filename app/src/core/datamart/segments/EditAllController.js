@@ -15,19 +15,25 @@ define(['./module'], function (module) {
         $scope.segments = segments;
       });
 
+      $scope.reportDateRange = {startDate: moment(), endDate: moment()};
+      var todayDate = {startDate: moment(), endDate: moment()};
+      AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
+
       updateStatistics($scope, AudienceSegmentAnalyticsReportService);
       $scope.refresh = function () {
+        AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
         updateStatistics($scope, AudienceSegmentAnalyticsReportService);
       };
-      $scope.reportDateRange = {startDate: moment(), endDate: moment()};
-      $scope.reportDefaultDateRanges = {startDate: moment(), endDate: moment()};
 
       $scope.$watch('reportDateRange', function (newRange) {
         if (!newRange) {
           return;
         }
 
-        AudienceSegmentAnalyticsReportService.setDateRange($scope.reportDateRange);
+        /*
+           if reportDateRange changes ,fetch statistics of the current day
+        */
+        AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
 
         updateStatistics($scope, AudienceSegmentAnalyticsReportService);
       });
