@@ -107,6 +107,14 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       });
 
 
+      // Get segments names for stats display
+      Restangular.all('audience_segments').getList({organisation_id: $scope.organisationId}).then(function (segmentsData) {
+        $scope.segmentNames = [];
+        _.forEach(segmentsData, function (segment) {
+          $scope.segmentNames[segment.id] = segment.name;
+        });
+      });
+
       /**
        * Data Table Export
        */
@@ -315,28 +323,15 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           return segment;
         };
 
+        var segments = [];
         var segmentRows = segmentPerformance.getRows();
-        if (segmentRows.length > 0) {
-          // Find segments to get their names
-          Restangular.all('audience_segments').getList({organisation_id: $scope.organisationId}).then(function (segmentsData) {
-            var segments = [];
-            console.log("SEGMENTS : ", segmentRows);
-            console.log("SEGMENTS W/ Names : ", segmentsData);
-
-            var segmentsNames = [];
-            _.forEach(segmentsData, function(segment) {
-              segmentsNames[segment.id] = segment.name;
-            });
-
-            for (var i = 0; i < segmentRows.length; ++i) {
-              var segment = {name: segmentsNames[segmentRows[i][0]]};
-              var segmentInfo = [segmentRows[i][0]].concat(segmentPerformance.decorate(segmentRows[i]));
-              segments[i] = addSegmentInfo(segment, segmentInfo);
-            }
-
-            $scope.segments = sort(segments);
-          });
+        for (var i = 0; i < segmentRows.length; ++i) {
+          var segment = {name: $scope.segmentNames[segmentRows[i][0]]};
+          var segmentInfo = [segmentRows[i][0]].concat(segmentPerformance.decorate(segmentRows[i]));
+          segments[i] = addSegmentInfo(segment, segmentInfo);
         }
+
+        return segments;
       };
 
       var buildSites = function (mediaPerformance) {
@@ -376,9 +371,12 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         return sites;
       };
 
-      $scope.$watch('segmentPerformance', function (segmentPerformance) {
-        if (angular.isDefined(segmentPerformance)) {
-          buildAudienceSegments(segmentPerformance);
+      $scope.$watchGroup(['segmentPerformance', 'segmentNames'], function (values) {
+        var segmentPerformance = values[0];
+        var segmentNames = values[1];
+
+        if (angular.isDefined(segmentPerformance) && angular.isDefined(segmentNames)) {
+          $scope.segments = sort(buildAudienceSegments(segmentPerformance));
         }
       });
 
