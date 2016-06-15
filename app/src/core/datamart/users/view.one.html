@@ -36,6 +36,10 @@
                         <td>Last name</td>
                         <td><strong>{{ user.$last_name }}</strong></td>
                     </tr>
+                    <tr ng-hide="user.$birth_date == null">
+                        <td>Birth date</td>
+                        <td><strong>{{ user.$birth_date  | date:'MM/dd/yyyy'}}</strong></td>
+                    </tr>
                     <tr ng-hide="user.$email == null">
                         <td>Email</td>
                         <td>{{ user.$email }}</td>
