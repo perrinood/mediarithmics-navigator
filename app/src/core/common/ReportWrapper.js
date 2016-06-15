@@ -3,12 +3,13 @@ define(['lodash'], function (_) {
 
   return function ReportWrapper(report, _tableHeaders) {
     var tableHeaders = _tableHeaders;
-    
-    for(var prop in _tableHeaders) {
+
+    for (var prop in _tableHeaders) {
       tableHeaders[prop].metric = prop;
     }
+
     //TODO send metadata in report
-    
+
     var isMetrics = function (e) {
       return !(/name|_id|day|site/).test(e) || (/cookie/).test(e);
     };
@@ -16,7 +17,6 @@ define(['lodash'], function (_) {
     var notMetrics = function (e) {
       return (/name|_id|day|site/).test(e) && !(/cookie/).test(e);
     };
-
 
 
     var self = this;
@@ -51,7 +51,7 @@ define(['lodash'], function (_) {
       return self.decorate(selectedRow);
     };
 
-    this.getRows = function() {
+    this.getRows = function () {
       return report.rows;
     };
 
@@ -68,60 +68,69 @@ define(['lodash'], function (_) {
       if (row === undefined) {
         return {};
       } else {
-        var values = row;
-
         // Build data array matching data values and data types
-        return _.zipObject(report.columns_headers,values);
-
+        return _.zipObject(report.columns_headers, row);
       }
     });
 
     this.transform = function (dimensionAsMetric, withTotals) {
-      if(typeof(withTotals) === "undefined") {
+      if (typeof(withTotals) === "undefined") {
         withTotals = true;
       }
 
       var keys = _.indexOf(report.columns_headers, dimensionAsMetric);
       var rows = _(report.rows);
       var metricsLength = report.columns_headers.length - keys;
-      var allDimensionAsMetricValues = rows.map( function(r) {return r[keys];}).uniq();
-      var newRows = rows.groupBy(function(r) {
-        return _.slice(r,0,keys);
-      }).map(function(allRowByKey) {
-        var key = _.slice(allRowByKey[0],0,keys);
-        var rowsByKey = allRowByKey.map(function(row) {return _.slice(row,keys);});
-        var rowsGroupedByValue = _.groupBy(rowsByKey,function(row) {return row[0];});
+      var allDimensionAsMetricValues = rows.map(function (r) {
+        return r[keys];
+      }).uniq();
+      var newRows = rows.groupBy(function (r) {
+        return _.slice(r, 0, keys);
+      }).map(function (allRowByKey) {
+        var key = _.slice(allRowByKey[0], 0, keys);
+        var rowsByKey = allRowByKey.map(function (row) {
+          return _.slice(row, keys);
+        });
+        var rowsGroupedByValue = _.groupBy(rowsByKey, function (row) {
+          return row[0];
+        });
         // x represent the metrics, one line by type
-        var x = allDimensionAsMetricValues.map(function(value) {
+        var x = allDimensionAsMetricValues.map(function (value) {
           // there is only ONE VALUE per line !
           var metrics = (rowsGroupedByValue[value] || new Array(1))[0] || new Array(metricsLength);
           var r = {};
           r[value] = _.rest(metrics);
           return r;
         });
-        var row =  x.reduce(function(total, n) { 
+        var row = x.reduce(function (total, n) {
           var metrics = _.map(n)[0];
-          _.forEach(metrics, function(m) {return total.push(m);});
+          _.forEach(metrics, function (m) {
+            return total.push(m);
+          });
 
-          return  total; 
+          return total;
         }, key).valueOf();
 
-        if(withTotals) {
-          var totalValue =  x.reduce(function(total, n) {
+        if (withTotals) {
+          var totalValue = x.reduce(function (total, n) {
             return _.zipWith(total, _.values(n)[0], _.add);
-          }, [0,0]);
+          }, [0, 0]);
           row.push(totalValue);
         }
 
         return _.flatten(row);
       }).valueOf();
 
-      var allDimensionAndTotal =  allDimensionAsMetricValues;
-      if(withTotals) {
-        allDimensionAndTotal =  allDimensionAsMetricValues.concat(["TOTAL"]);
+      var allDimensionAndTotal = allDimensionAsMetricValues;
+      if (withTotals) {
+        allDimensionAndTotal = allDimensionAsMetricValues.concat(["TOTAL"]);
       }
 
-      var x = allDimensionAndTotal.map(function(d) {return report.columns_headers.slice(keys +1).map(function(h){return h+ "." + d;});}).flatten().valueOf();
+      var x = allDimensionAndTotal.map(function (d) {
+        return report.columns_headers.slice(keys + 1).map(function (h) {
+          return h + "." + d;
+        });
+      }).flatten().valueOf();
 
       var newReport = {};
       newReport.rows = newRows;
@@ -164,13 +173,11 @@ define(['lodash'], function (_) {
       }
     };
 
-       // Return the list of the report metrics (excluding the dimensions)
+    // Return the list of the report metrics (excluding the dimensions)
     this.getMetricsInfos = function () {
-      return _.map(this.getMetrics(),this.getMetricInfos);
+      return _.map(this.getMetrics(), this.getMetricInfos);
     };
 
-
-    
 
     this.getMetricType = function (index) {
       return tableHeaders[this.getMetrics()[index]].type;
@@ -189,7 +196,4 @@ define(['lodash'], function (_) {
       return headers;
     };
   };
-
-
-  
 });
