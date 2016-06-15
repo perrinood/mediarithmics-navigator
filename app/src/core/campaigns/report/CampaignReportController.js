@@ -39,8 +39,12 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       $scope.adPerformance = data;
     });
 
-    CampaignAnalyticsReportService.segmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
-      $scope.segmentPerformance = data;
+    CampaignAnalyticsReportService.targetedSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      $scope.targetedSegmentPerformance = data;
+    });
+
+    CampaignAnalyticsReportService.discoveredSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      $scope.discoveredSegmentPerformance = data;
     });
 
     // For unspeakable reasons (and hopefully soon-to-be-fixed ones) this triggers a huuuuge boost.
@@ -334,6 +338,24 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         return segments;
       };
 
+      $scope.$watchGroup(['targetedSegmentPerformance', 'segmentNames'], function (values) {
+        var targetedSegmentPerformance = values[0];
+        var segmentNames = values[1];
+
+        if (angular.isDefined(targetedSegmentPerformance) && angular.isDefined(segmentNames)) {
+          $scope.targetedSegments = sort(buildAudienceSegments(targetedSegmentPerformance));
+        }
+      });
+
+      $scope.$watchGroup(['discoveredSegmentPerformance', 'segmentNames'], function (values) {
+        var discoveredSegmentPerformance = values[0];
+        var segmentNames = values[1];
+
+        if (angular.isDefined(discoveredSegmentPerformance) && angular.isDefined(segmentNames)) {
+          $scope.discoveredSegments = sort(buildAudienceSegments(discoveredSegmentPerformance));
+        }
+      });
+
       var buildSites = function (mediaPerformance) {
         var sites = [];
 
@@ -370,15 +392,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
         return sites;
       };
-
-      $scope.$watchGroup(['segmentPerformance', 'segmentNames'], function (values) {
-        var segmentPerformance = values[0];
-        var segmentNames = values[1];
-
-        if (angular.isDefined(segmentPerformance) && angular.isDefined(segmentNames)) {
-          $scope.segments = sort(buildAudienceSegments(segmentPerformance));
-        }
-      });
 
       $scope.$watch('mediaPerformance', function (mediaPerformance) {
         if (angular.isDefined(mediaPerformance)) {

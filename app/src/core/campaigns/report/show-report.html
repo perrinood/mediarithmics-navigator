@@ -231,8 +231,7 @@
               </uib-tab>
 
               <!--Audience Segment Tab-->
-              <uib-tab heading="Audience Segments" ng-show="segments.length">
-
+              <uib-tab heading="Audience Segments">
                 <h4>Targeted Segments</h4>
                 <table class="mics-table">
                   <thead>
@@ -241,14 +240,43 @@
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
-                    <th ng-click="sortSegmentsBy(info.key)" class="metrics" ng-repeat="info in segments[0].info">
+                    <th ng-click="sortSegmentsBy(info.key)" class="metrics" ng-repeat="info in targetedSegments[0].info">
                       {{ adPerformance.getMetricName(info.key) }}
                       <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr ng-repeat="segment in segments">
+                  <tr ng-repeat="segment in targetedSegments">
+                    <td>{{segment.name}}</td>
+                    <td class="metrics" ng-repeat="info in segment.info">
+                  <span ng-if="info.type == 'currency' && info.value != undefined">
+                    {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
+                  </span>
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+
+                <h4>Discovered Segments</h4>
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th ng-click="sortSegmentsBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortSegmentsBy(info.key)" class="metrics" ng-repeat="info in discoveredSegments[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="segment in discoveredSegments">
                     <td>{{segment.name}}</td>
                     <td class="metrics" ng-repeat="info in segment.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">

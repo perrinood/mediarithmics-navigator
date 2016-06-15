@@ -222,13 +222,25 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           );
         };
 
-        ReportService.segmentPerformance = function (campaignId, hasCpa, sort, limit) {
+        ReportService.targetedSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
             segmentPerformanceResource,
             "audience_segment_id",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
-            "campaign_id==" + campaignId,
+            "campaign_id==" + campaignId + ",segment_scope==1",
+            sort,
+            limit
+          );
+        };
+
+        ReportService.discoveredSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
+          var cpa = hasCpa ? ",cpa" : "";
+          return this.buildPerformanceDimensionReport(
+            segmentPerformanceResource,
+            "audience_segment_id",
+            "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
+            "campaign_id==" + campaignId + ",segment_scope==2",
             sort,
             limit
           );
