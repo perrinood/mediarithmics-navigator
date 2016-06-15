@@ -301,6 +301,24 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         });
       };
 
+      $scope.sortTargetedSegmentsBy = function (key) {
+        CampaignAnalyticsReportService.targetedSegmentPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", 30).then(function (segmentPerformance) {
+          $scope.targetedSegmentPerformance = segmentPerformance;
+          $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
+          $scope.orderBy = key;
+          $scope.targetedSegments = sort(buildAudienceSegments(segmentPerformance));
+        });
+      };
+
+      $scope.sortDiscoveredSegmentsBy = function (key) {
+        CampaignAnalyticsReportService.discoveredSegmentPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", 30).then(function (segmentPerformance) {
+          $scope.discoveredSegmentPerformance = segmentPerformance;
+          $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
+          $scope.orderBy = key;
+          $scope.discoveredSegments = sort(buildAudienceSegments(segmentPerformance));
+        });
+      };
+
       var buildAudienceSegments = function (segmentPerformance) {
         // Get media performance info indexes to identify the media information
         var clicksIdx = segmentPerformance.getHeaderIndex("clicks");

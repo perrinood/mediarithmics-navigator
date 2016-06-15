@@ -236,11 +236,11 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
-                    <th ng-click="sortSegmentsBy('name')">
+                    <th ng-click="sortTargetedSegmentsBy('name')">
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
-                    <th ng-click="sortSegmentsBy(info.key)" class="metrics" ng-repeat="info in targetedSegments[0].info">
+                    <th ng-click="sortTargetedSegmentsBy(info.key)" class="metrics" ng-repeat="info in targetedSegments[0].info">
                       {{ adPerformance.getMetricName(info.key) }}
                       <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
@@ -265,11 +265,11 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
-                    <th ng-click="sortSegmentsBy('name')">
+                    <th ng-click="sortDiscoveredSegmentsBy('name')">
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
-                    <th ng-click="sortSegmentsBy(info.key)" class="metrics" ng-repeat="info in discoveredSegments[0].info">
+                    <th ng-click="sortDiscoveredSegmentsBy(info.key)" class="metrics" ng-repeat="info in discoveredSegments[0].info">
                       {{ adPerformance.getMetricName(info.key) }}
                       <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
