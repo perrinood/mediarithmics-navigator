@@ -85,6 +85,7 @@ define(['./module'], function (module) {
 
               for (var i = 0; i < report[metricIdx].values.length; i++) {
                 report[metricIdx].color =  "#FE5858";
+                report[metricIdx].values[i].y = Math.abs(report[metricIdx].values[i].y) * -1;
               }
               $scope.dataCreationSuppression.push(report[metricIdx]);
             }
@@ -125,7 +126,7 @@ define(['./module'], function (module) {
           yAxis: {
             axisLabelDistance: -20,
             tickFormat: function (d) {
-              return d3.format(',.0f')(d);
+              return d3.format(',.0f')(Math.abs(d));
             }
           }
         }
