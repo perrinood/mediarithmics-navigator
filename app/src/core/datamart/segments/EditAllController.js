@@ -17,6 +17,7 @@ define(['./module'], function (module) {
 
       $scope.reportDateRange = {startDate: moment(), endDate: moment()};
       var todayDate = {startDate: moment(), endDate: moment()};
+      var sevenDaysRange = {startDate: moment().subtract('days', 7), endDate: moment()};
       AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
 
       updateStatistics($scope, AudienceSegmentAnalyticsReportService);
@@ -44,6 +45,7 @@ define(['./module'], function (module) {
 
       $scope.detailsAudienceSegment = function (segment, $event) {
         if ($event) {
+          AudienceSegmentAnalyticsReportService.setDateRange(sevenDaysRange);
           $event.preventDefault();
           $event.stopPropagation();
         }
