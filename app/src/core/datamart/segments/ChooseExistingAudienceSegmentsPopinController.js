@@ -6,7 +6,7 @@ define(['./module'], function (module) {
     function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session) {
 
       $scope.segments = Restangular.all("audience_segments").getList({
-        organisation_id : Session.getCurrentWorkspace().organisation_id
+        datamart_id : Session.getCurrentWorkspace().datamart_id
       }).$object;
 
       $scope.selectedSegments = [];
@@ -31,4 +31,3 @@ define(['./module'], function (module) {
     }
   ]);
 });
-

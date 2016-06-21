@@ -72,7 +72,10 @@ define(['./module'], function (module) {
           {operator:"BETWEEN", label:"between date"}],
         "BOOLEAN": [
           {operator:"EQUAL", label:"is"},
-          {operator:"NOT_EQUAL", label:"not"}]
+          {operator:"NOT_EQUAL", label:"not"}],
+        "ID": [
+          {operator:"EQUAL", label:"is"},
+          {operator:"NOT_EQUAL", label:"is not"}]
       };
 
       var familyLabels = { USER_PROFILE:"Profile", USER_VISITS:"Visits" ,

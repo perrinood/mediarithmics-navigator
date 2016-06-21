@@ -44,18 +44,25 @@
                                 <span>{{condition.getOperatorLabel()}}</span>
 
                                 <div ng-switch="condition.getSelectorValueType()">
+                                  <div ng-switch-when="ID">
+                                      <mcs-query-condition-value-id condition="condition" read-only="true"></mcs-query-condition-value-id>
+                                  </div>
                                   <div ng-switch-when="BOOLEAN">
                                     <span>{{condition.value.value | lowercase}}</span>
                                   </div>
                                   <div ng-switch-when="DATE">
                                     <div ng-switch="condition.value.operator">
                                       <div ng-switch-when="RELATIVE_GT">
+                                          <mcs-query-condition-value-relative-date condition="condition" read-only="true"></mcs-query-condition-value-relative-date>
+                                      </div>
+                                      <div ng-switch-when="RELATIVE_LT">
+                                          <mcs-query-condition-value-relative-date condition="condition" read-only="true"></mcs-query-condition-value-relative-date>
                                       </div>
                                       <div ng-switch-when="BETWEEN">
-                                        <span>{{condition.value.value.from}}</span>
+                                          <mcs-query-condition-value-date-range condition="condition" read-only="true"></mcs-query-condition-value-date-range>
                                       </div>
                                       <div ng-switch-default>
-                                        <span>{{condition.value.value}}</span>
+                                          <span>{{ condition.value.value | date }}</span>
                                       </div>
                                     </div>
                                   </div>

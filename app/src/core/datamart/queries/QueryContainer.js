@@ -38,7 +38,11 @@ define(['./module'], function (module) {
 
             ConditionContainer.prototype.getSelectorValueType = function () {
                 var condition = this.value;
-                return QueryService.getPropertySelectorValueType(condition.property_selector_value_type, condition.property_selector_expression);
+                if (condition.property_selector_name === 'SITE_ID' || condition.property_selector_name === 'SEGMENT_ID'){
+                  return 'ID';
+                } else {
+                  return QueryService.getPropertySelectorValueType(condition.property_selector_value_type, condition.property_selector_expression);
+                }
             };
 
             ConditionContainer.prototype.getFamilyName = function () {
@@ -95,7 +99,7 @@ define(['./module'], function (module) {
               elementContainerCopy.selectedIndexOptionLabel = this.selectedIndexOptionLabel;
               return elementContainerCopy;
             };
-            
+
             ElementContainer.prototype.clone = function (groupContainer) {
               var elementContainerCopy = new ElementContainer(groupContainer);
               elementContainerCopy.conditions = this.conditions.map(function(condition){
@@ -333,7 +337,7 @@ define(['./module'], function (module) {
                 return elementContainer.copy(groupContainerCopy);
               });
               return groupContainerCopy;
-            }; 
+            };
             GroupContainer.prototype.clone = function(queryContainer) {
               var groupContainerCopy = new GroupContainer(queryContainer);
               groupContainerCopy.elementContainers = this.elementContainers.map(function(elementContainer){
@@ -596,7 +600,7 @@ define(['./module'], function (module) {
             QueryContainer.prototype.addGroupContainer = function () {
                 this.groupContainers.push(new GroupContainer(this));
             };
-            
+
             QueryContainer.prototype.copyGroupContainer = function (groupToCopy) {
                 this.groupContainers.push(groupToCopy.clone(this));
             };
