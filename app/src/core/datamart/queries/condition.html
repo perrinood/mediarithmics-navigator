@@ -3,14 +3,19 @@
     <span class="btn-expression-default" ng-show="condition.value.property_selector_expression">{{condition.value.property_selector_expression}}</span>
     {{condition.getSelectorLabel()}}
 </div>
-<div class="col-md-4">
+<div class="col-md-3">
     <select class="form-control input-sm" ng-model="condition.value.operator" ng-change="initConditionValue(condition)">
         <option ng-repeat="propertyOperator in operators" ng-selected="{{condition.value.operator == propertyOperator.operator}}" value="{{propertyOperator.operator}}">{{propertyOperator.label}}</option>
     </select>
 </div>
-<div class="col-md-4">
+<div class="col-md-5">
     <div class="row">
         <div ng-switch="condition.getSelectorValueType()">
+            <div ng-switch-when="ID">
+              <div class="col-md-12">
+                <mcs-query-condition-value-id condition="condition"></mcs-query-condition-value-id>
+              </div>
+            </div>
             <div ng-switch-when="STRING">
                 <div ng-show="condition.value.operator != 'IS_EMPTY' && condition.value.operator != 'IS_NOT_EMPTY'">
                     <div class="col-md-12">

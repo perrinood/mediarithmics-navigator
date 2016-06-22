@@ -6,6 +6,8 @@ define(['./module'], function (module) {
     this.organisation_name = workspace.organisation_name;
     this.organisation_id = workspace.organisation_id;
     this.administrator = workspace.administrator;
+    this.datamart = datamart;
+    this.sourcesDatamart = [];
     if(datamart) {
       // TODO : remove the conditional assignement
       this.datamart_id = datamart.id || datamart.datamart_id;
@@ -151,20 +153,25 @@ define(['./module'], function (module) {
         for (var i = 0; i < this.userProfile.workspaces.length; i++) {
           pushWorkspace(result, this.userProfile.workspaces[i]);
         }
-        
+
         return result;
       };
 
       function pushWorkspace(result, workspace) {
         for(var j = 0 ; j < workspace.datamarts.length; j++) {
-          var w = new Workspace(workspace, workspace.datamarts[j]);
+          var datamart = workspace.datamarts[j];
+          var w = new Workspace(workspace, datamart);
+          if (datamart.type === 'CROSS_DATAMART'){
+            w.sourcesDatamart = Restangular.one('datamarts', datamart.id).getList('sources').$object;
+          }
+
           result.push(w);
         }
         if(workspace.datamarts.length === 0) {
           result.push(new Workspace(workspace));
         }
       }
-      
+
       service.getWorkspacePrefixUrl = function () {
         return "/o"+ service.getCurrentWorkspace().organisation_id + "d"+service.getCurrentWorkspace().datamart_id;
       };
@@ -172,6 +179,8 @@ define(['./module'], function (module) {
       service.getCurrentDatamartId = function () {
         return service.getCurrentWorkspace().datamart_id;
       };
+
+
 
       service.findWorkspaceByDatamartId = function (datamartId) {
         if(datamartId) {

@@ -38,7 +38,7 @@ define(['./module'], function (module) {
                         });
                     };
 
-                    fetchPropertySelectors();
+                    fetchPropertySelectors(true);
 
                     $scope.propertySelectorOperators = Common.propertySelectorOperators;
                     $scope.propertySelectorExpressions = Common.propertySelectorExpressions;
@@ -312,7 +312,6 @@ define(['./module'], function (module) {
                       condition.value.value = "";
                     }
                   }
-
                 };
             },
             templateUrl: function (elem, attr) {
@@ -358,7 +357,8 @@ define(['./module'], function (module) {
             restrict: 'E',
             scope: {
                 // same as '=condition'
-                condition: '='
+                condition: '=',
+                readOnly: '='
             },
             templateUrl: 'src/core/datamart/queries/value-condition-type-date-range.html',
             link:function(scope, elem, attr){
@@ -403,12 +403,76 @@ define(['./module'], function (module) {
         };
     }]);
 
+    /* This directive is for condition on a domain object id (eg SEGMENT_ID, SITE_ID,...)
+       It fetches the list of domain object resources in order to display conveniently a select box
+       with segment's names and bind the value to the selected segment's ID.
+    */
+    module.directive('mcsQueryConditionValueId', [ 'Restangular', 'core/common/auth/Session', 'lodash', function (Restangular,Session,_) {
+        return {
+            restrict: 'E',
+            scope: {
+                // same as '=condition'
+                condition: '=',
+                readOnly: '='
+            },
+            templateUrl: 'src/core/datamart/queries/value-condition-type-id.html',
+            link:function(scope, elem, attr){
+              var selectedDomainId = scope.condition.value.value;
+
+              //initial values
+              scope.domainSources = [];
+              scope.selectedDomain = selectedDomainId;
+
+              if (scope.condition.value.property_selector_name === 'SITE_ID'){
+                //Let's fetch datamart's sites resources
+                Restangular.all("datamarts/" + Session.getCurrentDatamartId() + "/sites").getList({"organisation_id": Session.getCurrentWorkspace().organisation_id}).then(function(sites) {
+
+                  scope.domainSources = sites;
+                  var siteMatch = _.find(sites, _.matchesProperty('id',selectedDomainId));
+                  if (siteMatch){
+                    scope.selectedDomain = siteMatch;
+                  }
+
+                });
+              } else if (scope.condition.value.property_selector_name === 'SEGMENT_ID'){
+                //Let's fetch datamart's audience segment's resources
+                Restangular.all("audience_segments").getList({"datamart_id": Session.getCurrentDatamartId(), "with_source_datamarts":1}).then(function(segments) {
+                  var currentDatamart = Session.getCurrentWorkspace().datamart;
+                  var sourcesDatamart = Session.getCurrentWorkspace().sourcesDatamart;
+
+                  //alter segments api resource object to add a datamartName if segment comes from a sourcesDatamart
+                  //(eg : segment_on_current_datamart, [datamart-name] sement_on_sourcesDatamart, ...)
+                  var newSegments = segments.map(function(s){
+                    var newSegment = s;
+                    //this is a "trick" in order to display segments belonging to the current datamart in first when sorting
+                    s.sourceDatamartName = "";
+                    if (currentDatamart.type === 'CROSS_DATAMART' && sourcesDatamart.length > 0){
+                      var sourceDatamartMatch = _.find(sourcesDatamart, _.matchesProperty('id',s.datamart_id));
+                      if (sourceDatamartMatch){
+                        s.sourceDatamartName = sourceDatamartMatch.name;
+                      }
+                    }
+                    return newSegment;
+                  });
+
+                  scope.domainSources = newSegments;//_.sortBy(newSegments, ['sourceDatamartName']);
+                  var segmentMatch = _.find(newSegments, _.matchesProperty('id', selectedDomainId));
+                  if (segmentMatch){
+                    scope.selectedDomain = segmentMatch;
+                  }
+                });
+              }
+            }
+        };
+    }]);
+
     module.directive('mcsQueryConditionValueSimpleDate', [ 'moment',  function (moment) {
         return {
             restrict: 'E',
             scope: {
                 // same as '=condition'
-                condition: '='
+                condition: '=',
+                readOnly: '='
             },
             templateUrl: 'src/core/datamart/queries/value-condition-type-date-simple.html',
             link:function(scope, elem, attr){
@@ -436,10 +500,10 @@ define(['./module'], function (module) {
         };
     }]);
 
-    module.directive('mcsQueryConditionValueRelativeDate', [ 'moment',  function (moment) {
+    module.directive('mcsQueryConditionValueRelativeDate', [ 'moment', 'lodash',  function (moment,_) {
 
         function updateCondition(scope){
-            var isoPeriod = "P" + scope.relativeDateNumber + scope.relativeDateMagnitude;
+            var isoPeriod = "P" + scope.relativeDate.number + scope.relativeDate.magnitude.letter;
             scope.condition.value.value = isoPeriod;
         }
 
@@ -447,11 +511,13 @@ define(['./module'], function (module) {
             restrict: 'E',
             scope: {
                 // same as '=condition'
-                condition: '='
+                condition: '=',
+                readOnly: '='
             },
             templateUrl: 'src/core/datamart/queries/value-condition-type-relative-date.html',
             link:function(scope, elem, attr){
 
+                scope.relativeDate = {};
                 scope.magnitudes = [
                     {label:"days", letter:"D"},
                     {label:"months", letter:"M"},
@@ -459,19 +525,20 @@ define(['./module'], function (module) {
                 ];
 
                 if (scope.condition.value.value){
-                    scope.relativeDateNumber = scope.condition.value.value.charAt(1);
-                    scope.relativeDateMagnitude = scope.condition.value.value.charAt(2);
+                  var match = scope.condition.value.value.match(/P([\d]+)([DMY])/);
+                  scope.relativeDate.number = match[1];
+                  scope.relativeDate.magnitude = _.find(scope.magnitudes, function(m){ return m.letter === match[2];});
                 } else {
-                    scope.relativeDateNumber = "";
-                    scope.relativeDateMagnitude = "";
+                  scope.relativeDate.number = "";
+                  scope.relativeDate.magnitude = "";
                 }
 
 
-                scope.$watch('relativeDateNumber', function(newValue, oldValue){
+                scope.$watch('relativeDate.number', function(newValue, oldValue){
                     updateCondition(scope);
                 });
 
-                scope.$watch('relativeDateMagnitude', function(newValue, oldValue){
+                scope.$watch('relativeDate.magnitude', function(newValue, oldValue){
                     updateCondition(scope);
                 });
 

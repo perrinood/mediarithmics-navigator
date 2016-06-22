@@ -28,13 +28,13 @@
 
         </div>
       </div>
-      
+
     </div>
     <table class="mics-table table-hover clickableRow js-auto-hide-actions" ng-show="segments.length">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Technical Id</th>
+          <th>Technical Name</th>
           <th>Type</th>
           <th class="metrics" ng-repeat="metric in audienceSegmentStats.getMetrics()">
             {{audienceSegmentStats.getMetricName(metric) }}

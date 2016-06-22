@@ -31,14 +31,14 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" uib-dropdown>
           <a ng-hide="workspaces.length > 1" href="#" class="mcs-workspace-label">{{currentWorkspace.organisation_name }}</a>
-          <a ng-show="workspaces.length > 1" href="#" class="mcs-workspace-label" uib-dropdown-toggle>{{currentWorkspace.organisation_name}} [{{currentWorkspace.datamart_id}}]
+          <a ng-show="workspaces.length > 1" href="#" class="mcs-workspace-label" uib-dropdown-toggle>{{currentWorkspace.organisation_name}} [{{currentWorkspace.datamart.name}}]
 
             <b class="caret"></b></a>
           <ul class="dropdown-menu">
               <li ng-repeat="workspace in workspaces" ng-if="workspaces.length > 1" ng-class="{disabled: workspace == currentWorkspace}">
-              <a ng-if="workspace != currentWorkspace" ng-click="switchWorkspace(workspace)">{{workspace.organisation_name}}[{{workspace.datamart_id}}]
+              <a ng-if="workspace != currentWorkspace" ng-click="switchWorkspace(workspace)">{{workspace.organisation_name}}[{{workspace.datamart.name}}]
 </a>
-              <a ng-if="workspace == currentWorkspace">{{workspace.organisation_name}}[{{workspace.datamart_id}}]</a>
+              <a ng-if="workspace == currentWorkspace">{{workspace.organisation_name}}[{{workspace.datamart.name}}]</a>
 
             </li>
           </ul>
