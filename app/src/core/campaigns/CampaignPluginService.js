@@ -66,7 +66,7 @@ define(['./module'], function (module) {
           image: "/images/plugins/multi-targeting-small.png",
           editor: {
             create_path: "/{organisation_id}/campaigns/display/external/edit/{id}",
-            edit_path: "/{organisation_id}/campaigns/display/external/{id}"
+            edit_path: "/{organisation_id}/campaigns/display/external/edit/{id}"
           }
         })
       ];

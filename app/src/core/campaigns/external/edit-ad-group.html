@@ -33,32 +33,21 @@
         <div ng-include="'src/core/adgroups/choose-external-ads.html'"></div>
         <span>Select ads</span>
       </div>
-      <table class="fragment-list-creatives list-ads" ng-show="getAds(adGroup.id).length">
+      <table class="fragment-list-creatives list-ads" ng-show="ads.length">
         <thead>
         <tr>
-          <th>Size</th>
+          <th>Format</th>
           <th>Ad Name</th>
-          <th>Type</th>
-          <th>Url</th>
-          <th>Created</th>
+          <th>Technical Name</th>
           <th class="actions">Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="ad in getAds(adGroup.id)" fetch-creative="ad.creative_id as creative with rendererProperties">
-          <td>
-            <div class="mics-small-thumbnail">
-              <img creative-thumbnail="creative.id"/>
-              <div class="caption">
-                {{creative.format}}
-              </div>
-            </div>
-          </td>
-          <td>{{creative.name}}</td>
-          <td>{{creative.creative_type}}</td>
-          <td pretty-print-url="creativeProperties['destination_url'] | rendererProperty"></td>
-          <td>{{creative.creation_date|date:'shortDate'}}</td>
-          <td class="actions"><button class="mics-btn mics-btn-delete" ng-click="deleteAd(ad.id)">Remove</button></td>
+        <tr ng-repeat="ad in ads" fetch-creative="ad.creative_id as creative with rendererProperties">
+          <td>{{ad.format}}</td>
+          <td>{{ad.name}}</td>
+          <td>{{ad.technical_name}}</td>
+          <td class="actions"><button class="mics-btn mics-btn-delete" ng-click="deleteAd(ad)">Remove</button></td>
         </tr>
         </tbody>
       </table>

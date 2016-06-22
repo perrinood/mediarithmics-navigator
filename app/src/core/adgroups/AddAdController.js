@@ -11,7 +11,7 @@ define(['./module'], function (module) {
       });
 
       $scope.done = function () {
-        $scope.$broadcast("display-ad/basic-editor:save");
+        $uibModalInstance.close($scope.ad);
       };
 
       $scope.canSave = function() {

@@ -2,8 +2,9 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller("core/adgroups/ChooseExternalAdsController", [
-    "$scope", "$uibModal", "$log", "$q", "core/common/ads/AdService",
-    function ($scope, $uibModal, $log, $q, AdService) {
+    "$scope", "$uibModal", "$log", "$q", "core/common/ads/AdService", "core/creatives/plugins/display-ad/DisplayAdService",
+    function ($scope, $uibModal, $log, $q, AdService, DisplayAdService) {
+      $scope.ads = [];
 
       $scope.setAdTypeToDisplayAd = function () {
         AdService.setAdTypeToDisplayAd();
@@ -23,7 +24,11 @@ define(['./module'], function (module) {
           controller: 'core/adgroups/AddAdController'
         });
 
-        uploadModal.result.then(function () {});
+        uploadModal.result.then(function (ad) {
+          if (ad) {
+            $scope.$emit("mics-creative:add-ad", {ad: ad});
+          }
+        });
       };
 
       // Select existing Ads
