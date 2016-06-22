@@ -1,0 +1,74 @@
+<div class="mcs-default-container" ng-controller="core/campaigns/external/EditAdGroupController">
+
+  <div class="mcs-default-sidebar ">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-campaign-type ">
+      <img src="/images/plugins/multi-targeting-small.png"><br/>
+      <h4>Multi Targeting</h4>
+    </div>
+  </div>
+
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form">
+
+    <!-- Ad Group edition form -->
+    <div class="mcs-default-heading">
+      <h3>Editing Ad Group</h3>
+      <h4>for {{campaignName}} Campaign</h4>
+    </div>
+
+    <!------------------------ Basic Info ------------------------>
+    <div mcs-form-group="" label-for="name" label-text="Ad Group Name">
+      <input ng-model="adGroup.name" type="text" class="form-control input-lg" id="name">
+    </div>
+
+    <div mcs-form-group="" label-for="technical-name" label-text="Technical Name">
+      <input ng-model="adGroup.technical_name" type="text" class="form-control input-lg" id="technical-name">
+    </div>
+
+    <!------------------------ Select Ads ------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <div ng-include="'src/core/adgroups/choose-external-ads.html'"></div>
+        <span>Select ads</span>
+      </div>
+      <table class="fragment-list-creatives list-ads" ng-show="getAds(adGroup.id).length">
+        <thead>
+        <tr>
+          <th>Size</th>
+          <th>Ad Name</th>
+          <th>Type</th>
+          <th>Url</th>
+          <th>Created</th>
+          <th class="actions">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="ad in getAds(adGroup.id)" fetch-creative="ad.creative_id as creative with rendererProperties">
+          <td>
+            <div class="mics-small-thumbnail">
+              <img creative-thumbnail="creative.id"/>
+              <div class="caption">
+                {{creative.format}}
+              </div>
+            </div>
+          </td>
+          <td>{{creative.name}}</td>
+          <td>{{creative.creative_type}}</td>
+          <td pretty-print-url="creativeProperties['destination_url'] | rendererProperty"></td>
+          <td>{{creative.creation_date|date:'shortDate'}}</td>
+          <td class="actions"><button class="mics-btn mics-btn-delete" ng-click="deleteAd(ad.id)">Remove</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Save or cancel -->
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-finish" ng-disabled="!canSave()" ng-click="done()">Done</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+
+  </form>
+</div>

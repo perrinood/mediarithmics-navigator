@@ -1,0 +1,36 @@
+<div ng-controller="core/adgroups/ChooseExternalAdsController">
+  <form>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-lg-6">
+          <div uib-dropdown>
+            <button ng-click="setAdTypeToDisplayAd()" class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">
+              Add Display Ads
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="add ads">
+              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="selectExistingAd()">
+                Choose From Library
+              </a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addAd()">
+                Add Ad
+              </a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="dropdown" uib-dropdown>
+            <button ng-click="setAdTypeToVideoAd()" class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">
+              Add Video Ads
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="add ads">
+              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="selectExistingAd()">
+                Choose From Library
+              </a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

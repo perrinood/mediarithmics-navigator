@@ -20,6 +20,16 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/campaigns/expert/edit-ad-group.html',
           data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
         })
+        .state('campaigns/display/external/edit', {
+          url: '/{organisation_id}/campaigns/display/external/edit/{campaign_id}',
+          templateUrl: 'src/core/campaigns/external/edit-campaign.html',
+          data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
+        })
+        .state('campaigns/display/external/edit/campaign/edit-ad-group', {
+          url: '/{organisation_id}/campaigns/display/external/edit/:campaign_id/edit-ad-group/:ad_group_id',
+          templateUrl: 'src/core/campaigns/external/edit-ad-group.html',
+          data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
+        })
         .state('campaigns/display', {
           url: '/{organisation_id}/campaigns/display',
           templateUrl: 'src/core/campaigns/list-display-campaigns.html',

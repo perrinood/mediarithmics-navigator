@@ -1,0 +1,49 @@
+<div class="mcs-default-container edit-campaign-external" ng-controller="core/campaigns/external/EditCampaignController">
+
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-campaign-type ">
+      <img src="/images/plugins/multi-targeting-small.png"><br/>
+      <h4>Multi Targeting</h4>
+    </div>
+  </div>
+
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form">
+
+    <!------------------------ Basic Info ------------------------>
+    <div class="mcs-default-heading">
+      <h1>Campaign</h1>
+    </div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="name" label-text="Campaign name">
+      <input ng-model="campaign.name" type="text" class="form-control input-lg" id="name">
+    </div>
+
+    <!-- Technical Name -->
+    <div mcs-form-group="" label-for="technical-name" label-text="Technical name">
+      <input ng-model="campaign.technical_name" type="text" class="form-control input-lg" id="technical-name">
+    </div>
+
+    <!------------------------ Select ad groups ------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-add" ng-click="newAdGroup()">Create new Ad Group</a>
+        </div>
+        <span>Ad groups</span>
+      </div>
+      <div ng-repeat="adGroup in adGroups|orderBy:'id'">
+        <div ng-include="'src/core/campaigns/external/view-ad-group.html'"></div>
+      </div>
+    </div>
+
+    <!-- Save or cancel -->
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-finish" ng-click="save()">Save</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
