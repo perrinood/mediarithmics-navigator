@@ -41,7 +41,11 @@ define(['./module'], function (module) {
           size: 'lg'
         });
 
-        uploadModal.result.then(function () {});
+        uploadModal.result.then(function (creative) {
+          if (creative) {
+            $scope.$emit("mics-creative:add-creative", {creative: creative});
+          }
+        });
       };
     }
   ]);

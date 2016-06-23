@@ -70,15 +70,31 @@ define(['./module', 'angular', 'jquery'], function (module, angular, $) {
         return creativeContainer.persist();
       }
 
+      function adsContain(creativeId) {
+        for (var i = 0; i < $scope.ads.length; ++i) {
+          if ($scope.ads[i].creative_id === "" + creativeId) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       function createCreatives() {
-        var promises = $scope.creatives.filter(function (val) {
-          return val.id === undefined;
-        }).map(function (creative) {
-          return createCreative(creative.name, creative.technical_name, creative.format).then(function (createdCreative) {
-            var ad = {creative_id: createdCreative.id};
-            ad.creative_id = createdCreative.id;
+        var promises = $scope.creatives.map(function (creative) {
+          if (creative.id === undefined) {
+            return createCreative(creative.name, creative.technical_name, creative.format).then(function (createdCreative) {
+              var ad = {creative_id: createdCreative.id};
+              ad.creative_id = createdCreative.id;
+              DisplayCampaignService.addAd(adGroupId, ad);
+            });
+          } else if (!adsContain(creative.id)) {
+            var ad = {creative_id: creative.id};
+            ad.creative_id = creative.id;
             DisplayCampaignService.addAd(adGroupId, ad);
-          });
+            $q.resolve(ad);
+          } else {
+            $q.resolve();
+          }
         });
 
         return $q.all(promises);
