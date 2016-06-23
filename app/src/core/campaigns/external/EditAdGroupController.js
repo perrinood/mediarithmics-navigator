@@ -1,4 +1,4 @@
-define(['./module', 'angular', 'jquery'], function (module, angular, jquery) {
+define(['./module', 'angular', 'jquery'], function (module, angular, $) {
   'use strict';
 
   /**
@@ -7,8 +7,8 @@ define(['./module', 'angular', 'jquery'], function (module, angular, jquery) {
    */
 
   module.controller('core/campaigns/external/EditAdGroupController', [
-    '$scope', '$location', '$stateParams', '$log', 'core/campaigns/DisplayCampaignService', 'lodash', 'core/common/auth/Session', "core/creatives/plugins/display-ad/DisplayAdService",
-    function ($scope, $location, $stateParams, $log, DisplayCampaignService, _, Session, DisplayAdService) {
+    '$scope', '$q', '$location', '$stateParams', '$log', 'Restangular', 'core/campaigns/DisplayCampaignService', 'lodash', 'core/common/auth/Session', "core/creatives/plugins/display-ad/DisplayAdService",
+    function ($scope, $q, $location, $stateParams, $log, Restangular, DisplayCampaignService, _, Session, DisplayAdService) {
       var adGroupId = $stateParams.ad_group_id;
       var campaignId = $stateParams.campaign_id;
       if (!DisplayCampaignService.isInitialized() || DisplayCampaignService.getCampaignId() !== campaignId) {
@@ -22,21 +22,29 @@ define(['./module', 'angular', 'jquery'], function (module, angular, jquery) {
         return DisplayCampaignService.getAds(adGroupId);
       };
 
+      $scope.getCreative = function (creativeId) {
+        Restangular.one("display_ads", creativeId).get().then(function (creative) {
+          $scope.creatives.push(creative);
+        });
+      };
+
       $scope.ads = $scope.getAds($scope.adGroup.id);
-      console.log("Ad group: ", $scope.adGroup);
-      console.log("Ads: ", $scope.ads);
+      $scope.creatives = [];
+      for (var i = 0; i < $scope.ads.length; ++i) {
+        if (angular.isDefined($scope.ads[i].creative_id)) {
+          $scope.getCreative($scope.ads[i].creative_id);
+        }
+      }
 
       $scope.deleteAd = function (ad) {
         if (angular.isDefined(ad.id)) {
+          $scope.creatives.slice($scope.creatives.indexOf(ad.id), 1);
           DisplayCampaignService.removeAd(adGroupId, ad.id);
         }
-        var index = $scope.ads.indexOf(ad);
-        $scope.ads.splice(index, 1);
       };
 
-
-      $scope.$on("mics-creative:add-ad", function (event, params) {
-        $scope.ads.push(params.ad);
+      $scope.$on("mics-creative:add-creative", function (event, params) {
+        $scope.creatives.push(params.creative);
       });
 
       $scope.canSave = function () {
@@ -62,17 +70,26 @@ define(['./module', 'angular', 'jquery'], function (module, angular, jquery) {
         return creativeContainer.persist();
       }
 
-      $scope.done = function () {
-        var ads = jquery.extend(true, {}, $scope.ads);
-        for (var i = 0; i < ads.length; ++i) {
-          var ad = ads[i];
-          createCreative(ad.name, ad.technical_name, ad.format);
-          DisplayCampaignService.addAd(adGroupId, ad);
-        }
+      function createCreatives() {
+        var promises = $scope.creatives.filter(function (val) {
+          return val.id === undefined;
+        }).map(function (creative) {
+          return createCreative(creative.name, creative.technical_name, creative.format).then(function (createdCreative) {
+            var ad = {creative_id: createdCreative.id};
+            ad.creative_id = createdCreative.id;
+            DisplayCampaignService.addAd(adGroupId, ad);
+          });
+        });
 
-        $log.debug("Editing Ad Group done! :", $scope.adGroup);
-        DisplayCampaignService.setAdGroupValue(adGroupId, $scope.adGroup);
-        $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/display/external/edit/' + DisplayCampaignService.getCampaignId());
+        return $q.all(promises);
+      }
+
+      $scope.done = function () {
+        createCreatives().then(function () {
+          DisplayCampaignService.setAdGroupValue(adGroupId, $scope.adGroup);
+          $log.debug("Editing Ad Group done! :", $scope.adGroup);
+          $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/display/external/edit/' + DisplayCampaignService.getCampaignId());
+        });
       };
 
       $scope.cancel = function () {

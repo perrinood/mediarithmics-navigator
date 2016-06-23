@@ -2,8 +2,8 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller("core/adgroups/ChooseExternalAdsController", [
-    "$scope", "$uibModal", "$log", "$q", "core/common/ads/AdService", "core/creatives/plugins/display-ad/DisplayAdService",
-    function ($scope, $uibModal, $log, $q, AdService, DisplayAdService) {
+    "$scope", "$uibModal", "$log", "$q", "core/common/ads/AdService",
+    function ($scope, $uibModal, $log, $q, AdService) {
       $scope.ads = [];
 
       $scope.setAdTypeToDisplayAd = function () {
@@ -14,9 +14,8 @@ define(['./module'], function (module) {
         AdService.setAdTypeToVideoAd();
       };
 
-      // Upload new Ad
+      // We call add ad but we actually get an object with info for both a creative and an ad.
       $scope.addAd = function () {
-        // Display pop-up
         var uploadModal = $uibModal.open({
           templateUrl: 'src/core/adgroups/add-ad.html',
           scope: $scope,
@@ -24,9 +23,9 @@ define(['./module'], function (module) {
           controller: 'core/adgroups/AddAdController'
         });
 
-        uploadModal.result.then(function (ad) {
-          if (ad) {
-            $scope.$emit("mics-creative:add-ad", {ad: ad});
+        uploadModal.result.then(function (creative) {
+          if (creative) {
+            $scope.$emit("mics-creative:add-creative", {creative: creative});
           }
         });
       };

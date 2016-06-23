@@ -5,8 +5,7 @@
       {{currentOrganisation}}
     </div>
     <div class="mcs-campaign-type ">
-      <img src="/images/plugins/multi-targeting-small.png"><br/>
-      <h4>Multi Targeting</h4>
+      <h4>External Campaign</h4>
     </div>
   </div>
 
@@ -33,7 +32,7 @@
         <div ng-include="'src/core/adgroups/choose-external-ads.html'"></div>
         <span>Select ads</span>
       </div>
-      <table class="fragment-list-creatives list-ads" ng-show="ads.length">
+      <table class="fragment-list-creatives list-ads" ng-show="creatives.length">
         <thead>
         <tr>
           <th>Format</th>
@@ -43,11 +42,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="ad in ads" fetch-creative="ad.creative_id as creative with rendererProperties">
-          <td>{{ad.format}}</td>
-          <td>{{ad.name}}</td>
-          <td>{{ad.technical_name}}</td>
-          <td class="actions"><button class="mics-btn mics-btn-delete" ng-click="deleteAd(ad)">Remove</button></td>
+        <tr ng-repeat="creative in creatives">
+          <td>{{creative.format}}</td>
+          <td>{{creative.name}}</td>
+          <td>{{creative.technical_name}}</td>
+          <td class="actions"><button class="mics-btn mics-btn-delete" ng-click="deleteAd(creative)">Remove</button></td>
         </tr>
         </tbody>
       </table>

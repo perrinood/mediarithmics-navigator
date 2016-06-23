@@ -1,4 +1,4 @@
-define(['./module', 'moment'], function (module, moment) {
+define(['./module'], function (module) {
   'use strict';
 
   /**
@@ -19,8 +19,6 @@ define(['./module', 'moment'], function (module, moment) {
       }
 
       CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.display", "external-campaign-editor").then(function (template) {
-        console.log("template " + template);
-
         // TODO load the campaign (no effect if already in cache or if this is a temporary id)
         if (!DisplayCampaignService.isInitialized() || DisplayCampaignService.getCampaignId() !== campaignId) {
           if (!campaignId || DisplayCampaignService.isTemporaryId(campaignId)) {
@@ -34,7 +32,6 @@ define(['./module', 'moment'], function (module, moment) {
             });
           }
         } else {
-          console.log("here2");
           initView();
         }
 
