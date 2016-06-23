@@ -19,289 +19,320 @@
 
 
     <uib-tabset class="mics-page-main-tabs">
-    <uib-tab>
-    <uib-tab-heading>
-      Overview
-    </uib-tab-heading>
+      <uib-tab>
+        <uib-tab-heading>
+          Overview
+        </uib-tab-heading>
 
 
-    <div class="report-toolbar">
-      <div class="date-export-toolbar">
-        <div class="report-date-controller">
-          <!-- date picker https://github.com/sagivf/ng-bs-daterangepicker -->
-          <form class="form-inline pull-right" role="form">
-            <input type="daterange" ng-model="date.reportDateRange" class="form-control range" format="L"
-                   ranges="reportDefaultDateRanges" opens="'left'">
-          </form>
-          <div class="dropdown pull-right" uib-dropdown>
-            <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle type="button">Export <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="Choose Export Format">
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('xlsx')">Excel (.xlsx)</a>
-              </li>
-              <!--<li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('csv')">CSV</a></li>-->
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div ng-class="chartArea">
-      <div class="kpi-area">
-        <dl>
-          <dt ng-if="hasCpa">CPA</dt>
-          <dd ng-if="hasCpa">{{kpis.cpa | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
-          <dt>CPC</dt>
-          <dd>{{kpis.cpc | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
-          <dt>CTR</dt>
-          <dd>{{kpis.ctr | number }} %</dd>
-          <dt>CPM</dt>
-          <dd>{{kpis.cpm | number:2 | currencyWithSymbol:campaign.currency_code }}</dd>
-          <dt>Spent</dt>
-          <dd>{{kpis.impressions_cost | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
-        </dl>
-        <!--<hr>-->
-        <!--<button ng-click="showDetails()" class="mics-btn mics-btn-continue">Details</button>-->
-      </div>
-      <div ng-show="details" class="kpi-details">
-        <dl>
-          <dt>Weekly Budget</dt>
-          <dd>{{campaign.max_daily_budget * 7 | number}} €</dd>
-        </dl>
-      </div>
-      <div class="medium-chart">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="chart"
-                 mics-double-line-chart
-                 interpolate="linear"
-                 clipEdge="true"
-                 data="chartData"
-                 height="110%"
-                 width="100%"
-                 singleday="dateRangeIsToday()"
-                 hourlymode="isHourlyMode()"
-                 timefilter="chartTimeFilter">
+        <div class="report-toolbar">
+          <div class="date-export-toolbar">
+            <div class="report-date-controller">
+              <!-- date picker https://github.com/sagivf/ng-bs-daterangepicker -->
+              <form class="form-inline pull-right" role="form">
+                <input type="daterange" ng-model="date.reportDateRange" class="form-control range" format="L"
+                       ranges="reportDefaultDateRanges" opens="'left'">
+              </form>
+              <div class="dropdown pull-right" uib-dropdown>
+                <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle type="button">Export <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="Choose Export Format">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('xlsx')">Excel (.xlsx)</a>
+                  </li>
+                  <!--<li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('csv')">CSV</a></li>-->
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-        <div class="row chart-legend">
-          <div class="col-xs-6">
-            <span class="y2-legend">{{getChartName(charts[0])}}</span>
-            <span class="y1-legend">{{getChartName(charts[1])}}</span>
-            <button class="mics-btn mics-btn-continue selection-button" ng-click="chooseCharts()">
-              <span class="caret"></span></button>
+
+        <div ng-class="chartArea">
+          <div class="kpi-area">
+            <dl>
+              <dt ng-if="hasCpa">CPA</dt>
+              <dd ng-if="hasCpa">{{kpis.cpa | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
+              <dt>CPC</dt>
+              <dd>{{kpis.cpc | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
+              <dt>CTR</dt>
+              <dd>{{kpis.ctr | number }} %</dd>
+              <dt>CPM</dt>
+              <dd>{{kpis.cpm | number:2 | currencyWithSymbol:campaign.currency_code }}</dd>
+              <dt>Spent</dt>
+              <dd>{{kpis.impressions_cost | number:2 | currencyWithSymbol:campaign.currency_code}}</dd>
+            </dl>
+            <!--<hr>-->
+            <!--<button ng-click="showDetails()" class="mics-btn mics-btn-continue">Details</button>-->
           </div>
-          <div class="col-xs-offset-4 col-xs-2">
-            <select id="role" ng-model="timeFilter" class="form-control precision-filter" ng-click="refresh()" ng-options="timeFilter for timeFilter in timeFilters" ng-disabled="dateRangeIsToday()"></select>
+          <div ng-show="details" class="kpi-details">
+            <dl>
+              <dt>Weekly Budget</dt>
+              <dd>{{campaign.max_daily_budget * 7 | number}} €</dd>
+            </dl>
+          </div>
+          <div class="medium-chart">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="chart"
+                     mics-double-line-chart
+                     interpolate="linear"
+                     clipEdge="true"
+                     data="chartData"
+                     height="110%"
+                     width="100%"
+                     singleday="dateRangeIsToday()"
+                     hourlymode="isHourlyMode()"
+                     timefilter="chartTimeFilter">
+                </div>
+              </div>
+            </div>
+            <div class="row chart-legend">
+              <div class="col-xs-6">
+                <span class="y2-legend">{{getChartName(charts[0])}}</span>
+                <span class="y1-legend">{{getChartName(charts[1])}}</span>
+                <button class="mics-btn mics-btn-continue selection-button" ng-click="chooseCharts()">
+                  <span class="caret"></span></button>
+              </div>
+              <div class="col-xs-offset-4 col-xs-2">
+                <select id="role" ng-model="timeFilter" class="form-control precision-filter" ng-click="refresh()" ng-options="timeFilter for timeFilter in timeFilters" ng-disabled="dateRangeIsToday()"></select>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <hr/>
+        <hr/>
 
-    <!-- Tab set: Ads, AdGroups and Sites -->
+        <!-- Tab set: Ads, AdGroups and Sites -->
 
-    <div class="breakdown-area">
-      <div class="panel-body">
-        <uib-tabset class="breakdown">
+        <div class="breakdown-area">
+          <div class="panel-body">
+            <uib-tabset class="breakdown">
 
-          <!--Ads Tab-->
-          <uib-tab heading="Ads">
-            <table class="mics-table">
-              <thead>
-              <tr>
-                <th ng-click="sortAdsBy('status')" class="status">
-                  Status
-                  <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortAdsBy('name')">
-                  Name
-                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortAdsBy('format')">
-                  Format
-                  <span ng-show="orderBy == 'format'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortAdsBy(info.key)" class="metrics" ng-repeat="info in ads[0].info">
-                  {{ adPerformance.getMetricName(info.key) }}
-                  <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="ad in ads">
-                <td>
-                  <div mics-ad-status="ad" ad-group="findAdGroup(ad.id)" campaign="campaign"></div>
+              <!--Ads Tab-->
+              <uib-tab heading="Ads">
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th ng-click="sortAdsBy('status')" class="status">
+                      Status
+                      <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortAdsBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortAdsBy('format')">
+                      Format
+                      <span ng-show="orderBy == 'format'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortAdsBy(info.key)" class="metrics" ng-repeat="info in ads[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="ad in ads">
+                    <td>
+                      <div mics-ad-status="ad" ad-group="findAdGroup(ad.id)" campaign="campaign"></div>
                   <span class="badge creative-audit-notification-warning"
                         popover="The creative has the status {{ad.creative_audit_status}}"
                         popover-trigger="mouseenter"
                         ng-if="ad.creative_audit_status == 'NOT_AUDITED'">?</span>
                   <span class="badge creative-audit-notification-warning"
-                        popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit finish."
+                        popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit ends."
                         popover-trigger="mouseenter"
                         ng-if="ad.creative_audit_status == 'AUDIT_PENDING'">?</span>
                   <span class="badge creative-audit-notification-alert"
                         popover="One or more audits failed, this creative may not be used everywhere !"
                         popover-trigger="mouseenter"
                         ng-if="ad.creative_audit_status == 'AUDIT_FAILED' || ad.creative_audit_status == 'AUDIT_PARTIALLY_PASSED'">!</span>
-                </td>
-                <td><a href="#{{getCreativeUrl(ad)}}">{{ad.name}}</a></td>
-                <td>{{ad.format}}</td>
-                <td class="metrics" ng-repeat="info in ad.info">
+                    </td>
+                    <td><a href="#{{getCreativeUrl(ad)}}">{{ad.name}}</a></td>
+                    <td>{{ad.format}}</td>
+                    <td class="metrics" ng-repeat="info in ad.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">
                     {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
                   </span>
-                  <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
-                  <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
-                  <span ng-if="!info.type || info.value == undefined"> - </span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </uib-tab>
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </uib-tab>
 
-          <!--AdGroups Tab -->
-          <uib-tab heading="Ad groups">
-            <table class="mics-table">
-              <thead>
-              <tr>
-                <th class="status" ng-click="sortAdGroupsBy('status')">
-                  Status
-                  <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortAdGroupsBy('name')">
-                  Name
-                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortAdGroupsBy(info.key)" class="metrics" ng-repeat="info in adGroups[0].info">
-                  {{ adPerformance.getMetricName(info.key) }}
-                  <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="adGroup in adGroups">
-                <td>
-                  <div mics-ad-group-status="adGroup" campaign="campaign"></div>
-                </td>
-                <td>{{adGroup.name}}</td>
-                <td class="metrics" ng-repeat="info in adGroup.info">
+              <!--AdGroups Tab -->
+              <uib-tab heading="Ad groups">
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th class="status" ng-click="sortAdGroupsBy('status')">
+                      Status
+                      <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortAdGroupsBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortAdGroupsBy(info.key)" class="metrics" ng-repeat="info in adGroups[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="adGroup in adGroups">
+                    <td>
+                      <div mics-ad-group-status="adGroup" campaign="campaign"></div>
+                    </td>
+                    <td>{{adGroup.name}}</td>
+                    <td class="metrics" ng-repeat="info in adGroup.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">
                     {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
                   </span>
-                  <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
-                  <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
-                  <span ng-if="!info.type || info.value == undefined"> - </span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </uib-tab>
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </uib-tab>
 
-          <!--Sites Tab-->
-          <uib-tab heading="Top Sites">
-            <table class="mics-table">
-              <thead>
-              <tr>
-                <th ng-click="sortSitesBy('name')">
-                  Name
-                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-                <th ng-click="sortSitesBy(info.key)" class="metrics" ng-repeat="info in sites[0].info">
-                  {{ adPerformance.getMetricName(info.key) }}
-                  <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
-                </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="site in sites">
-                <td>{{site.name}}</td>
-                <td class="metrics" ng-repeat="info in site.info">
+              <!--Sites Tab-->
+              <uib-tab heading="Top Sites">
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th ng-click="sortSitesBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortSitesBy(info.key)" class="metrics" ng-repeat="info in sites[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="site in sites">
+                    <td>{{site.name}}</td>
+                    <td class="metrics" ng-repeat="info in site.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">
                     {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
                   </span>
-                  <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
-                  <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
-                  <span ng-if="!info.type || info.value == undefined"> - </span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </uib-tab>
-          <!--Sites Tab-->
-          <uib-tab heading="Audience Segment" ng-show="segmentPerformance">
-          <table class="mics-table">
-              <thead>
-              <tr>
-                <th >
-                  Name
-                </th>
-                <th  class="metrics" ng-repeat="metric in segmentPerformance.getMetrics()">
-                  {{ segmentPerformance.getMetricName(metric) }} 
-                </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr ng-repeat="row in segmentPerformance.getObjectRows()" ng-show="row.audience_segment_id != 0">
-                <td>{{segmentNames[row.audience_segment_id]}}</td>
-                <td class="metrics" ng-repeat="info in  segmentPerformance.getMetricsInfos()">
-                  <span ng-if="info.type == 'currency' && row[info.metric] != undefined">
-                    {{row[info.metric]  | number:2 | currencyWithSymbol:campaign.currency_code}}
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </uib-tab>
+
+              <!--Audience Segment Tab-->
+              <uib-tab heading="Audience Segments">
+                <h4>Targeted Segments</h4>
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th ng-click="sortTargetedSegmentsBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortTargetedSegmentsBy(info.key)" class="metrics" ng-repeat="info in targetedSegments[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="segment in targetedSegments">
+                    <td>{{segment.name}}</td>
+                    <td class="metrics" ng-repeat="info in segment.info">
+                  <span ng-if="info.type == 'currency' && info.value != undefined">
+                    {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
                   </span>
-                  <span ng-if="info.type == 'percent' && row[info.metric] != undefined">{{row[info.metric] | number}} %</span>
-                  <span ng-if="info.type == 'number' && row[info.metric] != undefined">{{row[info.metric] | number}}</span>
-                  <span ng-if="!info.type || row[info.metric] == undefined"> -  </span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </uib-tab>
-        </uib-tabset>
-      </div>
-    </div>
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
 
-    </uib-tab>
-
-
-    <uib-tab active="refreshGraph.refreshDataTab">
-      <uib-tab-heading>
-        Live
-      </uib-tab-heading>
-      <div class="col-xs-12 breakdown-area">
-        <div>
-          <div class="col-xs-12 report-toolbar">
-            <form class="" role="form">
-              <div class="form-group pull-left">
-                <label for="bidFrequency">Refresh interval</label>
-                <select id="bidFrequency" class="form-control" ng-model="refreshGraph.refreshInterval"
-                        ng-options="frequency+' seconds' for frequency in  refreshGraph.refreshIntervals">
-                </select>
-              </div>
-            </form>
+                <h4>Discovered Segments</h4>
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th ng-click="sortDiscoveredSegmentsBy('name')">
+                      Name
+                      <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                    <th ng-click="sortDiscoveredSegmentsBy(info.key)" class="metrics" ng-repeat="info in discoveredSegments[0].info">
+                      {{ adPerformance.getMetricName(info.key) }}
+                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="segment in discoveredSegments">
+                    <td>{{segment.name}}</td>
+                    <td class="metrics" ng-repeat="info in segment.info">
+                  <span ng-if="info.type == 'currency' && info.value != undefined">
+                    {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
+                  </span>
+                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
+                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
+                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </uib-tab>
+            </uib-tabset>
           </div>
-          <div class="col-xs-12">
-            <div ng-show="statsLoading" class="loading">
-              <img src="./images/ajax-loader.gif" class="ajax-loader">
+        </div>
+
+      </uib-tab>
+
+
+      <uib-tab active="refreshGraph.refreshDataTab">
+        <uib-tab-heading>
+          Live
+        </uib-tab-heading>
+        <div class="col-xs-12 breakdown-area">
+          <div>
+            <div class="col-xs-12 report-toolbar">
+              <form class="" role="form">
+                <div class="form-group pull-left">
+                  <label for="bidFrequency">Refresh interval</label>
+                  <select id="bidFrequency" class="form-control" ng-model="refreshGraph.refreshInterval"
+                          ng-options="frequency+' seconds' for frequency in  refreshGraph.refreshIntervals">
+                  </select>
+                </div>
+              </form>
             </div>
-            <div ng-if="!statsLoading">
-              <div class="col-lg-4">
-                <nvd3 options="optionsBidCount" data="dataBidCount"></nvd3>
+            <div class="col-xs-12">
+              <div ng-show="statsLoading" class="loading">
+                <img src="./images/ajax-loader.gif" class="ajax-loader">
               </div>
-              <div class="col-lg-4">
-                <nvd3 options="optionsWinRate" data="dataBidWinRate"></nvd3>
-              </div>
-              <div class="col-lg-4">
-                <nvd3 options="optionsBidPrice" data="dataBidPrice"></nvd3>
+              <div ng-if="!statsLoading">
+                <div class="col-lg-4">
+                  <nvd3 options="optionsBidCount" data="dataBidCount"></nvd3>
+                </div>
+                <div class="col-lg-4">
+                  <nvd3 options="optionsWinRate" data="dataBidWinRate"></nvd3>
+                </div>
+                <div class="col-lg-4">
+                  <nvd3 options="optionsBidPrice" data="dataBidPrice"></nvd3>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </uib-tab>
+      </uib-tab>
 
     </uib-tabset>
-
-
   </div>
 </div>

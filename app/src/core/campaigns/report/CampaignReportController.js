@@ -1,4 +1,4 @@
-define(['./module', 'lodash'], function (module, _) {
+define(['./module', 'angular', 'lodash'], function (module, angular, _) {
   'use strict';
 
   var updateChartsStatistics = function ($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts) {
@@ -38,20 +38,13 @@ define(['./module', 'lodash'], function (module, _) {
     CampaignAnalyticsReportService.adPerformance(campaignId, $scope.hasCpa).then(function (data) {
       $scope.adPerformance = data;
     });
- 
-    CampaignAnalyticsReportService.segmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
-      if(data.getRows().length > 1) {
-              Restangular.all('audience_segments').getList({organisation_id: $scope.campaign.organisation_id}).then(function (segments) {
 
-        $scope.segmentNames = {};
-        for(var i = 0; i< segments.length; i++) {
-          $scope.segmentNames[segments[i].id] = segments[i].name;
-        }
-        $scope.segmentPerformance = data;
-      });
+    CampaignAnalyticsReportService.targetedSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      $scope.targetedSegmentPerformance = data;
+    });
 
-
-      }
+    CampaignAnalyticsReportService.discoveredSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      $scope.discoveredSegmentPerformance = data;
     });
 
     // For unspeakable reasons (and hopefully soon-to-be-fixed ones) this triggers a huuuuge boost.
@@ -74,6 +67,8 @@ define(['./module', 'lodash'], function (module, _) {
     '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/DisplayCampaignService',
     'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'core/common/files/ExportService', 'core/campaigns/goals/GoalsService', 'd3', 'moment', '$interval', '$q',
     function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService, Session, ExportService, GoalsService, d3, moment, $interval, $q) {
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
+
       // Chart
       $scope.date = {reportDateRange: CampaignAnalyticsReportService.getDateRange()};
       $scope.reportDefaultDateRanges = CampaignAnalyticsReportService.getDefaultDateRanges();
@@ -103,7 +98,7 @@ define(['./module', 'lodash'], function (module, _) {
       $scope.adGroups = [];
       DisplayCampaignService.getDeepCampaignView($stateParams.campaign_id).then(function (campaign) {
         $scope.campaign = campaign;
-        $scope.optionsBidPrice.chart.yDomain = [0,campaign.max_bid_price];
+        $scope.optionsBidPrice.chart.yDomain = [0, campaign.max_bid_price];
 
         // display the adgroups/ads a first time with the stats (they can take some times)
         $scope.adGroups = sort(campaign.ad_groups);
@@ -115,6 +110,14 @@ define(['./module', 'lodash'], function (module, _) {
         $scope.ads = sort(ads);
       });
 
+
+      // Get segments names for stats display
+      Restangular.all('audience_segments').getList({organisation_id: $scope.organisationId}).then(function (segmentsData) {
+        $scope.segmentNames = [];
+        _.forEach(segmentsData, function (segment) {
+          $scope.segmentNames[segment.id] = segment.name;
+        });
+      });
 
       /**
        * Data Table Export
@@ -298,6 +301,79 @@ define(['./module', 'lodash'], function (module, _) {
         });
       };
 
+      $scope.sortTargetedSegmentsBy = function (key) {
+        CampaignAnalyticsReportService.targetedSegmentPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", 30).then(function (segmentPerformance) {
+          $scope.targetedSegmentPerformance = segmentPerformance;
+          $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
+          $scope.orderBy = key;
+          $scope.targetedSegments = sort(buildAudienceSegments(segmentPerformance));
+        });
+      };
+
+      $scope.sortDiscoveredSegmentsBy = function (key) {
+        CampaignAnalyticsReportService.discoveredSegmentPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", 30).then(function (segmentPerformance) {
+          $scope.discoveredSegmentPerformance = segmentPerformance;
+          $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
+          $scope.orderBy = key;
+          $scope.discoveredSegments = sort(buildAudienceSegments(segmentPerformance));
+        });
+      };
+
+      var buildAudienceSegments = function (segmentPerformance) {
+        // Get media performance info indexes to identify the media information
+        var clicksIdx = segmentPerformance.getHeaderIndex("clicks");
+        var spentIdx = segmentPerformance.getHeaderIndex("impressions_cost");
+        var impIdx = segmentPerformance.getHeaderIndex("impressions");
+        var cpmIdx = segmentPerformance.getHeaderIndex("cpm");
+        var ctrIdx = segmentPerformance.getHeaderIndex("ctr");
+        var cpcIdx = segmentPerformance.getHeaderIndex("cpc");
+        // var cpaIdx = segmentPerformance.getHeaderIndex("cpa");
+
+        var addSegmentInfo = function (segment, segmentInfo) {
+          // Build ad info object using ad performance values. Ad info is used to display and sort the data values.
+          segment.info = [];
+          segment.info[0] = {key: "impressions", type: segmentInfo[impIdx].type, value: segmentInfo[impIdx].value || 0};
+          segment.info[1] = {key: "cpm", type: segmentInfo[cpmIdx].type, value: segmentInfo[cpmIdx].value || 0};
+          segment.info[2] = {key: "impressions_cost", type: segmentInfo[spentIdx].type, value: segmentInfo[spentIdx].value || 0};
+          segment.info[3] = {key: "clicks", type: segmentInfo[clicksIdx].type, value: segmentInfo[clicksIdx].value || 0};
+          segment.info[4] = {key: "ctr", type: segmentInfo[ctrIdx].type, value: segmentInfo[ctrIdx].value || 0};
+          segment.info[5] = {key: "cpc", type: segmentInfo[cpcIdx].type, value: segmentInfo[cpcIdx].value || 0};
+          // TODO add segments cpa stats in backend
+          // if ($scope.hasCpa) {
+          //   segment.info[6] = {key: "cpa", type: segmentInfo[cpaIdx].type, value: segmentInfo[cpaIdx].value || 0};
+          // }
+          return segment;
+        };
+
+        var segments = [];
+        var segmentRows = segmentPerformance.getRows();
+        for (var i = 0; i < segmentRows.length; ++i) {
+          var segment = {name: $scope.segmentNames[segmentRows[i][0]]};
+          var segmentInfo = [segmentRows[i][0]].concat(segmentPerformance.decorate(segmentRows[i]));
+          segments[i] = addSegmentInfo(segment, segmentInfo);
+        }
+
+        return segments;
+      };
+
+      $scope.$watchGroup(['targetedSegmentPerformance', 'segmentNames'], function (values) {
+        var targetedSegmentPerformance = values[0];
+        var segmentNames = values[1];
+
+        if (angular.isDefined(targetedSegmentPerformance) && angular.isDefined(segmentNames)) {
+          $scope.targetedSegments = sort(buildAudienceSegments(targetedSegmentPerformance));
+        }
+      });
+
+      $scope.$watchGroup(['discoveredSegmentPerformance', 'segmentNames'], function (values) {
+        var discoveredSegmentPerformance = values[0];
+        var segmentNames = values[1];
+
+        if (angular.isDefined(discoveredSegmentPerformance) && angular.isDefined(segmentNames)) {
+          $scope.discoveredSegments = sort(buildAudienceSegments(discoveredSegmentPerformance));
+        }
+      });
+
       var buildSites = function (mediaPerformance) {
         var sites = [];
 
@@ -313,22 +389,10 @@ define(['./module', 'lodash'], function (module, _) {
         var addSiteInfo = function (site, siteInfo) {
           // Build ad info object using ad performance values. Ad info is used to display and sort the data values.
           site.info = [];
-          site.info[0] = {
-            key: "impressions",
-            type: siteInfo[siteImpIdx].type,
-            value: siteInfo[siteImpIdx].value || 0
-          };
+          site.info[0] = {key: "impressions", type: siteInfo[siteImpIdx].type, value: siteInfo[siteImpIdx].value || 0};
           site.info[1] = {key: "cpm", type: siteInfo[siteCpmIdx].type, value: siteInfo[siteCpmIdx].value || 0};
-          site.info[2] = {
-            key: "impressions_cost",
-            type: siteInfo[siteSpentIdx].type,
-            value: siteInfo[siteSpentIdx].value || 0
-          };
-          site.info[3] = {
-            key: "clicks",
-            type: siteInfo[siteClicksIdx].type,
-            value: siteInfo[siteClicksIdx].value || 0
-          };
+          site.info[2] = {key: "impressions_cost", type: siteInfo[siteSpentIdx].type, value: siteInfo[siteSpentIdx].value || 0};
+          site.info[3] = {key: "clicks", type: siteInfo[siteClicksIdx].type, value: siteInfo[siteClicksIdx].value || 0};
           site.info[4] = {key: "ctr", type: siteInfo[siteCtrIdx].type, value: siteInfo[siteCtrIdx].value || 0};
           site.info[5] = {key: "cpc", type: siteInfo[siteCpcIdx].type, value: siteInfo[siteCpcIdx].value || 0};
           if ($scope.hasCpa) {
@@ -400,22 +464,10 @@ define(['./module', 'lodash'], function (module, _) {
           var addAdGroupInfo = function (adGroup, info) {
             // Build ad group info object using ad group performance values.
             adGroup.info = [];
-            adGroup.info[0] = {
-              key: "impressions",
-              type: info[adGroupImpIdx].type,
-              value: info[adGroupImpIdx].value || 0
-            };
+            adGroup.info[0] = {key: "impressions", type: info[adGroupImpIdx].type, value: info[adGroupImpIdx].value || 0};
             adGroup.info[1] = {key: "cpm", type: info[adGroupCpmIdx].type, value: info[adGroupCpmIdx].value || 0};
-            adGroup.info[2] = {
-              key: "impressions_cost",
-              type: info[adGroupSpentIdx].type,
-              value: info[adGroupSpentIdx].value || 0
-            };
-            adGroup.info[3] = {
-              key: "clicks",
-              type: info[adGroupClicksIdx].type,
-              value: info[adGroupClicksIdx].value || 0
-            };
+            adGroup.info[2] = {key: "impressions_cost", type: info[adGroupSpentIdx].type, value: info[adGroupSpentIdx].value || 0};
+            adGroup.info[3] = {key: "clicks", type: info[adGroupClicksIdx].type, value: info[adGroupClicksIdx].value || 0};
             adGroup.info[4] = {key: "ctr", type: info[adGroupCtrIdx].type, value: info[adGroupCtrIdx].value || 0};
             adGroup.info[5] = {key: "cpc", type: info[adGroupCpcIdx].type, value: info[adGroupCpcIdx].value || 0};
             if ($scope.hasCpa) {
@@ -470,8 +522,8 @@ define(['./module', 'lodash'], function (module, _) {
       $scope.dateRangeIsToday = function () {
         return CampaignAnalyticsReportService.dateRangeIsToday();
       };
-      
-      
+
+
       $scope.chooseCharts = function () {
         var modalInstance = $uibModal.open({
           templateUrl: 'src/core/campaigns/report/ChooseCharts.html',
@@ -548,22 +600,22 @@ define(['./module', 'lodash'], function (module, _) {
             bottom: 40,
             left: 55
           },
-          forceY:[0,5],
-          x: function(d) {
+          forceY: [0, 5],
+          x: function (d) {
             return d.x;
           },
-          y: function(d) {
+          y: function (d) {
             return d.y;
           },
           useInteractiveGuideline: true,
           duration: 0,
           xAxis: {
-            tickFormat: function(d) {
+            tickFormat: function (d) {
               return d3.time.format('%X')(new Date(d));
             }
           },
           yAxis: {
-            tickFormat: function(d) {
+            tickFormat: function (d) {
               return d3.format('.0f')(d);
             }
           },
@@ -582,21 +634,21 @@ define(['./module', 'lodash'], function (module, _) {
             left: 55
           },
           yDomain: [0, 1],
-          x: function(d) {
+          x: function (d) {
             return d.x;
           },
-          y: function(d) {
+          y: function (d) {
             return d.y;
           },
           useInteractiveGuideline: true,
           duration: 0,
           xAxis: {
-            tickFormat: function(d) {
+            tickFormat: function (d) {
               return d3.time.format('%X')(new Date(d));
             }
           },
           yAxis: {
-            tickFormat: function(d) {
+            tickFormat: function (d) {
               return d3.format('%')(d);
             }
           },
@@ -614,22 +666,22 @@ define(['./module', 'lodash'], function (module, _) {
             bottom: 40,
             left: 55
           },
-          x: function(d) {
+          x: function (d) {
             return d.x;
           },
-          y: function(d) {
+          y: function (d) {
             return d.y;
           },
           useInteractiveGuideline: true,
           duration: 0,
           xAxis: {
-            tickFormat: function(d) {
+            tickFormat: function (d) {
               return d3.time.format('%X')(new Date(d));
             }
           },
           yAxis: {
-            tickFormat: function(d) {
-              return d3.format('.02f')(d) + ' ' +$scope.campaign.currency_code;
+            tickFormat: function (d) {
+              return d3.format('.02f')(d) + ' ' + $scope.campaign.currency_code;
             }
           },
           legendPosition: 'right'
@@ -639,7 +691,7 @@ define(['./module', 'lodash'], function (module, _) {
 
       /*
        data of charts
-      */
+       */
       var bidCountData = {
         values: [],
         key: 'Bid Count/s',
@@ -681,9 +733,9 @@ define(['./module', 'lodash'], function (module, _) {
       var time1 = null;
 
       /*
-        function to count delta metrics
-      */
-      var deltaStats = function(stats, unixTime) {
+       function to count delta metrics
+       */
+      var deltaStats = function (stats, unixTime) {
 
         var delta = {
           bidCount: 0,
@@ -726,18 +778,18 @@ define(['./module', 'lodash'], function (module, _) {
 
       $scope.$on("$destroy", function () {
         if (refreshTimeoutId) {
-            clearTimeout(refreshTimeoutId);
+          clearTimeout(refreshTimeoutId);
         }
         $scope.refreshGraph.refreshDataTab = false;
       });
 
-      var fetchAndUpdateLiveGraph = function() {
+      var fetchAndUpdateLiveGraph = function () {
 
         var promise = $q.resolve();
 
         if ($scope.refreshGraph.refreshDataTab) {
           var x = moment();
-          promise = CampaignAnalyticsReportService.livePerformance($stateParams.campaign_id, $scope.refreshGraph.refreshInterval).then(function(data) {
+          promise = CampaignAnalyticsReportService.livePerformance($stateParams.campaign_id, $scope.refreshGraph.refreshInterval).then(function (data) {
             $scope.livePerformance = data;
             var delta = deltaStats(data, x.unix());
 
@@ -775,12 +827,12 @@ define(['./module', 'lodash'], function (module, _) {
               $scope.dataBidPrice[1].values.shift();
             }
 
-          }).then(function() {
+          }).then(function () {
             $scope.$applyAsync(); // update both chart
           });
         }
 
-        promise.then(function() {
+        promise.then(function () {
           refreshTimeoutId = setTimeout(fetchAndUpdateLiveGraph, $scope.refreshGraph.refreshInterval * 1000);
         });
 

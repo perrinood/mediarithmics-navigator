@@ -1,4 +1,4 @@
-define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, ReportWrapper) {
+define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _, ReportWrapper) {
   'use strict';
 
 
@@ -103,6 +103,16 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
           }
         );
 
+        var segmentPerformanceResource = $resource(WS_URL + "/reports/campaign_segment_performance_report",
+          {},
+          {
+            get: {
+              method: 'GET',
+              headers: {'Authorization': AuthenticationService.getAccessToken()}
+            }
+          }
+        );
+
         /**
          * Default Date Range Used For Daily Stats
          */
@@ -160,7 +170,7 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
             });
         };
 
-	ReportService.buildPerformanceDimensionReport = function (resource, dimensions, metrics, filters, sort, limit) {
+        ReportService.buildPerformanceDimensionReport = function (resource, dimensions, metrics, filters, sort, limit) {
           return this.getPerformance(resource, dimensions, metrics, filters, sort, limit)
             .$promise.then(function (response) {
               return new ReportWrapper(response.data.report_view, tableHeaders);
@@ -211,13 +221,26 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
             limit
           );
         };
-	ReportService.segmentPerformance = function (campaignId, hasCpa, sort, limit) {
+
+        ReportService.targetedSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
-            displayCampaignResource,
-	    "audience_segment_id",
+            segmentPerformanceResource,
+            "audience_segment_id",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
-            "campaign_id==" + campaignId,
+            "campaign_id==" + campaignId + ",segment_scope==1",
+            sort,
+            limit
+          );
+        };
+
+        ReportService.discoveredSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
+          var cpa = hasCpa ? ",cpa" : "";
+          return this.buildPerformanceDimensionReport(
+            segmentPerformanceResource,
+            "audience_segment_id",
+            "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
+            "campaign_id==" + campaignId + ",segment_scope==2",
             sort,
             limit
           );
@@ -229,7 +252,7 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
             liveResource,
             period,
             "impressions,clicks,cpm,ctr,cpc,winning_bid_price,losing_bid_price,losing_bid_count,avg_winning_bid_price,avg_losing_bid_price",
-              "campaign_id==" + campaignId,
+            "campaign_id==" + campaignId,
             sort,
             limit
           );
@@ -238,7 +261,7 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
 
         ReportService.kpi = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";
-          return this.getPerformance(displayCampaignResource,"", "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa, "campaign_id==" + campaignId)
+          return this.getPerformance(displayCampaignResource, "", "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa, "campaign_id==" + campaignId)
             .$promise.then(function (response) {
               var report = response.data.report_view;
               var firstLine = report.rows[0] || [];
@@ -263,7 +286,7 @@ define(['./module', 'lodash','core/common/ReportWrapper'], function (module, _, 
         ReportService.getDefaultDateRanges = function () {
           return {
             'Today': [moment(), moment()],
-            'Yesterday' : [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
             'Last 7 Days': [moment().subtract('days', 6), moment()],
             'Last 30 Days': [moment().subtract('days', 29), moment()]
           };
