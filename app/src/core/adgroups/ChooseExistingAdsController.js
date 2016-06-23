@@ -31,7 +31,7 @@ define(['./module'], function (module) {
             creative: creative
           });
         }
-        $uibModalInstance.close();
+        $uibModalInstance.close(creative);
       };
 
       $scope.cancel = function () {

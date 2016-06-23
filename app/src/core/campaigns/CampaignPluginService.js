@@ -40,7 +40,7 @@ define(['./module'], function (module) {
           name: "Desktop & Mobile",
           editor_version_id: "11",
           group_id: "com.mediarithmics.campaign.display",
-          artifact_id: "default-template",
+          artifact_id: "default-editor",
           image: "/images/plugins/multi-targeting-small.png",
           editor: {
             create_path: "/{organisation_id}/campaigns/display/expert/edit/{id}",
@@ -51,22 +51,22 @@ define(['./module'], function (module) {
           name: "Simplified Keywords Targeting",
           editor_version_id: "12",
           group_id: "com.mediarithmics.campaign.display",
-          artifact_id: "keywords-targeting-template",
+          artifact_id: "keywords-targeting-editor",
           image: "/images/plugins/keywords-targeting-small.png",
           editor: {
             create_path: "/{organisation_id}/campaigns/display/keywords",
             edit_path: "/{organisation_id}/campaigns/display/keywords/{id}"
-          },
+          }
         }),
         new CampaignTemplate({
-          name: "Email campaign Default Editor",
-          editor_version_id: "17",
-          group_id: "com.mediarithmics.campaign.email",
-          artifact_id: "default-editor",
-          image: "/images/plugins/email-campaign-expert-small.png",
+          name: "External Campaign",
+          editor_version_id: "1027",
+          group_id: "com.mediarithmics.campaign.display",
+          artifact_id: "external-campaign-editor",
+          image: "/images/plugins/multi-targeting-small.png",
           editor: {
-            create_path: "/{organisation_id}/campaigns/email/edit",
-            edit_path: "/{organisation_id}/campaigns/email/edit/{id}"
+            create_path: "/{organisation_id}/campaigns/display/external/edit/{id}",
+            edit_path: "/{organisation_id}/campaigns/display/external/edit/{id}"
           }
         })
       ];

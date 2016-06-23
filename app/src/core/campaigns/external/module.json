@@ -1,0 +1,17 @@
+{
+  "name": "core/campaigns/external",
+  "dependencies": [
+    "restangular",
+    "core/campaigns",
+    "core/creatives",
+    "core/adgroups",
+    "core/bidOptimizer",
+    "core/plugin",
+    "ui.bootstrap",
+    "core/keywords",
+    "core/placementlists",
+    "core/common/properties",
+    "core/common/ads",
+    "core/location"
+  ]
+}

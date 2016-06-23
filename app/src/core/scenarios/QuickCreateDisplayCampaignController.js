@@ -5,7 +5,7 @@ define(['./module'], function (module) {
     '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session',
     'core/campaigns/CampaignPluginService',
     function ($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, CampaignPluginService) {
-      CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.display", "default-template").then(function (template) {
+      CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.display", "default-editor").then(function (template) {
         DisplayCampaignService.initCreateCampaign(template).then(function () {
           $scope.campaign = DisplayCampaignService.getCampaignValue();
         });

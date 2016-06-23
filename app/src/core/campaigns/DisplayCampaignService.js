@@ -31,7 +31,7 @@ define(['./module'], function (module) {
       };
 
       service.initCreateCampaign = function (template) {
-        var campaignCtn = new DisplayCampaignContainer(template.editor_version_id,Session.getCurrentWorkspace() );
+        var campaignCtn = new DisplayCampaignContainer(template.editor_version_id, Session.getCurrentWorkspace());
         campaignCtn.id = IdGenerator.getId();
         campaignCtn.organisationId = Session.getCurrentWorkspace().organisation_id;
 
@@ -44,7 +44,7 @@ define(['./module'], function (module) {
       };
 
       service.initEditCampaign = function (campaignId, template) {
-        var campaignCtn = new DisplayCampaignContainer(template.editor_version_id, Session.getCurrentWorkspace() );
+        var campaignCtn = new DisplayCampaignContainer(template.editor_version_id, Session.getCurrentWorkspace());
         this.campaignCtn = campaignCtn;
         return campaignCtn.load(campaignId);
       };
