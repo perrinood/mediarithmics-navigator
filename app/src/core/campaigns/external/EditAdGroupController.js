@@ -36,10 +36,16 @@ define(['./module', 'angular', 'jquery'], function (module, angular, $) {
         }
       }
 
-      $scope.deleteAd = function (ad) {
-        if (angular.isDefined(ad.id)) {
-          $scope.creatives.slice($scope.creatives.indexOf(ad.id), 1);
-          DisplayCampaignService.removeAd(adGroupId, ad.id);
+      $scope.deleteAd = function (creative) {
+        if (angular.isDefined(creative.id)) {
+          $scope.creatives = $scope.creatives.filter(function (val) {
+            return val.id !== creative.id;
+          });
+          for (var i = 0; i < $scope.ads.length; ++i) {
+            if ($scope.ads[i].creative_id === creative.id) {
+              DisplayCampaignService.removeAd(adGroupId, $scope.ads[i].id);
+            }
+          }
         }
       };
 
