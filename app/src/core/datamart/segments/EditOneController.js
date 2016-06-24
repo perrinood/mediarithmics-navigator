@@ -200,7 +200,7 @@ define(['./module'], function (module) {
       };
 
       $scope.next = function () {
-        if (type === 'USER_QUERY'){
+        if ($scope.segment.type === 'USER_QUERY'){
           $scope.queryContainer.saveOrUpdate().then(function sucess(updateQueryContainer){
             saveSegment(updateQueryContainer.id);
           }, function error(reason){
