@@ -34,9 +34,29 @@
         </div>
         <span>Ad groups</span>
       </div>
-      <div ng-repeat="adGroup in adGroups|orderBy:'id'">
-        <div ng-include="'src/core/campaigns/external/view-ad-group.html'"></div>
-      </div>
+      <table class="fragment-list-creatives list-ads" ng-show="adGroups.length">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Visibility</th>
+          <th>Creatives</th>
+          <th>Audience Segments</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="adGroup in adGroups|orderBy:'id'">
+          <td>{{adGroup.name}}</td>
+          <td>{{adGroup.visibility | constant:'adgroup_visibility'}}</td>
+          <td>{{getAds(adGroup.id).length}}</td>
+          <td>{{getAudienceSegments(adGroup.id).length}}</td>
+          <td class="actions">
+            <a ng-click="editAdGroup(adGroup)" class="mics-btn mics-btn-action">Edit</a>
+            <a ng-click="removeAdGroup(adGroup)" class="mics-btn mics-btn-delete">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Save or cancel -->
