@@ -35,6 +35,10 @@ define(['./module'], function (module) {
           initView();
         }
 
+        $scope.getAudienceSegments = function (adGroupId) {
+          return DisplayCampaignService.getAudienceSegments(adGroupId);
+        };
+
         /**
          * Ad Group Management
          */
@@ -54,6 +58,9 @@ define(['./module'], function (module) {
           $scope.adGroups = DisplayCampaignService.getAdGroupValues();
         };
 
+        $scope.getAds = function (adGroupId) {
+          return DisplayCampaignService.getAds(adGroupId);
+        };
 
         /**
          * Confirm or cancel campaign editing

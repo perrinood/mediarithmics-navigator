@@ -60,7 +60,7 @@ define(['./module'], function (module) {
         }),
         new CampaignTemplate({
           name: "External Campaign",
-          editor_version_id: "1027",
+          editor_version_id: "1028",
           group_id: "com.mediarithmics.campaign.display",
           artifact_id: "external-campaign-editor",
           image: "/images/plugins/multi-targeting-small.png",
