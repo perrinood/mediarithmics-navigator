@@ -68,6 +68,17 @@ define(['./module'], function (module) {
             create_path: "/{organisation_id}/campaigns/display/external/edit/{id}",
             edit_path: "/{organisation_id}/campaigns/display/external/edit/{id}"
           }
+        }),
+        new CampaignTemplate({
+          name: "Email campaign Default Editor",
+          editor_version_id: "17",
+          group_id: "com.mediarithmics.campaign.email",
+          artifact_id: "default-editor",
+          image: "/images/plugins/email-campaign-expert-small.png",
+          editor: {
+            create_path: "/{organisation_id}/campaigns/email/edit",
+            edit_path: "/{organisation_id}/campaigns/email/edit/{id}"
+          }
         })
       ];
 
@@ -80,6 +91,14 @@ define(['./module'], function (module) {
          * @return {$q.promise} the promise with the templates.
          */
         getAllDisplayCampaignEditors: function () {
+          return this.getAllCampaignEditors().then(function(campaignTemplates){
+            return campaignTemplates.filter(function(t){
+              return t.group_id === 'com.mediarithmics.campaign.display';
+            });
+          });
+        },
+
+        getAllCampaignEditors : function () {
           var deferred = $q.defer();
 
           setTimeout(function () {
@@ -87,11 +106,6 @@ define(['./module'], function (module) {
           }, 0);
 
           return deferred.promise;
-        },
-
-        getAllCampaignEditors : function () {
-
-          return this.getAllDisplayCampaignEditors();
         },
 
         /**
