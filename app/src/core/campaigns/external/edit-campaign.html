@@ -58,6 +58,49 @@
         </tbody>
       </table>
     </div>
+    
+    <!------------------------ Select Goals   ------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <span>Goals</span>
+      </div>
+      <div class="mics-default-block">
+        <div class="row goals-selection" ng-repeat="goalType in goalTypes">
+          <div class="col-xs-2">
+            <hr ng-show="isConversionType(goalType.key)"/>
+            <label>
+              <input type="checkbox" ng-change="selectConversion(goalType)" ng-model="checkedGoalTypes[goalType.key]">
+              <strong> {{goalType.name}}</strong>
+            </label>
+          </div>
+          <div class="col-xs-2">{{goalType.description}}</div>
+        </div>
+        <!--List Conversion Goals-->
+        <div ng-show="conversionGoals.length">
+          <h4>Selected Conversion Goals</h4>
+          <table class="fragment-list-keyword-list">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th class="actions">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="source in goalSelections | filter: { goal_selection_type: getConversionType() }">
+              <td>{{source.goal_name}}</td>
+              <td>{{source.goal_selection_type || json}}</td>
+              <td><input type="radio" ng-checked="source.default" ng-disabled="true"/></td>
+              <td class="actions">
+                <button class="mics-btn mics-btn-delete" ng-click="removeGoalSelection(source)">Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <!-- Save or cancel -->
     <div class="mcs-actions-group">

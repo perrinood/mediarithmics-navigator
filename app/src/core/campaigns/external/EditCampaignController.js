@@ -1,4 +1,4 @@
-define(['./module'], function (module) {
+define(['./module', 'jquery'], function (module, $) {
   'use strict';
 
   /**
@@ -7,14 +7,35 @@ define(['./module'], function (module) {
    */
 
   module.controller('core/campaigns/external/EditCampaignController', [
-    '$scope', '$log', '$location', '$stateParams', 'core/campaigns/DisplayCampaignService', 'core/campaigns/CampaignPluginService',
-    'core/common/WaitingService', 'core/common/ErrorService', 'core/common/auth/Session',
-    function ($scope, $log, $location, $stateParams, DisplayCampaignService, CampaignPluginService, WaitingService, ErrorService, Session) {
+    '$scope', '$log', '$uibModal', '$location', '$stateParams', 'lodash', 'core/campaigns/DisplayCampaignService', 'core/campaigns/CampaignPluginService',
+    'core/common/WaitingService', 'core/common/ErrorService', 'core/common/auth/Session', 'core/campaigns/goals/GoalsService',
+    function ($scope, $log, $uibModal, $location, $stateParams, _, DisplayCampaignService, CampaignPluginService, WaitingService, ErrorService, Session, GoalsService) {
       var campaignId = $stateParams.campaign_id;
+      $scope.goalTypes = GoalsService.getGoalTypesList();
+      $scope.isConversionType = GoalsService.isConversionType;
+      $scope.getConversionType = GoalsService.getConversionType;
+      $scope.checkedGoalTypes = [];
+      $scope.conversionGoals = [];
+      $scope.campaignScopeHelper = {};
+
+      function updateSelectedGoals() {
+        $scope.selectedGoals = DisplayCampaignService.getGoalSelections();
+      }
 
       function initView() {
+        $scope.moreGoals = false;
         $scope.campaign = DisplayCampaignService.getCampaignValue();
         $scope.adGroups = DisplayCampaignService.getAdGroupValues();
+        $scope.goalSelections = DisplayCampaignService.getGoalSelections();
+        $scope.campaignScopeHelper.defaultGoalSelection = _.find(DisplayCampaignService.getGoalSelections(), {"default": true});
+        // Init selected goals
+        updateSelectedGoals();
+        for (var i = 0; i < $scope.selectedGoals.length; ++i) {
+          $scope.checkedGoalTypes[$scope.selectedGoals[i].goal_selection_type] = true;
+          if (GoalsService.isConversionType($scope.selectedGoals[i].goal_selection_type)) {
+            $scope.conversionGoals.push($scope.selectedGoals[i]);
+          }
+        }
         $scope.locations = DisplayCampaignService.getLocations();
       }
 
@@ -60,6 +81,98 @@ define(['./module'], function (module) {
 
         $scope.getAds = function (adGroupId) {
           return DisplayCampaignService.getAds(adGroupId);
+        };
+
+
+        /**
+         * Goals Management
+         */
+
+        $scope.selectConversion = function (goalType) {
+          var self = this;
+          var type = goalType.key;
+
+          if ($scope.checkedGoalTypes[type]) {
+            // If checkbox has just been checked
+
+            if (GoalsService.isConversionType(type)) {
+              var modalInstance = $uibModal.open({
+                templateUrl: 'src/core/goals/ChooseExistingGoal.html',
+                scope: $scope,
+                backdrop: 'static',
+                controller: 'core/goals/ChooseExistingGoalController',
+                size: 'lg',
+                resolve: {
+                  goals: function () {
+                    return $scope.conversionGoals;
+                  }
+                }
+              });
+
+              // TODO Right now we only consider the first selected goal. This will be changed later.
+              modalInstance.result.then(function (conversionGoals) {
+                $scope.conversionGoals = conversionGoals;
+                if (!conversionGoals.length) {
+                  $scope.checkedGoalTypes[type] = false;
+                }
+                for (var i = 0; i < conversionGoals.length; ++i) {
+                  self.addGoalSelection({
+                    'goal_selection_type': type,
+                    'goal_id': conversionGoals[i].id,
+                    'goal_name': conversionGoals[i].name
+                  });
+                }
+              });
+            } else {
+              this.addGoalSelection({
+                'goal_selection_type': type,
+                'goal_name': goalType.name
+              });
+            }
+          } else {
+            // If checkbox has been unchecked we remove all the corresponding goals
+
+            if (GoalsService.isConversionType(type)) {
+              $scope.conversionGoals = [];
+            }
+            var goalsToRemove = $.grep($scope.selectedGoals, function (g) {
+              return g.goal_selection_type === type;
+            });
+            self.removeGoals(goalsToRemove);
+          }
+        };
+
+        $scope.updateDefaultGoalSelection = function () {
+          _.forEach(DisplayCampaignService.getGoalSelections(), function (gs) {
+            gs.default = false;
+          });
+          $scope.campaignScopeHelper.defaultGoalSelection.default = true;
+        };
+
+        $scope.addGoalSelection = function (goalSelection) {
+          DisplayCampaignService.addGoalSelection(goalSelection);
+          updateSelectedGoals();
+        };
+
+        $scope.removeGoalSelection = function (goalSelection) {
+          DisplayCampaignService.removeGoalSelection(goalSelection);
+          updateSelectedGoals();
+
+          // Uncheck conversion checkbox if we have no more conversion goals
+          for (var i = 0; i < $scope.selectedGoals.length; ++i) {
+            if (GoalsService.isConversionType($scope.selectedGoals[i].goal_selection_type)) {
+              return;
+            }
+          }
+          $scope.conversionGoals = [];
+          $scope.checkedGoalTypes[this.getConversionType()] = false;
+        };
+
+        $scope.removeGoals = function (goalsList) {
+          for (var i = 0; i < goalsList.length; ++i) {
+            DisplayCampaignService.removeGoalSelection(goalsList[i]);
+          }
+          updateSelectedGoals();
         };
 
         /**
