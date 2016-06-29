@@ -97,7 +97,8 @@
                 <span class="help-block" ng-if="!queryContainer.hasConditions()">No conditions defined, query matchs all</span>
                 <div ng-repeat="(i,groupContainer) in queryContainer.groupContainers">
                   <div ng-class="{'panel panel-success':!groupContainer.value.excluded, 'panel panel-danger':groupContainer.value.excluded}">
-                    <div class="panel-heading">
+                    <div class="panel-heading" x-lvl-drop-target='true'
+                         x-on-drop='addElement(dragEl, dropEl , groupContainer)'>
                       <div class="pull-right">
 
                         <button type="button" class="btn btn-default btn-xs" aria-label="copy"
@@ -121,7 +122,8 @@
                       <div id="group {{groupContainer.id}}"
                            ng-repeat="(j,elementContainer) in groupContainer.elementContainers">
                         <div class="panel panel-default">
-                          <div class="panel-heading">
+                          <div class="panel-heading" x-lvl-drop-target='true'
+                               x-on-drop='addCondition(dragEl, dropEl , elementContainer)'>
                             <div class="pull-right">
                               <button type="button" class="btn btn-default btn-xs"
                                       aria-label="remove"
@@ -161,17 +163,17 @@
                               </div>
                             </div>
                             <!--ng-class="isDropAllowedOnElement(dragEl, elementContainer)"-->
-                            <div class="droppable-zone" x-lvl-drop-target='true'
+                            <!-- <div class="droppable-zone" x-lvl-drop-target='true'
                                  ng-class="{
                                                         'drop-allowed': familyMatchesForDrop(elementContainer.family),
                                                         'drop-forbidden': !familyMatchesForDrop(elementContainer.family)
                                                      }"
-                                 x-on-drop='addCondition(dragEl, dropEl , elementContainer)'></div>
+                                 x-on-drop='addCondition(dragEl, dropEl , elementContainer)'></div> -->
                           </div>
                         </div>
                       </div>
-                      <div class="droppable-zone drop-allowed" x-lvl-drop-target='true'
-                           x-on-drop='addElement(dragEl, dropEl , groupContainer)'></div>
+                      <!-- <div class="droppable-zone drop-allowed" x-lvl-drop-target='true'
+                           x-on-drop='addElement(dragEl, dropEl , groupContainer)'></div> -->
                     </div>
                   </div>
                 </div>
