@@ -1,0 +1,28 @@
+<div class="mcs-default-container" ng-controller="core/settings/serviceusage/ViewAllController">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Service Usage Report</h1>
+    </div>
+  </div>
+
+  <table class="mics-table js-auto-hide-actions table-hover">
+    <thead>
+    <tr>
+      <th>Campaign Id</th>
+      <th>Campaign Name</th>
+      <th>Service Name</th>
+      <th>Service Element Name</th>
+      <th>Usage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="usage in usages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{usage.campaign_id}}</td>
+      <td>{{usage.campaign_name}}</td>
+      <td>{{usage.service_name}}</td>
+      <td>{{usage.service_element_name}}</td>
+      <td>{{usage.usage}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

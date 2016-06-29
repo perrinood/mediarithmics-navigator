@@ -5,6 +5,7 @@
     "restangular",
     "core/settings/sites",
     "core/settings/useraccount",
-    "core/settings/datamarts"
+    "core/settings/datamarts",
+    "core/settings/serviceusage"
   ]
 }
