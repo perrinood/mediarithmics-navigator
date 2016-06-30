@@ -2466,11 +2466,7 @@ a.category-item {
   }
 
   .drop-allowed.lvl-over {
-    background: #dff0d8;
-  }
-
-  .drop-forbidden.lvl-over {
-    background: #f2dede;
+    background-color: $mcs-green;
   }
 
 }

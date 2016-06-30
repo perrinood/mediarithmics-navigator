@@ -93,11 +93,11 @@
           </div>
           <uib-tabset>
             <uib-tab heading="Query conditions">
-              <div class="query-tab">
+              <div class="query-tab" ng-class="{'ongoing-drag-decorate':onGoingDrag}">
                 <span class="help-block" ng-if="!queryContainer.hasConditions()">No conditions defined, query matchs all</span>
                 <div ng-repeat="(i,groupContainer) in queryContainer.groupContainers">
                   <div ng-class="{'panel panel-success':!groupContainer.value.excluded, 'panel panel-danger':groupContainer.value.excluded}">
-                    <div class="panel-heading" x-lvl-drop-target='true'
+                    <div class="panel-heading drop-allowed" x-lvl-drop-target='true'
                          x-on-drop='addElement(dragEl, dropEl , groupContainer)'>
                       <div class="pull-right">
 
@@ -118,12 +118,16 @@
                                           class="glyphicon glyphicon-remove-circle" aria-hidden="true"
                                           title="Exclude group" ng-click="toggleExclude(groupContainer)"></span>
                     </div>
-                    <div class="panel-body" ng-class="{'ongoing-drag-decorate':onGoingDrag}">
+                    <div class="panel-body">
                       <div id="group {{groupContainer.id}}"
                            ng-repeat="(j,elementContainer) in groupContainer.elementContainers">
                         <div class="panel panel-default">
                           <div class="panel-heading" x-lvl-drop-target='true'
-                               x-on-drop='addCondition(dragEl, dropEl , elementContainer)'>
+                               x-on-drop='addCondition(dragEl, dropEl , elementContainer)'
+                               ng-class="{
+                                                      'drop-allowed': familyMatchesForDrop(elementContainer.family)
+                                                   }"
+                               >
                             <div class="pull-right">
                               <button type="button" class="btn btn-default btn-xs"
                                       aria-label="remove"
