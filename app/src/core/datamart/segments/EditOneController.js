@@ -56,7 +56,7 @@ define(['./module'], function (module) {
           }
           segment.all('external_feeds').getList().then(function(feeds) {
             var pluginContainers = [];
-            
+
             for(var i = 0; i<feeds.length; i++) {
               var pic = new PluginInstanceContainer(feeds[i]);
               pic.loadProperties($q);
@@ -64,7 +64,7 @@ define(['./module'], function (module) {
             }
 
             $scope.activations = pluginContainers;
-            
+
           });
 
         });
@@ -86,7 +86,7 @@ define(['./module'], function (module) {
           $scope.segment.query_id = queryId;
           promise = Restangular.all('audience_segments').post($scope.segment, {organisation_id: Session.getCurrentWorkspace().organisation_id});
         }
-        
+
         promise.then(function(audienceSegment) {
           var promises = [];
           if($scope.activations) {
@@ -95,16 +95,18 @@ define(['./module'], function (module) {
               var p = activation.save();
               promises.push(p);
             }
-            return $q.all(promises);
+            return $q.all(promises).then(function(){
+              return audienceSegment;
+            });
           } else {
             return audienceSegment;
           }
         }, function failure() {
           $scope.error = 'There was an error while saving segment';
           $log.info("failure");
-        }).then(function success(){
+        }).then(function success(audienceSegment){
           $log.info("success");
-          $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments");
+          $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments/" +  audienceSegment.type + "/" + audienceSegment.id + "/report");
         }, function failure(){
           $scope.error = 'There was an error while saving segment';
           $log.info("failure");
@@ -133,7 +135,7 @@ define(['./module'], function (module) {
       $scope.addActivation = function () {
         var endpoint = $scope.segment.all('external_feeds');
         var newScope = $scope.$new(true);
-        
+
         newScope.activation = new PluginInstanceContainer({}, endpoint);
 
         $uibModal.open({
@@ -196,7 +198,12 @@ define(['./module'], function (module) {
       };
 
       $scope.cancel = function () {
-        $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments");
+        if ($scope.segment.id){
+          $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments/" +  $scope.segment.type + "/" + $scope.segment.id + "/report");
+        } else {
+          $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments");
+        }
+
       };
 
       $scope.next = function () {

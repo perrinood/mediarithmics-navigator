@@ -28,14 +28,28 @@
 
         </div>
       </div>
-
+      <div class="form-group col-md-3 pull-right">
+        <input class="form-control"
+               type="text"
+               ng-model="searchInput"
+               placeholder="Search">
+      </div>
     </div>
     <table class="mics-table table-hover clickableRow js-auto-hide-actions" ng-show="segments.length">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Technical Name</th>
-          <th>Type</th>
+          <th ng-click="sortType = 'name'; reverseSort = !reverseSort">
+            Name
+            <span ng-show="sortType == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'technical_name'; reverseSort = !reverseSort">
+            Technical Name
+            <span ng-show="sortType == 'technical_name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'type'; reverseSort = !reverseSort">
+            Type
+            <span ng-show="sortType == 'type'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
           <th class="metrics" ng-repeat="metric in audienceSegmentStats.getMetrics()">
             {{audienceSegmentStats.getMetricName(metric) }}
           </th>
@@ -43,7 +57,7 @@
         </tr>
       </thead>
       <tbody>
-      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in segments">
+      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in segments | orderBy:sortType:reverseSort | filter:searchInput">
         <td>{{segment.name}}</td>
         <td>{{segment.technical_name}}</td>
         <td>{{segment.type}}</td>
