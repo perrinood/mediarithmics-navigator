@@ -13,6 +13,7 @@ define(['./module'], function (module) {
       var datamartId = Session.getCurrentWorkspace().datamart_id;
       Restangular.all('audience_segments').getList({datamart_id: datamartId}).then(function (segments) {
         $scope.segments = segments;
+        $scope.sortType = 'name';
       });
 
       $scope.reportDateRange = {startDate: moment(), endDate: moment()};
