@@ -1,103 +1,88 @@
-define(['./module', 'angular'], function (module, angular) {
+define(['./module'], function (module) {
   'use strict';
 
   module.controller('core/settings/serviceusage/ViewAllController', [
-    '$scope', '$log', '$location', '$state', '$stateParams', 'Restangular', 'core/common/auth/Session', 'ServiceUsageReportService', 'lodash',
-    function ($scope, $log, $location, $state, $stateParams, Restangular, Session, ServiceUsageReportService, _) {
+    '$scope', '$log', '$location', '$state', '$stateParams', 'Restangular', 'core/common/auth/Session', 'ServiceUsageReportService', 'lodash', '$q',
+    function ($scope, $log, $location, $state, $stateParams, Restangular, Session, ServiceUsageReportService, _, $q) {
+      var currentWorkspace = Session.getCurrentWorkspace();
       $scope.datamartId = Session.getCurrentDatamartId();
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
       $scope.itemsPerPage = 20;
       $scope.currentPage = 0;
       $scope.usages = [];
 
-      // TODO MAKE DECORATORS WORK IN ORDER TO STOP DOING THIS BEAUTIFUL MANUAL JOIN...
-      // Get campaign names
-      Restangular.all('campaigns').getList({organisation_id: $scope.organisationId}).then(function (campaignsData) {
-        $scope.campaignNames = [];
-        _.forEach(campaignsData, function (campaign) {
-          $scope.campaignNames[campaign.id] = campaign.name;
-        });
-      });
+      $scope.reportDateRange = ServiceUsageReportService.getDateRange();
 
-      // Get services names
-      Restangular.all('services').getList({organisation_id: $scope.organisationId}).then(function (servicesData) {
-        $scope.serviceNames = [];
-        _.forEach(servicesData, function (service) {
-          $scope.serviceNames[service.id] = service.name;
+      var updateStatistics = function ($scope, ServiceUsageReportService) {
+        ServiceUsageReportService.setDateRange($scope.reportDateRange);
+        ServiceUsageReportService.serviceUsageCustomerReport($scope.organisationId).then(function (data) {
+          buildCustomerServiceUsageReport(data);
         });
-      });
+      };
 
-      // Get segments names for stats display
-      Restangular.all('audience_segments').getList({organisation_id: $scope.organisationId}).then(function (segmentsData) {
-        $scope.serviceElementNames = [];
-        _.forEach(segmentsData, function (segment) {
-          $scope.serviceElementNames[segment.id] = segment.name;
-        });
+      $scope.$watch('reportDateRange', function () {
+        updateStatistics($scope, ServiceUsageReportService, currentWorkspace.organisation_id);
       });
 
       ServiceUsageReportService.serviceUsageCustomerReport($scope.organisationId).then(function (data) {
-        $scope.serviceUsageCustomerReport = data;
+        buildCustomerServiceUsageReport(data);
       });
 
-      // ServiceUsageReportService.serviceUsageProviderReport($scope.organisationId).then(function (data) {
-      //   $scope.serviceUsageProviderReport = data;
-      // });
+      function getServiceElement(segmentId) {
+        return Restangular.one('audience_segments', segmentId).get({organisation_id: $scope.organisationId});
+      }
 
-      // var buildProviderServiceUsageReport = function (serviceUsage) {
-      //   var usages = [];
-      //
-      //   var usageRows = serviceUsage.getRows();
-      //   for (var i = 0; i < usageRows.length; ++i) {
-      //     usages[i] = {
-      //       provider_organisation_id: usageRows[i][1],
-      //       campaign_id: usageRows[i][1],
-      //       campaign_name: $scope.campaignNames[usageRows[i][1]],
-      //       service_name: $scope.serviceNames[usageRows[i][2]],
-      //       // Keep only stats values. There's only one, unit_count so wee keep the first
-      //       unit_count: usageRows[i][3]
-      //     }
-      //   }
-      //
-      //   return usages;
-      // };
-      //
-      // $scope.$watchGroup(['serviceUsageProviderReport', 'campaignNames', 'serviceNames'], function (values) {
-      //   var serviceUsageProviderReport = values[0];
-      //   var campaignNames = values[1];
-      //   var serviceNames = values[2];
-      //   if (angular.isDefined(serviceUsageProviderReport) && angular.isDefined(campaignNames) && angular.isDefined(serviceNames)) {
-      //     $scope.providerUsages = buildServiceUsageReport(serviceUsageProviderReport);
-      //     console.log($scope.providerUsages);
-      //   }
-      // });
+      function getService(serviceId) {
+        return Restangular.one('services', serviceId).get({organisation_id: $scope.organisationId});
+      }
+
+      function getCampaign(campaignId) {
+        return Restangular.one('campaigns', campaignId).get({organisation_id: $scope.organisationId});
+      }
+
+      function getOrganisation(organisationId) {
+        return Restangular.one('organisations', organisationId).get({organisation_id: $scope.organisationId});
+      }
+
+      $scope.serviceUsageCustomerReport = [];
+
+      function buildRow(usageRows, i) {
+        var deferred = $q.defer();
+        var unitCount = usageRows[i][4];
+        var list = [getOrganisation(usageRows[i][0]), getCampaign(usageRows[i][1]), getService(usageRows[i][2]), getServiceElement(usageRows[i][3])];
+        $q.all(list).then(function (results) {
+          var organisation = results[0];
+          var campaign = results[1];
+          var service = results[2];
+          var element = results[3];
+          var obj = {
+            customer_organisation_name: organisation.name,
+            campaign_name: campaign.name,
+            service_name: service.name,
+            service_element_name: element.name,
+            unit_count: unitCount
+          };
+          deferred.resolve(obj);
+        }, function () {
+          deferred.resolve(undefined);
+        });
+
+        return deferred.promise;
+      }
 
       var buildCustomerServiceUsageReport = function (serviceUsage) {
-        var usages = [];
-
+        var futures = [];
         var usageRows = serviceUsage.getRows();
         for (var i = 0; i < usageRows.length; ++i) {
-          usages[i] = {
-            customer_organisation_id: usageRows[i][0],
-            campaign_name: $scope.campaignNames[usageRows[i][1]],
-            service_name: $scope.serviceNames[usageRows[i][2]],
-            service_element_name: $scope.serviceElementNames[usageRows[i][3]],
-            // Keep only stats values. There's only one, unit_count so wee keep the first
-            unit_count: usageRows[i][4]
-          };
+          futures[i] = buildRow(usageRows, i);
         }
 
-        return usages;
+        $q.all(futures).then(function (result) {
+          $scope.customerUsages = result.filter(function(n) { return n !== undefined; });
+        }, function () {
+          $log.error("An error occurred during service usage report build");
+        });
       };
-
-      $scope.$watchGroup(['serviceUsageCustomerReport', 'campaignNames', 'serviceNames', 'serviceElementNames'], function (values) {
-        var serviceUsageCustomerReport = values[0];
-        var campaignNames = values[1];
-        var serviceNames = values[2];
-        var serviceElementNames = values[3];
-        if (angular.isDefined(serviceUsageCustomerReport) && angular.isDefined(campaignNames) && angular.isDefined(serviceNames) && angular.isDefined(serviceElementNames)) {
-          $scope.customerUsages = buildCustomerServiceUsageReport(serviceUsageCustomerReport);
-        }
-      });
     }
   ]);
 });

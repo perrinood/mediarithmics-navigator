@@ -112,6 +112,36 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         );
       };
 
+
+      ReportService.getDefaultDateRanges = function () {
+        return {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+          'Last 7 Days': [moment().subtract('days', 6), moment()],
+          'Last 30 Days': [moment().subtract('days', 29), moment()]
+        };
+      };
+
+      ReportService.getDateRange = function () {
+        return range;
+      };
+
+      ReportService.setDateRange = function (newRange) {
+        range = newRange;
+      };
+
+      ReportService.getStartDate = function () {
+        return startDate();
+      };
+
+      ReportService.getEndDate = function () {
+        return endDate();
+      };
+
+      ReportService.dateRangeIsToday = function () {
+        return this.getStartDate().valueOf() >= this.getEndDate().subtract('days', 1).valueOf();
+      };
+
       return ReportService;
     }]);
 });
