@@ -87,7 +87,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
       };
 
       // TODO MAKE THE DECORATORS WORK!
-      ReportService.serviceUsageCustomerReport = function (organisationId, sort, limit) {
+      ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
           serviceUsageCustomerResource,
           // "campaign_id,campaign_name,service_name,service_element_name,customer_name",

@@ -37,7 +37,7 @@
   <table class="mics-table js-auto-hide-actions table-hover">
     <thead>
     <tr>
-      <th>Customer Organisation Name</th>
+      <th>Provider Name</th>
       <th>Campaign Name</th>
       <th>Service Name</th>
       <th>Service Element Name</th>
@@ -45,8 +45,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="usage in customerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
-      <td>{{usage.customer_organisation_name}}</td>
+    <tr ng-repeat="usage in providerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{usage.provider_organisation_name}}</td>
       <td>{{usage.campaign_name}}</td>
       <td>{{usage.service_name}}</td>
       <td>{{usage.service_element_name}}</td>

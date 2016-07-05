@@ -15,8 +15,8 @@ define(['./module'], function (module) {
 
       var updateStatistics = function ($scope, ServiceUsageReportService) {
         ServiceUsageReportService.setDateRange($scope.reportDateRange);
-        ServiceUsageReportService.serviceUsageCustomerReport($scope.organisationId).then(function (data) {
-          buildCustomerServiceUsageReport(data);
+        ServiceUsageReportService.serviceUsageProviderReport($scope.organisationId).then(function (data) {
+          buildProviderServiceUsageReport(data);
         });
       };
 
@@ -24,8 +24,12 @@ define(['./module'], function (module) {
         updateStatistics($scope, ServiceUsageReportService, currentWorkspace.organisation_id);
       });
 
-      ServiceUsageReportService.serviceUsageCustomerReport($scope.organisationId).then(function (data) {
-        buildCustomerServiceUsageReport(data);
+      // ServiceUsageReportService.serviceUsageCustomerReport($scope.organisationId).then(function (data) {
+      //   buildCustomerServiceUsageReport(data);
+      // });
+
+      ServiceUsageReportService.serviceUsageProviderReport($scope.organisationId).then(function (data) {
+        buildProviderServiceUsageReport(data);
       });
 
       function getServiceElement(segmentId) {
@@ -44,8 +48,6 @@ define(['./module'], function (module) {
         return Restangular.one('organisations', organisationId).get({organisation_id: $scope.organisationId});
       }
 
-      $scope.serviceUsageCustomerReport = [];
-
       function buildRow(usageRows, i) {
         var unitCount = usageRows[i][4];
         var list = [getOrganisation(usageRows[i][0]), getCampaign(usageRows[i][1]), getService(usageRows[i][2]), getServiceElement(usageRows[i][3])];
@@ -55,7 +57,7 @@ define(['./module'], function (module) {
           var service = results[2];
           var element = results[3];
           return {
-            customer_organisation_name: organisation.name,
+            provider_organisation_name: organisation.name,
             campaign_name: campaign.name,
             service_name: service.name,
             service_element_name: element.name,
@@ -66,7 +68,7 @@ define(['./module'], function (module) {
         });
       }
 
-      var buildCustomerServiceUsageReport = function (serviceUsage) {
+      var buildProviderServiceUsageReport = function (serviceUsage) {
         var futures = [];
         var usageRows = serviceUsage.getRows();
         for (var i = 0; i < usageRows.length; ++i) {
@@ -74,7 +76,7 @@ define(['./module'], function (module) {
         }
 
         $q.all(futures).then(function (result) {
-          $scope.customerUsages = result.filter(function (n) {
+          $scope.providerUsages = result.filter(function (n) {
             return n !== undefined;
           });
         }, function () {
