@@ -47,27 +47,23 @@ define(['./module'], function (module) {
       $scope.serviceUsageCustomerReport = [];
 
       function buildRow(usageRows, i) {
-        var deferred = $q.defer();
         var unitCount = usageRows[i][4];
         var list = [getOrganisation(usageRows[i][0]), getCampaign(usageRows[i][1]), getService(usageRows[i][2]), getServiceElement(usageRows[i][3])];
-        $q.all(list).then(function (results) {
+        return $q.all(list).then(function (results) {
           var organisation = results[0];
           var campaign = results[1];
           var service = results[2];
           var element = results[3];
-          var obj = {
+          return {
             customer_organisation_name: organisation.name,
             campaign_name: campaign.name,
             service_name: service.name,
             service_element_name: element.name,
             unit_count: unitCount
           };
-          deferred.resolve(obj);
         }, function () {
-          deferred.resolve(undefined);
+          return undefined;
         });
-
-        return deferred.promise;
       }
 
       var buildCustomerServiceUsageReport = function (serviceUsage) {
@@ -78,7 +74,9 @@ define(['./module'], function (module) {
         }
 
         $q.all(futures).then(function (result) {
-          $scope.customerUsages = result.filter(function(n) { return n !== undefined; });
+          $scope.customerUsages = result.filter(function (n) {
+            return n !== undefined;
+          });
         }, function () {
           $log.error("An error occurred during service usage report build");
         });
