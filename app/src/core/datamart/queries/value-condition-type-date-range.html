@@ -1,4 +1,4 @@
-<div ng-if="!readOnly">
+<div ng-show="!readOnly">
   <div class="col-md-5">
       <input name="fromDateInputField" type="text" class="form-control" ng-model="datefield.from">
   </div>
@@ -10,6 +10,6 @@
   </div>
 </div>
 
-<div ng-if="readOnly">
+<div ng-show="readOnly">
   <span>{{datefield.from | date }} and {{datefield.from | date}}</span>
 </div>
