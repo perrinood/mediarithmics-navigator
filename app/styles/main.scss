@@ -2800,6 +2800,27 @@ a.category-item {
 }
 
 /**
+ * ------------------------------------------------ Service Usage Report------------------------------------------------
+ */
+
+.service-usage-date-controller {
+  min-width: 270px;
+  margin-bottom: 10px;
+  input.range {
+    width: 240px;
+    background-color: $mcs-light-blue;
+    color: $mcs-light-blue-not;
+    @include use-bold-font();
+    font-size: ceil(($font-size-base * 1.5));
+  }
+  @extend .text-right;
+
+  > * {
+    margin-left: 10px;
+  }
+}
+
+/**
  * ------------------------------------------------ Scenario ---------------------------------------------------------
  */
 
@@ -2928,6 +2949,7 @@ a.category-item {
     font-size: 12px;
     text-align: center;
     z-index: 10;
-    .actions {}
+    .actions {
+    }
   }
 }

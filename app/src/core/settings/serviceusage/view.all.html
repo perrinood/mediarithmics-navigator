@@ -1,0 +1,57 @@
+<div class="mcs-default-container" ng-controller="core/settings/serviceusage/ViewAllController">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Service Usage Report</h1>
+    </div>
+  </div>
+
+  <div class="service-usage-date-controller pull-right">
+    <form class="form-inline pull-right" role="form">
+      <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
+    </form>
+  </div>
+  <!--TODO we'll need provider later-->
+  <!--<h2>Provider Service Usages</h2>-->
+  <!--<table class="mics-table js-auto-hide-actions table-hover">-->
+  <!--<thead>-->
+  <!--<tr>-->
+  <!--<th>Campaign Id</th>-->
+  <!--<th>Campaign Name</th>-->
+  <!--<th>Service Name</th>-->
+  <!--<th>Service Element Name</th>-->
+  <!--<th>Usage</th>-->
+  <!--</tr>-->
+  <!--</thead>-->
+  <!--<tbody>-->
+  <!--<tr ng-repeat="usage in providerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">-->
+  <!--<td>{{usage.provider_organisation_id}}</td>-->
+  <!--<td>{{usage.campaign_id}}</td>-->
+  <!--<td>{{usage.campaign_name}}</td>-->
+  <!--<td>{{usage.service_name}}</td>-->
+  <!--<td>{{usage.service_element_name}}</td>-->
+  <!--<td>{{usage.unit_count}}</td>-->
+  <!--</tr>-->
+  <!--</tbody>-->
+  <!--</table>-->
+
+  <table class="mics-table js-auto-hide-actions table-hover">
+    <thead>
+    <tr>
+      <th>Customer Organisation Name</th>
+      <th>Campaign Name</th>
+      <th>Service Name</th>
+      <th>Service Element Name</th>
+      <th>Usage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="usage in customerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{usage.customer_organisation_name}}</td>
+      <td>{{usage.campaign_name}}</td>
+      <td>{{usage.service_name}}</td>
+      <td>{{usage.service_element_name}}</td>
+      <td>{{usage.unit_count}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

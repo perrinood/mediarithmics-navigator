@@ -1,8 +1,9 @@
 <ul class="mcs-lm-nav mcs-lm-nav-pills mcs-lm-nav-stacked" ng-controller="SidebarContentController">
-    <li ng-class="subCategory == 'user_account' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/useraccount">User Account</a></li>
-    <!--<li ng-class="subCategory == 'audience_datamart' ? 'active' : ''"><a href="#/settings/audiencedatamart">Audience Datamart</a></li>-->
-    <!--<li ng-class="subCategory == 'catalogs' ? 'active' : ''"><a href="#/settings/catalogs">Catalogs</a></li>-->
-    <li ng-show="currentWorkspace.datamart_id" ng-class="subCategory == 'sites' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/sites">Sites</a></li>
-    <li ng-show="currentWorkspace.datamart_id" ng-class="subCategory == 'datamarts' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/datamarts">Datamarts</a></li>
-    <!--<li ng-class="subCategory == 'web_domains' ? 'active' : ''"><a href="#/settings/webdomains">Web Domains</a></li>-->
+  <li ng-class="subCategory == 'user_account' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/useraccount">User Account</a></li>
+  <!--<li ng-class="subCategory == 'audience_datamart' ? 'active' : ''"><a href="#/settings/audiencedatamart">Audience Datamart</a></li>-->
+  <!--<li ng-class="subCategory == 'catalogs' ? 'active' : ''"><a href="#/settings/catalogs">Catalogs</a></li>-->
+  <li ng-show="currentWorkspace.datamart_id" ng-class="subCategory == 'sites' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/sites">Sites</a></li>
+  <li ng-show="currentWorkspace.datamart_id" ng-class="subCategory == 'datamarts' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/datamarts">Datamarts</a></li>
+  <li ng-show="currentWorkspace.datamart_id == 1048" ng-class="subCategory == 'service_usage_report' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/settings/serviceusage">Service Usage Report</a></li>
+  <!--<li ng-class="subCategory == 'web_domains' ? 'active' : ''"><a href="#/settings/webdomains">Web Domains</a></li>-->
 </ul>
