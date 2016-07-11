@@ -25,10 +25,10 @@ define(['./module', 'angular', 'jquery'], function (module, angular, $) {
         newScope.segmentSelectionType = "DISPLAY";
         // display pop-up
         $uibModal.open({
-          templateUrl: 'src/core/datamart/segments/ChooseExistingAudienceSegmentsPopin.html',
+          templateUrl: 'src/core/campaigns/external/select-audience-segments.html',
           scope : newScope,
           backdrop : 'static',
-          controller: 'core/datamart/segments/ChooseExistingAudienceSegmentsPopinController',
+          controller: 'core/campaigns/external/SelectAudienceSegmentsController',
           size: "lg"
         });
       };
