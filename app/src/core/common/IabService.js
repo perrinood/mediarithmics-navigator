@@ -66,6 +66,18 @@ define(['./module'], function (module) {
               name: "Display Rising Stars, Filmstrip",
               format: "300x600"
             }, {
+              name: "Mobile Horizontal",
+              format: "480x320"
+            }, {
+              name: "Mobile Vertical",
+              format: "320x480"
+            }, {
+              name: "Tablet Horizontal",
+              format: "1024x768"
+            }, {
+              name: "Tablet Vertical",
+              format: "768x1024"
+            }, {
               name: "Delisted (Deprecated) Ad Unit, Square Pop-Up",
               format: "250x250"
             }, {
