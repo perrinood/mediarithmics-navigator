@@ -322,22 +322,16 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       var buildAudienceSegments = function (segmentPerformance) {
         // Get media performance info indexes to identify the media information
         var clicksIdx = segmentPerformance.getHeaderIndex("clicks");
-        var spentIdx = segmentPerformance.getHeaderIndex("impressions_cost");
         var impIdx = segmentPerformance.getHeaderIndex("impressions");
-        var cpmIdx = segmentPerformance.getHeaderIndex("cpm");
         var ctrIdx = segmentPerformance.getHeaderIndex("ctr");
-        var cpcIdx = segmentPerformance.getHeaderIndex("cpc");
         // var cpaIdx = segmentPerformance.getHeaderIndex("cpa");
 
         var addSegmentInfo = function (segment, segmentInfo) {
           // Build ad info object using ad performance values. Ad info is used to display and sort the data values.
           segment.info = [];
           segment.info[0] = {key: "impressions", type: segmentInfo[impIdx].type, value: segmentInfo[impIdx].value || 0};
-          segment.info[1] = {key: "cpm", type: segmentInfo[cpmIdx].type, value: segmentInfo[cpmIdx].value || 0};
-          segment.info[2] = {key: "impressions_cost", type: segmentInfo[spentIdx].type, value: segmentInfo[spentIdx].value || 0};
-          segment.info[3] = {key: "clicks", type: segmentInfo[clicksIdx].type, value: segmentInfo[clicksIdx].value || 0};
-          segment.info[4] = {key: "ctr", type: segmentInfo[ctrIdx].type, value: segmentInfo[ctrIdx].value || 0};
-          segment.info[5] = {key: "cpc", type: segmentInfo[cpcIdx].type, value: segmentInfo[cpcIdx].value || 0};
+          segment.info[1] = {key: "clicks", type: segmentInfo[clicksIdx].type, value: segmentInfo[clicksIdx].value || 0};
+          segment.info[2] = {key: "ctr", type: segmentInfo[ctrIdx].type, value: segmentInfo[ctrIdx].value || 0};
           // TODO add segments cpa stats in backend
           // if ($scope.hasCpa) {
           //   segment.info[6] = {key: "cpa", type: segmentInfo[cpaIdx].type, value: segmentInfo[cpaIdx].value || 0};
