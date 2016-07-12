@@ -1,40 +1,41 @@
 define(['./module'], function (module) {
-
   'use strict';
 
-  module.directive('micsDatamartGrid', [ 'core/datamart/common/Common', function(Common) {
+  module.directive('micsDatamartGrid', ['core/datamart/common/Common', '$location', 'Restangular', function (Common, $location) {
     return {
       restrict: 'A',
       scope: {
-        // temlplate for rendering the list
+        // template for rendering the list
         template: '=',
         // template for rendering an element
         elementTemplate: '=',
         // element data to bind to
         data: '=',
-        // calback that refreshes data based on paging information
+        // callback that refreshes data based on paging information
         refresh: '=',
         // links to individual elements are prefixed with this
         urlPrefix: '=',
         // page size
         pageSize: '='
       },
-      link: function(scope, element, attrs) {
+      link: function (scope, element, attrs) {
 
-        scope.getTemplate = function() {
+        scope.getTemplate = function () {
           if (scope.template) {
             return scope.template;
           } else {
-            // default
             return 'src/core/datamart/common/default-grid.template.html';
           }
         };
 
-        scope.getElementTemplate = function() {
+        scope.showItem = function (itemId) {
+          $location.path(scope.urlPrefix + '/' + itemId);
+        };
+
+        scope.getElementTemplate = function () {
           if (scope.elementTemplate) {
             return scope.elementTemplate;
           } else {
-            // default
             return 'src/core/datamart/common/default-grid-element.template.html';
           }
         };
@@ -45,15 +46,15 @@ define(['./module'], function (module) {
         scope.currentOffset = 0;
         scope.elementsPerPage = (scope.pageSize) ? scope.pageSize : 10;
 
-        scope.generatePaging = function() {
+        scope.generatePaging = function () {
           var pages = [];
-          for (var i=0; i <= scope.pageCount; i++) {
+          for (var i = 0; i <= scope.pageCount; i++) {
             pages.push(i);
           }
           return pages;
         };
 
-        var updatePageCount = function() {
+        var updatePageCount = function () {
           var pc = 0;
           // calculate page count
           if (scope.data && scope.data.metadata && scope.data.metadata.paging) {
@@ -70,28 +71,28 @@ define(['./module'], function (module) {
           }
         };
 
-        scope.previousPage = function() {
+        scope.previousPage = function () {
           if (scope.currentPage > 0) {
             scope.currentPage--;
             callDataRefresh();
           }
         };
 
-        scope.nextPage = function() {
+        scope.nextPage = function () {
           if (scope.currentPage < scope.pageCount) {
             scope.currentPage++;
             callDataRefresh();
           }
         };
 
-        scope.setPageTo = function() {
+        scope.setPageTo = function () {
           scope.currentPage = this.page;
           callDataRefresh();
         };
 
         scope.languageMapping = Common.languageMapping;
 
-        var callDataRefresh = function() {
+        var callDataRefresh = function () {
           // call the provided callback with the offset and limit calculated
           scope.currentOffset = scope.currentPage * scope.elementsPerPage;
           // this triggers the data change, which in turn regenerates the paging

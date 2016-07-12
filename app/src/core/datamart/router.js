@@ -20,8 +20,19 @@ define(['./module'], function (module) {
             }
           }
         })
-        .state('datamart/items/:catalogId/:itemId', {
-          url: '/:organisation_id/datamart/items/:catalogId/:itemId',
+        .state('datamart/items/:catalogToken', {
+          url: '/:organisation_id/datamart/items/:catalogToken',
+          templateUrl: 'src/core/datamart/items/view.all.html',
+          data: {
+            category: 'catalog',
+            sidebar: {
+              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              selected: 'items'
+            }
+          }
+        })
+        .state('datamart/items/:catalogToken/:itemId', {
+          url: '/:organisation_id/datamart/items/:catalogToken/:itemId',
           templateUrl: 'src/core/datamart/items/view.one.html',
           data: {
             category: 'catalog',
@@ -31,8 +42,8 @@ define(['./module'], function (module) {
             }
           }
         })
-        .state('datamart/categories/:catalogId', {
-          url: '/:organisation_id/datamart/categories/:catalogId',
+        .state('datamart/categories/:catalogToken', {
+          url: '/:organisation_id/datamart/categories/:catalogToken',
           templateUrl: 'src/core/datamart/categories/browse.html',
           data: {
             category: 'catalog',
@@ -42,8 +53,8 @@ define(['./module'], function (module) {
             }
           }
         })
-        .state('datamart/categories/:catalogId/:categoryId', {
-          url: '/:organisation_id/datamart/categories/:catalogId/:categoryId',
+        .state('datamart/categories/:catalogToken/:categoryId', {
+          url: '/:organisation_id/datamart/categories/:catalogToken/:categoryId',
           templateUrl: 'src/core/datamart/categories/browse.html',
           data: {
             category: 'catalog',
