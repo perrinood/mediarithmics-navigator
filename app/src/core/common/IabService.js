@@ -66,6 +66,21 @@ define(['./module'], function (module) {
               name: "Display Rising Stars, Filmstrip",
               format: "300x600"
             }, {
+              name: "App Banner 320x50",
+              format: "320x50"
+            }, {
+              name: "Mobile Interstitial Horizontal",
+              format: "480x320"
+            }, {
+              name: "Mobile Interstitial Vertical",
+              format: "320x480"
+            }, {
+              name: "Tablet Interstitial Horizontal",
+              format: "1024x768"
+            }, {
+              name: "Tablet Interstitial Vertical",
+              format: "768x1024"
+            }, {
               name: "Delisted (Deprecated) Ad Unit, Square Pop-Up",
               format: "250x250"
             }, {

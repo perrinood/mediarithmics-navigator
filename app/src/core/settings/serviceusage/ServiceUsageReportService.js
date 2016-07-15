@@ -90,7 +90,6 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
       ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
           serviceUsageCustomerResource,
-          // "campaign_id,campaign_name,service_name,service_element_name,customer_name",
           "campaign_id,service_id,service_element_id",
           "unit_count",
           "organisation_id==" + organisationId,
@@ -103,7 +102,6 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
       ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
           serviceUsageProviderResource,
-          // "campaign_id,campaign_name,service_name,service_element_name,provider_name",
           "campaign_id,service_id,service_element_id",
           "unit_count",
           "organisation_id==" + organisationId,
