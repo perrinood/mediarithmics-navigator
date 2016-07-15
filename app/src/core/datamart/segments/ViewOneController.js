@@ -26,8 +26,7 @@ define(['./module'], function (module) {
          });
 
 
-      var metricsBreakDown = ['user_points', 'user_accounts', 'emails', 'desktop_cookie_ids' ,'mobile_cookie_ids'];
-      var metricsAdditionsDeletions = ['user_point_deletions', 'user_point_additions'];
+      var metrics = ['user_points', 'user_accounts', 'emails', 'desktop_cookie_ids' ,'mobile_cookie_ids', 'user_point_deletions', 'user_point_additions'];
 
       var legendPrettyPrint = function(legend){
         switch(legend){
@@ -43,6 +42,71 @@ define(['./module'], function (module) {
 
       };
 
+      var workBreakDownReport = function(elementReport){
+        //quick fix to remove underscore in legend
+        elementReport.key = legendPrettyPrint(elementReport.key);
+        return elementReport;
+
+      };
+
+       var workAdditionsDeletionsReport = function(elementReport){
+
+        if (elementReport.key === 'user_point_deletions') {
+          for (var i = 0; i < elementReport.values.length; i++) {
+            elementReport.color =  "#FE5858";
+            elementReport.values[i].y = Math.abs(elementReport.values[i].y) * -1;
+          }
+        }
+        else {
+          elementReport.color =  "#00AC67";
+        }
+        //quick fix to remove underscore in legend
+        elementReport.key = legendPrettyPrint(elementReport.key);
+        return elementReport;
+      };
+
+      var isAllStatsEqualZero = function(reportView, valueIdx, metricsBreakDown){
+        var totalsSum = _.filter(reportView, function(obj){
+          return metricsBreakDown.indexOf(obj.key) !== -1;
+        }).map(function(obj){
+          return obj.values[valueIdx].y;
+        }).reduce(function(a,b){return a + b;} , 0);
+
+        return totalsSum === 0;
+      };
+
+      /*
+        this function  recover statistics of yesterday if all statistics of today are all equal 0. and this du the a bug
+        we have in the job we use to generate statistics.
+      */
+      var correctReport = function(reportView){
+
+           var metricsBreakDown = ['user_points', 'user_accounts', 'emails', 'desktop_cookie_ids' ,'mobile_cookie_ids'];
+
+           var lenValues = reportView[0].values.length;
+
+           if (lenValues > 1) {
+             for (var valueIdx = 1; valueIdx < lenValues; valueIdx++){
+
+                if (isAllStatsEqualZero(reportView, valueIdx, metricsBreakDown)) {
+                 for (var metricIdx = 0; metricIdx < metrics.length; metricIdx++) {
+
+                   switch (reportView[metricIdx].key) {
+                     case "user_points" :  reportView[metricIdx].values[valueIdx].y = reportView[metricIdx].values[valueIdx -1 ].y ; break;
+                     case "user_accounts" : reportView[metricIdx].values[valueIdx].y = reportView[metricIdx].values[valueIdx -1 ].y ; break;
+                     case "emails" : reportView[metricIdx].values[valueIdx].y = reportView[metricIdx].values[valueIdx -1 ].y ; break;
+                     case "desktop_cookie_ids" : reportView[metricIdx].values[valueIdx].y = reportView[metricIdx].values[valueIdx -1 ].y ; break;
+                     case "mobile_cookie_ids" :  reportView[metricIdx].values[valueIdx].y = reportView[metricIdx].values[valueIdx -1 ].y ; break;
+                     case "user_point_deletions" :  reportView[metricIdx].values[valueIdx].y = 0 ; break;
+                     case "user_point_additions" :  reportView[metricIdx].values[valueIdx].y = 0 ; break;
+                   }
+                 }
+                }
+             }
+           }
+           return reportView;
+      };
+
       $scope.$watch('reportDateRange', function (newVal) {
         if (!newVal) {
           return;
@@ -50,49 +114,25 @@ define(['./module'], function (module) {
 
         AudienceSegmentAnalyticsReportService.setDateRange($scope.reportDateRange);
 
-        /**
-         * the per category chart
-         */
-        AudienceSegmentAnalyticsReportService.dailyPerformanceMetrics($scope.segmentId, metricsBreakDown).then(function (report) {
+        AudienceSegmentAnalyticsReportService.dailyPerformanceMetrics($scope.segmentId, metrics).then(function (report) {
+
+          var correctedReport = correctReport(report);
           $scope.breakDownData = [];
-          for (var metricIdx = 0; metricIdx < metricsBreakDown.length; metricIdx++) {
+          $scope.dataCreationSuppression = [];
 
-            switch (report[metricIdx].key) {
-              case "user_points" : $scope.statistics.total = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
-              case "user_accounts" : $scope.statistics.hasUserAccountId= report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
-              case "emails" : $scope.statistics.hasEmail = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
-              case "desktop_cookie_ids" : $scope.statistics.hasCookie = report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
-              case "mobile_cookie_ids" : $scope.statistics.hasCookie = $scope.statistics.hasCookie + report[metricIdx].values[report[metricIdx].values.length -1 ].y; break;
+          for (var metricIdx = 0; metricIdx < metrics.length; metricIdx++) {
 
+            switch (correctedReport[metricIdx].key) {
+              case "user_points" : $scope.statistics.total = correctedReport[metricIdx].values[correctedReport[metricIdx].values.length -1 ].y;$scope.breakDownData.push(workBreakDownReport(correctedReport[metricIdx]))  ; break;
+              case "user_accounts" : $scope.statistics.hasUserAccountId= correctedReport[metricIdx].values[correctedReport[metricIdx].values.length -1 ].y; $scope.breakDownData.push(workBreakDownReport(correctedReport[metricIdx])); break;
+              case "emails" : $scope.statistics.hasEmail = correctedReport[metricIdx].values[correctedReport[metricIdx].values.length -1 ].y;$scope.breakDownData.push(workBreakDownReport(correctedReport[metricIdx])); break;
+              case "desktop_cookie_ids" : $scope.statistics.hasCookie = correctedReport[metricIdx].values[correctedReport[metricIdx].values.length -1 ].y; $scope.breakDownData.push(workBreakDownReport(correctedReport[metricIdx])); break;
+              case "mobile_cookie_ids" : $scope.statistics.hasCookie = $scope.statistics.hasCookie + correctedReport[metricIdx].values[correctedReport[metricIdx].values.length -1 ].y;$scope.breakDownData.push(workBreakDownReport(correctedReport[metricIdx])); break;
+              default : $scope.dataCreationSuppression.push(workAdditionsDeletionsReport(correctedReport[metricIdx])) ; break;
             }
             $scope.statsError = null;
             $scope.statsLoading = false;
 
-            //quick fix to remove underscore in legend
-            report[metricIdx].key = legendPrettyPrint(report[metricIdx].key);
-            $scope.breakDownData.push(report[metricIdx]);
-          }
-        });
-
-        /**
-         * the creations deletions chart
-         */
-        AudienceSegmentAnalyticsReportService.dailyPerformanceMetrics($scope.segmentId, metricsAdditionsDeletions).then(function (report) {
-          $scope.dataCreationSuppression = [];
-          for (var metricIdx = 0; metricIdx < metricsAdditionsDeletions.length; metricIdx++) {
-              report[metricIdx].key = legendPrettyPrint(report[metricIdx].key);
-            if (metricsAdditionsDeletions[metricIdx] === 'user_point_deletions') {
-
-              for (var i = 0; i < report[metricIdx].values.length; i++) {
-                report[metricIdx].color =  "#FE5858";
-                report[metricIdx].values[i].y = Math.abs(report[metricIdx].values[i].y) * -1;
-              }
-              $scope.dataCreationSuppression.push(report[metricIdx]);
-            }
-            else {
-              report[metricIdx].color =  "#00AC67";
-              $scope.dataCreationSuppression.push(report[metricIdx]);
-            }
           }
         });
       });
