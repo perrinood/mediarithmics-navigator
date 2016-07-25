@@ -37,6 +37,8 @@ define(['./module', 'jquery'], function (module, $) {
           }
         }
         $scope.locations = DisplayCampaignService.getLocations();
+
+        $scope.campaign.subtype = "TRACKING";
       }
 
       CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.display", "external-campaign-editor").then(function (template) {
