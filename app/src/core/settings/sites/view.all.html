@@ -10,6 +10,12 @@
     <div class="col-xs-2">
       <button ng-click="new()" class="mics-btn mics-btn-add">New Site</button>
     </div>
+    <div class="form-group col-md-3 pull-right">
+      <input class="form-control"
+             type="text"
+             ng-model="searchInput"
+             placeholder="Search">
+    </div>
   </div>
 
   <table class="mics-table js-auto-hide-actions table-hover">
@@ -22,7 +28,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="site in sites| offset : (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
+    <tr ng-repeat="site in filteredSites() | offset : (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
       <td>{{site.name}}</td>
       <td>{{site.token}}</td>
       <td>{{site.creation_date | date}}</td>
@@ -33,4 +39,6 @@
     </tr>
     </tbody>
   </table>
+  <uib-pagination total-items="filteredSites().length" ng-model="currentPageCreative"
+              items-per-page="itemsPerPage"></uib-pagination>
 </div>
