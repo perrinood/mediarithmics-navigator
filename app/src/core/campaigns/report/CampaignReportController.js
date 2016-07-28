@@ -397,7 +397,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
         var siteRows = mediaPerformance.getRows();
         for (var i = 0; i < siteRows.length; ++i) {
-          var site = {name: siteRows[i][0].replace("site:web:", "")};
+          var site = {name: siteRows[i][0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "")};
           var siteInfo = [siteRows[i][0]].concat(mediaPerformance.decorate(siteRows[i]));
           sites[i] = addSiteInfo(site, siteInfo);
         }
