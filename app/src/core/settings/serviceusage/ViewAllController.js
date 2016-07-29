@@ -32,56 +32,21 @@ define(['./module'], function (module) {
         buildProviderServiceUsageReport(data);
       });
 
-      function getServiceElement(segmentId) {
-        return Restangular.one('audience_segments', segmentId).get({organisation_id: $scope.organisationId});
-      }
-
-      function getService(serviceId) {
-        return Restangular.one('services', serviceId).get({organisation_id: $scope.organisationId});
-      }
-
-      function getCampaign(campaignId) {
-        return Restangular.one('campaigns', campaignId).get({organisation_id: $scope.organisationId});
-      }
-
-      function getOrganisation(organisationId) {
-        return Restangular.one('organisations', organisationId).get({organisation_id: $scope.organisationId});
-      }
-
-      function buildRow(usageRows, i) {
-        var unitCount = usageRows[i][4];
-        var list = [getOrganisation(usageRows[i][0]), getCampaign(usageRows[i][1]), getService(usageRows[i][2]), getServiceElement(usageRows[i][3])];
-        return $q.all(list).then(function (results) {
-          var organisation = results[0];
-          var campaign = results[1];
-          var service = results[2];
-          var element = results[3];
-          return {
-            provider_organisation_name: organisation.name,
-            campaign_name: campaign.name,
-            service_name: service.name,
-            service_element_name: element.name,
-            unit_count: unitCount
-          };
-        }, function () {
-          return undefined;
-        });
-      }
-
       var buildProviderServiceUsageReport = function (serviceUsage) {
-        var futures = [];
         var usageRows = serviceUsage.getRows();
         for (var i = 0; i < usageRows.length; ++i) {
-          futures[i] = buildRow(usageRows, i);
+          $scope.usages[i] = {
+            provider_organisation_id: usageRows[i][0],
+            provider_name: usageRows[i][1],
+            campaign_id: usageRows[i][2],
+            campaign_name: usageRows[i][3],
+            service_id: usageRows[i][4],
+            service_name: usageRows[i][5],
+            service_element_id: usageRows[i][6],
+            segment_name: usageRows[i][7],
+            unit_count: usageRows[i][8]
+          };
         }
-
-        $q.all(futures).then(function (result) {
-          $scope.providerUsages = result.filter(function (n) {
-            return n !== undefined;
-          });
-        }, function () {
-          $log.error("An error occurred during service usage report build");
-        });
       };
     }
   ]);

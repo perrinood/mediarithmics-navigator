@@ -86,11 +86,10 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           });
       };
 
-      // TODO MAKE THE DECORATORS WORK!
-      ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
+      ReportService.serviceUsageCustomerReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
           serviceUsageCustomerResource,
-          "campaign_id,service_id,service_element_id",
+          "campaign_id,campaign_name,customer_name,service_id,service_name,service_element_id,service_element_name",
           "unit_count",
           "organisation_id==" + organisationId,
           sort,
@@ -98,11 +97,10 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         );
       };
 
-      // TODO MAKE THE DECORATORS WORK!
       ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
           serviceUsageProviderResource,
-          "campaign_id,service_id,service_element_id",
+          "campaign_id,campaign_name,provider_name,service_id,service_name,service_element_id,service_element_name",
           "unit_count",
           "organisation_id==" + organisationId,
           sort,
