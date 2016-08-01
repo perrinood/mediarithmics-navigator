@@ -41,6 +41,9 @@
                   <!--<li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('csv')">CSV</a></li>-->
                 </ul>
               </div>
+              <span ng-show="statisticsQuery.isRunning || exportQuery.isRunning" class="pull-right">
+                <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
+              </span>
             </div>
           </div>
         </div>

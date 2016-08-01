@@ -26,6 +26,9 @@
       <!-- Date picker -->
       <div class="col-md-6">
         <div class="campaign-list-date-controller pull-right">
+          <span ng-show="statisticsQuery.isRunning || exportQuery.isRunning">
+             <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
+          </span>
           <form class="form-inline pull-right" role="form">
             <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
           </form>
