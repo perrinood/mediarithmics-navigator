@@ -19,7 +19,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
     }
   };
 
-  var updateStatistics = function ($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts, Restangular) {
+  var updateStatistics = function ($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts) {
     CampaignAnalyticsReportService.setDateRange($scope.date.reportDateRange);
     if (CampaignAnalyticsReportService.dateRangeIsToday()) {
       $scope.timeFilter = $scope.timeFilters[1];
@@ -108,15 +108,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           })
         );
         $scope.ads = sort(ads);
-      });
-
-
-      // Get segments names for stats display
-      Restangular.all('audience_segments').getList({organisation_id: $scope.organisationId}).then(function (segmentsData) {
-        $scope.segmentNames = [];
-        _.forEach(segmentsData, function (segment) {
-          $scope.segmentNames[segment.id] = segment.name;
-        });
       });
 
       /**
@@ -320,50 +311,41 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       };
 
       var buildAudienceSegments = function (segmentPerformance) {
-        // Get media performance info indexes to identify the media information
-        var clicksIdx = segmentPerformance.getHeaderIndex("clicks");
-        var impIdx = segmentPerformance.getHeaderIndex("impressions");
-        var ctrIdx = segmentPerformance.getHeaderIndex("ctr");
-        // var cpaIdx = segmentPerformance.getHeaderIndex("cpa");
+        // Since the segments data contains id + name, it isn't counted as a metric.
+        var offset = 2;
 
-        var addSegmentInfo = function (segment, segmentInfo) {
+        // Get media performance info indexes to identify the media information
+        var clicksIdx = segmentPerformance.getHeaderIndex("clicks") - offset;
+        var impIdx = segmentPerformance.getHeaderIndex("impressions") - offset;
+        var ctrIdx = segmentPerformance.getHeaderIndex("ctr") - offset;
+
+        var buildSegmentMetrics = function (metrics) {
           // Build ad info object using ad performance values. Ad info is used to display and sort the data values.
-          segment.info = [];
-          segment.info[0] = {key: "impressions", type: segmentInfo[impIdx].type, value: segmentInfo[impIdx].value || 0};
-          segment.info[1] = {key: "clicks", type: segmentInfo[clicksIdx].type, value: segmentInfo[clicksIdx].value || 0};
-          segment.info[2] = {key: "ctr", type: segmentInfo[ctrIdx].type, value: segmentInfo[ctrIdx].value || 0};
-          // TODO add segments cpa stats in backend
-          // if ($scope.hasCpa) {
-          //   segment.info[6] = {key: "cpa", type: segmentInfo[cpaIdx].type, value: segmentInfo[cpaIdx].value || 0};
-          // }
-          return segment;
+          var info = [];
+          info[0] = {key: "impressions", type: metrics[impIdx].type, value: metrics[impIdx].value || 0};
+          info[1] = {key: "clicks", type: metrics[clicksIdx].type, value: metrics[clicksIdx].value || 0};
+          info[2] = {key: "ctr", type: metrics[ctrIdx].type, value: metrics[ctrIdx].value || 0};
+          return info;
         };
 
         var segments = [];
         var segmentRows = segmentPerformance.getRows();
         for (var i = 0; i < segmentRows.length; ++i) {
-          var segment = {name: $scope.segmentNames[segmentRows[i][0]]};
-          var segmentInfo = [segmentRows[i][0]].concat(segmentPerformance.decorate(segmentRows[i]));
-          segments[i] = addSegmentInfo(segment, segmentInfo);
+          var metrics = segmentPerformance.decorate(segmentRows[i]);
+          segments[i] = {id: segmentRows[i][0], name: segmentRows[i][1], metrics: buildSegmentMetrics(metrics)};
         }
 
         return segments;
       };
 
-      $scope.$watchGroup(['targetedSegmentPerformance', 'segmentNames'], function (values) {
-        var targetedSegmentPerformance = values[0];
-        var segmentNames = values[1];
-
-        if (angular.isDefined(targetedSegmentPerformance) && angular.isDefined(segmentNames)) {
+      $scope.$watch('targetedSegmentPerformance', function (targetedSegmentPerformance) {
+        if (angular.isDefined(targetedSegmentPerformance)) {
           $scope.targetedSegments = sort(buildAudienceSegments(targetedSegmentPerformance));
         }
       });
 
-      $scope.$watchGroup(['discoveredSegmentPerformance', 'segmentNames'], function (values) {
-        var discoveredSegmentPerformance = values[0];
-        var segmentNames = values[1];
-
-        if (angular.isDefined(discoveredSegmentPerformance) && angular.isDefined(segmentNames)) {
+      $scope.$watch('discoveredSegmentPerformance', function (discoveredSegmentPerformance) {
+        if (angular.isDefined(discoveredSegmentPerformance)) {
           $scope.discoveredSegments = sort(buildAudienceSegments(discoveredSegmentPerformance));
         }
       });
@@ -497,12 +479,12 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       $scope.$watchGroup(['date.reportDateRange', 'hasCpa'], function (values) {
         if (angular.isDefined(values[0]) && angular.isDefined(values[1])) {
           $scope.timeFilter = $scope.timeFilters[0];
-          updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts, Restangular);
+          updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts);
         }
       });
 
       $scope.refresh = function () {
-        updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts, Restangular);
+        updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts);
       };
 
       /**

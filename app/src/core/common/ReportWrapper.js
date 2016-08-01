@@ -139,6 +139,10 @@ define(['lodash'], function (_) {
       return new ReportWrapper(newReport);
     };
 
+    /**
+     * Any data having a header containing name|_id|day|site in it won't be considered as a metric.
+     * Therefore, it won't be included.
+     */
     this.decorate = _.memoize(function (row) {
       if (row === undefined) {
         return _.map(new Array(self.getMetrics().length), function () {

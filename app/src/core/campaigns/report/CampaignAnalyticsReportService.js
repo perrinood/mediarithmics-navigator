@@ -9,6 +9,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
     "site": {name: "Site"},
     "display_network": {name: "Display Network"},
     "ad_group_name": {name: "Ad Group Name"},
+    "segment_name": {name: "Segment Name", type: "string"},
     "day": {name: "Date"},
     "impressions_cost": {name: "Spent", type: "currency"},
     "cost_impressions": {name: "Spent", type: "currency"}, // DEPRECATED TO BE REMOVED
@@ -226,7 +227,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
             segmentPerformanceResource,
-            "audience_segment_id",
+            "audience_segment_id,segment_name",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId + ",segment_scope==1",
             sort,
@@ -238,7 +239,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
             segmentPerformanceResource,
-            "audience_segment_id",
+            "audience_segment_id,segment_name",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId + ",segment_scope==2",
             sort,
