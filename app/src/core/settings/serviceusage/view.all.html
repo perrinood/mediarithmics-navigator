@@ -10,29 +10,6 @@
       <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
     </form>
   </div>
-  <!--TODO we'll need provider later-->
-  <!--<h2>Provider Service Usages</h2>-->
-  <!--<table class="mics-table js-auto-hide-actions table-hover">-->
-  <!--<thead>-->
-  <!--<tr>-->
-  <!--<th>Campaign Id</th>-->
-  <!--<th>Campaign Name</th>-->
-  <!--<th>Service Name</th>-->
-  <!--<th>Service Element Name</th>-->
-  <!--<th>Usage</th>-->
-  <!--</tr>-->
-  <!--</thead>-->
-  <!--<tbody>-->
-  <!--<tr ng-repeat="usage in providerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">-->
-  <!--<td>{{usage.provider_organisation_id}}</td>-->
-  <!--<td>{{usage.campaign_id}}</td>-->
-  <!--<td>{{usage.campaign_name}}</td>-->
-  <!--<td>{{usage.service_name}}</td>-->
-  <!--<td>{{usage.service_element_name}}</td>-->
-  <!--<td>{{usage.unit_count}}</td>-->
-  <!--</tr>-->
-  <!--</tbody>-->
-  <!--</table>-->
 
   <table class="mics-table js-auto-hide-actions table-hover">
     <thead>
@@ -45,11 +22,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="usage in providerUsages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
-      <td>{{usage.provider_organisation_name}}</td>
+    <tr ng-repeat="usage in usages| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{usage.provider_name}}</td>
       <td>{{usage.campaign_name}}</td>
       <td>{{usage.service_name}}</td>
-      <td>{{usage.service_element_name}}</td>
+      <td>{{usage.segment_name}}</td>
       <td>{{usage.unit_count}}</td>
     </tr>
     </tbody>
