@@ -1126,6 +1126,9 @@ form.mcs-full-page-form {
     position: absolute;
     left: 50%;
   }
+  .inline-ajax-loader {
+    margin-top: 3px;
+  }
 }
 
 .double-line-chart-selection {
@@ -1211,6 +1214,9 @@ div.mics-page-main-tabs {
         @extend .mics-table;
       }
     }
+  }
+  .inline-ajax-loader {
+    margin-top: 3px;
   }
 }
 

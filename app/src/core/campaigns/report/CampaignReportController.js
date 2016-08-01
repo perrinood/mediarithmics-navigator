@@ -7,19 +7,28 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
     // Get statistics according to time filter
     if ($scope.timeFilter === $scope.timeFilters[1]) {
-      CampaignAnalyticsReportService.hourlyPerformance(campaignId, leftMetric, rightMetric)
+      return CampaignAnalyticsReportService.hourlyPerformance(campaignId, leftMetric, rightMetric)
         .then(function (data) {
           $scope.chartData = data;
         });
     } else {
-      CampaignAnalyticsReportService.dailyPerformance(campaignId, leftMetric, rightMetric)
+      return CampaignAnalyticsReportService.dailyPerformance(campaignId, leftMetric, rightMetric)
         .then(function (data) {
           $scope.chartData = data;
         });
     }
   };
 
-  var updateStatistics = function ($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts) {
+  var updateStatistics = function ($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts, $q, ErrorService) {
+
+    var currentStatObj = $scope.statisticsQuery = {
+      rand: Math.random().toString(36).substring(8),
+      isRunning: true,
+      error: null
+    };
+
+    var promises = [];
+
     CampaignAnalyticsReportService.setDateRange($scope.date.reportDateRange);
     if (CampaignAnalyticsReportService.dateRangeIsToday()) {
       $scope.timeFilter = $scope.timeFilters[1];
@@ -29,29 +38,64 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       CampaignAnalyticsReportService.getEndDate().toDate().getTime()
     ];
 
-    updateChartsStatistics($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts);
+    promises.push(updateChartsStatistics($scope, campaignId, CampaignAnalyticsReportService, ChartsService, charts));
 
-    CampaignAnalyticsReportService.adGroupPerformance(campaignId, $scope.hasCpa).then(function (data) {
+    promises.push(CampaignAnalyticsReportService.adGroupPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      // an other refresh was triggered, don't do anything !
+      if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+        return;
+      }
+
       $scope.adGroupPerformance = data;
-    });
+    }));
 
-    CampaignAnalyticsReportService.adPerformance(campaignId, $scope.hasCpa).then(function (data) {
+    promises.push(CampaignAnalyticsReportService.adPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      // an other refresh was triggered, don't do anything !
+      if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+        return;
+      }
+
       $scope.adPerformance = data;
-    });
+    }));
 
-    CampaignAnalyticsReportService.targetedSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+    promises.push(CampaignAnalyticsReportService.targetedSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      // an other refresh was triggered, don't do anything !
+      if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+        return;
+      }
+
       $scope.targetedSegmentPerformance = data;
-    });
+    }));
 
-    CampaignAnalyticsReportService.discoveredSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+    promises.push(CampaignAnalyticsReportService.discoveredSegmentPerformance(campaignId, $scope.hasCpa).then(function (data) {
+      // an other refresh was triggered, don't do anything !
+      if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+        return;
+      }
+
       $scope.discoveredSegmentPerformance = data;
-    });
+    }));
 
     // For unspeakable reasons (and hopefully soon-to-be-fixed ones) this triggers a huuuuge boost.
     // I'll work on these, please continue my combat if I fall.
     setTimeout(function () {
-      CampaignAnalyticsReportService.mediaPerformance(campaignId, $scope.hasCpa, "-click_count", 30).then(function (data) {
+      promises.push(CampaignAnalyticsReportService.mediaPerformance(campaignId, $scope.hasCpa, "-click_count", 30).then(function (data) {
+        // an other refresh was triggered, don't do anything !
+        if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+          return;
+        }
+
         $scope.mediaPerformance = data;
+      }));
+
+
+      // we now have all promises
+      $q.all(promises).then(function () {
+        currentStatObj.isRunning = false;
+      }).catch(function (e) {
+        currentStatObj.isRunning = false;
+        currentStatObj.error = e;
+        ErrorService.showErrorModal(e);
       });
     }, 500);
 
@@ -66,7 +110,8 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
   module.controller('core/campaigns/report/CampaignReportController', [
     '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/DisplayCampaignService',
     'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'core/common/files/ExportService', 'core/campaigns/goals/GoalsService', 'd3', 'moment', '$interval', '$q',
-    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService, Session, ExportService, GoalsService, d3, moment, $interval, $q) {
+    'core/common/ErrorService',
+    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService, Session, ExportService, GoalsService, d3, moment, $interval, $q, ErrorService) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       // Chart
@@ -192,11 +237,24 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       };
 
       $scope.export = function (extension) {
+        var currentExportObj = $scope.exportQuery = {
+          rand: Math.random().toString(36).substring(8),
+          isRunning: true,
+          error: null
+        };
+
         // Get all the media data on export
         CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", null).then(function (mediaPerformance) {
+
+          currentExportObj.isRunning = false;
+
           var sites = sort(buildSites(mediaPerformance));
           var dataExport = buildCampaignMetricsExportData($scope.ads, $scope.adGroups, sites);
           ExportService.exportData(dataExport, $scope.campaign.name + '-Metrics', extension);
+        }).catch(function (e) {
+          currentExportObj.isRunning = false;
+          currentExportObj.error = e;
+          ErrorService.showErrorModal(e);
         });
       };
 
@@ -479,12 +537,12 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       $scope.$watchGroup(['date.reportDateRange', 'hasCpa'], function (values) {
         if (angular.isDefined(values[0]) && angular.isDefined(values[1])) {
           $scope.timeFilter = $scope.timeFilters[0];
-          updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts);
+          updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts, $q, ErrorService);
         }
       });
 
       $scope.refresh = function () {
-        updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts);
+        updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts, $q, ErrorService);
       };
 
       /**

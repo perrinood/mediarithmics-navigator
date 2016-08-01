@@ -1,12 +1,31 @@
 define(['./module'], function (module) {
   'use strict';
 
-  var updateStatistics = function ($scope, CampaignAnalyticsReportService, organisationId) {
+  var updateStatistics = function ($scope, CampaignAnalyticsReportService, organisationId, ErrorService) {
+
+    var currentStatObj = $scope.statisticsQuery = {
+      rand: Math.random().toString(36).substring(8),
+      isRunning: true,
+      error: null
+    };
+
     CampaignAnalyticsReportService.setDateRange($scope.reportDateRange);
     // Moment is not immutable
     var report = CampaignAnalyticsReportService.allCampaigns(organisationId);
     report.then(function (stats) {
+
+      currentStatObj.isRunning = false;
+
+      // an other refresh was triggered, don't do anything !
+      if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
+        return;
+      }
+
       $scope.displayCampaignsStatistics = stats;
+    }).catch(function (e) {
+      currentStatObj.isRunning = false;
+      currentStatObj.error = e;
+      ErrorService.showErrorModal(e);
     });
   };
 
@@ -15,9 +34,9 @@ define(['./module'], function (module) {
    */
   module.controller('core/campaigns/ListDisplayCampaignsController', [
     '$scope', '$location', '$uibModal', '$log', 'Restangular', 'd3', 'moment', 'core/campaigns/DisplayCampaignService', 'core/common/auth/Session',
-    'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/files/ExportService',
+    'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/files/ExportService', 'core/common/ErrorService',
     function ($scope, $location, $uibModal, $log, Restangular, d3, moment, DisplayCampaignService, Session,
-              CampaignAnalyticsReportService, CampaignPluginService, ExportService) {
+              CampaignAnalyticsReportService, CampaignPluginService, ExportService, ErrorService) {
       $log.debug("init campaigns");
       var currentWorkspace = Session.getCurrentWorkspace();
 
@@ -42,11 +61,11 @@ define(['./module'], function (module) {
       });
 
       $scope.$watch('reportDateRange', function () {
-        updateStatistics($scope, CampaignAnalyticsReportService, currentWorkspace.organisation_id);
+        updateStatistics($scope, CampaignAnalyticsReportService, currentWorkspace.organisation_id, ErrorService);
       });
 
       $scope.refresh = function () {
-        updateStatistics($scope, CampaignAnalyticsReportService, currentWorkspace.organisation_id);
+        updateStatistics($scope, CampaignAnalyticsReportService, currentWorkspace.organisation_id, ErrorService);
       };
 
       // load display campaign templates
@@ -105,11 +124,25 @@ define(['./module'], function (module) {
       };
 
       $scope.export = function (extension) {
+        var currentExportObj = $scope.exportQuery = {
+          rand: Math.random().toString(36).substring(8),
+          isRunning: true,
+          error: null
+        };
+
         $scope.buildAllCampaignsExportData().then(function (dataExport) {
+
+          currentExportObj.isRunning = false;
+
+          // even if the rand is different, trigger the download
           ExportService.exportData([{
             name: "All Campaigns",
             data: dataExport
           }], 'AllCampaigns-' + currentWorkspace.organisation_id, extension);
+        }).catch(function (e) {
+          currentExportObj.isRunning = false;
+          currentExportObj.error = e;
+          ErrorService.showErrorModal(e);
         });
       };
 
