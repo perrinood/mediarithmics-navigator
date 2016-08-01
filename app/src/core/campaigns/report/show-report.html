@@ -133,18 +133,18 @@
                   <tr ng-repeat="ad in ads">
                     <td>
                       <div mics-ad-status="ad" ad-group="findAdGroup(ad.id)" campaign="campaign"></div>
-                  <span class="badge creative-audit-notification-warning"
-                        popover="The creative has the status {{ad.creative_audit_status}}"
-                        popover-trigger="mouseenter"
-                        ng-if="ad.creative_audit_status == 'NOT_AUDITED'">?</span>
-                  <span class="badge creative-audit-notification-warning"
-                        popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit ends."
-                        popover-trigger="mouseenter"
-                        ng-if="ad.creative_audit_status == 'AUDIT_PENDING'">?</span>
-                  <span class="badge creative-audit-notification-alert"
-                        popover="One or more audits failed, this creative may not be used everywhere !"
-                        popover-trigger="mouseenter"
-                        ng-if="ad.creative_audit_status == 'AUDIT_FAILED' || ad.creative_audit_status == 'AUDIT_PARTIALLY_PASSED'">!</span>
+                      <span class="badge creative-audit-notification-warning"
+                            popover="The creative has the status {{ad.creative_audit_status}}"
+                            popover-trigger="mouseenter"
+                            ng-if="ad.creative_audit_status == 'NOT_AUDITED'">?</span>
+                      <span class="badge creative-audit-notification-warning"
+                            popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit ends."
+                            popover-trigger="mouseenter"
+                            ng-if="ad.creative_audit_status == 'AUDIT_PENDING'">?</span>
+                      <span class="badge creative-audit-notification-alert"
+                            popover="One or more audits failed, this creative may not be used everywhere !"
+                            popover-trigger="mouseenter"
+                            ng-if="ad.creative_audit_status == 'AUDIT_FAILED' || ad.creative_audit_status == 'AUDIT_PARTIALLY_PASSED'">!</span>
                     </td>
                     <td><a href="#{{getCreativeUrl(ad)}}">{{ad.name}}</a></td>
                     <td>{{ad.format}}</td>
@@ -236,26 +236,24 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
-                    <th ng-click="sortTargetedSegmentsBy('name')">
+                    <th ng-click="sortDiscoveredSegmentsBy('name')">
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
-                    <th ng-click="sortTargetedSegmentsBy(info.key)" class="metrics" ng-repeat="info in targetedSegments[0].info">
-                      {{ adPerformance.getMetricName(info.key) }}
-                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                      {{ adPerformance.getMetricName(metric.key) }}
+                      <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr ng-repeat="segment in targetedSegments">
                     <td>{{segment.name}}</td>
-                    <td class="metrics" ng-repeat="info in segment.info">
-                  <span ng-if="info.type == 'currency' && info.value != undefined">
-                    {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
-                  </span>
-                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
-                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
-                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    <td class="metrics" ng-repeat="metric in segment.metrics">
+                      <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+                      <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+                      <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+                      <span ng-if="!metric.type || metric.value == undefined"> - </span>
                     </td>
                   </tr>
                   </tbody>
@@ -269,22 +267,20 @@
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
-                    <th ng-click="sortDiscoveredSegmentsBy(info.key)" class="metrics" ng-repeat="info in discoveredSegments[0].info">
-                      {{ adPerformance.getMetricName(info.key) }}
-                      <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                      {{ adPerformance.getMetricName(metric.key) }}
+                      <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr ng-repeat="segment in discoveredSegments">
                     <td>{{segment.name}}</td>
-                    <td class="metrics" ng-repeat="info in segment.info">
-                  <span ng-if="info.type == 'currency' && info.value != undefined">
-                    {{info.value | number:2 | currencyWithSymbol:campaign.currency_code}}
-                  </span>
-                      <span ng-if="info.type == 'percent' && info.value != undefined">{{info.value | number}} %</span>
-                      <span ng-if="info.type == 'number' && info.value != undefined">{{info.value | number}}</span>
-                      <span ng-if="!info.type || info.value == undefined"> - </span>
+                    <td class="metrics" ng-repeat="metric in segment.metrics">
+                      <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+                      <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+                      <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+                      <span ng-if="!metric.type || metric.value == undefined"> - </span>
                     </td>
                   </tr>
                   </tbody>
