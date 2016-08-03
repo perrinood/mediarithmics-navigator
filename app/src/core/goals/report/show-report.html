@@ -185,7 +185,7 @@
               <tbody>
               <tr ng-repeat="campaign in attributionModel.stats.campaigns.getObjectRows()">
                   <td ng-show='{{campaign.campaign_id == null}}'>{{campaign.campaign_name}}</td>
-                  <td ng-show='{{campaign.campaign_id != null}}'><span fetch-campaign="campaign.campaign_id as campaignResource"><a ng-href="{{goToCampaign(campaignResource)}}">{{campaignResource.name}}</a></span></td>
+                  <td ng-show='{{campaign.campaign_id != null}}'><span fetch-campaign="campaign.campaign_id as campaignResource"><a ng-click="goToCampaign(campaignResource)">{{campaignResource.name}}</a></span></td>
                   <td>{{campaign["weighted_conversions.TOTAL"] |number }}</td>
                   <td>{{campaign["weighted_value.TOTAL"] | number:2 | currencyWithSymbol:goal.goal_value_currency  }}</td>
                   <td>{{campaign["weighted_conversions.POST_VIEW"] |number}}</td>

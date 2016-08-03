@@ -33,10 +33,10 @@ define(['./module', 'lodash'], function (module, _) {
     ];
 
     updateChartsStatistics($scope, goalId, GoalAnalyticsReportService, ChartsService, charts);
-    _.forEach(attributionModels, function(attributionModel){
+    _.forEach(attributionModels, function (attributionModel) {
       attributionModel.stats = {};
       var stats = attributionModel.stats;
-      
+
       GoalAnalyticsReportService.attributionKpi(goalId, attributionModel.id).then(function (data) {
         stats.global = data;
       });
@@ -45,15 +45,14 @@ define(['./module', 'lodash'], function (module, _) {
         stats.campaigns = data.transform("interaction_type", true);
       });
       GoalAnalyticsReportService.attributionSources(goalId, attributionModel.id).then(function (data) {
-        stats.sources = data.transform("interaction_type",true);
+        stats.sources = data.transform("interaction_type", true);
       });
       GoalAnalyticsReportService.attributionCreatives(goalId, attributionModel.id).then(function (data) {
         stats.creatives = data.transform("interaction_type", true);
       });
 
       return;
-    } );
-
+    });
 
 
     GoalAnalyticsReportService.kpi(goalId)
@@ -66,8 +65,8 @@ define(['./module', 'lodash'], function (module, _) {
    * Campaign list controller
    */
   module.controller('core/goals/report/GoalReportController', [
-    '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/goals/report/ChartsService',    'GoalAnalyticsReportService',  'core/common/auth/Session', 'core/common/files/ExportService',
-    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService,         GoalAnalyticsReportService,  Session, ExportService ) {
+    '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/goals/report/ChartsService', 'GoalAnalyticsReportService', 'core/common/auth/Session', 'core/common/files/ExportService',
+    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, GoalAnalyticsReportService, Session, ExportService) {
       var goalId = $stateParams.goal_id;
       // Chart
       $scope.reportDateRange = GoalAnalyticsReportService.getDateRange();
@@ -81,20 +80,19 @@ define(['./module', 'lodash'], function (module, _) {
       var tableHeadersKeys = Object.keys(GoalAnalyticsReportService.getTableHeaders());
       $scope.reverseSort = false;
       $scope.orderBy = "clicks";
-      
+
       Restangular.one("goals", goalId).get().then(function (goal) {
-          $scope.goal = goal;
+        $scope.goal = goal;
 
-          goal.all("attribution_models").getList().then(function (attributionModels) {
-            $scope.attributionModels = attributionModels;
-            $scope.defaultAttributionModel = _.find(attributionModels, {'default': true}, 'id').id;
-            updateStatistics($scope, $stateParams.goal_id, GoalAnalyticsReportService, ChartsService, $scope.charts);
-          } );
-          
-
+        goal.all("attribution_models").getList().then(function (attributionModels) {
+          $scope.attributionModels = attributionModels;
+          $scope.defaultAttributionModel = _.find(attributionModels, {'default': true}, 'id').id;
+          updateStatistics($scope, $stateParams.goal_id, GoalAnalyticsReportService, ChartsService, $scope.charts);
         });
 
-      
+
+      });
+
 
       /**
        * Data Table Export
@@ -142,7 +140,7 @@ define(['./module', 'lodash'], function (module, _) {
       var buildExportOverview = function (header) {
         var metrics = [$scope.kpis.conversions, $scope.kpis.conversion_value];
 
-        
+
         return header.concat([metrics]).concat($scope.charts).concat($scope.chartData);
       };
 
@@ -181,13 +179,12 @@ define(['./module', 'lodash'], function (module, _) {
         ExportService.exportData(dataExport, $scope.goal.name + '-Metrics', extension);
       };
 
-       
-      
+
       /**
        * Stats
        */
-      $scope.$watchGroup(['reportDateRange'], function(value) {
-          updateStatistics($scope, $stateParams.goal_id, GoalAnalyticsReportService, ChartsService, $scope.charts);
+      $scope.$watchGroup(['reportDateRange'], function (value) {
+        updateStatistics($scope, $stateParams.goal_id, GoalAnalyticsReportService, ChartsService, $scope.charts);
       });
 
       $scope.refresh = function () {
@@ -205,16 +202,15 @@ define(['./module', 'lodash'], function (module, _) {
       $scope.dateRangeIsToday = function () {
         return GoalAnalyticsReportService.dateRangeIsToday();
       };
+
       $scope.goToCampaign = function (campaign) {
         var type = campaign ? campaign.type : "";
-        switch (type) {
-          case "DISPLAY":
-            return Session.getWorkspacePrefixUrl() + "/campaigns/display/report/" + campaign.id + "/basic";
-          default:
-            return Session.getWorkspacePrefixUrl() + "/campaigns/display";
+        if (type === "DISPLAY") {
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/display/report/" + campaign.id + "/basic");
+        } else {
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/display");
         }
       };
-
 
       $scope.chooseCharts = function () {
         var modalInstance = $uibModal.open({
@@ -244,13 +240,6 @@ define(['./module', 'lodash'], function (module, _) {
       //    $scope.chartArea = "chart-area";
       //  updateChartsStatistics($scope, $stateParams.goal_id, GoalAnalyticsReportService, ChartsService, $scope.charts);
       //};
-
-      /**
-       * Campaigns Management
-       */
-
-
-
     }
   ]);
 });
