@@ -19,27 +19,27 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
     function ($resource, Restangular, Session, AuthenticationService, configuration, moment) {
       var WS_URL = configuration.WS_URL;
 
-      var serviceUsageCustomerResource = $resource(
-        WS_URL + "/reports/service_usage_customer_report",
-        {},
-        {
-          get: {
-            method: 'GET',
-            headers: {'Authorization': AuthenticationService.getAccessToken()}
+      function buildServiceUsageCustomerResource() {
+        return $resource(WS_URL + "/reports/service_usage_customer_report", {},
+          {
+            get: {
+              method: 'GET',
+              headers: {'Authorization': AuthenticationService.getAccessToken()}
+            }
           }
-        }
-      );
+        );
+      }
 
-      var serviceUsageProviderResource = $resource(
-        WS_URL + "/reports/service_usage_provider_report",
-        {},
-        {
-          get: {
-            method: 'GET',
-            headers: {'Authorization': AuthenticationService.getAccessToken()}
+      function buildServiceUsageProviderResource() {
+        return $resource(WS_URL + "/reports/service_usage_provider_report", {},
+          {
+            get: {
+              method: 'GET',
+              headers: {'Authorization': AuthenticationService.getAccessToken()}
+            }
           }
-        }
-      );
+        );
+      }
 
       /**
        * Default Date Range Used For Daily Stats
@@ -88,7 +88,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
       ReportService.serviceUsageCustomerReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
-          serviceUsageCustomerResource,
+          buildServiceUsageCustomerResource(),
           "campaign_id,campaign_name,customer_name,service_id,service_name,service_element_id,service_element_name",
           "unit_count",
           "organisation_id==" + organisationId,
@@ -99,7 +99,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
       ReportService.serviceUsageProviderReport = function (organisationId, sort, limit) {
         return this.buildPerformanceReport(
-          serviceUsageProviderResource,
+          buildServiceUsageProviderResource(),
           "campaign_id,campaign_name,provider_name,service_id,service_name,service_element_id,service_element_name",
           "unit_count",
           "organisation_id==" + organisationId,

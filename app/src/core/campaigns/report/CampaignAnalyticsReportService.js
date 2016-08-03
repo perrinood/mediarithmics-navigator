@@ -35,84 +35,90 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
    */
   module.factory('CampaignAnalyticsReportService',
     ['$resource', 'Restangular', 'core/common/auth/Session', 'core/common/auth/AuthenticationService', 'core/configuration',
-      'moment', 'core/campaigns/report/ChartsService', 'core/campaigns/goals/GoalsService',
-      function ($resource, Restangular, Session, AuthenticationService, configuration, moment, ChartsService, GoalsService) {
+      'moment', 'core/campaigns/report/ChartsService',
+      function ($resource, Restangular, Session, AuthenticationService, configuration, moment, ChartsService) {
         var WS_URL = configuration.WS_URL;
 
         /**
          * Resources definition
          */
 
-        var displayCampaignResource = $resource(
-          WS_URL + "/reports/display_campaign_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildDisplayCampaignResource() {
+          return $resource(WS_URL + "/reports/display_campaign_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var adGroupResource = $resource(WS_URL + "/reports/ad_group_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildAdGroupResource() {
+          return $resource(WS_URL + "/reports/ad_group_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var adResource = $resource(WS_URL + "/reports/ad_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildAdResource() {
+          return $resource(WS_URL + "/reports/ad_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var creativeResource = $resource(WS_URL + "/reports/creative_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildCreativeResource() {
+          return $resource(WS_URL + "/reports/creative_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var mediaResource = $resource(WS_URL + "/reports/media_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildMediaResource() {
+          return $resource(WS_URL + "/reports/media_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var liveResource = $resource(WS_URL + "/reports/display_campaign_live_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildLiveResource() {
+          return $resource(WS_URL + "/reports/display_campaign_live_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
-        var segmentPerformanceResource = $resource(WS_URL + "/reports/campaign_segment_performance_report",
-          {},
-          {
-            get: {
-              method: 'GET',
-              headers: {'Authorization': AuthenticationService.getAccessToken()}
+        function buildSegmentPerformanceResource() {
+          return $resource(WS_URL + "/reports/campaign_segment_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
             }
-          }
-        );
+          );
+        }
 
         /**
          * Default Date Range Used For Daily Stats
@@ -188,7 +194,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.creativePerformance = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceReport(
-            creativeResource,
+            buildCreativeResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId
           );
@@ -197,7 +203,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.adGroupPerformance = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceReport(
-            adGroupResource,
+            buildAdGroupResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId
           );
@@ -206,7 +212,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.adPerformance = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceReport(
-            adResource,
+            buildAdResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId
           );
@@ -215,7 +221,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.mediaPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceReport(
-            mediaResource,
+            buildMediaResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId,
             sort,
@@ -226,7 +232,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.targetedSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
-            segmentPerformanceResource,
+            buildSegmentPerformanceResource(),
             "audience_segment_id,segment_name",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId + ",segment_scope==1",
@@ -238,7 +244,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         ReportService.discoveredSegmentPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
           return this.buildPerformanceDimensionReport(
-            segmentPerformanceResource,
+            buildSegmentPerformanceResource(),
             "audience_segment_id,segment_name",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId + ",segment_scope==2",
@@ -248,9 +254,8 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         };
 
         ReportService.livePerformance = function (campaignId, period, sort, limit) {
-
           return this.buildLivePerformanceReport(
-            liveResource,
+            buildLiveResource(),
             period,
             "impressions,clicks,cpm,ctr,cpc,winning_bid_price,losing_bid_price,losing_bid_count,avg_winning_bid_price,avg_losing_bid_price",
             "campaign_id==" + campaignId,
@@ -262,7 +267,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
         ReportService.kpi = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";
-          return this.getPerformance(displayCampaignResource, "", "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa, "campaign_id==" + campaignId)
+          return this.getPerformance(buildDisplayCampaignResource(), "", "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa, "campaign_id==" + campaignId)
             .$promise.then(function (response) {
               var report = response.data.report_view;
               var firstLine = report.rows[0] || [];
@@ -278,7 +283,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
         ReportService.allCampaigns = function (organisation_id) {
           return this.buildPerformanceReport(
-            displayCampaignResource,
+            buildDisplayCampaignResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost,cpa",
             "organisation==" + organisation_id
           );
@@ -364,7 +369,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
             ];
           };
 
-          return displayCampaignResource.get({
+          return buildDisplayCampaignResource().get({
             organisation_id: Session.getCurrentWorkspace().organisation_id,
             start_date: startDate().format('YYYY-MM-D'),
             end_date: endDate().format('YYYY-MM-D'),
@@ -428,7 +433,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
             ];
           };
 
-          return displayCampaignResource.get({
+          return buildDisplayCampaignResource().get({
             organisation_id: Session.getCurrentWorkspace().organisation_id,
             start_date: startDate().format('YYYY-MM-D'),
             end_date: endDate().format('YYYY-MM-D'),
@@ -439,5 +444,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         };
 
         return ReportService;
-      }]);
+      }
+
+    ]);
 });
