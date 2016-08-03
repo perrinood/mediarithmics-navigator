@@ -109,9 +109,10 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
    */
   module.controller('core/campaigns/report/CampaignReportController', [
     '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/DisplayCampaignService',
-    'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'core/common/files/ExportService', 'core/campaigns/goals/GoalsService', 'd3', 'moment', '$interval', '$q',
-    'core/common/ErrorService',
-    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService, Session, ExportService, GoalsService, d3, moment, $interval, $q, ErrorService) {
+    'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'core/common/files/ExportService',
+    'core/campaigns/goals/GoalsService', 'd3', 'moment', '$interval', '$q', 'core/common/ErrorService', 'core/common/auth/AuthenticationService',
+    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService,
+              Session, ExportService, GoalsService, d3, moment, $interval, $q, ErrorService, AuthenticationService) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       // Chart
