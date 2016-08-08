@@ -16,7 +16,7 @@ define(['./module'], function(module) {
            functions for formatting cells in the table
           */
           scope.mediaValue = function(media) {
-            return media.replace("site:web:", "");
+            return media.replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
           };
           var interpolatedValue = function(scope, row) {
             return row[this.field];
