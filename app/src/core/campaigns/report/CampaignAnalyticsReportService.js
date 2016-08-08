@@ -257,7 +257,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           return this.buildLivePerformanceReport(
             buildLiveResource(),
             period,
-            "impressions,clicks,cpm,ctr,cpc,winning_bid_price,losing_bid_price,losing_bid_count,avg_winning_bid_price,avg_losing_bid_price",
+            "impressions,clicks,cpm,ctr,cpc,impressions_cost,winning_bid_price,losing_bid_price,losing_bid_count,avg_winning_bid_price,avg_losing_bid_price",
             "campaign_id==" + campaignId,
             sort,
             limit

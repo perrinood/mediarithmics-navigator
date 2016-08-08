@@ -723,10 +723,42 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         }
       };
 
-
       /*
        data of charts
        */
+
+        $scope.optionsCPM = {
+          chart: {
+            type: 'lineChart',
+            height: 250,
+            margin: {
+              top: 20,
+              right: 30,
+              bottom: 40,
+              left: 55
+            },
+            x: function (d) {
+              return d.x;
+            },
+            y: function (d) {
+              return d.y;
+            },
+            useInteractiveGuideline: true,
+            duration: 0,
+            xAxis: {
+              tickFormat: function (d) {
+                return d3.time.format('%X')(new Date(d));
+              }
+            },
+            yAxis: {
+              tickFormat: function (d) {
+                return d3.format('.02f')(d) + ' ' + $scope.campaign.currency_code;
+              }
+            },
+            legendPosition: 'right'
+          }
+        };
+
       var bidCountData = {
         values: [],
         key: 'Bid Count/s',
@@ -752,9 +784,16 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         color: '#FE5858'
       };
 
+      var aveCpmData = {
+        values: [],
+        key: 'CPM',
+        color: '#00AC67'
+      };
+
       $scope.dataBidCount = [bidCountData];
       $scope.dataBidWinRate = [bidWinRateData];
       $scope.dataBidPrice = [aveWinningPriceData, aveLosingPriceData];
+      $scope.dataAveCpmData = [aveCpmData];
 
       $scope.refreshGraph = {
         refreshInterval: 2,
@@ -776,13 +815,15 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           bidCount: 0,
           winRate: 0,
           aveWiningBidPriceCPM: 0,
-          aveLosingBidPriceCPM: 0
+          aveLosingBidPriceCPM: 0,
+          cpm:0
         };
 
         var winningBidCountIdx = stats.getHeaderIndex("impressions");
         var losingBidCountIdx = stats.getHeaderIndex("losing_bid_count");
         var winningBidPriceIdx = stats.getHeaderIndex("winning_bid_price");
         var losingBidPriceIdx = stats.getHeaderIndex("losing_bid_price");
+        var impressionsCostIdx = stats.getHeaderIndex("impressions_cost");
 
         if (statsAtT1 === null) {
           statsAtT1 = stats;
@@ -797,7 +838,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
           var deltaImpressions = (rowAtT2[winningBidCountIdx] - rowAtT1[winningBidCountIdx]) / deltaTSeconds;
           var deltaLosingBidCount = (rowAtT2[losingBidCountIdx] - rowAtT1[losingBidCountIdx]) / deltaTSeconds;
+          var deltaImpressionsCost = (rowAtT2[impressionsCostIdx] - rowAtT1[impressionsCostIdx]) / deltaTSeconds;
 
+          delta.cpm = (deltaImpressions > 0) ? (deltaImpressionsCost * 1000 / deltaImpressions ) : 0;
           delta.bidCount = deltaImpressions + deltaLosingBidCount;
           delta.winRate = (deltaImpressions + deltaLosingBidCount > 0) ? (deltaImpressions / (deltaImpressions + deltaLosingBidCount)) : 0;
           delta.aveWiningBidPriceCPM = (deltaImpressions > 0) ? ((rowAtT2[winningBidPriceIdx] - rowAtT1[winningBidPriceIdx]) * 1000 / (deltaImpressions * deltaTSeconds)) : 0;
@@ -847,6 +890,10 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
               y: Math.ceil(delta.bidCount)
             });
 
+            aveCpmData.values.push({
+              x: x.unix() * 1000,
+              y: delta.cpm
+            });
 
             $scope.dataBidCount = [bidCountData];
             $scope.dataBidWinRate = [bidWinRateData];
@@ -860,6 +907,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
               $scope.dataBidWinRate[0].values.shift();
               $scope.dataBidPrice[0].values.shift();
               $scope.dataBidPrice[1].values.shift();
+              $scope.dataAveCpmData[0].values.shift();
             }
 
           }).then(function () {
