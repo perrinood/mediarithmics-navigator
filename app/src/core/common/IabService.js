@@ -95,6 +95,9 @@ define(['./module'], function (module) {
             }, {
               name: "Delisted (Deprecated) Ad Unit, Large Rectangle",
               format: "336x280"
+            }, {
+              name: "Skin",
+              format: "1800x1000"
             }];
         }
       };
