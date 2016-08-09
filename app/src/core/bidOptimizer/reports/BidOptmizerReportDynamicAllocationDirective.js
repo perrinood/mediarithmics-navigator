@@ -134,6 +134,10 @@ define(['./module', 'angular'], function (module, angular) {
                 allocation.DISPLAY_NETWORK_NAME = scope.uniqueDisplayNetworksObj[allocation.DISPLAY_NETWORK_ID];
                 return allocation;
               });
+
+              scope.totalWeightedConversions = _.sum(scope.allocationsData, "WEIGHTED_CONVERSIONS");
+              scope.totalDailyBudgetPercentage = _.sum(scope.allocationsData, "RATIO_TO_SPEND");
+
               scope.ignoredContextsData = scope.ignoredContextsData.map(function (context) {
                 context.DISPLAY_NETWORK_NAME = scope.uniqueDisplayNetworksObj[context.DISPLAY_NETWORK_ID];
                 return context;
@@ -167,19 +171,26 @@ define(['./module', 'angular'], function (module, angular) {
               }, {
                 field: "WEIGHTED_CONVERSIONS",
                 title: "Weighted Conversions",
+                filter: {
+                  WEIGHTED_CONVERSIONS: "number"
+                },
                 show: true,
                 sortable: "'WEIGHTED_CONVERSIONS'",
                 getValue: interpolatedValue
               }, {
                 field: "RATIO_TO_SPEND",
                 title: "Percent Of Daily Budget",
+                filter: {
+                  RATIO_TO_SPEND: "text"
+                },
                 show: true,
                 sortable: "'RATIO_TO_SPEND'",
                 getValue: allocationRatioToPercent
               }];
 
               scope.allocationsTable = new NgTableParams({
-                count: 10
+                count: 10,
+                filter: {DISPLAY_NETWORK_NAME: ""}
               }, {
                 data: scope.allocationsData
               });
@@ -207,7 +218,6 @@ define(['./module', 'angular'], function (module, angular) {
           };
 
           scope.reloadAllocations = function () {
-
             var selectedEnvironment = _.find(scope.allocationTablesEnvironment, function (environment) {
               return environment.adGroup.id === scope.selectedAdGroup.id;
             });
@@ -215,7 +225,7 @@ define(['./module', 'angular'], function (module, angular) {
           };
 
           scope.refreshAdGroups = function () {
-            //to select only ad groups for the selected campaign
+            // To select only ad groups for the selected campaign
             scope.adGroupsForCampaign = _.filter(scope.allocationTablesEnvironment, function (o) {
               return o.campaign.id === scope.selectedCampaign.id;
             }).map(function (environment) {
@@ -228,7 +238,7 @@ define(['./module', 'angular'], function (module, angular) {
 
               scope.report = newVal;
 
-              //selecting from the report the adGroupId,campaignId and goalId for each allocation table
+              // Selecting from the report the adGroupId,campaignId and goalId for each allocation table
               var adGroupsIds = scope.report.$allocation_tables.map(function (all_table, i) {
                 return {
                   adGroupId: all_table.$ad_group_id,
@@ -241,8 +251,8 @@ define(['./module', 'angular'], function (module, angular) {
                 return Restangular.one("display_campaigns", adg.campaignId).one("ad_groups", adg.adGroupId).get();
               })).then(function (adGroupsResult) {
 
-                //global container,will be used to contains adgroups+campaigns+goals
-                //each cell contains information about ad group, campaign and the optimized goal
+                // Global container will be used to contain ad groups + campaigns + goals
+                // each cell contains information about ad group, campaign and the optimized goal
                 scope.allocationTablesEnvironment = adGroupsResult.map(function (adGroup) {
                   return {"adGroup": adGroup};
                 });
@@ -284,18 +294,29 @@ define(['./module', 'angular'], function (module, angular) {
                   scope.selectedAdGroup = scope.selectedEnvironment.adGroup;
                   scope.selectedCampaign = scope.selectedEnvironment.campaign;
 
-                  scope.sum = function(data, field){
-                    var filter = data.filter();
-                    var keys = Object.keys(filter);
+                  scope.sum = function (data, field) {
+                    if (data !== undefined && field !== undefined) {
+                      var filter = data.filter();
+                      var keys = Object.keys(filter);
 
-                    var filteredData = _.filter(scope.allocationsData, function(o){
-                      return  _.reduce(keys.map(function(key){
+                      var filteredData = _.filter(scope.allocationsData, function (o) {
+                        return _.reduce(keys.map(function (key) {
+                          if (filter[key] === undefined || filter[key] === "") {
+                            return true;
+                          }
+                          if (key === "RATIO_TO_SPEND") {
+                            // We need to filter on the same percentages that we display
+                            var percentage = Number((o[key] * 100).toFixed(3)) + "";
+                            return percentage.includes(filter[key]);
+                          }
+                          return ("" + o[key]).includes(filter[key]);
+                        }), function (memo, num) {
+                          return memo && num;
+                        }, true);
+                      });
 
-                        return o[key].indexOf(filter[key]) > -1;
-                      }) , function(memo, num){ return memo && num; } , true);
-                    });
-
-                    return _.sum(filteredData, field);
+                      return _.sum(filteredData, field);
+                    }
                   };
                   scope.refreshAdGroups();
                   changeAllocation(scope.selectedEnvironment);
