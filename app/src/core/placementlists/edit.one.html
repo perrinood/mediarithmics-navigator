@@ -1,4 +1,4 @@
-<div ng-controller="core/placementlists/EditOneController" class="mcs-default-container">
+<div ng-controller="core/placementlists/EditOneController" class="mcs-default-container" xmlns="">
   <div class="mcs-default-sidebar">
     <div class="organisation-name-block">
       {{currentOrganisation}}
@@ -11,66 +11,125 @@
       <h1 ng-if="!isCreationMode">Edit Placement List</h1>
     </div>
 
+    <div ng-show="isCreationMode">CSV upload will be available after creation</div>
+    <br>
+
     <!-- Name -->
     <div mcs-form-group="" label-for="placement_list_name" label-text="Placement List Name">
       <input required class="input-lg" ng-model="placementList.name" type="text" id="placement_list_name">
     </div>
 
-    <div ng-show="!isCreationMode">
-      <table class="mics-table" ng-table="tableParams">
-        <thead>
+    <!--Add Or Search Placement Lists-->
+    <div ng-show="!isCreationMode" class="dropdown" uib-dropdown>
+      <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>New Placement List</button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="New Placement List">
+        <li role="presentation" ng-show="!webPlacementListParams.data.length">
+          <a role="menuitem" tabindex="0" ng-click="createPlacementList('WEB_BROWSER')">Websites</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="1" ng-click="createPlacementList('APPLICATION')">Applications</a></li>
+      </ul>
+    </div>
+    <br>
+
+    <uib-tabset ng-show="!isCreationMode" class="mics-page-main-tabs">
+      <!--WEB DESCRIPTORS-->
+      <uib-tab ng-show="webPlacementListParams.data.length">
+        <uib-tab-heading>
+          Web Pages
+        </uib-tab-heading>
+
+        <!--List Web Placement Descriptors-->
+        <table class="mics-table" ng-table="webPlacementListParams">
+          <thead>
           <tr>
-            <th>Url</th>
-            <th>Type</th>
+            <th>Value</th>
+            <th>Descriptor Type</th>
+            <th>Holder</th>
             <th>Url Keywords</th>
             <th class="actions">Actions</th>
           </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="descriptor in $data">
-          <td><a ng-href="{{descriptor.url}}" target="_blank">{{descriptor.url}}</a></td>
-          <td>{{descriptor.descriptor_type}}</td>
-          <td>
-            <span ng-show="descriptor.descriptor_type == 'PATTERN'" ng-repeat="keyword in descriptor.keywords">{{keyword + ' '}}</span>
-          </td>
-          <td class="actions">
-            <a class="mics-btn mics-btn-delete" ng-click="deletePlacement(descriptor)">Delete</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <tr ng-repeat="descriptor in $data">
+            <td><a ng-href="{{descriptor.value}}" target="_blank">{{descriptor.value}}</a></td>
+            <td>{{descriptor.descriptor_type}}</td>
+            <td>{{descriptor.placement_holder}}</td>
+            <td><span ng-show="descriptor.descriptor_type == 'PATTERN'" ng-repeat="keyword in descriptor.keywords">{{keyword + ' '}}</span></td>
+            <td class="actions">
+              <a class="mics-btn mics-btn-edit" ng-click="editPlacement(descriptor)">Edit</a>
+              <a class="mics-btn mics-btn-delete" ng-click="deletePlacement(descriptor)">Delete</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-      <div ng-show="!!uploadError" class="alert alert-danger">
-        {{uploadError}}
-      </div>
-      <div mics-pl-upload="pluploadOptions" class="btn-group">
-        <a class="browse-button mics-btn mics-btn-add" ng-click="uploadCSV()">upload CSV file and replace</a>
-        <a ng-click="downloadCSV()" class="mics-btn mics-btn-action">Download CSV</a>
-      </div>
-    </div>
-    <div ng-show="isCreationMode">
-      CSV download / upload will be available after the creation.
-    </div>
+        <!--Current placement list actions-->
+        <div ng-show="!!uploadError" class="alert alert-danger">{{uploadError}}</div>
+        <div mics-pl-upload="pluploadOptions" class="btn-group">
+          <a class="mics-btn mics-btn-add">Add Placement</a>
+          <a class="browse-button mics-btn mics-btn-add">Replace with CSV</a>
+          <a ng-click="downloadCSV()" class="mics-btn mics-btn-action pull-right">Download CSV</a>
+        </div>
+      </uib-tab>
 
-    <br>
+      <!--APPLICATIONS DESCRIPTORS-->
+      <uib-tab ng-show="appPlacementListParams.data.length">
+        <uib-tab-heading>
+          Applications
+        </uib-tab-heading>
+
+        <!--List App Placement Descriptors-->
+        <table class="mics-table" ng-table="appPlacementListParams">
+          <thead>
+          <tr>
+            <th>Value</th>
+            <th>Descriptor Type</th>
+            <th>Holder</th>
+            <th>Url Keywords</th>
+            <th class="actions">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="descriptor in $data">
+            <td><a ng-href="{{descriptor.value}}" target="_blank">{{descriptor.value}}</a></td>
+            <td>{{descriptor.descriptor_type}}</td>
+            <td>{{descriptor.placement_holder}}</td>
+            <td><span ng-show="descriptor.descriptor_type == 'PATTERN'" ng-repeat="keyword in descriptor.keywords">{{keyword + ' '}}</span></td>
+            <td class="actions">
+              <a class="mics-btn mics-btn-edit" ng-click="editPlacement(descriptor)">Edit</a>
+              <a class="mics-btn mics-btn-delete" ng-click="deletePlacement(descriptor)">Delete</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <!--Current placement list actions-->
+        <div ng-show="!!uploadError" class="alert alert-danger">{{uploadError}}</div>
+        <div mics-pl-upload="pluploadOptions" class="btn-group">
+          <a class="mics-btn mics-btn-add">Add Placement</a>
+          <a class="browse-button mics-btn mics-btn-add">Replace with CSV</a>
+          <a ng-click="downloadCSV()" class="mics-btn mics-btn-action pull-right">Download CSV</a>
+        </div>
+      </uib-tab>
+    </uib-tabset>
 
     <div ng-show="generatorCampains.length">
       <h4>Campaign generating data in this placement list</h4>
       <ul>
         <li ng-repeat="campaign in generatorCampains">
-        <a ng-click="goToCampaign(campaign)">
-          {{campaign.name}}
-        </a>
+          <a ng-click="goToCampaign(campaign)">
+            {{campaign.name}}
+          </a>
         </li>
       </ul>
     </div>
+
     <div ng-show="consumerCampains.length">
       <h4>Campaign consuming data from this placement list</h4>
       <ul>
         <li ng-repeat="campaign in consumerCampains">
-        <a ng-click="goToCampaign(campaign)">
-          {{campaign.name}}
-        </a>
+          <a ng-click="goToCampaign(campaign)">
+            {{campaign.name}}
+          </a>
         </li>
       </ul>
     </div>
