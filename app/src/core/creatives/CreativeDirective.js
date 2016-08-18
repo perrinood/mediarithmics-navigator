@@ -53,10 +53,11 @@ define(['./module'], function (module) {
                   } else {
                     attrs.$set("src", "images/flash/Adobe-swf_icon.png");
                   }
-                } else if (creative.icon_id === "image") {
-                  attrs.$set("src", "images/Unknown_file.png");
                 } else if (creative.url) {
                   attrs.$set("src", creative.url);
+                } else {
+                  // TODO put a better image if icon_id === "image" ?
+                  attrs.$set("src", "images/Unknown_file.png");
                 }
 
               }
