@@ -43,7 +43,16 @@ define(['./module'], function (module) {
         $scope.properties = DisplayAdService.getProperties();
         $scope.audits = DisplayAdService.getAudits();
         $scope.disabledEdition = $scope.displayAd.audit_status !== "NOT_AUDITED";
-        $scope.previewUrl = $sce.trustAsResourceUrl(configuration.ADS_PREVIEW_URL + "?ctx=PREVIEW&rid=" + $scope.displayAd.id + "&caid=preview");
+        var tagType = "iframe";
+        try {
+          tagType = $scope.properties.find(function(prop){return prop.value.technical_name === "tag_type";}).value.value.value || "iframe";
+        } catch(e){}
+
+        if (tagType === "script") {
+          $scope.previewUrl = $sce.trustAsResourceUrl('data:text/html;charset=utf-8,' + encodeURI('<html><body style="margin-left: 0%; margin-right: 0%; margin-top: 0%; margin-bottom: 0%"><script type="text/javascript" src="https:' + configuration.ADS_PREVIEW_URL + '?ctx=PREVIEW&rid=' + $scope.displayAd.id + '&caid=preview' + '"></script></body></html>'));
+        } else {
+          $scope.previewUrl = $sce.trustAsResourceUrl(configuration.ADS_PREVIEW_URL + "?ctx=PREVIEW&rid=" + $scope.displayAd.id + "&caid=preview");
+        }
         var sizes = $scope.displayAd.format.split("x");
         $scope.previewWidth = parseInt(sizes[0]);
         $scope.previewHeight = parseInt(sizes[1]);
