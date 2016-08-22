@@ -434,6 +434,21 @@ define(['./module'], function (module) {
                   }
 
                 });
+              } else if (scope.condition.value.property_selector_name === 'ORIGIN_CAMPAIGN_ID'){
+                var params = {organisation_id: Session.getCurrentWorkspace().organisation_id};
+                if (scope.condition.value.property_selector_family === 'USER_EMAILS'){
+                  params.campaign_type = 'EMAIL';
+                } else if (scope.condition.value.property_selector_family === 'USER_DISPLAY_ADS'){
+                  params.campaign_type = 'DISPLAY';
+                }
+                Restangular.all('campaigns').getList(params).then(function (campaigns) {
+                  scope.domainSources = campaigns;
+                  var campaignMatch = _.find(campaigns, _.matchesProperty('id',selectedDomainId));
+                  if (campaignMatch){
+                    scope.selectedDomain = campaignMatch;
+                  }
+                });
+
               } else if (scope.condition.value.property_selector_name === 'SEGMENT_ID'){
                 //Let's fetch datamart's audience segment's resources
                 Restangular.all("audience_segments").getList({"datamart_id": Session.getCurrentDatamartId(), "with_source_datamarts":1}).then(function(segments) {
