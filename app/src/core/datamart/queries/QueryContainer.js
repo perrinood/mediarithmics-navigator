@@ -38,7 +38,7 @@ define(['./module'], function (module) {
 
             ConditionContainer.prototype.getSelectorValueType = function () {
                 var condition = this.value;
-                if (condition.property_selector_name === 'SITE_ID' || condition.property_selector_name === 'SEGMENT_ID'){
+                if (condition.property_selector_name === 'SITE_ID' || condition.property_selector_name === 'SEGMENT_ID' || condition.property_selector_name === 'ORIGIN_CAMPAIGN_ID'){
                   return 'ID';
                 } else {
                   return QueryService.getPropertySelectorValueType(condition.property_selector_value_type, condition.property_selector_expression);
