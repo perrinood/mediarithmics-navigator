@@ -82,13 +82,17 @@ define(['./module'], function (module) {
                            USER_SEGMENTS:"Segments", USER_EMAILS:"Emails",
                            USER_TOUCHES:"Touches", USER_EMAIL_ADDRESSES:"Email Addresses",
                            "$product_view":"Product views",
-                           "$product_list_view":"Product list views"};
+                           "$product_list_view":"Product list views",
+                           USER_DISPLAY_ADS:"Display Ads"
+                         };
       var elementLabels = { USER_PROFILE:"Profile", USER_VISITS:"Visit" ,
                             USER_CONVERSIONS:"Conversion", USER_DEVICES:"Device",
                             USER_SEGMENTS:"Segment", USER_EMAILS:"Email",
                             USER_TOUCHES:"Touch", USER_EMAIL_ADDRESSES:"Email Address",
                             "$product_view":"Product view",
-                            "$product_list_view":"Product list view"};
+                            "$product_list_view":"Product list view",
+                            USER_DISPLAY_ADS:"Display Ad"
+                          };
 
       var propertySelectorExpressions = [
         {name:"MAX", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
@@ -100,7 +104,7 @@ define(['./module'], function (module) {
         {name:"NEWEST", applicableSelectorType:["INTEGER","DOUBLE","LONG","STRING","DATE","BOOLEAN"], applicableEvaluationType:["ARRAY","TABLE"]}
       ];
 
-      var familyWithIndex = ["USER_VISITS","USER_EVENTS","USER_EMAILS","USER_CONVERSIONS", "USER_TOUCHES"];
+      var familyWithIndex = ["USER_VISITS","USER_EVENTS","USER_EMAILS","USER_CONVERSIONS","USER_TOUCHES","USER_DISPLAY_ADS"];
 
       var indexOptions = [
         {id:"0", index:-1, operator:"", label:"Any,s"},
