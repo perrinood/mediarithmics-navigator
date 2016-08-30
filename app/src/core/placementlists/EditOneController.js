@@ -18,7 +18,7 @@ define(['./module'], function (module) {
         total: 0,           // length of data
         getData: function ($defer, params) {
           Restangular.one('placement_lists', placementListId).all('placement_descriptors').getList({
-            descriptor_type: "PATTERN",
+            placement_holder: "WEB_BROWSER",
             first_result: (params.page() - 1) * params.count(),
             max_results: params.count()
           }).then(function (descriptors) {
@@ -37,7 +37,6 @@ define(['./module'], function (module) {
         total: 0,           // length of data
         getData: function ($defer, params) {
           Restangular.one('placement_lists', placementListId).all('placement_descriptors').getList({
-            descriptor_type: "EXACT_APPLICATION_ID",
             placement_holder: "APPLICATION",
             first_result: (params.page() - 1) * params.count(),
             max_results: params.count()
@@ -59,6 +58,7 @@ define(['./module'], function (module) {
           $scope.placementList = placementList;
         });
       }
+
       $scope.pluploadOptions = {
         multi_selection: true,
         url: $location.protocol() + ":" + Restangular.one('placement_lists', placementListId).one("placement_descriptors").one("batch").getRestangularUrl(),
@@ -71,6 +71,7 @@ define(['./module'], function (module) {
         init: {
           FileUploaded: function () {
             $scope.webPlacementListParams.reload();
+            $scope.appPlacementListParams.reload();
             waitingService.hideWaitingModal();
           },
           FilesAdded: function () {
@@ -86,18 +87,8 @@ define(['./module'], function (module) {
         }
       };
 
-      $scope.addPlacement = function (placementType) {
-        // switch (placementType) {
-        //   case "EXACT_URL":
-        //     Restangular.all('placement_lists').post($scope.placementList, {organisation_id: Session.getCurrentWorkspace().organisation_id});
-        //     break;
-        //   case "EXACT_APPLICATION_ID":
-        //     Restangular.all('placement_lists').post($scope.placementList, {organisation_id: Session.getCurrentWorkspace().organisation_id});
-        //     break;
-        //   default:
-        //     $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/display");
-        //     break;
-        // }
+      $scope.addPlacement = function () {
+        $location.path(Session.getWorkspacePrefixUrl() + "/library/placementlists/" + placementListId + "/descriptor");
       };
 
       $scope.goToCampaign = function (campaign) {
@@ -122,6 +113,7 @@ define(['./module'], function (module) {
       };
 
       $scope.editPlacement = function (placement) {
+        $location.path(Session.getWorkspacePrefixUrl() + "/library/placementlists/" + placementListId + "/descriptor/" + placement.id);
       };
 
       $scope.cancel = function () {
