@@ -21,14 +21,14 @@
     <!-- Type -->
     <div class="row">
       <div class="col-md-6" mcs-form-group="" label-for="descriptor_type" label-text="Type">
-        <select ng-model="descriptor.descriptor_type" ng-options="key for (key, value) in descriptorTypes" id="descriptor_type"></select>
+        <select ng-model="descriptor.descriptor_type" ng-options="key as value for (key , value) in descriptorTypes" id="descriptor_type"></select>
       </div>
     </div>
 
     <!-- Holder -->
     <div class="row">
       <div class="col-md-6" mcs-form-group="" label-for="descriptor_holder" label-text="Holder">
-        <select ng-model="descriptor.placement_holder" ng-options="key for (key, value) in placementHolders" id="descriptor_holder"></select>
+        <select ng-model="descriptor.placement_holder" ng-options="key as value for (key, value) in placementHolders" id="descriptor_holder"></select>
       </div>
     </div>
 

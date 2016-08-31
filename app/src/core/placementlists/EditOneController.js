@@ -109,6 +109,7 @@ define(['./module'], function (module) {
       $scope.deletePlacement = function (placement) {
         placement.remove({organisation_id: Session.getCurrentWorkspace().organisation_id}).then(function () {
           $scope.webPlacementListParams.reload();
+          $scope.appPlacementListParams.reload();
         });
       };
 
