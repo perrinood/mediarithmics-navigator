@@ -1,9 +1,9 @@
-define(['./module'], function (module) {
+define(['./module', 'angular'], function (module, angular) {
   'use strict';
 
   module.directive('mcsBidOptimizerDynamicAllocationReport', [
-    'core/common/auth/Session', 'Restangular', 'moment', 'ngTableParams', '$filter', '$interpolate', 'lodash', '$q', '$location',
-    function (Session, Restangular, moment, NgTableParams, $filter, $interpolate, _, $q, $location) {
+    'core/common/auth/Session', 'Restangular', 'moment', 'ngTableParams', '$filter', '$interpolate', 'lodash', '$q', '$http',
+    function (Session, Restangular, moment, NgTableParams, $filter, $interpolate, _, $q, $http) {
       return {
         restrict: 'E',
         scope: {
@@ -12,26 +12,24 @@ define(['./module'], function (module) {
         link: function link(scope, element, attrs) {
           scope.organisationId = Session.getCurrentWorkspace().organisation_id;
           scope.workspace = Session.getWorkspacePrefixUrl();
-          /*
-           functions for formatting cells in the table
+          /**
+           * Cells formatting methods
            */
-          scope.mediaValue = function (media) {
-            return media.replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
-          };
 
           var interpolatedValue = function (scope, row) {
             return row[this.field];
           };
 
           var formatMedia = function (scope, row) {
-            return scope.mediaValue(row[this.field]);
+            return row[this.field];
           };
 
           var allocationRatioToPercent = function (scope, row) {
             return (row.RATIO_TO_SPEND) > 0 ? (row.RATIO_TO_SPEND * 100).toFixed(3) + '%' : '-';
           };
-          /*
-           function to call when selecting an ad group
+
+          /**
+           * Function to call when selecting an ad group
            */
           var changeAllocation = function (environment) {
 
@@ -48,6 +46,47 @@ define(['./module'], function (module) {
               allocation.$allocation_id.RATIO_TO_SPEND = allocation.$ratio_to_spend;
               return allocation.$allocation_id;
             });
+
+            function isNumeric(n) {
+              return !isNaN(parseFloat(n)) && isFinite(n);
+            }
+
+            /**
+             * Find the app name if it is an app
+             */
+            function findAppName(id) {
+              var deferred = $q.defer();
+
+              if (isNumeric(id)) {
+                $http.jsonp("https://itunes.apple.com/lookup", {
+                  params: {
+                    'callback': 'JSON_CALLBACK',
+                    'id': id
+                  }
+                }).success(function (data) {
+                  deferred.resolve(angular.isDefined(data.results) && data.results.length ? data.results[0].trackName : id);
+                }).error(function (e) {
+                  deferred.resolve(id);
+                });
+              } else {
+                // No need to look for a name if it is a site or an android app (no Google API)
+                deferred.resolve(id);
+              }
+
+              return deferred.promise;
+            }
+
+            // Setup media id
+            function setupMediaId() {
+              scope.allocationsData.map(function (data) {
+                var id = data.MEDIA_ID.replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
+                findAppName(id).then(function (name) {
+                  data.MEDIA_ID = name;
+                });
+              });
+            }
+
+            setupMediaId();
 
             // values of ignored contexts of adGroupId
             scope.ignoredContextsData = allocationTable.$ignored_contexts.map(function (allocation) {
