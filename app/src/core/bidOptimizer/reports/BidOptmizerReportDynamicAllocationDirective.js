@@ -80,9 +80,11 @@ define(['./module', 'angular'], function (module, angular) {
             function setupMediaId() {
               scope.allocationsData.map(function (data) {
                 var id = data.MEDIA_ID.replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
-                findAppName(id).then(function (name) {
-                  data.MEDIA_ID = name;
-                });
+                if (data.MEDIA_ID.startsWith("app:ios")) {
+                  findAppName(id).then(function (name) {
+                    data.MEDIA_ID = name;
+                  });
+                } else data.MEDIA_ID = id;
               });
             }
 

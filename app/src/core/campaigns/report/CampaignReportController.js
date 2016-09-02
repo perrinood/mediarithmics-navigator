@@ -421,7 +421,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       function findAppName(id) {
         var deferred = $q.defer();
 
-        if ($scope.campaign.targeted_devices !== 'ONLY_DESKTOP' && isNumeric(id)) {
+        if (isNumeric(id)) {
           $http.jsonp("https://itunes.apple.com/lookup", {
             params: {
               'callback': 'JSON_CALLBACK',
@@ -468,11 +468,18 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         var siteRows = mediaPerformance.getRows();
 
         var promises = siteRows.map(function (row) {
-          return findAppName(row[0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "")).then(function (name) {
-            var site = {name: name};
+          var id = row[0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
+          if (row[0].startsWith("app:ios")) {
+            return findAppName(id).then(function(name) {
+              var site = {name: name};
+              var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
+              return addSiteInfo(site, siteInfo);
+            });
+          } else {
+            var site = {name: id};
             var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
             return addSiteInfo(site, siteInfo);
-          });
+          }
         });
 
         return $q.all(promises);
