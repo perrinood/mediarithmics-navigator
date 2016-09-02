@@ -108,10 +108,10 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
    * Campaign list controller
    */
   module.controller('core/campaigns/report/CampaignReportController', [
-    '$scope', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/DisplayCampaignService',
+    '$scope', '$http', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/DisplayCampaignService',
     'CampaignAnalyticsReportService', 'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'core/common/files/ExportService',
     'core/campaigns/goals/GoalsService', 'd3', 'moment', '$interval', '$q', 'core/common/ErrorService', 'core/common/auth/AuthenticationService',
-    function ($scope, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService,
+    function ($scope, $http, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, DisplayCampaignService, CampaignAnalyticsReportService, CampaignPluginService,
               Session, ExportService, GoalsService, d3, moment, $interval, $q, ErrorService, AuthenticationService) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
@@ -347,7 +347,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           $scope.mediaPerformance = mediaPerformance;
           $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
           $scope.orderBy = key;
-          $scope.sites = sort(buildSites(mediaPerformance));
+          buildSites(mediaPerformance).then(function (sites) {
+            $scope.sites = sort(sites);
+          });
         });
       };
 
@@ -409,9 +411,36 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         }
       });
 
-      var buildSites = function (mediaPerformance) {
-        var sites = [];
+      function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
 
+      /**
+       * Find the app name if it is an app
+       */
+      function findAppName(id) {
+        var deferred = $q.defer();
+
+        if ($scope.campaign.targeted_devices !== 'ONLY_DESKTOP' && isNumeric(id)) {
+          $http.jsonp("https://itunes.apple.com/lookup", {
+            params: {
+              'callback': 'JSON_CALLBACK',
+              'id': id
+            }
+          }).success(function (data) {
+            deferred.resolve(angular.isDefined(data.results) && data.results.length ? data.results[0].trackName : id);
+          }).error(function (e) {
+            deferred.resolve(id);
+          });
+        } else {
+          // No need to look for a name if it is a site or an android app (no Google API)
+          deferred.resolve(id);
+        }
+
+        return deferred.promise;
+      }
+
+      var buildSites = function (mediaPerformance) {
         // Get media performance info indexes to identify the media information
         var siteClicksIdx = mediaPerformance.getHeaderIndex("clicks");
         var siteSpentIdx = mediaPerformance.getHeaderIndex("impressions_cost");
@@ -437,18 +466,23 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         };
 
         var siteRows = mediaPerformance.getRows();
-        for (var i = 0; i < siteRows.length; ++i) {
-          var site = {name: siteRows[i][0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "")};
-          var siteInfo = [siteRows[i][0]].concat(mediaPerformance.decorate(siteRows[i]));
-          sites[i] = addSiteInfo(site, siteInfo);
-        }
 
-        return sites;
+        var promises = siteRows.map(function (row) {
+          return findAppName(row[0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "")).then(function (name) {
+            var site = {name: name};
+            var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
+            return addSiteInfo(site, siteInfo);
+          });
+        });
+
+        return $q.all(promises);
       };
 
       $scope.$watch('mediaPerformance', function (mediaPerformance) {
         if (angular.isDefined(mediaPerformance)) {
-          $scope.sites = sort(buildSites(mediaPerformance));
+          buildSites(mediaPerformance).then(function (sites) {
+            $scope.sites = sort(sites);
+          });
         }
       });
 
@@ -727,37 +761,37 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
        data of charts
        */
 
-        $scope.optionsCPM = {
-          chart: {
-            type: 'lineChart',
-            height: 250,
-            margin: {
-              top: 20,
-              right: 30,
-              bottom: 40,
-              left: 55
-            },
-            x: function (d) {
-              return d.x;
-            },
-            y: function (d) {
-              return d.y;
-            },
-            useInteractiveGuideline: true,
-            duration: 0,
-            xAxis: {
-              tickFormat: function (d) {
-                return d3.time.format('%X')(new Date(d));
-              }
-            },
-            yAxis: {
-              tickFormat: function (d) {
-                return d3.format('.02f')(d) + ' ' + $scope.campaign.currency_code;
-              }
-            },
-            legendPosition: 'right'
-          }
-        };
+      $scope.optionsCPM = {
+        chart: {
+          type: 'lineChart',
+          height: 250,
+          margin: {
+            top: 20,
+            right: 30,
+            bottom: 40,
+            left: 55
+          },
+          x: function (d) {
+            return d.x;
+          },
+          y: function (d) {
+            return d.y;
+          },
+          useInteractiveGuideline: true,
+          duration: 0,
+          xAxis: {
+            tickFormat: function (d) {
+              return d3.time.format('%X')(new Date(d));
+            }
+          },
+          yAxis: {
+            tickFormat: function (d) {
+              return d3.format('.02f')(d) + ' ' + $scope.campaign.currency_code;
+            }
+          },
+          legendPosition: 'right'
+        }
+      };
 
       var bidCountData = {
         values: [],
@@ -816,7 +850,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           winRate: 0,
           aveWiningBidPriceCPM: 0,
           aveLosingBidPriceCPM: 0,
-          cpm:0
+          cpm: 0
         };
 
         var winningBidCountIdx = stats.getHeaderIndex("impressions");
@@ -922,7 +956,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       };
 
       fetchAndUpdateLiveGraph();
-
     }
   ]);
 });
