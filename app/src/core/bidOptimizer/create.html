@@ -5,34 +5,34 @@
 
   <div class="modal-body form-inline">
     <label for="new_bid_optimizer_name">Name</label>
-    <input id="new_bid_optimizer_name" ng-model="bidOptimizer.name" class="form-control" /><br/>
-    <br />
+    <input id="new_bid_optimizer_name" ng-model="bidOptimizer.name" class="form-control"/><br/>
+    <br/>
     <table class="fragment-list-bid-optimizer-engine">
       <thead>
-        <tr>
-          <th>&nbsp;</th>
-          <th>Bid Optimizer Engine</th>
-          <th>Data Miner</th>
-        </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Bid Optimizer Engine</th>
+        <th>Data Miner</th>
+      </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="availableBidOptimizerEngine in availableBidOptimizerEngines" fetch-plugin-properties="availableBidOptimizerEngine.id as properties">
-          <td>
-            <input
+      <tr ng-repeat="availableBidOptimizerEngine in availableBidOptimizerEngines" fetch-plugin-properties="availableBidOptimizerEngine.id as properties">
+        <td>
+          <input
               type="radio"
               name="available_bid_optimizer_engine"
               ng-model="bidOptimizer.bidOptimizerEngine"
               value="{{availableBidOptimizerEngine.group_id}}/{{availableBidOptimizerEngine.artifact_id}}"
               id="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}"
-            />
-          </td>
-          <td>
-            <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['name'].value}}</label>
-          </td>
-          <td>
-            <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['provider'].value}}</label>
-          </td>
-        </tr>
+          />
+        </td>
+        <td>
+          <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['name'].value}}</label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['provider'].value}}</label>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

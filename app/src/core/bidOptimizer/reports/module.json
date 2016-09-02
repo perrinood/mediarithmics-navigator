@@ -1,9 +1,8 @@
 {
-    "name": "core/bidOptimizer/reports",
-    "dependencies": [
-        "restangular",
-        "core/plugin",
-        "ngTable"
-
-    ]
+  "name": "core/bidOptimizer/reports",
+  "dependencies": [
+    "restangular",
+    "core/plugin",
+    "ngTable"
+  ]
 }

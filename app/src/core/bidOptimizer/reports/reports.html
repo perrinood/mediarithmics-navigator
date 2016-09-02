@@ -1,68 +1,68 @@
 <div class="mcs-default-container mics-report"
      ng-controller="core/bidOptimizer/reports/BidOptimizerReportsController" xmlns="http://www.w3.org/1999/html">
-    <div class="report mcs-default-content">
+  <div class="report mcs-default-content">
 
-        <div class="report-heading">
-            <h2>
-                <div class="pull-right">
-                    <a class="mics-btn mics-btn-action"
-                       href="#/{{currentWorkspaceId}}/library/bidOptimizers/{{bidOptimizer.id}}">Edit Bid Optimizer</a>
-                </div>
-                <span class="ng-binding">{{bidOptimizer.name}}</span>
-            </h2>
+    <div class="report-heading">
+      <h2>
+        <div class="pull-right">
+          <a class="mics-btn mics-btn-action"
+             href="#/{{currentWorkspaceId}}/library/bidOptimizers/{{bidOptimizer.id}}">Edit Bid Optimizer</a>
         </div>
-
-        <uib-tabset class="mics-page-main-tabs">
-            <uib-tab>
-                <uib-tab-heading>
-                    Model Statistics
-                </uib-tab-heading>
-                <div ng-show="statsLoading" class="loading">
-                    <img src="./images/ajax-loader.gif" class="ajax-loader">
-                </div>
-                <div ng-show="!statsLoading">
-                    <div class="report-header">
-                        <h3>
-                            Model id : <span>{{showModelId}}</span>
-                            Date : <span>{{modelDate | date:'MM/dd/yyyy'}}</span>
-                            <span ng-show="showModelId == usedModel"> (Current Model)</span>
-                            <a class="mics-btn mics-btn-action" ng-click="selectModel()">Select Model</a>
-                        </h3>
-                    </div>
-                     <div class="breakdown-area">
-                     <div class="panel-body" ng-if="report.$model_type == 'CATEGORICAL_MODEL'">
-                        <uib-tabset class="breakdown">
-                            <uib-tab heading="Roc">
-                                <div class="active chart-area ">
-                                    <mcs-bid-optimizer-roc-report
-                                            report="report"></mcs-bid-optimizer-roc-report>
-                                </div>
-                            </uib-tab>
-                            <uib-tab heading="Features contribution">
-                                <div class="chart-area">
-                                    <mcs-bid-optimizer-features-contribution-report
-                                            report="report"></mcs-bid-optimizer-features-contribution-report>
-                                </div>
-                            </uib-tab>
-                            <uib-tab heading="Data Set">
-                                <div class="chart-area">
-                                    <mcs-bid-optimizer-data-set
-                                            report="report"></mcs-bid-optimizer-data-set>
-                                </div>
-                            </uib-tab>
-
-                        </uib-tabset>
-
-                    </div>
-                    <div class="panel-body" ng-if="report.$model_type == 'DYNAMIC_ALLOCATION'">
-                        <mcs-bid-optimizer-dynamic-allocation-report
-                                report="report"></mcs-bid-optimizer-dynamic-allocation-report>
-                    </div>
-                </div>
-                </div>
-            </uib-tab>
-        </uib-tabset>
+        <span class="ng-binding">{{bidOptimizer.name}}</span>
+      </h2>
     </div>
+
+    <uib-tabset class="mics-page-main-tabs">
+      <uib-tab>
+        <uib-tab-heading>
+          Model Statistics
+        </uib-tab-heading>
+        <div ng-show="statsLoading" class="loading">
+          <img src="./images/ajax-loader.gif" class="ajax-loader">
+        </div>
+        <div ng-show="!statsLoading">
+          <div class="report-header">
+            <h3>
+              Model id : <span>{{showModelId}}</span>
+              Date : <span>{{modelDate | date:'MM/dd/yyyy'}}</span>
+              <span ng-show="showModelId == usedModel"> (Current Model)</span>
+              <a class="mics-btn mics-btn-action" ng-click="selectModel()">Select Model</a>
+            </h3>
+          </div>
+          <div class="breakdown-area">
+            <div class="panel-body" ng-if="report.$model_type == 'CATEGORICAL_MODEL'">
+              <uib-tabset class="breakdown">
+                <uib-tab heading="Roc">
+                  <div class="active chart-area ">
+                    <mcs-bid-optimizer-roc-report
+                        report="report"></mcs-bid-optimizer-roc-report>
+                  </div>
+                </uib-tab>
+                <uib-tab heading="Features contribution">
+                  <div class="chart-area">
+                    <mcs-bid-optimizer-features-contribution-report
+                        report="report"></mcs-bid-optimizer-features-contribution-report>
+                  </div>
+                </uib-tab>
+                <uib-tab heading="Data Set">
+                  <div class="chart-area">
+                    <mcs-bid-optimizer-data-set
+                        report="report"></mcs-bid-optimizer-data-set>
+                  </div>
+                </uib-tab>
+
+              </uib-tabset>
+
+            </div>
+            <div class="panel-body" ng-if="report.$model_type == 'DYNAMIC_ALLOCATION'">
+              <mcs-bid-optimizer-dynamic-allocation-report
+                  report="report"></mcs-bid-optimizer-dynamic-allocation-report>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
 
 </div>
 
