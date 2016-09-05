@@ -63,6 +63,7 @@ define(['./module'], function (module) {
         $q.all(promises).then(function (results) {
           var editor = results[0];
           var creative = results[1];
+          creative.organisation_id = creative.organisationId;
           var url = editor.getEditPath(creative);
           $location.path(url);
         });
