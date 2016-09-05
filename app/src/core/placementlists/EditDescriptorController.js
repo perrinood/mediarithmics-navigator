@@ -33,8 +33,6 @@ define(['./module'], function (module) {
       };
 
       $scope.done = function () {
-        console.log($scope.descriptor);
-        return;
         if (!$scope.editMode) {
           // Create and link the placement descriptor to the placement list
           Restangular.one('placement_lists', placementListId).post('placement_descriptors', $scope.descriptor, {placement_list_id: placementListId}).then(function () {
