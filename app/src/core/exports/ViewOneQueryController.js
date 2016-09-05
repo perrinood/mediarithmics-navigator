@@ -11,7 +11,7 @@ define(['./module'], function (module) {
         $scope['export'] = exportObj;
       });
 
-      $scope.tableParams = new NgTableParams({
+      $scope.webPlacementListParams = new NgTableParams({
         page: 1,            // show first page
         count: 10           // count per page
       }, {
@@ -32,12 +32,12 @@ define(['./module'], function (module) {
       $scope.executeExport = function () {
         Restangular.one('exports', exportId).all('executions').post({})
         .then(function () {
-         $scope.tableParams.reload();
+         $scope.webPlacementListParams.reload();
         });
       };
 
       $scope.reload = function () {
-         $scope.tableParams.reload();
+         $scope.webPlacementListParams.reload();
       };
 
       $scope.downloadResult = function(execution) {
