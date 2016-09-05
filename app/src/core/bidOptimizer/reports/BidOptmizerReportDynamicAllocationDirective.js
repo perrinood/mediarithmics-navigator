@@ -84,7 +84,9 @@ define(['./module', 'angular'], function (module, angular) {
                   findAppName(id).then(function (name) {
                     data.MEDIA_ID = name;
                   });
-                } else data.MEDIA_ID = id;
+                } else {
+                  data.MEDIA_ID = id;
+                }
               });
             }
 
