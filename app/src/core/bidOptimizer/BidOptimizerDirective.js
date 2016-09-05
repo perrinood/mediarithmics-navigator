@@ -6,10 +6,10 @@ define(['./module'], function (module) {
     function (Restangular) {
       return {
         restrict: 'EA',
-        controller : [
+        controller: [
           "$scope",
           function ($scope) {
-            this.setup = function(fetchBidOptimizer) {
+            this.setup = function (fetchBidOptimizer) {
               var asString = fetchBidOptimizer;
               var match = asString.match(/^\s*(.+)\s+as\s+(.*?)$/);
               var bidOptimizerIdExpr = match[1];
@@ -24,7 +24,7 @@ define(['./module'], function (module) {
             };
           }
         ],
-        link: function(scope, element, attrs, myCtrl) {
+        link: function (scope, element, attrs, myCtrl) {
           myCtrl.setup(attrs.fetchBidOptimizer);
         }
       };

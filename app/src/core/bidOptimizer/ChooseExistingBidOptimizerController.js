@@ -3,30 +3,30 @@ define(['./module'], function (module) {
 
   module.controller('core/bidOptimizer/ChooseExistingBidOptimizerController', [
     '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', "Restangular", 'core/common/auth/Session',
-    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session) {
+    function ($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session) {
 
       $scope.availableBidOptimizers = Restangular.all("bid_optimizers").getList({
-        organisation_id : Session.getCurrentWorkspace().organisation_id
+        organisation_id: Session.getCurrentWorkspace().organisation_id
       }).$object;
 
       $scope.selectedBidOptimizer = {
-        id : null
+        id: null
       };
 
-      $scope.done = function() {
+      $scope.done = function () {
         var bidOptimizer;
         for (var i = 0; i < $scope.availableBidOptimizers.length; i++) {
           bidOptimizer = $scope.availableBidOptimizers[i];
-          if(bidOptimizer.id === $scope.selectedBidOptimizer.id) {
+          if (bidOptimizer.id === $scope.selectedBidOptimizer.id) {
             $scope.$emit("mics-bid-optimizer:selected", {
-              bidOptimizer : bidOptimizer
+              bidOptimizer: bidOptimizer
             });
           }
         }
         $uibModalInstance.close();
       };
 
-      $scope.cancel = function() {
+      $scope.cancel = function () {
         $uibModalInstance.close();
       };
 

@@ -6,44 +6,44 @@
   <div class="modal-body">
     <table class="fragment-list-bid-optimizer">
       <thead>
-        <tr>
-          <th>&nbsp;</th>
-          <th>Name</th>
-          <th>Bid Optimizer Engine</th>
-          <th>Data Miner</th>
-        </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Name</th>
+        <th>Bid Optimizer Engine</th>
+        <th>Data Miner</th>
+      </tr>
       </thead>
       <tbody>
-        <tr
+      <tr
           ng-repeat="availableBidOptimizer in availableBidOptimizers"
           fetch-plugin-from-version="availableBidOptimizer.engine_version_id as engine"
           fetch-plugin-properties="engine.id as engineProperties"
-        >
-          <td>
-            <input
+      >
+        <td>
+          <input
               type="radio"
               name="available_bid_optimizer"
               value="{{availableBidOptimizer.id}}"
               ng-model="selectedBidOptimizer.id"
               id="available_bid_optimizer_{{availableBidOptimizer.id}}"
-            />
-          </td>
-          <td>
-            <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
-              {{availableBidOptimizer.name}}
-            </label>
-          </td>
-          <td>
-            <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
-              {{engineProperties['name'].value}}
-            </label>
-          </td>
-          <td>
-            <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
-              {{engineProperties['provider'].value}}
-            </label>
-          </td>
-        </tr>
+          />
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{availableBidOptimizer.name}}
+          </label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{engineProperties['name'].value}}
+          </label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{engineProperties['provider'].value}}
+          </label>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

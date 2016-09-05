@@ -1,4 +1,5 @@
-{"name": "core/bidOptimizer",
+{
+  "name": "core/bidOptimizer",
   "dependencies": [
     "restangular",
     "core/plugin",

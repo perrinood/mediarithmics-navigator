@@ -4,7 +4,7 @@ define(['./module'], function (module) {
   module.factory("core/bidOptimizer/PropertyContainer", [
     "$q", "Restangular",
 
-    function($q, Restangular) {
+    function ($q, Restangular) {
 
       var PropertyContainer = function PropertyContainer(property) {
 
@@ -14,20 +14,20 @@ define(['./module'], function (module) {
       };
 
       PropertyContainer.prototype.update = function update() {
-          var deferred = $q.defer();
+        var deferred = $q.defer();
 
-          if (this.value.origin === 'PLUGIN_STATIC') {
-            deferred.resolve();
-            return deferred.promise;
-          }
-
-          this.value.customPUT(this.value, 'technical_name=' + this.value.technical_name).then(function(property) {
-            deferred.resolve(property);
-          }, function(reason) {
-            deferred.reject(reason);
-          });
-
+        if (this.value.origin === 'PLUGIN_STATIC') {
+          deferred.resolve();
           return deferred.promise;
+        }
+
+        this.value.customPUT(this.value, 'technical_name=' + this.value.technical_name).then(function (property) {
+          deferred.resolve(property);
+        }, function (reason) {
+          deferred.reject(reason);
+        });
+
+        return deferred.promise;
       };
 
       PropertyContainer.prototype.persist = function persist(creativeId) {

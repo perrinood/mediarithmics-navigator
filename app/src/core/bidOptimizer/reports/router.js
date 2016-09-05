@@ -1,10 +1,9 @@
 define(['./module'], function (module) {
-    'use strict';
+  'use strict';
 
-    module.config([
-        "$stateProvider",
-        function ($stateProvider) {
-
-        }
-    ]);
+  module.config([
+    "$stateProvider",
+    function ($stateProvider) {
+    }
+  ]);
 });

@@ -1,67 +1,67 @@
 <div class="features-contribution">
-    <table class="ng-scope">
-        <thead>
-        <tr>
-            <th>Feature Name</th>
-            <th>Feature Contribution</th>
-            <th>Categories Contributions</th>
-        </tr>
+  <table class="ng-scope">
+    <thead>
+    <tr>
+      <th>Feature Name</th>
+      <th>Feature Contribution</th>
+      <th>Categories Contributions</th>
+    </tr>
 
-        </thead>
-        <tbody>
-        <tr ng-repeat=" featureContribution in featuresContribution">
+    </thead>
+    <tbody>
+    <tr ng-repeat=" featureContribution in featuresContribution">
 
-            <td class="feature-name">
-                <span>{{featureContribution.$feature_name}}</span>
+      <td class="feature-name">
+        <span>{{featureContribution.$feature_name}}</span>
 
-            </td>
-            <td class="feature-contribution">
-                <div tooltip-class="detail-tooltip"
-                     uib-tooltip-template="'feature-contribution'"
-                     tooltip-placement="top">
-                    <svg ng-attr-height="{{getRadius(featureContribution.$contribution) * 2}}"
-                         ng-attr-width="{{getRadius(featureContribution.$contribution) * 2}}">
-                        <circle ng-attr-cx="{{getRadius(featureContribution.$contribution)}}" ng-attr-cy="{{getRadius(featureContribution.$contribution)}}"
-                                ng-attr-r="{{getRadius(featureContribution.$contribution)}}"
-                                ng-attr-fill="{{getColor(featureContribution.$contribution)}}"
-                                class="contribution"></circle>
-                    </svg>
-                </div>
-            </td>
-            <td class="categories-contribution">
-                <div ng-repeat="categoriesContribution in featureContribution.$categories_contributions"
-                     tooltip-class="detail-tooltip"
-                     uib-tooltip-template="'category-contribution'"
-                     tooltip-placement="top">
-                    <svg ng-attr-height="{{getRadius(categoriesContribution.$weight) * 2}}"
-                         ng-attr-width="{{getRadius(categoriesContribution.$weight) *2 + 10}} ">
-                        <circle ng-attr-cx="{{getRadius(categoriesContribution.$weight)}} " ng-attr-cy="{{getRadius(categoriesContribution.$weight)}}"
-                                ng-attr-r="{{getRadius(categoriesContribution.$weight)}}"
-                                ng-attr-fill="{{getColor(categoriesContribution.$weight)}}"
-                                class="contribution"></circle>
-                    </svg>
-
-                </div>
-            </td>
-
-        </tr>
-        </tbody>
-    </table>
-    <script type="text/ng-template" id="feature-contribution">
-        <div>
-            <span> {{featureContribution.$feature_name}}</span>
-            <br/>
-            <span> contribution: {{featureContribution.$contribution }}</span>
-            <br/>
-            <span> standard deviation: {{featureContribution.$standard_deviation }}</span>
+      </td>
+      <td class="feature-contribution">
+        <div tooltip-class="detail-tooltip"
+             uib-tooltip-template="'feature-contribution'"
+             tooltip-placement="top">
+          <svg ng-attr-height="{{getRadius(featureContribution.$contribution) * 2}}"
+               ng-attr-width="{{getRadius(featureContribution.$contribution) * 2}}">
+            <circle ng-attr-cx="{{getRadius(featureContribution.$contribution)}}" ng-attr-cy="{{getRadius(featureContribution.$contribution)}}"
+                    ng-attr-r="{{getRadius(featureContribution.$contribution)}}"
+                    ng-attr-fill="{{getColor(featureContribution.$contribution)}}"
+                    class="contribution"></circle>
+          </svg>
         </div>
-    </script>
+      </td>
+      <td class="categories-contribution">
+        <div ng-repeat="categoriesContribution in featureContribution.$categories_contributions"
+             tooltip-class="detail-tooltip"
+             uib-tooltip-template="'category-contribution'"
+             tooltip-placement="top">
+          <svg ng-attr-height="{{getRadius(categoriesContribution.$weight) * 2}}"
+               ng-attr-width="{{getRadius(categoriesContribution.$weight) *2 + 10}} ">
+            <circle ng-attr-cx="{{getRadius(categoriesContribution.$weight)}} " ng-attr-cy="{{getRadius(categoriesContribution.$weight)}}"
+                    ng-attr-r="{{getRadius(categoriesContribution.$weight)}}"
+                    ng-attr-fill="{{getColor(categoriesContribution.$weight)}}"
+                    class="contribution"></circle>
+          </svg>
 
-    <script type="text/ng-template" id="category-contribution">
-        <span> {{categoriesContribution.$categories}} </span>
-        <br/>
-        <div>
-            <span> contribution: {{categoriesContribution.$weight }}</span>
         </div>
-    </script>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+  <script type="text/ng-template" id="feature-contribution">
+    <div>
+      <span> {{featureContribution.$feature_name}}</span>
+      <br/>
+      <span> contribution: {{featureContribution.$contribution }}</span>
+      <br/>
+      <span> standard deviation: {{featureContribution.$standard_deviation }}</span>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="category-contribution">
+    <span> {{categoriesContribution.$categories}} </span>
+    <br/>
+    <div>
+      <span> contribution: {{categoriesContribution.$weight }}</span>
+    </div>
+  </script>
 </div>
