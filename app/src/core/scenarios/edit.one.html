@@ -4,7 +4,7 @@
       {{currentOrganisation}}
     </div>
   </div>
-  <form  class="mcs-default-edit-content mcs-full-page-form">
+  <form class="mcs-default-edit-content mcs-full-page-form">
 
     <div class="mcs-default-heading">
       <h1 ng-if="isCreationMode">Create Scenario</h1>
@@ -17,65 +17,52 @@
     </div>
 
     <h3>Storyline</h3>
-      <div class="dropdown" uib-dropdown>
-          <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
-              Add Node
-              <!-- <span class="caret"></span> -->
-          </button>
+    <div class="dropdown" uib-dropdown>
+      <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
+        Add Node
+        <!-- <span class="caret"></span> -->
+      </button>
 
-          <ul class="dropdown-menu" role="menu" aria-labelledby="New Input">
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('TRIGGER')">
-                  User activity trigger
-              </a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('SEGMENT')">
-                  Audience Segment
-              </a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('LIBRARY')">
-                  Choose From Library
-              </a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('DISPLAY')">
-                  New Display Campaign
-              </a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('EMAIL')">
-                  New Email Campaign
-              </a></li>
-          </ul>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="New Input">
+        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('TRIGGER')">
+          User activity trigger
+        </a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="addCampaign('LIBRARY')">
+          Choose From Library
+        </a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="panel-body">
+        <js-joint-canvas on-connection="onConnection" on-deconnect="onDeconnect" x="pos_x" y="pos_y" zoom="zoomlevel" storyline="graph" class='paper'>
+          <div ng-repeat="node in graph.nodes">
+            <js-joint-node node="node.value">
+              <span ng-show="node.type === 'DISPLAY_CAMPAIGN'">
+				            {{node.campaign.name}}<span ng-if="node.adGroup"> &gt; {{node.adGroup.name}} </span>
+                    <!-- <a class="mics-btn mics-btn-edit btn-xs" ng-href="{{node.campaign_editor_url}}" target="_blank">Edit</a> -->
+                    <br/>
+              </span>
+              <span ng-show="node.type === 'EMAIL_CAMPAIGN'">
+				            {{node.campaign.name}}
+                    <!-- <a class="mics-btn mics-btn-edit btn-xs" ng-href="{{node.campaign_editor_url}}" target="_blank">Edit</a> -->
+                    <br/>
+              </span>
+              <div ng-if="node.type === 'QUERY_INPUT'" ng-controller="core/scenarios/EditOneController/NodeController as nodeCtrl">
+                <span contenteditable="true" ng-model="node.value.name" no-line-breaks="true"></span>
+                <a class="mics-btn mics-btn-edit btn-xs" ng-click="nodeCtrl.editTrigger()">Edit</a>
+                <br/>
+              </div>
+              <div class="actions">
+                <button class=" mics-btn btn-xs mics-btn-cancel" ng-click="deleteNode(node)">Delete</button>
+              </div>
+
+            </js-joint-node>
+          </div>
+        </js-joint-canvas>
       </div>
-        <div >
-            <div class="panel-body">
-                <js-joint-canvas on-connection="onConnection" on-deconnect="onDeconnect"  x="pos_x" y="pos_y" zoom="zoomlevel" storyline="graph" class='paper'>
-                    <div ng-repeat="node in graph.nodes">
-                        <js-joint-node node="node.value" >
-                            <span ng-show="node.type === 'DISPLAY_CAMPAIGN'">
-				                          {{node.campaign.name}} <span ng-if="node.adGroup"> &gt; {{node.adGroup.name}} </span>
-                                  <!-- <a class="mics-btn mics-btn-edit btn-xs" ng-href="{{node.campaign_editor_url}}" target="_blank">Edit</a> -->
-                                  <br />
-                            </span>
-                            <span ng-show="node.type === 'EMAIL_CAMPAIGN'">
-				                          {{node.campaign.name}}
-                                  <!-- <a class="mics-btn mics-btn-edit btn-xs" ng-href="{{node.campaign_editor_url}}" target="_blank">Edit</a> -->
-                                  <br />
-                            </span>
-                            <div ng-if="node.type === 'QUERY_INPUT'" ng-controller="core/scenarios/EditOneController/NodeController as nodeCtrl">
-                                <span contenteditable="true" ng-model="node.value.name" no-line-breaks="true" >
-                                </span>
-                                <a class="mics-btn mics-btn-edit btn-xs" ng-click="nodeCtrl.editTrigger()">Edit</a>
-                                <br />
-                            </div>
-                            <div class="actions">
-                                <button class=" mics-btn btn-xs mics-btn-cancel" ng-click="deleteNode(node)">Delete</button>
-                            </div>
+    </div>
 
-                        </js-joint-node>
-                    </div>
-
-                </js-joint-canvas>
-            </div>
-
-        </div>
-
-
-    <br />
+    <br/>
 
     <div class="panel-group" id="accordion">
       <div class="panel panel-default">
@@ -109,6 +96,4 @@
     </div>
 
   </form>
-
-
 </div>
