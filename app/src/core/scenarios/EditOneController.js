@@ -130,29 +130,11 @@ define(['./module', 'lodash'], function (module, _) {
         });
       };
 
+      // TODO if we want to create a campaign here we need something more complex handling also ad groups
       $scope.addCampaign = function (type) {
         if(type === 'TRIGGER') {
           $scope.graph.addNode({"type":"QUERY_INPUT","x":0,"y":0,"query_id":null});
-        }
-        if (type === 'DISPLAY') {
-          $uibModal.open({
-            templateUrl: 'src/core/scenarios/QuickCreateCampaign.html',
-            scope: $scope,
-            backdrop: 'static',
-            controller: 'core/scenarios/QuickCreateDisplayCampaignController',
-            size: "lg"
-          });
-        }
-        if (type === 'EMAIL') {
-          $uibModal.open({
-            templateUrl: 'src/core/scenarios/QuickCreateCampaign.html',
-            scope: $scope,
-            backdrop: 'static',
-            controller: 'core/scenarios/QuickCreateEmailCampaignController',
-            size: "lg"
-          });
-        }
-        if (type === 'LIBRARY') {
+        } else if (type === 'LIBRARY') {
           $uibModal.open({
             templateUrl: 'src/core/campaigns/ChooseExistingCampaign.html',
             scope: $scope,

@@ -1,4 +1,4 @@
-define(['./module'], function (module) {
+define(['./module', 'angular'], function (module, angular) {
   'use strict';
 
   module.factory("core/creatives/plugins/display-ad/DisplayAdContainer", [
@@ -100,6 +100,7 @@ define(['./module'], function (module) {
 
         Restangular.all('display_ads').post(this.value).then(angular.bind(this, function (displayAd) {
           self.id = displayAd.id;
+          self.value = displayAd;
           var pArray = [];
 
           if (self.properties.length > 0) {
