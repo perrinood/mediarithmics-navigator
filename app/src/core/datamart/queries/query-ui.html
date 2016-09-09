@@ -235,9 +235,8 @@
                 </div>
                 <div ng-show="resultsError" class="alert alert-danger" role="alert">{{resultsError}}</div>
                 <div ng-show="!resultsLoading && !resultsError">
-                  <div ng-show="queryContainer.selectedValues.length == 0">Add Selected values first !</div>
                   <div ng-show="statistics.total == 0">No Results</div>
-                  <div ng-show="queryContainer.selectedValues.length != 0 && results.length == 0 && statistics.total != 0">Click refresh to
+                  <div ng-show="results.length == 0 && statistics.total != 0">Click refresh to
                     view results
                   </div>
 
@@ -245,21 +244,22 @@
                 <table class="mics-table results-tab" ng-show="results && results.metadata">
                   <thead>
                   <tr>
-                    <th ng-repeat="family in families" colspan="{{results.metadata[family].length}}">{{family}}</th>
-                    <th></th>
+                    <th class="col-md-1">Action</th>
+                    <th ng-show="queryContainer.selectedValues.length == 0">No Selected values</th>
+                    <th ng-show="queryContainer.selectedValues.length != 0" ng-repeat="family in families" colspan="{{results.metadata[family.familyJson].length}}">{{family.familyLabel}}</th>
                   </tr>
                   <tr>
-                    <th ng-repeat="column in selectedColumns">{{column.json_path}}</th>
-                    <th></th>
+                    <th ng-show="queryContainer.selectedValues.length != 0" class="col-md-1"></th>
+                    <th ng-show="queryContainer.selectedValues.length != 0" ng-repeat="column in selectedColumns">{{column.columnLabel}}</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr ng-repeat="row in results.rows">
-                    <td ng-repeat="column in selectedColumns">{{displayValue(row['cells'][column.json_path],column.value_type)}}</td>
                     <td>
                       <a class="mics-btn mics-btn-action btn-xs" target="_blank"
-                         ng-href="{{goToTimeline(row['user_point_id'])}}">Timeline</a>
+                         ng-href="{{goToTimeline(row['user_point_id'])}}">User overview</a>
                     </td>
+                    <td ng-repeat="column in selectedColumns">{{displayValue(row['cells'][column.json_path],column.value_type)}}</td>
                   </tr>
                   </tbody>
                 </table>

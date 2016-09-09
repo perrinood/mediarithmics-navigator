@@ -2549,6 +2549,7 @@ a.category-item {
     padding: 3px 5px;
     margin-right: 10px;
   }
+
 }
 
 .edit-query-popin {
@@ -2577,6 +2578,8 @@ a.category-item {
 }
 
 .results-tab {
+  table-layout: fixed;
+  word-wrap: break-word;
   .family-title {
     text-align: center;
   }
