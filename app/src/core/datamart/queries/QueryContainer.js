@@ -629,12 +629,8 @@ define(['./module'], function (module) {
 
                 var selectedValueContainer = new SelectedValueContainer(selectedValue);
 
-                var alreadySelected = lodash.find(this.selectedValues, function (selector) {
-                    return selector.value.property_selector_id === propertySelector.id;
-                });
-                if (!alreadySelected){
-                    this.selectedValues.push(selectedValueContainer);
-                }
+                this.selectedValues.push(selectedValueContainer);
+
             };
 
             QueryContainer.prototype.removeSelectedValue = function (selectedValue) {

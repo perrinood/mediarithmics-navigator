@@ -69,18 +69,30 @@ define(['./module'], function (module) {
                         $scope.results = [];
                         $scope.resultsError = null;
 
-                        if (resultsTabSelected && $scope.statistics.total !== 0 && $scope.queryContainer.selectedValues.length !== 0) {
+                        if (resultsTabSelected && $scope.statistics.total !== 0) {
                             $scope.resultsLoading = true;
                             Restangular.one('datamarts', queryContainer.datamartId).customPOST(jsonQuery, 'query_executions/result_preview').then(function (results) {
                                 $scope.results = results;
                                 $scope.resultsLoading = false;
                                 $scope.resultsError = null;
 
-                                $scope.families = Object.keys(results.metadata).sort();
+                                var metadataKeys = Object.keys(results.metadata).sort();
 
-                                $scope.selectedColumns = lodash.flatten(lodash.map($scope.families, function(family) {
-                                    return results.metadata[family];
-                                }));
+                                $scope.families = lodash.map(metadataKeys, function(family) {
+                                  var firstSelector = results.metadata[family][0];
+                                  var familyLabel = QueryService.getSelectorFamilyName(firstSelector.selector_family, firstSelector.family_parameters);
+                                  return {familyJson: family, familyLabel: familyLabel};
+                                });
+
+                                $scope.selectedColumns = lodash.flatten(lodash.map(metadataKeys, function(family) {
+                                  // column.displayLabel = QueryService.getPropertySelectorDisplayName(column.selector_name, column.selector_parameter, column.expression, column.label);
+                                  return results.metadata[family];
+                                })).map(function(column){
+                                  column.columnLabel = QueryService.getPropertySelectorDisplayName(column.selector_name, column.selector_parameter, column.expression, column.selector_label);
+                                  return column;
+                                });
+
+                                var toto = "";
 
                             }, function () {
                                 $scope.resultsLoading = false;
