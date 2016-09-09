@@ -23,7 +23,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="audience_segment_name">Name</label>
-            <input required class="form-control input-lg" ng-model="segment.name" type="text" id="audience_segment_name">
+            <input ng-disabled="segment.type == 'USER_ACTIVATION'"  required class="form-control input-lg" ng-model="segment.name" type="text" id="audience_segment_name" >
+            
           </div>
         </div>
         <div class="col-md-4">
@@ -187,6 +188,10 @@
       </div></div>
       <br>
     </div>
+
+
+
+
 
     <div ng-if="!isCreationMode">
     <div class="mics-block-heading">

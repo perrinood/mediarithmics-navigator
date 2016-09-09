@@ -207,8 +207,14 @@
                 <option value="MOBILE_AND_TABLET">Mobile and tablet</option>
               </select>
             </div>
+          
+            <div mcs-form-group="" label-for="user_activation_segments" label-text="User activation segment">
+              <label><input type="checkbox" ng-change="addUserActivationSegment('clickers')" ng-model="checkedUserActivationSegments['clickers']" ng-disabled="disabledUserActivationSegments['clickers']" /> Clickers</label><br />
+              <label><input type="checkbox" ng-change="addUserActivationSegment('exposed')" ng-model="checkedUserActivationSegments['exposed']"  ng-disabled="disabledUserActivationSegments['exposed']"/> Exposed</label>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
 

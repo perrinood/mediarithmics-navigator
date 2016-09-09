@@ -17,6 +17,7 @@ define(['./module'], function (module) {
         this.goalSelections = [];
         this.removedGoalSelections = [];
         this.locations = [];
+        this.userActivationSegments = [];
         this.removedLocations = [];
         this.workspace = workspace;
 
@@ -35,10 +36,11 @@ define(['./module'], function (module) {
         var inventorySourcesP = root.getList('inventory_sources');
         var locationsP = root.getList('locations');
         var goalSelectionsP = meta.getList('goal_selections');
+        var userActivationSegmentsP = Restangular.all('audience_segments').getList({organisation_id: this.workspace.organisation_id, datamart_id: this.workspace.datamart_id, campaign_id: campaignId});
         var self = this;
         var defered = $q.defer();
 
-        $q.all([campaignResourceP, AdGroupsListP, inventorySourcesP, locationsP, goalSelectionsP])
+        $q.all([campaignResourceP, AdGroupsListP, inventorySourcesP, locationsP, goalSelectionsP, userActivationSegmentsP])
           .then(function (result) {
             self.creationMode = false;
             self.value = result[0];
@@ -50,6 +52,7 @@ define(['./module'], function (module) {
             self.inventorySources = result[2];
             self.locations = result[3];
             self.goalSelections = result[4];
+            self.userActivationSegments = result[5];
 
             var adGroupsP = [];
             if (adGroups.length > 0) {
@@ -116,6 +119,7 @@ define(['./module'], function (module) {
       DisplayCampaignContainer.prototype.getGoalSelections = function () {
         return this.goalSelections;
       };
+      
 
       DisplayCampaignContainer.prototype.hasCpa = function () {
         for (var i = 0; i < this.goalSelections.length; ++i) {
@@ -125,6 +129,40 @@ define(['./module'], function (module) {
         }
         return false;
       };
+
+      DisplayCampaignContainer.prototype.getUserActivationSegments = function (status) {
+        return this.userActivationSegments;
+      };
+
+      DisplayCampaignContainer.prototype.addUserActivationSegment = function (status) {
+        var userActivationSegment = {};
+        var found = _.find(this.userActivationSegments, function (s) {
+          return s.clickers === (status === "clickers") || s.exposed === (status === "exposed");
+        });
+        if (!found) {
+           
+          userActivationSegment.id = IdGenerator.getId();
+          if(status === "clickers" || status === "exposed") {
+            userActivationSegment.clickers = status === "clickers";
+            userActivationSegment.exposed = status === "exposed";
+          }
+          this.userActivationSegments.push(userActivationSegment);
+          
+        }
+        return userActivationSegment.id || found.id;
+      };
+
+
+     DisplayCampaignContainer.prototype.removeUserActivationSegment = function (status) {
+        for (var i = 0; i < this.userActivationSegments.length; i++) {
+          if (this.userActivationSegments[i].clickers === (status === "clickers") || this.userActivationSegments[i].exposed === (status === "exposed")) {
+            this.userActivationSegments.splice(i, 1);
+            return;
+          }
+        }
+      };
+
+
 
       DisplayCampaignContainer.prototype.addGoalSelection = function (goalSelection) {
         var found = _.find(this.goalSelections, function (source) {
@@ -335,6 +373,69 @@ define(['./module'], function (module) {
         return deferred.promise;
       };
 
+
+
+      /**
+       * Create a task (to be used by async.series) to save the given userActivationSegment.
+       * @param {Object} userActivationSegment the user activation segment to save.
+       * @param {String} campaign the current campaign.
+       * @return {Function} the task.
+       */
+      function saveUserActivationSegmentTask(self, userActivationSegment) {
+        return function (callback) {
+          $log.info("saving userActivationSegment", userActivationSegment.id);
+          var promise;
+          if ((userActivationSegment.id && userActivationSegment.id.indexOf('T') === -1) || (typeof(userActivationSegment.modified) !== "undefined")) {
+            // update the inventory source
+            // TODO 501 Not Implemented
+            // promise = userActivationSegment.put();
+
+            var deferred = $q.defer();
+            promise = deferred.promise;
+            deferred.resolve();
+
+          } else {
+            var userActivationSegmentResource = { 
+              "type":"USER_ACTIVATION",
+              "datamart_id":self.workspace.datamart_id,
+              "campaign_id":self.id,
+              "clickers": userActivationSegment.clickers,
+               "exposed":userActivationSegment.exposed,
+                "name":self.name
+              };
+            promise = Restangular
+              .all('audience_segments').post(userActivationSegmentResource, {organisation_id: self.workspace.organisation_id});
+              
+              
+          }
+          promiseUtils.bindPromiseCallback(promise, callback);
+        };
+      }
+
+       var saveUserActivationSegments = function (self, campaignId) {
+        var deferred = $q.defer(), tasks = [], i;
+        for (i = 0; i < self.userActivationSegments.length; i++) {
+          tasks.push(saveUserActivationSegmentTask(self, self.userActivationSegments[i]));
+        }
+//        for (i = 0; i < self.userActivationSegments.length; i++) {
+//          tasks.push(deleteInventorySourceTask(self.userActivationSegments[i]));
+//        }
+
+        async.series(tasks, function (err, res) {
+          if (err) {
+            deferred.reject(err);
+          } else {
+            $log.info(res.length + " inventory sources saved");
+            // return the ad group container as the promise results
+            deferred.resolve(self);
+          }
+
+        });
+        return deferred.promise;
+      };
+
+
+
       /**
        * Create a task (to be used by async.series) to delete the given goal selection source.
        * @param {Object} goalSelection the goal selection to delete.
@@ -481,11 +582,13 @@ define(['./module'], function (module) {
       };
 
 
-      function persistDependencies(self, campaignId, adGroups) {
+      function persistDependencies(self, campaignId, adGroups, userActivationSegments) {
         return saveGoalSelections(self, campaignId).then(function () {
           return saveInventorySources(self, campaignId).then(function () {
             return saveLocations(self, campaignId).then(function () {
-              return saveAdGroups(self, adGroups);
+              return saveAdGroups(self, adGroups).then(function(){
+                return saveUserActivationSegments(self, userActivationSegments);
+              });
             });
           });
         });
@@ -498,7 +601,7 @@ define(['./module'], function (module) {
         Restangular.all('display_campaigns').post(this.value, {organisation_id: this.organisationId})
           .then(angular.bind(this, function (campaign) {
             self.id = campaign.id;
-            persistDependencies.call(null, self, campaign.id, self.adGroups).then(function () {
+            persistDependencies.call(null, self, campaign.id, self.adGroups, self.userActivationSegments).then(function () {
               deferred.resolve(campaign);
             }, deferred.reject);
           }), function (reason) {
