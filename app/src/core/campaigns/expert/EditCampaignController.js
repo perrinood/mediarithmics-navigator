@@ -110,14 +110,21 @@ define(['./module', 'moment'], function (module, moment) {
           });
         };
 
+        $scope.$watch("campaignScopeHelper.campaignDateRange", function(range) {
+          if (range && $scope.campaignScopeHelper.schedule === 'custom') {
+            $scope.campaign.start_date = range.startDate.valueOf();
+            $scope.campaign.end_date = range.endDate.valueOf();
+          }
+        });
+
         $scope.addUserActivationSegment = function (type) {
-          
+
           if(!$scope.checkedUserActivationSegments[type]) {
             DisplayCampaignService.removeUserActivationSegment(type);
           } else {
             DisplayCampaignService.addUserActivationSegment(type);
           }
-          
+
           updateUserActivationSegments();
         };
 
