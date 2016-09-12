@@ -221,6 +221,13 @@ label {
   }
 }
 
+// Customize ng-table-dynamic
+.ng-table .ng-table-filters {
+  background-color: white;
+  border: 1px black !important;
+}
+
+
 .mics-block-heading {
   background: $mcs-light-grey;
   padding: 21px;
@@ -1580,6 +1587,22 @@ table.fragment-list-bid-optimizer-engine {
         border-top: 1px solid $mcs-light-grey;
       }
     }
+  }
+}
+
+.allocation-table-sum {
+  width: 500px;
+
+  tr:first-child td:nth-child(1), tr:first-child td:nth-child(2) {
+    border: none;
+  }
+
+  td:nth-child(1) {
+    font-weight: bold;
+  }
+
+  td:nth-child(n) {
+    width: 200px;
   }
 }
 
