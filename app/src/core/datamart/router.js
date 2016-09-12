@@ -15,7 +15,7 @@ define(['./module'], function (module) {
           data: {
             category: 'catalog',
             sidebar: {
-              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              templateUrl: 'src/core/datamart/catalog-sidebar.html',
               selected: 'items'
             }
           }
@@ -26,7 +26,7 @@ define(['./module'], function (module) {
           data: {
             category: 'catalog',
             sidebar: {
-              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              templateUrl: 'src/core/datamart/catalog-sidebar.html',
               selected: 'items'
             }
           }
@@ -37,7 +37,7 @@ define(['./module'], function (module) {
           data: {
             category: 'catalog',
             sidebar: {
-              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              templateUrl: 'src/core/datamart/catalog-sidebar.html',
               selected: 'items'
             }
           }
@@ -48,7 +48,7 @@ define(['./module'], function (module) {
           data: {
             category: 'catalog',
             sidebar: {
-              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              templateUrl: 'src/core/datamart/catalog-sidebar.html',
               selected: 'categories'
             }
           }
@@ -59,7 +59,7 @@ define(['./module'], function (module) {
           data: {
             category: 'catalog',
             sidebar: {
-              templateUrl : 'src/core/datamart/catalog-sidebar.html',
+              templateUrl: 'src/core/datamart/catalog-sidebar.html',
               selected: 'categories'
             }
           }
@@ -69,7 +69,7 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/segments/view.all.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'segments'
             }
           }
@@ -77,7 +77,7 @@ define(['./module'], function (module) {
         .state('datamart/segments/edit', {
           url: '/{organisation_id}/datamart/segments/:type/:segment_id',
           templateUrl: 'src/core/datamart/segments/edit.one.html',
-          data: { navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html' }
+          data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
         })
         .state('datamart/segments/report', {
           url: '/{organisation_id}/datamart/segments/:type/:segment_id/report',
@@ -92,14 +92,14 @@ define(['./module'], function (module) {
         .state('datamart/segments/create', {
           url: '/{organisation_id}/datamart/segments/:type',
           templateUrl: 'src/core/datamart/segments/edit.one.html',
-          data: { navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html' }
+          data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
         })
         .state('datamart/users', {
           url: '/:organisation_id/datamart/users',
           templateUrl: 'src/core/datamart/users/view.all.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'search'
             }
           }
@@ -109,7 +109,7 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/users/view.one.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'search'
             }
           }
@@ -119,7 +119,7 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/users/view.one.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'search'
             }
           }
@@ -129,7 +129,7 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/queries/index.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'query'
             }
           }
@@ -139,7 +139,7 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/queries/index.html',
           data: {
             sidebar: {
-              templateUrl : 'src/core/datamart/datamart-sidebar.html',
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
               selected: 'query'
             }
           }
