@@ -229,6 +229,17 @@ define(['./module'], function (module) {
         return this.campaignCtn.removeAllGoalsByType(goalType);
       };
 
+      service.addUserActivationSegment = function (type) {
+        return this.campaignCtn.addUserActivationSegment(type);
+      };
+
+      service.removeUserActivationSegment = function (type) {
+        return this.campaignCtn.removeUserActivationSegment(type);
+      };
+
+      service.getUserActivationSegments = function () {
+        return this.campaignCtn.getUserActivationSegments();
+      };
 
       /**
        * Bid Optimizer methods
