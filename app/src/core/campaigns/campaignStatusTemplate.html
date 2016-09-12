@@ -1,4 +1,4 @@
-<div class="updatable-item-status updatable-item-status-{{campaign.status}}" uib-dropdown ng-show="campaign.subtype == 'PROGRAMMATIC'">
+<div class="updatable-item-status updatable-item-status-{{campaign.status}}" uib-dropdown ng-show="campaign.subtype == 'PROGRAMMATIC' && campaign.editor_artifact_id != 'external-campaign-editor'">
   <button class="updatable-item-status-state mics-btn btn-xs" uib-dropdown-toggle>
     <span></span>
     {{campaign.status}}
