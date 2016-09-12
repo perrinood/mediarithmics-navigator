@@ -38,11 +38,11 @@
           <tbody>
           <tr>
             <td>Filtered Weighted Conversions</td>
-            <td>{{sum(allocationsTable,"WEIGHTED_CONVERSIONS")}}</td>
+            <td>{{sum(allocationsData, allocationsTable,"WEIGHTED_CONVERSIONS")}}</td>
           </tr>
           <tr>
             <td>Filtered Percent of Daily Budget</td>
-            <td>{{sum(allocationsTable,"RATIO_TO_SPEND") * 100 | number:3}}%</td>
+            <td>{{sum(allocationsData, allocationsTable,"RATIO_TO_SPEND") * 100 | number:3}}%</td>
           </tr>
           <tr>
             <td>Total Weighted Conversions</td>
@@ -62,11 +62,18 @@
             <tr ng-repeat="row in $data">
               <td ng-repeat="col in $columns" ng-bind-html="col.getValue(this, row)">{{row[col.field]}}</td>
             </tr>
+          </table>
+          <table class="table allocation-table-sum">
+            <tbody>
             <tr>
-              <td colspan="2" class="text-right">Sum</td>
-              <td>{{sum(ignoredContexts,"WEIGHTED_CONVERSIONS")}}</td>
-              <td>-</td>
+              <td>Filtered Weighted Conversions</td>
+              <td>{{sum(ignoredContextsData, ignoredContexts,"WEIGHTED_CONVERSIONS")}}</td>
             </tr>
+            <tr>
+              <td>Total Weighted Conversions</td>
+              <td>{{totalIgnoredContextsWeightedConversions}}</td>
+            </tr>
+            </tbody>
           </table>
         </div>
       </uib-tab>

@@ -99,6 +99,9 @@ define(['./module', 'angular'], function (module, angular) {
               return allocation.$allocation_id;
             });
 
+            scope.totalIgnoredContextsWeightedConversions = _.sum(scope.ignoredContextsData, "WEIGHTED_CONVERSIONS");
+
+
             // list of display networks of the allocation table
             var uniqueDisplayNetworksIds = _.union(_.uniq(scope.allocationsData.map(function (display) {
                 return display.DISPLAY_NETWORK_ID;
@@ -196,7 +199,8 @@ define(['./module', 'angular'], function (module, angular) {
               });
 
               scope.ignoredContexts = new NgTableParams({
-                count: 10
+                count: 10,
+                filter: {DISPLAY_NETWORK_NAME: ""}
               }, {
                 data: scope.ignoredContextsData
               });
@@ -294,12 +298,12 @@ define(['./module', 'angular'], function (module, angular) {
                   scope.selectedAdGroup = scope.selectedEnvironment.adGroup;
                   scope.selectedCampaign = scope.selectedEnvironment.campaign;
 
-                  scope.sum = function (data, field) {
-                    if (data !== undefined && field !== undefined) {
-                      var filter = data.filter();
+                  scope.sum = function (data, tableData, field) {
+                    if (tableData !== undefined && field !== undefined) {
+                      var filter = tableData.filter();
                       var keys = Object.keys(filter);
 
-                      var filteredData = _.filter(scope.allocationsData, function (o) {
+                      var filteredData = _.filter(data, function (o) {
                         return _.reduce(keys.map(function (key) {
                           if (filter[key] === undefined || filter[key] === "") {
                             return true;
