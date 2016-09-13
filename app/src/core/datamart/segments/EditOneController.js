@@ -104,11 +104,11 @@ define(['./module'], function (module) {
             for(var i=0; i < $scope.activations.length; i++) {
               var activation = $scope.activations[i];
               var p = activation.save();
-              promises.push(p);
+              promises.push(updateActivationStatusIfNeeded(p, activation));
             }
-            return updateActivationStatusIfNeeded($q.all(promises).then(function(){
+            return $q.all(promises).then(function(){
               return audienceSegment;
-            }), activation);
+            });
           } else {
             return audienceSegment;
           }
