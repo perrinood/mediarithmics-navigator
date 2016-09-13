@@ -86,14 +86,25 @@ define(['./module'], function (module) {
           $scope.segment.query_id = queryId;
           promise = Restangular.all('audience_segments').post($scope.segment, {organisation_id: Session.getCurrentWorkspace().organisation_id});
         }
-
+        function updateActivationStatusIfNeeded(promise, activation) {
+          if(activation.value.id === undefined && activation.value.status === 'ACTIVE') {
+            return promise.then(function() {
+                $log.info("start activation", activation);
+                activation.value.status = 'ACTIVE';
+                return activation.save();
+            });
+          } else {
+            return promise;
+          }
+          
+        }
         promise.then(function(audienceSegment) {
           var promises = [];
           if($scope.activations) {
             for(var i=0; i < $scope.activations.length; i++) {
               var activation = $scope.activations[i];
               var p = activation.save();
-              promises.push(p);
+              promises.push(updateActivationStatusIfNeeded(p, activation));
             }
             return $q.all(promises).then(function(){
               return audienceSegment;
