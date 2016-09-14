@@ -137,15 +137,15 @@
                     <td>
                       <div mics-ad-status="ad" ad-group="findAdGroup(ad.id)" campaign="campaign"></div>
                       <span class="badge creative-audit-notification-warning"
-                            popover="The creative has the status {{ad.creative_audit_status}}"
+                            uib-popover="The creative has the status {{ad.creative_audit_status}}"
                             popover-trigger="mouseenter"
                             ng-if="ad.creative_audit_status == 'NOT_AUDITED'">?</span>
                       <span class="badge creative-audit-notification-warning"
-                            popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit ends."
+                            uib-popover="The creative has the status {{ad.creative_audit_status}} and will be used as soon as the audit ends."
                             popover-trigger="mouseenter"
                             ng-if="ad.creative_audit_status == 'AUDIT_PENDING'">?</span>
                       <span class="badge creative-audit-notification-alert"
-                            popover="One or more audits failed, this creative may not be used everywhere !"
+                            uib-popover="One or more audits failed, this creative may not be used everywhere !"
                             popover-trigger="mouseenter"
                             ng-if="ad.creative_audit_status == 'AUDIT_FAILED' || ad.creative_audit_status == 'AUDIT_PARTIALLY_PASSED'">!</span>
                     </td>
