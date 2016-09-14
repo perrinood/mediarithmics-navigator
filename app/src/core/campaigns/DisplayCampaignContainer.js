@@ -21,7 +21,10 @@ define(['./module'], function (module) {
         this.removedLocations = [];
         this.workspace = workspace;
 
-        this.value = {type: "DISPLAY", editor_version_id: editorVersionId
+        this.value = {
+          type: "DISPLAY",
+          editor_version_id: editorVersionId,
+          time_zone: "Europe/Paris"
         };//, datamart_id: workspace.datamart_id};
         $log.info("DisplayCampaignContainer", this.value);
       };

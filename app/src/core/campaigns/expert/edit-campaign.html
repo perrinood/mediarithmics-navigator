@@ -212,6 +212,14 @@
               <label><input type="checkbox" ng-change="addUserActivationSegment('clickers')" ng-model="checkedUserActivationSegments['clickers']" ng-disabled="disabledUserActivationSegments['clickers']" /> Clickers <span class="badge" uib-popover="Create a segment with all users that clicked in this campaign" popover-trigger="mouseenter" popover-placement="right">?</span> </label><br />
               <label><input type="checkbox" ng-change="addUserActivationSegment('exposed')" ng-model="checkedUserActivationSegments['exposed']"  ng-disabled="disabledUserActivationSegments['exposed']"/> Exposed <span class="badge" uib-popover="Create a segment with all users exposed to this campaign" popover-trigger="mouseenter" popover-placement="right">?</span> </label>
             </div>
+
+            <div mcs-form-group="" label-for="campaign_time_zone" label-text="Time Zone">
+              <select ng-model="campaign.time_zone" type="text" id="campaign_time_zone">
+                <option value="Europe/Paris">Europe/Paris</option>
+                <option value="America/New_York">America/New_York</option>
+                <option value="America/Los_Angeles">America/Los_Angeles</option>
+              </select>
+            </div>
           </div>
         </div>
 
