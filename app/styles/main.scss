@@ -1238,7 +1238,7 @@ div.mics-page-main-tabs {
   }
   .badge {
     background-color: #ffffff;
-    color: #00a1e1;
+    color: $mcs-light-blue;
     font-size: 12px;
   }
 }
@@ -1314,6 +1314,7 @@ div.mics-page-main-tabs {
 
     .badge {
       @include use-normal-font();
+      color: white;
       background: $mcs-red;
       font-size: $font-size-base;
       padding: 5px 8px;
