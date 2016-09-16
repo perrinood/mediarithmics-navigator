@@ -140,13 +140,13 @@ define(['./module'], function (module) {
                 }
                 return scope.autoMatchTypes[rule.auto_match_type];
               case "USER_ACCOUNT_ID_INSERTION":
-                str = scope.shortenString(rule.property_source, 25);
+                str = scope.shortenString(rule.property_source, 35);
                 return "Property " + str + " is hashed to " + rule.hash_function;
               case "URL_MATCH":
-                str = scope.shortenString(rule.pattern, 25);
+                str = scope.shortenString(rule.pattern, 35);
                 return "Matches " + str;
               case "PROPERTY_TO_ORIGIN_COPY":
-                str = scope.shortenString(rule.property_name, 25);
+                str = scope.shortenString(rule.property_name, 35);
                 return "Property " + str + " in" + rule.property_source + "is copied to " + rule.destination;
 
             }
