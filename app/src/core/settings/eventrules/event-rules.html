@@ -27,7 +27,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="rule in filteredEventRules() | offset : (rulesCurrentPage - 1) * rulesPerPage | limitTo: rulesPerPage" ng-click="showDetails(rule)">
+          <tr ng-repeat="rule in filteredEventRules() " ng-click="showDetails(rule)">
             <td class="first-column">{{ruleTypes[rule.type]}}</td>
             <td class="second-column">{{getSummary(rule)}}</td>
           </tr>

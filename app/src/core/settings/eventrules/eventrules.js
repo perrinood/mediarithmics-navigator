@@ -14,8 +14,6 @@ define(['./module'], function (module) {
         link: function link(scope, element, attrs) {
           var datamartId = Session.getCurrentDatamartId();
           var organisationId = Session.getCurrentWorkspace().organisation_id;
-          scope.rulesPerPage = 20;
-          scope.rulesCurrentPage = 0;
 
           scope.ruleEditMode = false;
           scope.ruleCreationMode = false;
