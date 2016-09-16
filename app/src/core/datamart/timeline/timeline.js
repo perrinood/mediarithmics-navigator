@@ -43,11 +43,13 @@ define(['./module'], function (module) {
         link: function link(scope, element, attrs) {
 
           scope.INITIAL_ACTIONS_PER_ACTIVITY = 4;
-          scope.itemUrl = function (catalogId, itemId) {
-            return '#'+Session.getWorkspacePrefixUrl() + '/datamart/items/' + catalogId + '/' + itemId;
+
+          scope.itemUrl = function (catalogToken, itemId) {
+            return '#'+Session.getWorkspacePrefixUrl() + '/datamart/items/' + catalogToken + '/' + itemId;
           };
-          scope.catalogUrl = function (catalogId) {
-            return '#'+Session.getWorkspacePrefixUrl() + "/datamart/categories/" + catalogId;
+
+          scope.catalogUrl = function (catalogToken) {
+            return '#'+Session.getWorkspacePrefixUrl() + "/datamart/categories/" + catalogToken;
           };
 
           // Transforms a duration to human a readable 'X days Y hours Z minutes' format
@@ -162,7 +164,7 @@ define(['./module'], function (module) {
               default:
                 return type;
             }
-          };      
+          };
 
           // prevent dropdown from closing on checkbox interaction
           element.find('.dropdown-menu').click(function (e) {

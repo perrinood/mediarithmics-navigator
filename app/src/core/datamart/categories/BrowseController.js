@@ -50,7 +50,8 @@ define(['./module'], function (module) {
           // get all categories by query
           Restangular.one('datamarts', $scope.datamartId).one('catalogs/token=' + $stateParams.catalogToken).all('categories').getList({
             first_result: firstResult,
-            max_results: maxResults
+            max_results: maxResults,
+            depth: 0
           }).then(function (result) {
             $scope.categories = result;
           });
