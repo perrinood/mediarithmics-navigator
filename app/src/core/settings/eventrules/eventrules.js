@@ -1,17 +1,15 @@
-define(['./module'], function(module) {
+define(['./module'], function (module) {
 
   'use strict';
 
   module.directive('mcsEventRules', ['$log', '$location', '$state', '$stateParams', '$uibModal', '$filter', '$q', 'core/common/auth/Session', 'lodash',
     'core/common/ErrorService', 'core/common/WarningService',
-    function($log, $location, $state, $stateParams, $uibModal, $filter, $q, Session, _, ErrorService, WarningService) {
-
+    function ($log, $location, $state, $stateParams, $uibModal, $filter, $q, Session, _, ErrorService, WarningService) {
 
       return {
         restrict: 'E',
         scope: {
-          rules: '=',
-
+          rules: '='
         },
         link: function link(scope, element, attrs) {
           var datamartId = Session.getCurrentDatamartId();
@@ -40,17 +38,15 @@ define(['./module'], function(module) {
            * Watchers
            */
 
-          scope.filteredEventRules = function() {
+          scope.filteredEventRules = function () {
             return $filter('filter')(scope.rules, scope.filteredRule);
           };
 
-          scope.$watch('filteredRule', function(rule) {
+          scope.$watch('filteredRule', function (rule) {
             if (rule) {
               scope.selectedRule = undefined;
             }
           });
-
-
 
 
           // -------------- RULES ------------------
@@ -65,14 +61,15 @@ define(['./module'], function(module) {
               scope.tmpRuleProperties = scope.tmpRule.event_template ? scope.tmpRule.event_template.$properties : undefined;
             }
           }
-          scope.showDetails = function(rule) {
+
+          scope.showDetails = function (rule) {
             scope.cancelRuleEdit();
             scope.selectedRule = rule;
             scope.tmpRule = angular.extend({}, rule);
             scope.tmpRuleProperties = scope.tmpRule.event_template ? scope.tmpRule.event_template.$properties : undefined;
           };
 
-          scope.newRule = function(type) {
+          scope.newRule = function (type) {
             scope.ruleCreationMode = true;
             scope.ruleEditMode = true;
             resetRuleEdit();
@@ -109,13 +106,13 @@ define(['./module'], function(module) {
             scope.selectedRule = scope.tmpRule;
           };
 
-          scope.editRule = function() {
+          scope.editRule = function () {
             scope.ruleEditMode = true;
             scope.tmpRule = angular.extend({}, scope.selectedRule);
             scope.tmpRuleProperties = scope.tmpRule.event_template.$properties;
           };
 
-          scope.removeRule = function(rule) {
+          scope.removeRule = function (rule) {
             var idx = scope.rules.indexOf(rule);
             if (idx !== -1) {
               scope.rules.splice(idx, 1);
@@ -123,7 +120,7 @@ define(['./module'], function(module) {
             scope.selectedRule = undefined;
           };
 
-          scope.shortenString = function(str, length) {
+          scope.shortenString = function (str, length) {
             if (str === undefined) {
               return "";
             }
@@ -133,7 +130,7 @@ define(['./module'], function(module) {
             return str;
           };
 
-          scope.getSummary = function(rule) {
+          scope.getSummary = function (rule) {
             if (rule === undefined) {
               return "";
             }
@@ -157,19 +154,19 @@ define(['./module'], function(module) {
             }
           };
 
-          scope.cancelRuleEdit = function() {
+          scope.cancelRuleEdit = function () {
             resetRuleEdit();
             scope.ruleCreationMode = false;
             scope.ruleEditMode = false;
           };
 
-          scope.confirmRuleEdit = function() {
+          scope.confirmRuleEdit = function () {
             if (scope.ruleCreationMode) {
               scope.ruleCreationMode = false;
               scope.rules.push(scope.tmpRule);
             }
             scope.ruleEditMode = false;
-            Object.keys(scope.selectedRule).map(function(a) {
+            Object.keys(scope.selectedRule).map(function (a) {
               if (a in scope.tmpRule) {
                 scope.selectedRule[a] = scope.tmpRule[a];
               }
@@ -178,18 +175,18 @@ define(['./module'], function(module) {
 
 
           // Auto Match Rule
-          scope.newEventTemplateProperty = function() {
+          scope.newEventTemplateProperty = function () {
             $uibModal.open({
               templateUrl: 'src/core/settings/eventrules/create.event-template-property.html',
               backdrop: 'static',
               controller: 'core/settings/eventrules/CreateEventTemplatePropertyController',
               size: 'md',
               resolve: {
-                properties: function() {
+                properties: function () {
                   return scope.tmpRule.event_template.$properties;
                 }
               }
-            }).result.then(function(prop) {
+            }).result.then(function (prop) {
               if (scope.tmpRule.event_template.$properties[prop.key] !== undefined) {
                 WarningService.showWarningModal("This property has already been defined. ");
               } else {
@@ -198,7 +195,7 @@ define(['./module'], function(module) {
             });
           };
 
-          scope.removeEventTemplateProperty = function(key) {
+          scope.removeEventTemplateProperty = function (key) {
             delete scope.tmpRule.event_template.$properties[key];
           };
 
