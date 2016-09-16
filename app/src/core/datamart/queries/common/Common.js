@@ -61,6 +61,27 @@ define(['./module'], function (module) {
           {operator:"GTE", label:">="},
           {operator:"LT", label:"<"},
           {operator:"LTE", label:"<="}],
+        "LIST_OF_INTEGER": [
+          {operator:"EQUAL", label:"="},
+          {operator:"NOT_EQUAL", label:"!="},
+          {operator:"GT", label:">"},
+          {operator:"GTE", label:">="},
+          {operator:"LT", label:"<"},
+          {operator:"LTE", label:"<="}],
+        "LIST_OF_DOUBLE": [
+          {operator:"EQUAL", label:"="},
+          {operator:"NOT_EQUAL", label:"!="},
+          {operator:"GT", label:">"},
+          {operator:"GTE", label:">="},
+          {operator:"LT", label:"<"},
+          {operator:"LTE", label:"<="}],
+        "LIST_OF_LONG": [
+          {operator:"EQUAL", label:"="},
+          {operator:"NOT_EQUAL", label:"!="},
+          {operator:"GT", label:">"},
+          {operator:"GTE", label:">="},
+          {operator:"LT", label:"<"},
+          {operator:"LTE", label:"<="}],
         "DATE": [
           {operator:"GT", label:"after"},
           {operator:"GTE", label:"after or equal"},
@@ -95,13 +116,13 @@ define(['./module'], function (module) {
                           };
 
       var propertySelectorExpressions = [
-        {name:"MAX", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"MIN", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"SUM", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"AVERAGE", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"COUNT", applicableSelectorType:["INTEGER","DOUBLE","LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"OLDEST", applicableSelectorType:["INTEGER","DOUBLE","LONG","STRING","DATE","BOOLEAN"], applicableEvaluationType:["ARRAY","TABLE"]},
-        {name:"NEWEST", applicableSelectorType:["INTEGER","DOUBLE","LONG","STRING","DATE","BOOLEAN"], applicableEvaluationType:["ARRAY","TABLE"]}
+        {name:"MAX", applicableSelectorType:["INTEGER","DOUBLE","LONG","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"MIN", applicableSelectorType:["INTEGER","DOUBLE","LONG","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"SUM", applicableSelectorType:["INTEGER","DOUBLE","LONG","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"AVERAGE", applicableSelectorType:["INTEGER","DOUBLE","LONG","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"COUNT", applicableSelectorType:["INTEGER","DOUBLE","LONG","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"OLDEST", applicableSelectorType:["INTEGER","DOUBLE","LONG","STRING","DATE","BOOLEAN","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]},
+        {name:"NEWEST", applicableSelectorType:["INTEGER","DOUBLE","LONG","STRING","DATE","BOOLEAN","LIST_OF_INTEGER","LIST_OF_DOUBLE","LIST_OF_LONG"], applicableEvaluationType:["ARRAY","TABLE"]}
       ];
 
       var familyWithIndex = ["USER_VISITS","USER_EVENTS","USER_EMAILS","USER_CONVERSIONS","USER_TOUCHES","USER_DISPLAY_ADS"];
