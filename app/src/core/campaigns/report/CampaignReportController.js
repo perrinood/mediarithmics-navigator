@@ -245,11 +245,11 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         };
 
         // Get all the media data on export
-        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", null).then(function (mediaPerformance) {
+        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", null).then(buildSites).then(function (builtMediaPerformances) {
 
           currentExportObj.isRunning = false;
 
-          var sites = sort(buildSites(mediaPerformance));
+          var sites = sort(builtMediaPerformances);
           var dataExport = buildCampaignMetricsExportData($scope.ads, $scope.adGroups, sites);
           ExportService.exportData(dataExport, $scope.campaign.name + '-Metrics', extension);
         }).catch(function (e) {
@@ -478,7 +478,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           } else {
             var site = {name: id};
             var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
-            return addSiteInfo(site, siteInfo);
+            return $q.resolve(addSiteInfo(site, siteInfo));
           }
         });
 
