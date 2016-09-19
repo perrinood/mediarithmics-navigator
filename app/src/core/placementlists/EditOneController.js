@@ -25,6 +25,7 @@ define(['./module'], function (module) {
             // update table params
             params.total(descriptors.metadata.paging.count);
             // set new data
+            $scope.doneWeb = true;
             $defer.resolve(descriptors);
           });
         }
@@ -44,8 +45,23 @@ define(['./module'], function (module) {
             // update table params
             params.total(descriptors.metadata.paging.count);
             // set new data
+            $scope.doneApp = true;
             $defer.resolve(descriptors);
           });
+        }
+      });
+
+      $scope.activeTab = [];
+      $scope.activeTab[0] = true;
+      $scope.activeTab[1] = false;
+
+      $scope.$watchGroup(['doneWeb', 'doneApp'], function() {
+        if ($scope.webPlacementListParams === undefined || $scope.webPlacementListParams.data === undefined || $scope.webPlacementListParams.data.length === 0) {
+          $scope.activeTab[0] = false;
+          $scope.activeTab[1] = true;
+        } else {
+          $scope.activeTab[0] = true;
+          $scope.activeTab[1] = false;
         }
       });
 

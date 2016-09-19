@@ -20,7 +20,7 @@
 
     <uib-tabset ng-show="!isCreationMode" class="mics-page-main-tabs">
       <!--WEB DESCRIPTORS-->
-      <uib-tab ng-show="webPlacementListParams.data.length">
+      <uib-tab active="activeTab[0]" ng-show="webPlacementListParams.data.length">
         <uib-tab-heading>
           Web Pages
         </uib-tab-heading>
@@ -52,7 +52,7 @@
       </uib-tab>
 
       <!--APPLICATIONS DESCRIPTORS-->
-      <uib-tab ng-show="appPlacementListParams.data.length">
+      <uib-tab active="activeTab[1]" ng-show="appPlacementListParams.data.length">
         <uib-tab-heading>
           Applications
         </uib-tab-heading>
