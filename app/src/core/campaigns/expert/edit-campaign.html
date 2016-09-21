@@ -25,7 +25,7 @@
     <!-- Weekly budget -->
     <div mcs-form-group="" label-for="max_budget_per_period" label-text="Budget">
       <div class="form-inline">
-        <input ng-model="campaign.max_budget_per_period" type="text" class="form-control " format="L" id="max_budget_per_period"/>
+        <input ng-model="campaign.max_budget_per_period" type="number" step="0.01" min="0" class="form-control " format="L" id="max_budget_per_period"/>
         &euro; per
         <select ng-model="campaign.max_budget_period">
           <option value="DAY">day</option>
@@ -37,7 +37,7 @@
 
     <!-- Total budget -->
     <div mcs-form-group="number" label-for="total-budget" label-text="Total budget">
-      <input ng-model="campaign.total_budget" type="text" class="form-control " format="L" id="total-budget"/>
+      <input ng-model="campaign.total_budget" name="totalBudget" type="number" step="0.01" min="0" class="form-control " format="L" id="total-budget">
     </div>
 
     <!-- Schedule -->
@@ -97,17 +97,17 @@
 
     <!-- Max bid price -->
     <div mcs-form-group="number" label-for="max-bid-price" label-text="Max bid price">
-      <input ng-model="campaign.max_bid_price" type="text" class="form-control " format="L" id="max-bid-price"/>
+      <input ng-model="campaign.max_bid_price" type="number" step="0.01" min="0" class="form-control " format="L" id="max-bid-price"/>
     </div>
 
     <!-- Total impression capping -->
     <div mcs-form-group="number" label-for="total-impression-capping" label-text="Total impression capping">
-      <input ng-model="campaign.total_impression_capping" type="text" class="form-control " format="L" id="total-impression-capping"/>
+      <input ng-model="campaign.total_impression_capping" type="number" min="0" class="form-control " format="L" id="total-impression-capping"/>
     </div>
 
     <!-- Daily impression capping -->
     <div mcs-form-group="number" label-for="per-day-impression-capping" label-text="Daily impression capping">
-      <input ng-model="campaign.per_day_impression_capping" type="text" class="form-control " format="L" id="per-day-impression-capping"/>
+      <input ng-model="campaign.per_day_impression_capping" type="number" min="0" class="form-control " format="L" id="per-day-impression-capping"/>
     </div>
 
     <!------------------------ Select ad groups ------------------------>
