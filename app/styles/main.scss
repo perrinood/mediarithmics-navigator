@@ -69,6 +69,9 @@ $navbar-inverse-bg: $dark-blue;
 $navbar-inverse-color: $body-bg;
 $navbar-inverse-link-color: $body-bg;
 
+// Form feedback states
+$state-danger-text: $mcs-red;
+
 @mixin mics-button-variant($background) {
   $color: #fff;
   @include button-variant($color, $background, $background);
