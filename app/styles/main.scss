@@ -1243,6 +1243,18 @@ div.mics-page-main-tabs {
   }
 }
 
+.edit-campaign-external {
+  .selected-display-network {
+    margin: 0 5px 5px 0;
+    display: inline-block;
+  }
+  .badge {
+    background-color: #ffffff;
+    color: $mcs-light-blue;
+    font-size: 12px;
+  }
+}
+
 .display-network-list .label {
   font-size: $font-size-base;
   font-weight: normal;
