@@ -114,7 +114,7 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
-                    <th ng-click="sortAdsBy('status')" class="status">
+                    <th ng-hide="template.artifact_id == 'external-campaign-editor'" ng-click="sortAdsBy('status')" class="status">
                       Status
                       <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
@@ -134,7 +134,7 @@
                   </thead>
                   <tbody>
                   <tr ng-repeat="ad in ads">
-                    <td>
+                    <td ng-hide="template.artifact_id == 'external-campaign-editor'">
                       <div mics-ad-status="ad" ad-group="findAdGroup(ad.id)" campaign="campaign"></div>
                       <span class="badge creative-audit-notification-warning"
                             uib-popover="The creative has the status {{ad.creative_audit_status}}"
@@ -169,7 +169,7 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
-                    <th class="status" ng-click="sortAdGroupsBy('status')">
+                    <th ng-hide="template.artifact_id == 'external-campaign-editor'" class="status" ng-click="sortAdGroupsBy('status')">
                       Status
                       <span ng-show="orderBy == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
                     </th>
@@ -185,7 +185,7 @@
                   </thead>
                   <tbody>
                   <tr ng-repeat="adGroup in adGroups">
-                    <td>
+                    <td ng-hide="template.artifact_id == 'external-campaign-editor'">
                       <div mics-ad-group-status="adGroup" campaign="campaign"></div>
                     </td>
                     <td>{{adGroup.name}}</td>
