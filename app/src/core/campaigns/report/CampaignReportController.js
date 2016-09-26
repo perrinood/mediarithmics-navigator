@@ -139,7 +139,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         $scope.hasCpa = false;
       });
 
-
       $scope.ads = [];
       $scope.adGroups = [];
       DisplayCampaignService.getDeepCampaignView($stateParams.campaign_id).then(function (campaign) {
@@ -470,7 +469,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         var promises = siteRows.map(function (row) {
           var id = row[0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
           if (row[0].startsWith("app:ios")) {
-            return findAppName(id).then(function(name) {
+            return findAppName(id).then(function (name) {
               var site = {name: name};
               var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
               return addSiteInfo(site, siteInfo);
@@ -633,11 +632,19 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
        * Campaigns Management
        */
 
+      $scope.$watch('campaign', function (campaign) {
+        if (campaign !== undefined) {
+          CampaignPluginService.getCampaignEditorFromVersionId($scope.campaign.editor_version_id).then(function (template) {
+            $scope.template = template;
+          });
+        }
+      });
+
       $scope.editCampaign = function (campaign) {
-        CampaignPluginService.getCampaignEditorFromVersionId(campaign.editor_version_id).then(function (template) {
-          var location = template.editor.getEditPath(campaign);
+        if ($scope.template) {
+          var location = $scope.template.editor.getEditPath(campaign);
           $location.path(location);
-        });
+        }
       };
 
       $scope.deleteCampaign = function (campaign) {

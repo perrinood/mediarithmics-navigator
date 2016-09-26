@@ -23,6 +23,18 @@ define(['./module', 'jquery'], function (module, $) {
         $scope.selectedGoals = DisplayCampaignService.getGoalSelections();
       }
 
+      function updateUserActivationSegments() {
+        $scope.userActivationSegments = DisplayCampaignService.getUserActivationSegments();
+        $scope.checkedUserActivationSegments = [];
+        for(var i = 0; i < $scope.userActivationSegments.length ; i++) {
+          $scope.checkedUserActivationSegments[$scope.userActivationSegments[i].clickers ? "clickers" : "exposed"] = true;
+        }
+        $scope.disabledUserActivationSegments = [];
+        for(var j = 0; j < $scope.userActivationSegments.length ; j++) {
+          $scope.disabledUserActivationSegments[$scope.userActivationSegments[j].clickers ? "clickers" : "exposed"] = ($scope.userActivationSegments[j].id !== undefined && $scope.userActivationSegments[j].id.indexOf('T') === -1);
+        }
+      }
+
       function initView() {
         $scope.moreGoals = false;
         $scope.campaign = DisplayCampaignService.getCampaignValue();
@@ -31,6 +43,7 @@ define(['./module', 'jquery'], function (module, $) {
         $scope.campaignScopeHelper.defaultGoalSelection = _.find(DisplayCampaignService.getGoalSelections(), {"default": true});
         // Init selected goals
         updateSelectedGoals();
+        updateUserActivationSegments();
         for (var i = 0; i < $scope.selectedGoals.length; ++i) {
           $scope.checkedGoalTypes[$scope.selectedGoals[i].goal_selection_type] = true;
           if (GoalsService.isConversionType($scope.selectedGoals[i].goal_selection_type)) {
@@ -86,6 +99,14 @@ define(['./module', 'jquery'], function (module, $) {
           return DisplayCampaignService.getAds(adGroupId);
         };
 
+        $scope.addUserActivationSegment = function (type) {
+          if(!$scope.checkedUserActivationSegments[type]) {
+            DisplayCampaignService.removeUserActivationSegment(type);
+          } else {
+            DisplayCampaignService.addUserActivationSegment(type);
+          }
+          updateUserActivationSegments();
+        };
 
         /**
          * Goals Management
