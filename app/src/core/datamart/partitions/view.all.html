@@ -1,0 +1,68 @@
+<div ng-controller="core/datamart/partitions/EditAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Audience Partitions</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class ="col-md-6">
+        <div class="dropdown" uib-dropdown>
+          <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
+            New Audience Partition
+          </button>
+
+          <ul class="dropdown-menu" role="menu" aria-labelledby="New Audience Partition">
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="createAudiencePartition('RANDOM_SPLIT')">
+              Ramdom Split
+            </a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="createAudiencePartition('CLUSTERING')">
+              Clustering
+            </a></li>            
+          </ul>
+
+        </div>
+      </div>
+      <div class="form-group col-md-3 pull-right">
+        <input class="form-control"
+               type="text"
+               ng-model="searchInput"
+               placeholder="Search">
+      </div>
+    </div>
+    <table class="mics-table table-hover clickableRow js-auto-hide-actions" ng-show="audiencePartitions.length">
+      <thead>
+        <tr>
+          <th ng-click="sortType = 'name'; reverseSort = !reverseSort">
+            Name
+            <span ng-show="sortType == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'part_count'; reverseSort = !reverseSort">
+            Part Count
+            <span ng-show="sortType == 'part_count'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'type'; reverseSort = !reverseSort">
+            Type
+            <span ng-show="sortType == 'type'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'status'; reverseSort = !reverseSort">
+            Status
+            <span ng-show="sortType == 'status'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-click="detailsAudiencePartition(audiencePartition, $event)" ng-repeat="audiencePartition in audiencePartitions | orderBy:sortType:reverseSort | filter:searchInput">
+        <td>{{audiencePartition.name}}</td>
+        <td>{{audiencePartition.part_count}}</td>
+        <td>{{audiencePartition.type}}</td>
+        <td>{{audiencePartition.status}}</td>        
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" ng-click="detailsAudiencePartition(audiencePartition, $event)">Details</a>
+          <a class="mics-btn mics-btn-action" ng-click="editAudiencePartition(audiencePartition, $event)">Edit</a>
+          <!--<a class="mics-btn mics-btn-delete" ng-click="deleteAudiencePartition(audiencePartition, $event)">Delete</a>-->
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

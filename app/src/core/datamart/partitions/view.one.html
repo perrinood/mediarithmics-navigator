@@ -1,0 +1,72 @@
+<div class="mcs-default-container mics-report" ng-controller="core/datamart/partitions/ViewOneController">
+    <div class="report mcs-default-content">
+
+        <div class="report-heading">
+            <h2>
+                <div class="pull-right">
+                    <a class="mics-btn mics-btn-action"
+                       href="#/{{currentWorkspaceId}}/datamart/partitions/{{partition.type}}/{{partition.id}}">Edit Partition</a>
+                </div>
+                <span class="ng-binding">{{partition.name}}</span>
+            </h2>
+        </div>
+
+        <div class="chart-controller">
+            <div class="report-type-controller">
+                <ul class="nav nav-pills">
+                    <li class="active"><a>Overview</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">        
+                <table class="mics-table table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-click="sortType = 'name'; reverseSort = !reverseSort">
+                                Part number
+                                <span ng-show="sortType == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                            </th>
+                            <th ng-click="sortType = 'part_count'; reverseSort = !reverseSort">
+                                Users
+                                <span ng-show="sortType == 'part_count'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                            </th>
+                            <th ng-click="sortType = 'type'; reverseSort = !reverseSort">
+                                Percentage
+                                <span ng-show="sortType == 'type'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                            </th>                            
+                            <!--<th class="metrics" ng-repeat="metric in audienceSegmentStats.getMetrics()">
+                            {{audienceSegmentStats.getMetricName(metric) }}
+                        </th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-show="segments.length == 0"><td colspan="3"><strong>No Available segments</strong></td></tr>                                                
+                        <tr ng-repeat="segment in segments | orderBy:sortType:reverseSort | filter:searchInput">
+                            <td>{{segment.part_number}}</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <!--<td class="metrics " ng-repeat="metricValue in audienceSegmentStats.getRow(segment.id) track by $index">
+                                <span ng-if="metricValue.type == 'currency'">
+                                {{metricValue.value | number:2 | currencyWithSymbol:campaign.currency_code}}
+                                </span>
+                                <span ng-if="metricValue.type == 'percent'">
+                                {{metricValue.value | number}} %
+                                </span>
+                                <span ng-if="metricValue.type == 'number'">
+                                {{metricValue.value | number}}
+                                </span>
+                                <span ng-if="!metricValue.type">
+                                -
+                                </span>
+                        </td>-->                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+
+    </div>
+
+</div>

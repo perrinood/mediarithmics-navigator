@@ -5,6 +5,7 @@ dist/
 .sass-cache/
 app/bower_components/
 .idea/
+.vscode/
 .editorconfig
 index.js
 module.js

@@ -11,9 +11,6 @@ define(['./module'], function (module) {
       var segmentId = $stateParams.segment_id;
       var type = $stateParams.type;
 
-
-
-
       $scope.isCreationMode = !segmentId;
 
       if (!segmentId) {

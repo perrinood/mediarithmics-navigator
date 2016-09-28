@@ -94,6 +94,36 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/segments/edit.one.html',
           data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
         })
+        .state('datamart/partitions', {
+          url: '/:organisation_id/datamart/partitions',
+          templateUrl: 'src/core/datamart/partitions/view.all.html',
+          data: {
+            sidebar: {
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
+              selected: 'partitions'
+            }
+          }
+        })
+        .state('datamart/partitions/report', {
+          url: '/{organisation_id}/datamart/partitions/:type/:partition_id/report',
+          templateUrl: 'src/core/datamart/partitions/view.one.html',
+          data: {
+            sidebar: {
+              templateUrl: 'src/core/datamart/datamart-sidebar.html',
+              selected: 'partitions'
+            }
+          }
+        })
+        .state('datamart/partitions/edit', {
+          url: '/{organisation_id}/datamart/partitions/:type/:partition_id',
+          templateUrl: 'src/core/datamart/partitions/edit.one.html',
+          data: { navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html' }
+        })
+        .state('datamart/partitions/create', {
+          url: '/{organisation_id}/datamart/partitions/:type',
+          templateUrl: 'src/core/datamart/partitions/edit.one.html',
+          data: { navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html' }
+        })      
         .state('datamart/users', {
           url: '/:organisation_id/datamart/users',
           templateUrl: 'src/core/datamart/users/view.all.html',
