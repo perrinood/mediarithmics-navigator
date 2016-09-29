@@ -45,8 +45,14 @@
                         <tr ng-show="segments.length == 0"><td colspan="3"><strong>No Available segments</strong></td></tr>                                                
                         <tr ng-repeat="segment in segments | orderBy:sortType:reverseSort | filter:searchInput">
                             <td>{{segment.part_number}}</td>
-                            <td>N/A</td>
-                            <td>N/A</td>
+                            <td>
+                                <span ng-if="hasStats(segment.id)">{{getUsersCount(segment.id)}}</span>
+                                <span ng-if="!hasStats(segment.id)">-</span>
+                            </td>
+                            <td>
+                                <span ng-if="hasStats(segment.id)">{{getUsersCountPercent(segment.id)}} %</span>
+                                <span ng-if="!hasStats(segment.id)">-</span>
+                            </td>
                             <!--<td class="metrics " ng-repeat="metricValue in audienceSegmentStats.getRow(segment.id) track by $index">
                                 <span ng-if="metricValue.type == 'currency'">
                                 {{metricValue.value | number:2 | currencyWithSymbol:campaign.currency_code}}

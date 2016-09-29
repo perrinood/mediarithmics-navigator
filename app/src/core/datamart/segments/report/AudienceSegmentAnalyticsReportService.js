@@ -98,44 +98,14 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           );
         };
 
-        ReportService.getSegmentStatsLive = function (audienceSegmentId, datamartId) {
-          var segmentStatsQuery = {
-            "groups": [
-              {
-                "excluded": false,
-                "elements": [
-                  {
-                    "conditions": [
-                      {
-                        "property_selector_family": "USER_SEGMENTS",
-                        "property_selector_name": "SEGMENT_ID",
-                        "property_selector_value_type": "LONG",
-                        "operator": "EQUAL",
-                        "value": audienceSegmentId
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "property_selector_selections": []
-          };
-
-          return Restangular.one('datamarts', datamartId).customPOST(segmentStatsQuery, 'query_executions').then(function (result) {
-            var segmentStatsLiveResult = {
-              total: result.total,
-              hasEmail: result.total_with_email,
-              hasUserAccountId: result.total_with_user_account_id,
-              hasCookie: result.total_with_cookie,
-              executionTimeInMs: result.execution_time_in_ms
-            };
-
-            return segmentStatsLiveResult;
-
-          });
-
+        ReportService.audienceSegmentsForPartition = function (audiencePartitionId) {
+          return this.buildReport(
+            buildAudienceSegmentsResource(),
+            "audience_segment_id",
+            "user_points",
+            "audience_partition_id==" + audiencePartitionId
+          );
         };
-
 
         ReportService.getDefaultDateRanges = function () {
           return {
