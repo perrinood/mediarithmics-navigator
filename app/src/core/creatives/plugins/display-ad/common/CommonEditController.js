@@ -15,6 +15,8 @@ define(['./module'], function (module) {
           return "";
         }
         switch (displayAd.renderer_group_id + "/" + displayAd.renderer_artifact_id) {
+          case "com.mediarithmics.creative.display/image-script":
+            return "Image Banner";
           case "com.mediarithmics.creative.display/image-iframe":
             return "Image Banner";
           case "com.mediarithmics.creative.display/flash-iframe":
