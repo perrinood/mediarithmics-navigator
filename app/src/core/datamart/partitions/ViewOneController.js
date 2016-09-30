@@ -10,8 +10,6 @@ define(['./module'], function (module) {
       var partitionId = $stateParams.partition_id;
       var datamartId = Session.getCurrentDatamartId();
 
-      var segments = [];
-
       var todayDate = { startDate: moment(), endDate: moment() };
       AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
 
@@ -41,7 +39,7 @@ define(['./module'], function (module) {
         Restangular.all('audience_segments').getList({ datamart_id: datamartId, audience_partition_id: partitionId})
       ]).then(function (res) {
         var partition = res[0];
-        segments = res[1];
+        var segments = res[1];
 
         $scope.partition = partition;
         $scope.segments = segments;
