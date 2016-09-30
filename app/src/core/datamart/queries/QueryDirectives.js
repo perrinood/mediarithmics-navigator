@@ -437,7 +437,7 @@ define(['./module'], function (module) {
 
               if (scope.condition.value.property_selector_name === 'SITE_ID'){
                 //Let's fetch datamart's sites resources
-                Restangular.all("datamarts/" + Session.getCurrentDatamartId() + "/sites").getList({"organisation_id": Session.getCurrentWorkspace().organisation_id}).then(function(sites) {
+                Restangular.all("datamarts/" + Session.getCurrentDatamartId() + "/sites").getList({"organisation_id": Session.getCurrentWorkspace().organisation_id, "max_results":200}).then(function(sites) {
 
                   scope.domainSources = sites;
                   var siteMatch = _.find(sites, _.matchesProperty('id',selectedDomainId));
