@@ -17,7 +17,7 @@ define(['./module'], function (module) {
         var found = _.find($scope.stats, function (s) {
           return s.id === segmentId;
         });
-        return found.usersCount;
+        return (found || {}).usersCount;
       };
 
       $scope.getUsersCount = function(segmentId){
@@ -49,7 +49,7 @@ define(['./module'], function (module) {
           AudienceSegmentAnalyticsReportService.audienceSegmentsForPartition(partitionId).then(function(report){            
             var totalUsers = report.getRows().map(function(r){ 
               return r[1];
-            }).reduce(function(a,b){ return (a + b);});
+            }).reduce(function(a,b){ return (a + b);}, 0);
 
             $scope.stats = segments.map(function(s){
               var result = { id: s.id };
