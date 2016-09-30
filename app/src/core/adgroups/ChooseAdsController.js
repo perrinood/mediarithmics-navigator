@@ -17,10 +17,10 @@ define(['./module'], function (module) {
       $scope.uploadNewAd = function(adGroup) {
         // Display pop-up
         var uploadModal = $uibModal.open({
-          templateUrl: 'src/core/adgroups/upload-ad.html',
+          templateUrl: 'src/core/creatives/plugins/display-ad/basic-editor/upload-creative.html',
           scope: $scope,
           backdrop: 'static',
-          controller: 'core/adgroups/UploadAdController'
+          controller: 'core/creatives/plugins/display-ad/basic-editor/UploadCreativeController'
         });
         uploadModal.result.then(function () {
         }, function () {
