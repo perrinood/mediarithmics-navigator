@@ -14,17 +14,14 @@ define(['./module'], function (module) {
       AudienceSegmentAnalyticsReportService.setDateRange(todayDate);
 
       $scope.hasStats = function (segmentId) {
-        var found = _.find($scope.stats, function (s) {
-          return s.id === segmentId;
-        });
-        return (found || {}).usersCount;
+        return $scope.getUsersCount(segmentId) !== 0;
       };
 
       $scope.getUsersCount = function(segmentId){
         var found = _.find($scope.stats, function(s){
           return s.id === segmentId;
         });
-        return found.usersCount;
+        return (found || {}).usersCount || 0 ;
       };
 
       $scope.getUsersCountPercent = function (segmentId) {
