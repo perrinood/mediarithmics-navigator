@@ -12,7 +12,10 @@ define(['./module'], function (module) {
     function ($scope, Restangular, Session, $location, $uibModal, AudienceSegmentAnalyticsReportService, moment) {
       var datamartId = Session.getCurrentWorkspace().datamart_id;
       Restangular.all('audience_segments').getList({datamart_id: datamartId}).then(function (segments) {
-        $scope.segments = segments;
+        var filteredSegments = segments.filter(function (seg){
+          return seg.type !== 'USER_PARTITION';
+        });
+        $scope.segments = filteredSegments;
         $scope.sortType = 'name';
       });
 

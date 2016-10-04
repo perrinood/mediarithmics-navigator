@@ -8,6 +8,7 @@
     "core/datamart/queries",
     "core/datamart/queries/common",
     "core/datamart/segments",
+    "core/datamart/partitions",
     "core/common/auth",
     "core/common",
     "restangular"
