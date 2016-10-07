@@ -5,9 +5,14 @@
 </time>
            <!-- icon -->
 <div class="datamart-timeline-icon">
-    <!--<img src="images/datamart/device_tablet.svg" width="24" height="24" ng-show="activity.agent.device_type == 'tablet'" />-->
-    <img src="images/datamart/device_pc.svg" width="24" height="24" ng-if="timelineActivity['$type'] === 'SITE_VISIT'"/>
-    <img src="images/datamart/device_phone.svg" width="24" height="24" ng-if="timelineActivity['$type'] === 'APP_VISIT'" />    
+    <img src="images/datamart/device_phone.svg" width="24" height="24" ng-if="timelineActivity.formFactor === 'SMARTPHONE'"/>
+    <img src="images/datamart/device_tablet.svg" width="24" height="24" ng-if="timelineActivity.formFactor === 'TABLET'"/>
+    <img 
+        src="images/datamart/device_pc.svg" 
+        width="24" 
+        height="24" 
+        ng-if="timelineActivity.formFactor !== 'SMARTPHONE' && timelineActivity.formFactor !== 'TABLET'"
+    />    
 </div>
 
 <!--&lt;!&ndash; content -->

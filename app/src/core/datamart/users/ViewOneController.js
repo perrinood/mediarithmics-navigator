@@ -41,12 +41,11 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       function scopeTimelines(timelines) {
         $scope.timelines = timelines;
-        return timelines;
       }
 
-      function retrieveSiteIdFromTimelines(timelines) {
+      function retrieveSiteIdFromTimelines() {
 
-        var sitesId = timelines.reduce(function (acc, next) {
+        var sitesId = $scope.timelines.reduce(function (acc, next) {
           var nextSiteId = next['$site_id'];
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
         }, []);
@@ -55,23 +54,44 @@ define(['./module', 'moment-duration-format'], function (module) {
           return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteId).get();
         });
 
-        function scopeSitesWithTimelines(sites) {
+        function scopeSitesandDevicesWithTimelines(sites) {
           $scope.timelines.forEach(function (timeline) {
-            var timelineSite = lodash.find(sites, function (site) {
+            timeline.site = lodash.find(sites, function (site) {
               return site.id === timeline['$site_id'];
             });
-            if (timelineSite) {
-              timeline.site = timelineSite;
+
+            var userAgent = lodash.find($scope.devices, function (userAgent) {
+              return userAgent.vector_id === timeline['$user_agent_id'];
+            });
+
+            if (userAgent) {
+              timeline.formFactor = userAgent.device.form_factor;
             }
+
           });
         }
 
-        $q.all(promises).then(scopeSitesWithTimelines)
+        $q.all(promises).then(scopeSitesandDevicesWithTimelines)
 
+      }
+
+      function waitForDevices() {
+
+        var deferred = $q.defer();
+
+        $scope.$watch('devices', function (newValue, oldValue) {
+          if (newValue) {
+            deferred.resolve();
+          }
+        });
+
+        return deferred.promise;
+        
       }
 
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
+        .then(waitForDevices)
         .then(retrieveSiteIdFromTimelines)
 
 
