@@ -5,8 +5,8 @@ define(['./module', 'moment-duration-format'], function (module) {
 
   module.controller('core/datamart/users/ViewOneController', [
     '$scope', '$stateParams', 'Restangular', 'core/datamart/common/Common', 'jquery', 'core/common/auth/Session',
-    'lodash', 'moment', '$log', '$location',
-    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location) {
+    'lodash', 'moment', '$log', '$location', '$q',
+    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location, $q) {
 
       $scope.INITIAL_VISITS = 10;
 
@@ -31,15 +31,48 @@ define(['./module', 'moment-duration-format'], function (module) {
         options = {live: $stateParams.live === "true"};
       }
 
-      if ($stateParams.property){
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', options).then(function (timelines) {
-          $scope.timelines = timelines;
-        });
+      var userTimelinesUrl;
+
+      if ($stateParams.property) {
+        userTimelinesUrl = $stateParams.property + '=' + $stateParams.value;
       } else {
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.userPointId + '/user_activities', options).then(function (timelines) {
-          $scope.timelines = timelines;
-        });
+        userTimelinesUrl = $stateParams.userPointId;
       }
+
+      function scopeTimelines(timelines) {
+        $scope.timelines = timelines;
+        return timelines;
+      }
+
+      function retrieveSiteIdFromTimelines(timelines) {
+
+        var sitesId = timelines.reduce(function (acc, next) {
+          var nextSiteId = next['$site_id'];
+          return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
+        }, []);
+
+        var promises = sitesId.map(function (siteId) {
+          return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteId).get();
+        });
+
+        function scopeSitesWithTimelines(sites) {
+          $scope.timelines.forEach(function (timeline) {
+            var timelineSite = lodash.find(sites, function (site) {
+              return site.id === timeline['$site_id'];
+            });
+            if (timelineSite) {
+              timeline.site = timelineSite;
+            }
+          });
+        }
+
+        $q.all(promises).then(scopeSitesWithTimelines)
+
+      }
+
+      $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
+        .then(scopeTimelines)
+        .then(retrieveSiteIdFromTimelines)
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
@@ -135,7 +168,7 @@ define(['./module', 'moment-duration-format'], function (module) {
           return userIdentifier.type  === 'USER_POINT';
         });
 
-        $scope.emails = lodash.filter(userIdentifiers, function(userIdentifier){
+        $scope.emails = lodash.find(userIdentifiers, function(userIdentifier){
           return userIdentifier.type  === 'USER_EMAIL';
         });
 

@@ -150,7 +150,7 @@ define(['./module'], function (module) {
           scope.typePrettyFormat = function(type) {
             switch (type) {
               case "SITE_VISIT":
-                return "Site visit";
+                return "Site:";
               case "TOUCH":
                 return "Touch";
               case "EMAIL":
