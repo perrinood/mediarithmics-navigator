@@ -46,7 +46,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       function retrieveSiteIdFromTimelines() {
 
         var sitesId = $scope.timelines.reduce(function (acc, next) {
-          var nextSiteId = next['$site_id'];
+          var nextSiteId = next.$site_id;
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
         }, []);
 
@@ -57,11 +57,11 @@ define(['./module', 'moment-duration-format'], function (module) {
         function scopeSitesandDevicesWithTimelines(sites) {
           $scope.timelines.forEach(function (timeline) {
             timeline.site = lodash.find(sites, function (site) {
-              return site.id === timeline['$site_id'];
+              return site.id === timeline.$site_id;
             });
 
             var userAgent = lodash.find($scope.devices, function (userAgent) {
-              return userAgent.vector_id === timeline['$user_agent_id'];
+              return userAgent.vector_id === timeline.$user_agent_id;
             });
 
             if (userAgent) {
@@ -71,7 +71,7 @@ define(['./module', 'moment-duration-format'], function (module) {
           });
         }
 
-        $q.all(promises).then(scopeSitesandDevicesWithTimelines)
+        $q.all(promises).then(scopeSitesandDevicesWithTimelines);
 
       }
 
@@ -92,7 +92,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
         .then(waitForDevices)
-        .then(retrieveSiteIdFromTimelines)
+        .then(retrieveSiteIdFromTimelines);
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
@@ -163,7 +163,7 @@ define(['./module', 'moment-duration-format'], function (module) {
             return userIdentifier.type  === 'USER_POINT';
           });
 
-          $scope.emails = lodash.find($scope.userIdentifiers,function(userIdentifier){
+          $scope.emails = lodash.filter($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_EMAIL';
           });
 
@@ -188,7 +188,7 @@ define(['./module', 'moment-duration-format'], function (module) {
           return userIdentifier.type  === 'USER_POINT';
         });
 
-        $scope.emails = lodash.find(userIdentifiers, function(userIdentifier){
+        $scope.emails = lodash.filter(userIdentifiers, function(userIdentifier){
           return userIdentifier.type  === 'USER_EMAIL';
         });
 
