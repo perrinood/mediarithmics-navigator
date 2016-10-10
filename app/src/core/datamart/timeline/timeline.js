@@ -172,11 +172,11 @@ define(['./module'], function (module) {
 
             switch(activity.$type) {
               case 'SITE_VISIT':
-                return activity.formFactor ? activity.formFactor : 'PERSONAL_COMPUTER'
+                return activity.formFactor || 'UNDETERMINED'
               case 'APP_VISIT':
-                return activity.formFactor ? activity.formFactor : 'SMARTPHONE'
+                return activity.formFactor || 'SMARTPHONE'
               case 'TOUCH':
-                return activity.formFactor ? activity.formFactor : 'PERSONAL_COMPUTER'
+                return activity.formFactor || 'UNDETERMINED'
               default:
                 return 'UNDETERMINED';
             }
