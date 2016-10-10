@@ -150,7 +150,9 @@ define(['./module'], function (module) {
           scope.typePrettyFormat = function(type) {
             switch (type) {
               case "SITE_VISIT":
-                return "Site visit";
+                return "Site:";
+              case "APP_VISIT":
+                return "App:";
               case "TOUCH":
                 return "Touch";
               case "EMAIL":
@@ -164,6 +166,21 @@ define(['./module'], function (module) {
               default:
                 return type;
             }
+          };
+
+          scope.getDeviceType = function(activity) {
+
+            switch(activity.$type) {
+              case 'SITE_VISIT':
+                return activity.formFactor || 'UNDETERMINED';
+              case 'APP_VISIT':
+                return activity.formFactor || 'SMARTPHONE';
+              case 'TOUCH':
+                return activity.formFactor || 'UNDETERMINED';
+              default:
+                return 'UNDETERMINED';
+            }
+
           };
 
           // prevent dropdown from closing on checkbox interaction

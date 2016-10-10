@@ -5,8 +5,8 @@ define(['./module', 'moment-duration-format'], function (module) {
 
   module.controller('core/datamart/users/ViewOneController', [
     '$scope', '$stateParams', 'Restangular', 'core/datamart/common/Common', 'jquery', 'core/common/auth/Session',
-    'lodash', 'moment', '$log', '$location',
-    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location) {
+    'lodash', 'moment', '$log', '$location', '$q',
+    function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location, $q) {
 
       $scope.INITIAL_VISITS = 10;
 
@@ -31,15 +31,68 @@ define(['./module', 'moment-duration-format'], function (module) {
         options = {live: $stateParams.live === "true"};
       }
 
-      if ($stateParams.property){
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.property + '=' + $stateParams.value + '/user_activities', options).then(function (timelines) {
-          $scope.timelines = timelines;
-        });
+      var userTimelinesUrl;
+
+      if ($stateParams.property) {
+        userTimelinesUrl = $stateParams.property + '=' + $stateParams.value;
       } else {
-        $scope.userEndpoint.customGETLIST('user_timelines/' + $stateParams.userPointId + '/user_activities', options).then(function (timelines) {
-          $scope.timelines = timelines;
-        });
+        userTimelinesUrl = $stateParams.userPointId;
       }
+
+      function scopeTimelines(timelines) {
+        $scope.timelines = timelines;
+      }
+
+      function retrieveSiteIdAndAppIdFromTimelines() {
+
+        var sitesOrAppsId = $scope.timelines.reduce(function (acc, next) {
+          var nextSiteId = (next.$site_id || next.$app_id); 
+          return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
+        }, []);
+
+        var promises = sitesOrAppsId.map(function (siteOrAppId) {
+          return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteOrAppId).get();
+        });
+
+        function scopeSitesOrAppsAndDevicesWithTimelines(sitesOrApps) {
+          $scope.timelines.forEach(function (timelineActivity) {
+            timelineActivity.siteOrApp = lodash.find(sitesOrApps, function (siteOrApp) {
+              return siteOrApp.id === (timelineActivity.$site_id || timelineActivity.$app_id);
+            });
+
+            var userAgent = lodash.find($scope.devices, function (userAgent) {
+              return userAgent.vector_id === timelineActivity.$user_agent_id;
+            });
+
+            if (userAgent) {
+              timelineActivity.formFactor = userAgent.device.form_factor;
+            }
+
+          });
+        }
+
+        $q.all(promises).then(scopeSitesOrAppsAndDevicesWithTimelines);
+
+      }
+
+      function waitForDevices() {
+
+        var deferred = $q.defer();
+
+        $scope.$watch('devices', function (newValue, oldValue) {
+          if (newValue) {
+            deferred.resolve();
+          }
+        });
+
+        return deferred.promise;
+        
+      }
+
+      $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
+        .then(scopeTimelines)
+        .then(waitForDevices)
+        .then(retrieveSiteIdAndAppIdFromTimelines);
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
@@ -110,7 +163,7 @@ define(['./module', 'moment-duration-format'], function (module) {
             return userIdentifier.type  === 'USER_POINT';
           });
 
-          $scope.emails = lodash.find($scope.userIdentifiers,function(userIdentifier){
+          $scope.emails = lodash.filter($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_EMAIL';
           });
 
