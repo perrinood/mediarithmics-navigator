@@ -172,16 +172,16 @@ define(['./module'], function (module) {
 
             switch(activity.$type) {
               case 'SITE_VISIT':
-                return activity.formFactor || 'UNDETERMINED'
+                return activity.formFactor || 'UNDETERMINED';
               case 'APP_VISIT':
-                return activity.formFactor || 'SMARTPHONE'
+                return activity.formFactor || 'SMARTPHONE';
               case 'TOUCH':
-                return activity.formFactor || 'UNDETERMINED'
+                return activity.formFactor || 'UNDETERMINED';
               default:
                 return 'UNDETERMINED';
             }
 
-          }
+          };
 
           // prevent dropdown from closing on checkbox interaction
           element.find('.dropdown-menu').click(function (e) {
