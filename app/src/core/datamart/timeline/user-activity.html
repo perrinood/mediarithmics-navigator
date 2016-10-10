@@ -5,14 +5,10 @@
 </time>
            <!-- icon -->
 <div class="datamart-timeline-icon">
-    <img src="images/datamart/device_phone.svg" width="24" height="24" ng-if="timelineActivity.formFactor === 'SMARTPHONE'"/>
-    <img src="images/datamart/device_tablet.svg" width="24" height="24" ng-if="timelineActivity.formFactor === 'TABLET'"/>
-    <img 
-        src="images/datamart/device_pc.svg" 
-        width="24" 
-        height="24" 
-        ng-if="timelineActivity.formFactor !== 'SMARTPHONE' && timelineActivity.formFactor !== 'TABLET'"
-    />    
+    <img src="images/datamart/device_phone.svg" ng-if="getDeviceType(timelineActivity) === 'SMARTPHONE'"/>
+    <img src="images/datamart/device_tablet.svg" ng-if="getDeviceType(timelineActivity) === 'TABLET'"/>
+    <img src="images/datamart/device_pc.svg" ng-if="getDeviceType(timelineActivity) === 'PERSONAL_COMPUTER'"/>
+    <span class="glyphicon glyphicon-question-sign" ng-if="getDeviceType(timelineActivity) === 'UNDETERMINED'"/>    
 </div>
 
 <!--&lt;!&ndash; content -->
@@ -20,7 +16,7 @@
     <div class="datamart-timeline-content-header">
         <h3 class="user-activity-title">
             {{ typePrettyFormat(timelineActivity.$type) }}
-            <span ng-if="timelineActivity.site">{{timelineActivity.site.name}}</span>
+            <span ng-if="timelineActivity.siteOrApp">{{timelineActivity.siteOrApp.name}}</span>
             <span ng-if="timelineActivity.$session_status == 'SESSION_SNAPSHOT'" class="live-event-header">Live</span>
         </h3>
         <div ng-if="timelineActivity.$type == 'SITE_VISIT'" >Duration: {{ toHumanReadableDuration(timelineActivity.$session_duration) }}</div>

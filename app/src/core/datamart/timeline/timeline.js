@@ -151,6 +151,8 @@ define(['./module'], function (module) {
             switch (type) {
               case "SITE_VISIT":
                 return "Site:";
+              case "APP_VISIT":
+                return "App:";
               case "TOUCH":
                 return "Touch";
               case "EMAIL":
@@ -165,6 +167,21 @@ define(['./module'], function (module) {
                 return type;
             }
           };
+
+          scope.getDeviceType = function(activity) {
+
+            switch(activity.$type) {
+              case 'SITE_VISIT':
+                return activity.formFactor ? activity.formFactor : 'PERSONAL_COMPUTER'
+              case 'APP_VISIT':
+                return activity.formFactor ? activity.formFactor : 'SMARTPHONE'
+              case 'TOUCH':
+                return activity.formFactor ? activity.formFactor : 'PERSONAL_COMPUTER'
+              default:
+                return 'UNDETERMINED';
+            }
+
+          }
 
           // prevent dropdown from closing on checkbox interaction
           element.find('.dropdown-menu').click(function (e) {

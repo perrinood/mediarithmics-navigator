@@ -43,35 +43,35 @@ define(['./module', 'moment-duration-format'], function (module) {
         $scope.timelines = timelines;
       }
 
-      function retrieveSiteIdFromTimelines() {
+      function retrieveSiteIdAndAppIdFromTimelines() {
 
-        var sitesId = $scope.timelines.reduce(function (acc, next) {
-          var nextSiteId = next.$site_id;
+        var sitesOrAppsId = $scope.timelines.reduce(function (acc, next) {
+          var nextSiteId = (next.$site_id || next.$app_id); 
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
         }, []);
 
-        var promises = sitesId.map(function (siteId) {
-          return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteId).get();
+        var promises = sitesOrAppsId.map(function (siteOrAppId) {
+          return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteOrAppId).get();
         });
 
-        function scopeSitesandDevicesWithTimelines(sites) {
-          $scope.timelines.forEach(function (timeline) {
-            timeline.site = lodash.find(sites, function (site) {
-              return site.id === timeline.$site_id;
+        function scopeSitesOrAppsAndDevicesWithTimelines(sitesOrApps) {
+          $scope.timelines.forEach(function (timelineActivity) {
+            timelineActivity.siteOrApp = lodash.find(sitesOrApps, function (siteOrApp) {
+              return siteOrApp.id === (timelineActivity.$site_id || timelineActivity.$app_id);
             });
 
             var userAgent = lodash.find($scope.devices, function (userAgent) {
-              return userAgent.vector_id === timeline.$user_agent_id;
+              return userAgent.vector_id === timelineActivity.$user_agent_id;
             });
 
             if (userAgent) {
-              timeline.formFactor = userAgent.device.form_factor;
+              timelineActivity.formFactor = userAgent.device.form_factor;
             }
 
           });
         }
 
-        $q.all(promises).then(scopeSitesandDevicesWithTimelines);
+        $q.all(promises).then(scopeSitesOrAppsAndDevicesWithTimelines);
 
       }
 
@@ -92,7 +92,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
         .then(waitForDevices)
-        .then(retrieveSiteIdFromTimelines);
+        .then(retrieveSiteIdAndAppIdFromTimelines);
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
