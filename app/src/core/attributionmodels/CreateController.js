@@ -12,6 +12,7 @@ define(['./module'], function (module) {
       $scope.selectedAttributionModelProcessor = null;
       $scope.attributionModel = {
         name : "",
+        mode: "DISCOVERY",
         attributionModelProcessor : null
       };
 
@@ -32,6 +33,7 @@ define(['./module'], function (module) {
 
         var promise = Restangular.all('attribution_models').post({
           name : $scope.attributionModel.name,
+          mode: $scope.attributionModel.mode,
           group_id : $scope.attributionModel.attributionModelProcessor.split('/')[0],
           artifact_id : $scope.attributionModel.attributionModelProcessor.split('/')[1]
         }, {
