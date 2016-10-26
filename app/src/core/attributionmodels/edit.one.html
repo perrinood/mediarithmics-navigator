@@ -28,6 +28,30 @@
         </div>
       </div>
     </div>
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+                        Advanced Options
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div mcs-form-group="" label-for="attribution_model_name" label-text="Mode">
+
+                        <select class="input-lg" ng-model="attributionModel.mode" type="text" id="attribution_model_mode">
+                            <option value="DISCOVERY">Discovery</option>
+                            <option value="STRICT">Strict (restrict to associated campaigns)</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="mcs-actions-group">
       <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
