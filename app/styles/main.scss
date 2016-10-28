@@ -2673,6 +2673,12 @@ a.category-item {
     position: absolute;
     left: 50%;
   }
+
+  .fix-to-top {
+    position: fixed;
+    top: 0;
+    width: 22%;
+  }
 }
 
 /**

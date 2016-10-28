@@ -588,4 +588,30 @@ define(['./module'], function (module) {
         };
     }]);
 
+    module.directive('fixPositionWhenAtTop', ['$window', function ($window) {
+
+        var windowWrapper = angular.element($window);
+
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+
+                var topClass = 'fix-to-top';
+                var offsetTop = element.offset().top;
+                var targetElement = angular.element(document.getElementById('query-toolbox-right-pane'));
+                var targetClass = 'col-md-offset-3';
+
+                windowWrapper.on('scroll', function () {
+                    if (windowWrapper.scrollTop() >= offsetTop) {
+                        element.addClass(topClass);
+                        targetElement.addClass(targetClass);
+                    } else {
+                        element.removeClass(topClass);
+                        targetElement.removeClass(targetClass);
+                    }
+                });
+            }
+        };
+    }]);
+
 });
