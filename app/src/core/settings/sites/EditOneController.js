@@ -11,7 +11,7 @@ define(['./module', 'jquery'], function (module, $) {
       $scope.aliasesPerPage = 20;
       $scope.aliasesCurrentPage = 0;
       $scope.editMode = false;
-      $scope.site = {datamart_id: datamartId, organisation_id: organisationId};
+      $scope.site = {type: "SITE", datamart_id: datamartId, organisation_id: organisationId};
       $scope.aliases = [];
       $scope.rules = [];
       $scope.originalAliasesIds = [];

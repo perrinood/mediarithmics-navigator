@@ -1,0 +1,43 @@
+<div class="mcs-default-container" ng-controller="core/settings/mobileapplications/ViewAllController">
+
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Mobile Applications</h1>
+    </div>
+  </div>
+
+  <div class="row mics-table-toolbar">
+    <div class="col-xs-2">
+      <button ng-click="new()" class="mics-btn mics-btn-add">New Mobile Application</button>
+    </div>
+    <div class="form-group col-md-3 pull-right">
+      <input class="form-control"
+             type="text"
+             ng-model="searchInput"
+             placeholder="Search">
+    </div>
+  </div>
+
+  <table class="mics-table js-auto-hide-actions table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Token</th>
+      <th>Creation Date</th>
+      <th class="actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="app in filteredApps() | offset : (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{app.name}}</td>
+      <td>{{app.token}}</td>
+      <td>{{app.creation_date | date}}</td>
+      <td class="actions">
+        <a class="mics-btn mics-btn-edit" ng-click="edit(app)">Edit</a>
+        <a class="mics-btn mics-btn-delete" ng-click="archive(app)">Archive</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <uib-pagination total-items="filteredApps().length" ng-model="currentPageCreative" items-per-page="itemsPerPage"></uib-pagination>
+</div>
