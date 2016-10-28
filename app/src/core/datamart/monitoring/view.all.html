@@ -1,0 +1,23 @@
+<div class="mcs-default-container" ng-controller="core/datamart/monitoring/ViewAllController">
+    <div class="mcs-default-content">
+        
+        <div class="mcs-default-heading">
+            <h2>
+                Test tools
+            </h2>
+        </div>
+
+        <div class="mics-table-toolbar">
+            <div class="col-md-12">
+                <form class="datamart form-inline" role="form">
+                    <div ng-show="myTimelineHref">
+                        <a class="btn btn-default" ng-href="{{myTimelineHref}}">My timeline</a>
+                    </div>
+                    <div ng-show="!myTimelineHref">
+                        <a uib-tooltip="no mics_vid" class="btn btn-default" ng-href="{{myTimelineHref}}">My timeline</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
