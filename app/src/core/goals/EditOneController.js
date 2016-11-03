@@ -13,6 +13,31 @@ define(['./module'], function (module) {
       var queryId = -1;
       var deletedAttributionModels = [];
 
+      function initConversionValue(goal) {
+
+        if (goal) {
+          $scope.conversionValue = {
+            goalValueCurrency: goal.goal_value_currency,
+            defaultGoalValue: goal.default_goal_value,
+            addConversionValue: true
+          };
+        } else {
+          $scope.conversionValue = {
+            goalValueCurrency: 'EUR'
+          };
+        }
+
+      }
+
+      function resetConversionValue(addConversionValue) {
+        if (!addConversionValue) {
+          initConversionValue();
+        }
+      }
+
+      $scope.initConversionValue = initConversionValue;
+      $scope.resetConversionValue = resetConversionValue;
+      $scope.trigger = 'query';
       $scope.attributionModels = [];
 
       var AttributionModelContainer = function AttributionModelContainer(value) {
@@ -30,11 +55,12 @@ define(['./module'], function (module) {
       };
 
       if (!goalId) {
-        $scope.goal = {type: 'organisation_goal', goal_value_currency:'EUR', default_goal_value: 0};
+        $scope.goal = {type: 'organisation_goal'};
+        initConversionValue();
       } else {
         Restangular.one("goals", goalId).get().then(function (goal) {
           $scope.goal = goal;
-
+          initConversionValue(goal);
           goal.all("attribution_models").getList().then(function (attributionModels) {
             $scope.attributionModels = attributionModels.map(function(attributionModel){
               return new AttributionModelContainer(attributionModel);
@@ -178,6 +204,10 @@ define(['./module'], function (module) {
           triggerDeletionTask = true;
         }
       };
+      
+      function getPixelCode() {}
+
+      $scope.getPixelCode = getPixelCode;
 
       function getAttributionModelTasks() {
         var deleteAttributionModelTasks = deletedAttributionModels.map(function (attribution){
@@ -233,6 +263,15 @@ define(['./module'], function (module) {
             }
           });
           return attributionP;
+        }).then(function setConversionValue() {
+          var conversionValue = {};
+          if ($scope.conversionValue.addConversionValue) {
+            conversionValue = {
+              default_goal_value: $scope.conversionValue.defaultGoalValue,
+              goal_value_currency: $scope.conversionValue.goalValueCurrency
+            };
+          }
+          $scope.goal = Restangular.copy(angular.merge({}, $scope.goal, conversionValue));
         }).then(function () {
           return $scope.goal.put();
         }).then(function (){

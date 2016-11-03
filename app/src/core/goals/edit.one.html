@@ -24,40 +24,79 @@
       </div>
     </div>
 
+
+    <div class="mcs-default-heading">
+      <h3>Conversion value</h3>
+    </div>
+
     <div class="row">
+      <div class="col-md-12">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="conversionValue.addConversionValue"> Add conversion value
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-if="conversionValue.addConversionValue">
+
       <div class="col-md-2">
         <label for="default_goal_value">Default value
           <span class="badge help-badge" data-html="true" uib-popover-html="'The Default Goal value'" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
         </label>
-        <input ng-model="goal.default_goal_value" type="text" class="form-control input-lg" id="default_goal_value">
-        <!-- </div> -->
+        <input ng-model="conversionValue.defaultGoalValue" type="text" class="form-control input-lg" id="default_goal_value">
       </div>
       <div class="col-md-2">
         <label>Currency
         </label>
-        <select class="form-control input-lg" ng-model="goal.goal_value_currency">
+        <select class="form-control input-lg" ng-model="conversionValue.goalValueCurrency">
           <option value="EUR">EUR</option>
         </select>
       </div>
     </div>
 
     <br/>
+
+    <div class="mcs-default-heading">
+      <h3>Trigger</h3>
+    </div>
+    
     <div class="mics-block-heading-2">
-      <div class="btn-group">
-        <a class="mics-btn mics-btn-add" ng-if="!queryContainer" ng-click="addTrigger()">Add a trigger</a>
-        <a class="mics-btn mics-btn-edit" ng-if="queryContainer" ng-click="editTrigger()">Edit trigger</a>
-        <a class="mics-btn mics-btn-delete" ng-if="queryContainer" ng-click="removeTrigger()">Remove trigger</a>
-      </div>
       <span>Conversion tracking through a trigger</span>
-      <span class="badge help-badge" data-html="true" uib-popover-html="" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
-    </div>  
-    <div class="row">
+    </div>
+
+    <div class="radio">
+      <label>
+        <input type="radio" name="optionsRadios" id="optionsRadios1" ng-model="trigger" value="query"> Trigger via query
+      </label>
+    </div>
+
+    <div class="row" ng-if="trigger === 'query'">
+      <div class="col-md-12 mics-block-heading-2">
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-add" ng-if="!queryContainer" ng-click="addTrigger()">Add a trigger</a>
+          <a class="mics-btn mics-btn-edit" ng-if="queryContainer" ng-click="editTrigger()">Edit trigger</a>
+          <a class="mics-btn mics-btn-delete" ng-if="queryContainer" ng-click="removeTrigger()">Remove trigger</a>
+        </div>
+      </div>      
       <div class="col-md-12">
         <span ng-if="!queryContainer" class="help-block">No trigger defined</span>
         <div ng-if="queryContainer" ng-include="'src/core/datamart/queries/query-readonly-view.html'"></div>
       </div>
     </div>
 
+    <div class="radio">
+      <label>
+        <input type="radio" name="optionsRadios" id="optionsRadios2" ng-model="trigger" value="pixel"> 
+        Trigger via pixel
+        <a class="mics-btn mics-btn-add" ng-if="trigger === 'pixel'" ng-click="getPixelCode()">Get pixel code</a>
+      </label>
+    </div>
+  
+    <div class="mcs-default-heading">
+      <h3>Attribution models</h3>
+    </div>
     <div class="mics-block-heading-2">
       <div class="btn-group">
         <div class="dropdown" uib-dropdown>
