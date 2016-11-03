@@ -51,6 +51,7 @@
         <label>Currency
         </label>
         <select class="form-control input-lg" ng-model="conversionValue.goalValueCurrency">
+          <option value="null">Select a currency</option>
           <option value="EUR">EUR</option>
         </select>
       </div>
@@ -68,29 +69,33 @@
 
     <div class="radio">
       <label>
-        <input type="radio" name="optionsRadios" id="optionsRadios1" ng-model="trigger" value="query"> Trigger via query
+        <input type="radio" name="triggers" id="query" ng-model="trigger" value="query"> Trigger via query
       </label>
     </div>
 
-    <div class="row" ng-if="trigger === 'query'">
-      <div class="col-md-12 mics-block-heading-2">
-        <div class="btn-group">
-          <a class="mics-btn mics-btn-add" ng-if="!queryContainer" ng-click="addTrigger()">Add a trigger</a>
-          <a class="mics-btn mics-btn-edit" ng-if="queryContainer" ng-click="editTrigger()">Edit trigger</a>
-          <a class="mics-btn mics-btn-delete" ng-if="queryContainer" ng-click="removeTrigger()">Remove trigger</a>
+    <div ng-if="trigger === 'query'">
+      <div class="row" >
+        <div class="col-md-12 mics-block-heading-2">
+          <div class="btn-group">
+            <a class="mics-btn mics-btn-add" ng-if="!queryContainer" ng-click="addTrigger()">Add a trigger</a>
+            <a class="mics-btn mics-btn-edit" ng-if="queryContainer" ng-click="editTrigger()">Edit trigger</a>
+            <a class="mics-btn mics-btn-delete" ng-if="queryContainer" ng-click="removeTrigger()">Remove trigger</a>
+          </div>
         </div>
-      </div>      
-      <div class="col-md-12">
-        <span ng-if="!queryContainer" class="help-block">No trigger defined</span>
-        <div ng-if="queryContainer" ng-include="'src/core/datamart/queries/query-readonly-view.html'"></div>
+      </div>
+      <div class="row">      
+        <div class="col-md-12">
+          <span ng-if="!queryContainer" class="help-block">No trigger defined</span>
+          <div ng-if="queryContainer" ng-include="'src/core/datamart/queries/query-readonly-view.html'"></div>
+        </div>
       </div>
     </div>
 
     <div class="radio">
       <label>
-        <input type="radio" name="optionsRadios" id="optionsRadios2" ng-model="trigger" value="pixel"> 
+        <input type="radio" name="triggers" id="pixel" ng-model="trigger" value="pixel"> 
         Trigger via pixel
-        <a class="mics-btn mics-btn-add" ng-if="trigger === 'pixel'" ng-click="getPixelCode()">Get pixel code</a>
+        <a class="mics-btn mics-btn-edit" ng-if="trigger === 'pixel'" ng-click="getPixelTrackingUrl()">Get pixel tracking url</a>
       </label>
     </div>
   

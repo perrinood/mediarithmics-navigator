@@ -12,35 +12,117 @@ define(['./module'], function (module) {
       var datamartId = Session.getCurrentDatamartId();
       var queryId = -1;
       var deletedAttributionModels = [];
+      var isCreationMode = goalId ? false : true;
 
-      function initConversionValue(goal) {
+      /**
+       * Conversion Value
+       */
+      
+      function initConversionValue() {
 
-        if (goal) {
           $scope.conversionValue = {
-            goalValueCurrency: goal.goal_value_currency,
-            defaultGoalValue: goal.default_goal_value,
-            addConversionValue: true
+            goalValueCurrency: $scope.goal.goal_value_currency,
+            defaultGoalValue: $scope.goal.default_goal_value,
+            addConversionValue: $scope.goal.default_goal_value ? true : false
           };
-        } else {
-          $scope.conversionValue = {
-            goalValueCurrency: 'EUR'
-          };
-        }
-
-      }
-
-      function resetConversionValue(addConversionValue) {
-        if (!addConversionValue) {
-          initConversionValue();
-        }
+          
       }
 
       $scope.initConversionValue = initConversionValue;
-      $scope.resetConversionValue = resetConversionValue;
-      $scope.trigger = 'query';
-      $scope.attributionModels = [];
 
-      var AttributionModelContainer = function AttributionModelContainer(value) {
+      /**
+       * Triggers
+       */
+
+      function addTrigger() {
+        var newScope = $scope.$new(true);
+        newScope.enableSelectedValues = false;
+        newScope.queryContainer = new QueryContainer(datamartId);
+        $uibModal.open({
+          templateUrl: 'src/core/datamart/queries/edit-query.html',
+          scope: newScope,
+          backdrop: 'static',
+          controller: 'core/datamart/queries/EditQueryController',
+          windowClass: 'edit-query-popin'
+        }).result.then(function ok(queryContainerUpdate) {
+          $scope.queryContainer = queryContainerUpdate;
+        }, function cancel() {
+          $log.debug("Edit Query model dismissed");
+        });
+      }
+
+      function editTrigger(queryId) {
+        var newScope = $scope.$new(true);
+        newScope.queryContainer = $scope.queryContainer.copy();
+        newScope.enableSelectedValues = false;
+        $uibModal.open({
+          templateUrl: 'src/core/datamart/queries/edit-query.html',
+          scope: newScope,
+          backdrop: 'static',
+          controller: 'core/datamart/queries/EditQueryController',
+          windowClass: 'edit-query-popin'
+        }).result.then(function ok(queryContainerUpdate) {
+          $scope.queryContainer = queryContainerUpdate;
+        }, function cancel() {
+          $log.debug("Edit Query model dismissed");
+        });
+      }
+
+      function removeTrigger() {
+        $scope.queryContainer = null;
+        if ($scope.goal.new_query_id) {
+          queryId = $scope.goal.new_query_id;
+          $scope.goal.new_query_id = null;
+          triggerDeletionTask = true;
+        }
+      }
+
+      function getPixelTrackingUrl() {
+
+        var promise;
+
+        if (isCreationMode) {
+          promise = saveOrUpdateOperations();
+        } else {
+          promise = $q.resolve();
+        }
+
+        function displayPixelTrackingUrl() {
+          var currentDatamartToken = Session.getCurrentDatamartToken();
+          var newScope = $scope.$new(true);
+
+          newScope.pixelTrackingUrl = 'http://events.mediarithmics.com/v1/touches/pixel?$ev=$conversion&$dat_token=' + currentDatamartToken + '&goal_id=' + $scope.goal.id;
+
+          function logResult() {
+            $log.debug("Get pixel code modal closed");
+          }
+
+          $uibModal.open({
+            templateUrl: 'src/core/goals/get-pixel.html',
+            scope: newScope,
+            backdrop: 'static',
+            controller: 'core/goals/GetPixelController'
+          }).result.then(logResult);
+
+        }
+
+        promise
+          .then(removeTrigger)
+          .then(displayPixelTrackingUrl);
+
+      }
+
+      $scope.trigger = 'query';
+      $scope.addTrigger = addTrigger;
+      $scope.editTrigger = editTrigger;
+      $scope.removeTrigger = removeTrigger;
+      $scope.getPixelTrackingUrl = getPixelTrackingUrl;
+
+      /**
+       * Attribution Model
+       */
+
+      function AttributionModelContainer(value) {
         this.selectedAsDefault = "false";
 
         if (value) {
@@ -52,183 +134,106 @@ define(['./module'], function (module) {
             }
         }
 
-      };
-
-      if (!goalId) {
-        $scope.goal = {type: 'organisation_goal'};
-        initConversionValue();
-      } else {
-        Restangular.one("goals", goalId).get().then(function (goal) {
-          $scope.goal = goal;
-          initConversionValue(goal);
-          goal.all("attribution_models").getList().then(function (attributionModels) {
-            $scope.attributionModels = attributionModels.map(function(attributionModel){
-              return new AttributionModelContainer(attributionModel);
-            });
-          } );
-
-          //load goal query if any
-          if (goal.new_query_id){
-            var queryContainer = new QueryContainer(datamartId, goal.new_query_id);
-            queryContainer.load().then(function sucess(loadedQueryContainer){
-              $scope.queryContainer = loadedQueryContainer;
-            }, function error(reason){
-              if (reason.data && reason.data.error_id){
-                $scope.error = "An error occured while loading trigger , errorId: " + reason.data.error_id;
-              } else {
-                $scope.error = "An error occured while loading trigger";
-              }
-            });
-          }
-
-        });
       }
 
-      $scope.updateDefaultAttributionModel = function (attributionModel) {
-        var previousDefault = $scope.attributionModels.find(function(el){return el.selectedAsDefault === "true";});
+      function updateDefaultAttributionModel(attributionModel) {
+        var previousDefault = $scope.attributionModels.find(function (el) { return el.selectedAsDefault === "true"; });
         previousDefault.selectedAsDefault = "false";
         previousDefault.value.default = false;
 
         attributionModel.selectedAsDefault = "true";
         attributionModel.value.default = true;
-      };
+      }
 
-      $scope.$on("mics-attribution-model:selected", function (event, data) {
-
-        var alreadySelected = $scope.attributionModels.find(function(model){
-          return model.value.attribution_model_id === data.attributionModel.id;
+      function addAttributionModel(type) {
+        $uibModal.open({
+          templateUrl: 'src/core/attributionmodels/ChooseExistingAttributionModel.html',
+          scope: $scope,
+          backdrop: 'static',
+          controller: 'core/attributionmodels/ChooseExistingAttributionModelController',
+          size: "lg"
         });
 
-        if (!alreadySelected){
-          var selectedAttributionModel = {
-            attribution_model_id: data.attributionModel.id,
-            attribution_model_name: data.attributionModel.name,
-            group_id: data.attributionModel.group_id,
-            artifact_id: data.attributionModel.artifact_id,
-            attribution_type:'WITH_PROCESSOR'
-          };
-
-          if ($scope.attributionModels.length === 0){
-            selectedAttributionModel.default = "true";
-          }
-
-          $scope.attributionModels.push(new AttributionModelContainer(selectedAttributionModel));
-        }
-      });
-
-      $scope.addAttributionModel = function (type) {
-        $uibModal.open({
-            templateUrl: 'src/core/attributionmodels/ChooseExistingAttributionModel.html',
-            scope: $scope,
-            backdrop: 'static',
-            controller: 'core/attributionmodels/ChooseExistingAttributionModelController',
-            size: "lg"
-          });
-
         return;
-      };
+      }
 
-      $scope.addDirectAttributionModel = function (type) {
+      function addDirectAttributionModel(type) {
 
-        var existingDirectModel = $scope.attributionModels.find(function(model){
+        var existingDirectModel = $scope.attributionModels.find(function (model) {
           return model.value.attribution_type === 'DIRECT';
         });
 
-        if (!existingDirectModel){
+        if (!existingDirectModel) {
           var directAttributionModel = {
-            attribution_type:'DIRECT'
+            attribution_type: 'DIRECT'
           };
 
-          if ($scope.attributionModels.length === 0){
+          if ($scope.attributionModels.length === 0) {
             directAttributionModel.default = "true";
           }
 
           $scope.attributionModels.push(new AttributionModelContainer(directAttributionModel));
         }
-      };
+      }
 
-      $scope.deleteAttributionModel = function (attribution) {
-        if (attribution.id){
+      function deleteAttributionModel(attribution) {
+        if (attribution.id) {
           deletedAttributionModels.push(attribution);
         }
 
         var i = $scope.attributionModels.indexOf(attribution);
         $scope.attributionModels.splice(i, 1);
 
-        if ($scope.attributionModels.length > 0 && attribution.selectedAsDefault === "true"){
+        if ($scope.attributionModels.length > 0 && attribution.selectedAsDefault === "true") {
           var first = $scope.attributionModels[0];
           first.selectedAsDefault = "true";
           first.value.default = true;
         }
-      };
+      }
 
-      $scope.addTrigger = function () {
-        var newScope = $scope.$new(true);
-        newScope.enableSelectedValues = false;
-        newScope.queryContainer = new QueryContainer(datamartId);
-        $uibModal.open({
-          templateUrl: 'src/core/datamart/queries/edit-query.html',
-          scope : newScope,
-          backdrop : 'static',
-          controller: 'core/datamart/queries/EditQueryController',
-          windowClass: 'edit-query-popin'
-        }).result.then(function ok(queryContainerUpdate){
-          $scope.queryContainer = queryContainerUpdate;
-        }, function cancel(){
-          $log.debug("Edit Query model dismissed");
+      function onAttributionModelSelected(event, data) {
+
+        var alreadySelected = $scope.attributionModels.find(function (model) {
+          return model.value.attribution_model_id === data.attributionModel.id;
         });
-      };
 
-      $scope.editTrigger = function (queryId) {
-        var newScope = $scope.$new(true);
-        newScope.queryContainer = $scope.queryContainer.copy();
-        newScope.enableSelectedValues = false;
-        $uibModal.open({
-          templateUrl: 'src/core/datamart/queries/edit-query.html',
-          scope : newScope,
-          backdrop : 'static',
-          controller: 'core/datamart/queries/EditQueryController',
-          windowClass: 'edit-query-popin'
-        }).result.then(function ok(queryContainerUpdate){
-          $scope.queryContainer = queryContainerUpdate;
-        }, function cancel(){
-          $log.debug("Edit Query model dismissed");
-        });
-      };
+        if (!alreadySelected) {
+          var selectedAttributionModel = {
+            attribution_model_id: data.attributionModel.id,
+            attribution_model_name: data.attributionModel.name,
+            group_id: data.attributionModel.group_id,
+            artifact_id: data.attributionModel.artifact_id,
+            attribution_type: 'WITH_PROCESSOR'
+          };
 
-      $scope.removeTrigger = function () {
-        $scope.queryContainer = null;
-        if ($scope.goal.new_query_id){
-          queryId = $scope.goal.new_query_id;
-          $scope.goal.new_query_id = null;
-          triggerDeletionTask = true;
+          if ($scope.attributionModels.length === 0) {
+            selectedAttributionModel.default = "true";
+          }
+
+          $scope.attributionModels.push(new AttributionModelContainer(selectedAttributionModel));
         }
-      };
-      
-      function getPixelCode() {}
-
-      $scope.getPixelCode = getPixelCode;
+      }
 
       function getAttributionModelTasks() {
-        var deleteAttributionModelTasks = deletedAttributionModels.map(function (attribution){
-          return function(callback) {
+        var deleteAttributionModelTasks = deletedAttributionModels.map(function (attribution) {
+          return function (callback) {
             promiseUtils.bindPromiseCallback(attribution.value.remove(), callback);
           };
         });
 
-        var updateAttributionModelTasks = $scope.attributionModels.filter(function (attribution){
+        var updateAttributionModelTasks = $scope.attributionModels.filter(function (attribution) {
           return attribution.id;
-        }).map(function (attribution){
-          return function(callback) {
+        }).map(function (attribution) {
+          return function (callback) {
             promiseUtils.bindPromiseCallback(attribution.value.put(), callback);
           };
         });
 
-        var createAttributionModelTasks = $scope.attributionModels.filter(function (attribution){
+        var createAttributionModelTasks = $scope.attributionModels.filter(function (attribution) {
           return !attribution.id;
-        }).map(function (attribution){
-          return function(callback) {
-            var promise = $scope.goal.all("attribution_models").post({"attribution_model_id":attribution.value.attribution_model_id, "attribution_type": attribution.value.attribution_type});
+        }).map(function (attribution) {
+          return function (callback) {
+            var promise = $scope.goal.all("attribution_models").post({ "attribution_model_id": attribution.value.attribution_model_id, "attribution_type": attribution.value.attribution_type });
             promiseUtils.bindPromiseCallback(promise, callback);
           };
         });
@@ -242,6 +247,18 @@ define(['./module'], function (module) {
 
       }
 
+      $scope.attributionModels = [];
+      $scope.updateDefaultAttributionModel = updateDefaultAttributionModel;
+      $scope.addAttributionModel = addAttributionModel;
+      $scope.addDirectAttributionModel = addDirectAttributionModel;
+      $scope.deleteAttributionModel = deleteAttributionModel;
+      $scope.$on("mics-attribution-model:selected", onAttributionModelSelected);
+
+
+      /**
+       * Actions
+       */
+
       function saveOrUpdateGoal(){
 
         var promise;
@@ -251,11 +268,11 @@ define(['./module'], function (module) {
           promise = $q.resolve($scope.goal);
         }
 
-        return promise.then(function (goal){
+        function saveAttributionModel(goal) {
           $scope.goal = goal;
           var deferred = $q.defer();
           var attributionP = deferred.promise;
-          async.series(getAttributionModelTasks(), function(err, res){
+          async.series(getAttributionModelTasks(), function (err, res) {
             if (err) {
               deferred.reject(err);
             } else {
@@ -263,32 +280,49 @@ define(['./module'], function (module) {
             }
           });
           return attributionP;
-        }).then(function setConversionValue() {
+        }
+
+        function setConversionValue() {
           var conversionValue = {};
           if ($scope.conversionValue.addConversionValue) {
             conversionValue = {
               default_goal_value: $scope.conversionValue.defaultGoalValue,
               goal_value_currency: $scope.conversionValue.goalValueCurrency
             };
+          } else {
+            conversionValue = {
+              default_goal_value: null,
+              goal_value_currency: null
+            };
           }
           $scope.goal = Restangular.copy(angular.merge({}, $scope.goal, conversionValue));
-        }).then(function () {
+        }
+
+        function saveGoal() {
           return $scope.goal.put();
-        }).then(function (){
-          if (triggerDeletionTask){
+        }
+
+        function checkDeletionTask() {
+          if (triggerDeletionTask) {
             return Restangular.one('datamarts', datamartId).one('queries', queryId).remove();
           } else {
             return $q.resolve();
           }
-        });
+        }
+
+        return promise.then(saveAttributionModel)
+                      .then(setConversionValue)
+                      .then(saveGoal)
+                      .then(checkDeletionTask);
       }
 
-      $scope.done = function () {
+      function saveOrUpdateQueryContainer() {
+
         var promise;
-        WaitingService.showWaitingModal();
-        if ($scope.queryContainer){
-          promise = $scope.queryContainer.saveOrUpdate().then(function sucess(updateQueryContainer){
-            if (!$scope.goal.new_query_id){
+
+        if ($scope.queryContainer) {
+          promise = $scope.queryContainer.saveOrUpdate().then(function success(updateQueryContainer) {
+            if (!$scope.goal.new_query_id) {
               $scope.goal.new_query_id = updateQueryContainer.id;
             }
             return $q.resolve();
@@ -297,28 +331,102 @@ define(['./module'], function (module) {
           promise = $q.resolve();
         }
 
-        promise.then(function (){
-          return saveOrUpdateGoal();
-        }).then(function success() {
+        return promise;
+
+      }
+
+      function saveOrUpdateOperations() {
+        return saveOrUpdateQueryContainer().then(saveOrUpdateGoal);
+      }
+
+      function done() {
+        WaitingService.showWaitingModal();
+
+        function success() {
           WaitingService.hideWaitingModal();
           $location.path(Session.getWorkspacePrefixUrl() + "/library/goals");
-        }, function error(reason){
+        }
+
+        function error(reason) {
           WaitingService.hideWaitingModal();
-          if (reason.data && reason.data.error_id){
+          if (reason.data && reason.data.error_id) {
             $scope.error = "An error occured while saving goal , errorId: " + reason.data.error_id;
           } else {
             $scope.error = "An error occured while saving goal";
           }
+        }
+
+        saveOrUpdateOperations().then(success, error);
+
+      }
+
+      function cancel() {
+
+        var promise;
+
+        if (isCreationMode && $scope.goal.id) {
+          promise = $scope.goal.remove();
+        } else {
+          promise = $q.resolve();
+        }
+
+        function redirectToGoalsLibrary() {
+          return $location.path(Session.getWorkspacePrefixUrl() + "/library/goals");
+        }
+
+        function displayError(error) {
+          if (error.data && error.data.error_id) {
+            $scope.error = "An error occured while deleting goal , errorId: " + error.data.error_id;
+          } else {
+            $scope.error = "An error occured while deleting goal";
+          }
+        }
+
+        promise
+          .then(redirectToGoalsLibrary)
+          .catch(displayError);
+        
+      }
+
+      $scope.done = done;
+      $scope.cancel = cancel;
+
+
+      /**
+       * Init
+       */
+
+      if (!goalId) {
+        $scope.goal = { type: 'organisation_goal' };
+        initConversionValue();
+      } else {
+        Restangular.one("goals", goalId).get().then(function (goal) {
+          $scope.goal = goal;
+          initConversionValue();
+          goal.all("attribution_models").getList().then(function (attributionModels) {
+            $scope.attributionModels = attributionModels.map(function (attributionModel) {
+              return new AttributionModelContainer(attributionModel);
+            });
+          });
+
+          //load goal query if any
+          if (goal.new_query_id) {
+            var queryContainer = new QueryContainer(datamartId, goal.new_query_id);
+            queryContainer.load().then(function sucess(loadedQueryContainer) {
+              $scope.queryContainer = loadedQueryContainer;
+            }, function error(reason) {
+              if (reason.data && reason.data.error_id) {
+                $scope.error = "An error occured while loading trigger , errorId: " + reason.data.error_id;
+              } else {
+                $scope.error = "An error occured while loading trigger";
+              }
+            });
+          }
+
         });
+      } 
 
-      };
-
-      $scope.cancel = function () {
-        $location.path(Session.getWorkspacePrefixUrl() + "/library/goals");
-      };
-
-    }
-
+    }     
 
   ]);
 });
