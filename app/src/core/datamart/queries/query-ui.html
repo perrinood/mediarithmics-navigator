@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="row" ng-show="!error">
-    <div class="col-md-3">
+    <div class="col-md-3" fix-position-when-at-top>
       <h4>List of criteria</h4>
 
       <div class="panel-group" id="accordion">
@@ -22,7 +22,8 @@
             <div class="panel-body selector-panel">
               <div ng-repeat="selector in family.selectors">
                 <div ng-if="selector.value.selector_name !== 'INDEX'" x-lvl-draggable='true' data-family="{{family.name}}">
-                  <span id="{{selector.id}}"><strong>{{selector.value.expression}}</strong> {{selector.label}}</span>
+                  <span ng-if="selector.value.indexed" id="{{selector.id}}"><strong>{{selector.value.expression}} {{selector.label}}</strong></span>
+                  <span ng-if="!selector.value.indexed" id="{{selector.id}}"><strong>{{selector.value.expression}}</strong> {{selector.label}}</span>
                 </div>
               </div>
               <!--<hr/>
@@ -36,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" id="query-toolbox-right-pane">
       <div class="row">
         <div ng-if="statisticsEnabled" class="col-md-12">
           <div class="panel panel-info">

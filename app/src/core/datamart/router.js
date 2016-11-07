@@ -124,13 +124,13 @@ define(['./module'], function (module) {
           templateUrl: 'src/core/datamart/partitions/edit.one.html',
           data: { navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html' }
         })      
-        .state('datamart/users', {
-          url: '/:organisation_id/datamart/users',
-          templateUrl: 'src/core/datamart/users/view.all.html',
+        .state('datamart/monitoring', {
+          url: '/:organisation_id/datamart/monitoring',
+          templateUrl: 'src/core/datamart/monitoring/view.all.html',
           data: {
             sidebar: {
               templateUrl: 'src/core/datamart/datamart-sidebar.html',
-              selected: 'search'
+              selected: 'monitoring'
             }
           }
         })

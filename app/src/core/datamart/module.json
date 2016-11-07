@@ -3,6 +3,7 @@
   "dependencies": [
     "core/datamart/common",
     "core/datamart/items",
+    "core/datamart/monitoring",
     "core/datamart/users",
     "core/datamart/categories",
     "core/datamart/queries",
