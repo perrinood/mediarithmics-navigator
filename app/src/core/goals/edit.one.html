@@ -51,7 +51,6 @@
         <label>Currency
         </label>
         <select class="form-control input-lg" ng-model="conversionValue.goalValueCurrency">
-          <option value="null">Select a currency</option>
           <option value="EUR">EUR</option>
         </select>
       </div>
@@ -182,7 +181,7 @@
 
     <div class="mcs-actions-group">
       <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
-      <a class="mics-btn mics-btn-finish" ng-click="done()">Done</a>
+      <a class="mics-btn mics-btn-finish" ng-disabled="disabled" ng-click="done()" >Done</a>
     </div>
   </form>
 </div>

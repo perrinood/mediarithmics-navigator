@@ -21,7 +21,7 @@ define(['./module'], function (module) {
       function initConversionValue() {
 
           $scope.conversionValue = {
-            goalValueCurrency: $scope.goal.goal_value_currency,
+            goalValueCurrency: $scope.goal.goal_value_currency || 'EUR',
             defaultGoalValue: $scope.goal.default_goal_value,
             addConversionValue: $scope.goal.default_goal_value ? true : false
           };
@@ -79,6 +79,8 @@ define(['./module'], function (module) {
 
       function getPixelTrackingUrl() {
 
+        $scope.error = null;
+
         var promise;
 
         if (isCreationMode) {
@@ -106,9 +108,18 @@ define(['./module'], function (module) {
 
         }
 
+        function displayError(reason) {
+          if (reason.message) {
+            $scope.error = "An error occured while getting pixel tracking url: " + reason.message;
+          } else {
+            $scope.error = "An error occured while getting pixel tracking url";
+          }
+        }
+
         promise
           .then(removeTrigger)
-          .then(displayPixelTrackingUrl);
+          .then(displayPixelTrackingUrl)
+          .catch(displayError);
 
       }
 
@@ -262,7 +273,10 @@ define(['./module'], function (module) {
       function saveOrUpdateGoal(){
 
         var promise;
-        if (!goalId) {
+
+        if (!$scope.goal.name) {
+          promise = $q.reject({ message: 'A name is required to save a goal' });
+        } else if (!goalId) {
           promise = Restangular.all('goals').post($scope.goal, {organisation_id: Session.getCurrentWorkspace().organisation_id});
         } else {
           promise = $q.resolve($scope.goal);
@@ -340,8 +354,8 @@ define(['./module'], function (module) {
       }
 
       function done() {
-        WaitingService.showWaitingModal();
-
+        $scope.error = null;
+      
         function success() {
           WaitingService.hideWaitingModal();
           $location.path(Session.getWorkspacePrefixUrl() + "/library/goals");
@@ -351,12 +365,20 @@ define(['./module'], function (module) {
           WaitingService.hideWaitingModal();
           if (reason.data && reason.data.error_id) {
             $scope.error = "An error occured while saving goal , errorId: " + reason.data.error_id;
+          } else if (reason.message) {
+            $scope.error = "An error occured while saving goal: " + reason.message;
           } else {
             $scope.error = "An error occured while saving goal";
           }
         }
 
-        saveOrUpdateOperations().then(success, error);
+        // workaround for WaitingService.hideWaitingModal() that doesn't seems to work properly
+        if (!$scope.goal.name) {
+          error({ message: 'A name is required to save a goal' });
+        } else {
+          WaitingService.showWaitingModal();
+          saveOrUpdateOperations().then(success, error);
+        }        
 
       }
 
@@ -425,6 +447,10 @@ define(['./module'], function (module) {
 
         });
       } 
+
+      $scope.$watch("goal['name']", function (goalName) {
+        $scope.disabled = goalName ? false : true;
+      });
 
     }     
 
