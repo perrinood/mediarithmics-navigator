@@ -180,6 +180,9 @@ define(['./module'], function (module) {
         return service.getCurrentWorkspace().datamart_id;
       };
 
+      service.getCurrentDatamartToken = function() {
+        return service.getCurrentWorkspace().datamart.token;
+      };
 
 
       service.findWorkspaceByDatamartId = function (datamartId) {
