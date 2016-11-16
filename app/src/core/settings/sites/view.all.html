@@ -31,7 +31,7 @@
     <tr ng-repeat="site in filteredSites() | offset : (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
       <td>{{site.name}}</td>
       <td>{{site.token}}</td>
-      <td>{{site.creation_date | date}}</td>
+      <td>{{site.creation_ts | date}}</td>
       <td class="actions">
         <a class="mics-btn mics-btn-edit" ng-click="edit(site)">Edit</a>
         <a class="mics-btn mics-btn-delete" ng-click="archive(site)">Archive</a>
