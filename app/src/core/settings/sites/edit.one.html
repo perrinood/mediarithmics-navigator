@@ -10,10 +10,19 @@
       <div class="row">
         <div class="col-xs-3">
           <div mcs-form-group="full">
-            <label for="name">Domain Name
+            <label for="name">Name</label>
+            <input class="form-control input-md" ng-model="site.name" type="text" id="name">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-3">
+          <div mcs-form-group="full">
+            <label for="domain">Domain
               <span class="badge" data-html="true" uib-popover-html="'The web domain of the website<br/> (e.g. myshop.com)'" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
             </label>
-            <input class="form-control input-md" ng-model="site.name" type="text" id="name">
+            <input class="form-control input-md" ng-model="site.domain" type="text" id="domain">
           </div>
         </div>
       </div>
@@ -102,7 +111,7 @@
 
       <div class="mcs-actions-group">
         <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
-        <button ng-disabled="!(site.name.length && site.token.length)" class="mics-btn mics-btn-finish" ng-click="done()">Done</button>
+        <button ng-disabled="!(site.name.length && site.token.length && site.domain.length)" class="mics-btn mics-btn-finish" ng-click="done()">Done</button>
       </div>
 
 

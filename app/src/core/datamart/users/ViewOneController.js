@@ -51,7 +51,7 @@ define(['./module', 'moment-duration-format'], function (module) {
         }, []);
 
         var promises = sitesOrAppsId.map(function (siteOrAppId) {
-          return Restangular.one("datamarts/" + $scope.datamartId + "/sites/" + siteOrAppId).get();
+          return Restangular.one("datamarts/" + $scope.datamartId + "/channels/" + siteOrAppId).get();
         });
 
         function scopeSitesOrAppsAndDevicesWithTimelines(sitesOrApps) {
