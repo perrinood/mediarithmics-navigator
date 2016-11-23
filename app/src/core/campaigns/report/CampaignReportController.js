@@ -470,13 +470,13 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           var id = row[0].replace(/^[a-zA-Z]+:[a-zA-Z]+:/, "");
           if (row[0].startsWith("app:ios")) {
             return findAppName(id).then(function (name) {
-              var site = {name: name};
-              var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
+              var site = {name: name, display_network_name:row[2]};
+              var siteInfo = [row[0],row[1],row[2]].concat(mediaPerformance.decorate(row));
               return addSiteInfo(site, siteInfo);
             });
           } else {
-            var site = {name: id};
-            var siteInfo = [row[0]].concat(mediaPerformance.decorate(row));
+            var site = {name: id, display_network_name:row[2]};
+            var siteInfo = [row[0],row[1],row[2]].concat(mediaPerformance.decorate(row));
             return $q.resolve(addSiteInfo(site, siteInfo));
           }
         });
