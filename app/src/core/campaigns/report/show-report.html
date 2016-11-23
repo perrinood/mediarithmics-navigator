@@ -207,6 +207,10 @@
                 <table class="mics-table">
                   <thead>
                   <tr>
+                    <th ng-click="sortSitesBy('display_network_name')">
+                      Display Network
+                      <span ng-show="orderBy == 'display_network_name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                    </th>
                     <th ng-click="sortSitesBy('name')">
                       Name
                       <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
@@ -219,6 +223,7 @@
                   </thead>
                   <tbody>
                   <tr ng-repeat="site in sites">
+                    <td>{{site.display_network_name}}</td>
                     <td>{{site.name}}</td>
                     <td class="metrics" ng-repeat="info in site.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">

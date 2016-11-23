@@ -220,8 +220,9 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
         ReportService.mediaPerformance = function (campaignId, hasCpa, sort, limit) {
           var cpa = hasCpa ? ",cpa" : "";
-          return this.buildPerformanceReport(
+          return this.buildPerformanceDimensionReport(
             buildMediaResource(),
+            "display_network_id,display_network_name",
             "impressions,clicks,cpm,ctr,cpc,impressions_cost" + cpa,
             "campaign_id==" + campaignId,
             sort,
