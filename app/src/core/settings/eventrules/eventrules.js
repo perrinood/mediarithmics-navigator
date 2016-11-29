@@ -19,7 +19,7 @@ define(['./module'], function (module) {
           scope.ruleCreationMode = false;
           scope.ruleTypes = {
             CATALOG_AUTO_MATCH: "Catalog Auto Match",
-            USER_ACCOUNT_ID_INSERTION: "User Account Id Creation",
+            USER_IDENTIFIER_INSERTION: "User Identifier Insertion",
             URL_MATCH: "Url Match",
             PROPERTY_TO_ORIGIN_COPY: "Property To Origin Copy"
           };
@@ -28,7 +28,8 @@ define(['./module'], function (module) {
             PRODUCT: "Product",
             PRODUCT_AND_CATEGORY: "Product And Category"
           };
-          scope.hashFunctions = ["SHA_256", "MD5", "NO_HASH"];
+          scope.hashFunctions = ["NO_HASH", "SHA_256","MD5", "MD2","SHA_1","SHA_384","SHA_512" ];
+          scope.identifierTypes = ["USER_ACCOUNT", "EMAIL_HASH"];
           scope.originPropertySources = ["URL", "EVENT_PROPERTY", "REFERRER"];
 
 
@@ -76,7 +77,7 @@ define(['./module'], function (module) {
                 type: type,
                 auto_match_type: "CATEGORY"
               };
-            } else if (type === "USER_ACCOUNT_ID_INSERTION") {
+            } else if (type === "USER_IDENTIFIER_INSERTION") {
               scope.tmpRule = {
                 type: type,
                 hash_function: scope.hashFunctions[0],
@@ -139,9 +140,9 @@ define(['./module'], function (module) {
                   return "";
                 }
                 return scope.autoMatchTypes[rule.auto_match_type];
-              case "USER_ACCOUNT_ID_INSERTION":
+              case "USER_IDENTIFIER_INSERTION":
                 str = scope.shortenString(rule.property_source, 35);
-                return "Property " + str + " is hashed to " + rule.hash_function;
+                return "Property " + str + " is hashed with " + rule.hash_function + " to insert "+ rule.identifier_creation;
               case "URL_MATCH":
                 str = scope.shortenString(rule.pattern, 35);
                 return "Matches " + str;

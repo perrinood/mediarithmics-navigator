@@ -10,7 +10,7 @@
           <button class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">New Rule</button>
           <ul class="dropdown-menu" role="menu">
             <li><a role="menuItem" tabindex="0" ng-click="newRule('CATALOG_AUTO_MATCH')">Catalog Auto Match</a></li>
-            <li><a role="menuItem" tabindex="1" ng-click="newRule('USER_ACCOUNT_ID_INSERTION')">User Account Setup</a></li>
+            <li><a role="menuItem" tabindex="1" ng-click="newRule('USER_IDENTIFIER_INSERTION')">User Identifier Insertion</a></li>
             <li><a role="menuItem" tabindex="2" ng-click="newRule('URL_MATCH')">Url Match</a></li>
             <li><a role="menuItem" tabindex="3" ng-click="newRule('PROPERTY_TO_ORIGIN_COPY')">Property To Origin Copy</a></li>
           </ul>
@@ -57,9 +57,18 @@
     </div>
 
     <!--User Account Id Creation Content-->
-    <div class="selected-editing" ng-show="selectedRule.type === 'USER_ACCOUNT_ID_INSERTION'">
+    <div class="selected-editing" ng-show="selectedRule.type === 'USER_IDENTIFIER_INSERTION'">
+      <label for="identifierTypeProperty"><strong>Type</strong>
+        <span class="badge site" uib-popover="The user identifier type to create" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <select class="form-control" ng-model="tmpRule.identifier_creation"  ng-options="hash for hash in identifierTypes"  id="identifier_creation">
+	</select>
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.identifier_creation, 70)}}</div>
+      <br>
       <label for="userAccountIdProperty"><strong>Property</strong>
-        <span class="badge site" uib-popover="The name of the property containing the data used to compute the User Account Id" popover-trigger="mouseenter" popover-placement="right">?</span>
+        <span class="badge site" uib-popover="The name of the property containing the data used to compute the user identifier" popover-trigger="mouseenter" popover-placement="right">?</span>
       </label>
       <div ng-show="ruleEditMode">
         <input class="form-control input-md" ng-model="tmpRule.property_source" type="text" id="userAccountIdProperty">
@@ -73,8 +82,6 @@
         <select class="form-control" ng-model="tmpRule.hash_function" ng-options="hash for hash in hashFunctions" id="hash"></select>
       </div>
       <div ng-show="!ruleEditMode">{{selectedRule.hash_function}}</div>
-      <br>
-      <label><input ng-disabled="!ruleEditMode" type="checkbox" ng-model="tmpRule.remove_source"> Remove property after transformation</label>
       <br>
       <label><input ng-disabled="!ruleEditMode" type="checkbox" ng-model="tmpRule.to_lower_case"> Lower case before transform</label>
     </div>
@@ -163,7 +170,7 @@
       <button ng-show="!ruleEditMode" class="mics-btn mics-btn-cancel pull-right" ng-click="removeRule(selectedRule)">Remove</button>
       <button ng-show="ruleEditMode && selectedRule.type === 'URL_MATCH'" class="mics-btn mics-btn-add pull-left" ng-click="newEventTemplateProperty()">New Property</button>
       <button ng-show="ruleEditMode"
-              ng-disabled="selectedRule.type === 'USER_ACCOUNT_ID_INSERTION' && !tmpRule.property_source.length ||
+              ng-disabled="selectedRule.type === 'USER_IDENTIFIER_INSERTION' && !tmpRule.property_source.length ||
                     selectedRule.type === 'URL_MATCH' && !tmpRule.event_template.event_name.length && !tmpRule.pattern.length"
               class="mics-btn mics-btn-finish pull-right" ng-click="confirmRuleEdit()">Done
       </button>
