@@ -303,15 +303,12 @@ define(['./module'], function (module) {
           });
 
           scope.isNotValid = function(uri){
-            if((uri || "").substring(0, 7) !== "mics://"){
-              return true;
-            }
-            return false;
+            return (uri || "").substring(0, 7) !== "mics://";
           };
 
           scope.download = function(uri){
             if (! scope.isNotValid(uri)){
-              var dlUrl = Restangular.one("data_file").one("data?uri=" + uri).getRestangularUrl() + "&access_token=" + encodeURIComponent(AuthenticationService.getAccessToken());
+              var dlUrl = Restangular.one("data_file").one("data").getRestangularUrl()+ "?uri=" + encodeURIComponent(uri) + "&access_token=" + encodeURIComponent(AuthenticationService.getAccessToken());
               $window.location = dlUrl;
             }
           };
