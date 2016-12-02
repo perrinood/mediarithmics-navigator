@@ -103,6 +103,7 @@ define(['./module'], function (module) {
           $scope.adGroup.bid_optimizer_id = null;
         } else {
           $scope.adGroup.bid_optimizer_id = params.bidOptimizer.id;
+          $scope.adGroup.bid_optimization_objective_type = $scope.adGroup.bid_optimization_objective_type || "CPC";
         }
       });
 
