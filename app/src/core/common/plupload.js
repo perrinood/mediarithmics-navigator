@@ -162,6 +162,7 @@ define(['./module', "plupload"], function (module) {
           uploader.bind('FileUploaded', handleFileUploaded);
           uploader.bind('UploadComplete', handleUploadComplete);
           uploader.bind('BeforeUpload', function (uploader) {
+            uploader.setOption("url", scope.micsPlUpload.url);
             uploader.settings.url = scope.micsPlUpload.url;
           });
           uploader.init();

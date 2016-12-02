@@ -274,32 +274,33 @@ define(['./module'], function (module) {
         templateUrl: '/src/core/common/properties/data-file-property.html',
         link: function (scope, element, attrs) {
 
-         /* scope.micsPlUpload = {
-                  multi_selection: true,
-                  url: Restangular.one("data_file").one("data?uri=" + scope.uriUpload).getRestangularUrl() + "&access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()),
-                  upload_method:"put",
-                  filters: {
-                    mime_types: [],
-                    max_file_size: "2500kb"
-                  },
-                  init: {
-                    FileUploaded: function () {
-                      waitingService.hideWaitingModal();
-                    },
-                    FilesAdded: function () {
-                      waitingService.showWaitingModal();
-                      scope.uploadError = null;
-                      scope.$apply();
-                    },
-                    Error: function (up, err) {
-                      waitingService.hideWaitingModal();
-                      scope.uploadError = err.message;
-                      scope.$apply();
-                    }
-                  }
-                };*/
-          scope.$watch("property", function () {
-//            console.log(scope.property);
+          scope.micsPlUpload = {
+            multi_selection: false,
+            url: $location.protocol() + ":" + Restangular.one("data_file").one("data").getRestangularUrl()+ "?uri=" + encodeURIComponent(scope.property.value.uri),
+            http_method: "PUT",
+            multipart: false,
+            filters: {
+              max_file_size: "2500kb"
+            },
+            init: {
+              FileUploaded: function () {
+                waitingService.hideWaitingModal();
+              },
+              FilesAdded: function () {
+                waitingService.showWaitingModal();
+                scope.uploadError = null;
+                scope.$apply();
+              },
+              Error: function (up, err) {
+                waitingService.hideWaitingModal();
+                scope.uploadError = err.message;
+                scope.$apply();
+              }
+            }
+          };
+
+          scope.$watch("property.value.uri", function () {
+           scope.micsPlUpload.url = $location.protocol() + ":" + Restangular.one("data_file").one("data").getRestangularUrl()+ "?uri=" + encodeURIComponent(scope.property.value.uri);
           });
 
           scope.isNotValid = function(uri){
@@ -312,12 +313,6 @@ define(['./module'], function (module) {
               $window.location = dlUrl;
             }
           };
-          // We are using plupload 2.1, and this version do not allow to upload with a put method
-          // TODO upgrade to plupload 3 and uncomment the code
-          /*scope.upload = function(uri){
-            scope.micsPlUpload.uri = Restangular.one("data_file").one("data?uri=" + uri).getRestangularUrl() + "&access_token=" + encodeURIComponent(AuthenticationService.getAccessToken())
-            scope.uriUpload =uri;
-          };*/
         }
       };
     }
