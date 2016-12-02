@@ -1,4 +1,7 @@
 #!/bin/bash
+
+[[ -f ~/.nvm/nvm.sh ]] && source ~/.nvm/nvm.sh
+
 set -e
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 npm update
