@@ -32,7 +32,7 @@ require.config({
         "autofill-event": "../bower_components/autofill-event/src/autofill-event",
 
         "async": "../bower_components/async/lib/async",
-        "plupload": "../bower_components/plupload/js/plupload",
+        "plupload": "../bower_components/plupload/js/plupload.min",
         "tracekit": "../bower_components/tracekit/tracekit",
 
 
