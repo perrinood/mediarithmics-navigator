@@ -32,8 +32,7 @@ require.config({
         "autofill-event": "../bower_components/autofill-event/src/autofill-event",
 
         "async": "../bower_components/async/lib/async",
-        "moxie": "../bower_components/plupload/js/moxie",
-        "plupload": "../bower_components/plupload/js/plupload.dev",
+        "plupload": "../bower_components/plupload/js/plupload",
         "tracekit": "../bower_components/tracekit/tracekit",
 
 
@@ -78,7 +77,7 @@ require.config({
         'ngBootstrap': ['angular', 'bootstrap', 'jqDaterangepicker'],
         'ui': ['angular'],
         'ngTable': ['angular'],
-        'plupload': {deps: ['moxie'], exports: 'plupload'},
+        'plupload': {exports: 'plupload'},
         'ui.router': ['angular'],
         'ui.router.extras': ['angular', 'ui.router'],
         'ngload': ['angularAMD'],
