@@ -1,7 +1,7 @@
 define(['./module'], function (module) {
 
   'use strict';
-
+ 
   module.controller("core/visitAnalysers/ChooseVisitAnalyserController", [
     "$scope", "$uibModal", "$log",
     function($scope, $uibModal, $log) {

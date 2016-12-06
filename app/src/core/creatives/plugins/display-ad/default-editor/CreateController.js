@@ -14,7 +14,7 @@ define(['./module'], function (module) {
         {name: "External ad server", groupId: "com.mediarithmics.creative.display", artifactId: "external-display-ad-renderer"}
       ];
       // TODO handle multiple groups / artifacts renderers according to the organisation
-      if ($scope.organisationId === 1051) {
+      if ($scope.organisationId === "1051") {
         $scope.groupArtifacts.push({name: "Ividence template", groupId: "com.ividence", artifactId: "display-ad-renderer"});
       }
       $scope.wrapper = {
