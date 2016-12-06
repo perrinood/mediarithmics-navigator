@@ -17,18 +17,18 @@
           <label for="name">Ad Name</label>
           <input ng-model="wrapper.name" type="text" class="form-control input-lg" id="name">
         </div>
-
-        <label><input type="radio" name="artifactId" ng-model="wrapper.artifactId" value="image-iframe"> Image file (.png, .jpg, .gif)</label><br>
-        <label><input type="radio" name="artifactId" ng-model="wrapper.artifactId" value="image-script"> Image file (.png, .jpg, .gif), for skins</label><br>
-        <label><input type="radio" name="artifactId" ng-model="wrapper.artifactId" value="flash-iframe"> Flash file (.swf)</label><br>
-        <label><input type="radio" name="artifactId" ng-model="wrapper.artifactId" value="dynamic-template"> Dynamic template</label><br>
-        <label><input type="radio" name="artifactId" ng-model="wrapper.artifactId" value="external-display-ad-renderer">External ad server</label><br>
+        <div ng-repeat="ga in groupArtifacts">
+          <label>
+            <input type="radio" ng-model="wrapper.groupArtifact" ng-value="ga">
+            {{ga.name}}
+          </label>
+        </div>
       </div>
     </div>
 
     <div class="mcs-actions-group">
-      <button class="mics-btn mics-btn-finish">Done</button>
-      <button type="button" class="mics-btn mics-btn-finish" ng-click="doneAndEdit()">Done &amp; Edit</button>
+      <button class="mics-btn mics-btn-finish" ng-disabled="disabled()">Done</button>
+      <button type="button" class="mics-btn mics-btn-finish" ng-disabled="disabled()" ng-click="doneAndEdit()">Done &amp; Edit</button>
       <button type="button" class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
     </div>
   </form>
