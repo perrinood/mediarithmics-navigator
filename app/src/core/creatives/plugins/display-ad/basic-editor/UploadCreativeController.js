@@ -12,8 +12,10 @@ define(['./module'], function (module) {
       };
 
       $scope.step = 'step0';
-      $scope.destination_domain = null;
-      $scope.url = null;
+      $scope.params = {
+        url: null,
+        destination_domain: null
+      };
       // For the page
       $scope.newCreativesWrapper = [];
 
@@ -49,6 +51,10 @@ define(['./module'], function (module) {
         }
       });
 
+      $scope.canFinalizeCreation = function () {
+        return !!$scope.params.url && !!$scope.params.destination_domain;
+      };
+
       function saveCreativeWrapper(userDefinedCreative) {
         var isFlash = userDefinedCreative.asset.mime_type === "application/x-shockwave-flash";
         var options = {
@@ -68,9 +74,9 @@ define(['./module'], function (module) {
 
         creativeContainer.value.name = userDefinedCreative.creative.name;
         creativeContainer.value.format = userDefinedCreative.asset.width + "x" + userDefinedCreative.asset.height;
-        creativeContainer.value.destination_domain = $scope.destination_domain;
+        creativeContainer.value.destination_domain = $scope.params.destination_domain;
         creativeContainer.value.subtype = "BANNER";
-        creativeContainer.getOrCreatePropertyValueByTechnicalName("destination_url").value = {"url": $scope.url};
+        creativeContainer.getOrCreatePropertyValueByTechnicalName("destination_url").value = {"url": $scope.params.url};
         if (isFlash) {
           creativeContainer.getOrCreatePropertyValueByTechnicalName("flash").value = {"asset_id": userDefinedCreative.asset.id};
         } else {
@@ -87,6 +93,11 @@ define(['./module'], function (module) {
       }
 
       $scope.done = function() {
+
+        if (!$scope.canFinalizeCreation()) {
+          return;
+        }
+
         var promises = _.map($scope.newCreativesWrapper, saveCreativeWrapper);
 
         $q.all(promises).then(function () {
