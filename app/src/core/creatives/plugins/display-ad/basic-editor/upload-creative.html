@@ -10,11 +10,11 @@
 
     <div ng-show="newCreativesWrapper.length && step == 'step2'">
       <div mcs-form-group="" label-for="name" label-text="Destination domain">
-        <input ng-model="$parent.$parent.destination_domain" type="text" class="form-control input" id="destination_dom" pattern="^([a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]\.)+([a-zA-Z0-9]{2,})$"/>
+        <input ng-model="params.destination_domain" required type="text" class="form-control input" id="destination_dom" pattern="^([a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]\.)+([a-zA-Z0-9]{2,})$"/>
         <span id="helpBlock" class="help-block">This is the final redirect location domain (without http or params)<br/>eg: destination.mybrand.com</span>
       </div>
       <div mcs-form-group="" label-for="destinationUrlProperty" label-text="Destination URL">
-        <input class="form-control" ng-model="url" type="url" id="destinationUrlProperty">
+        <input class="form-control" required ng-model="params.url" type="url" id="destinationUrlProperty">
             <span id="helpBlock" class="help-block">
                 This is the URL where the user will be redirected to. You may use a click tracker.
                 <br/> eg: http://redirect.to/mypage
@@ -34,6 +34,6 @@
   <div class="modal-footer">
     <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
     <a ng-show="step == 'step1'" class="mics-btn mics-btn-finish" ng-click="next()">Next</a>
-    <a ng-show="step == 'step2'" ng-click="done()" class="mics-btn mics-btn-finish">Done</a>
+    <a ng-show="step == 'step2'" ng-click="done()" ng-disabled="!canFinalizeCreation()" class="mics-btn mics-btn-finish">Done</a>
   </div>
 </div>

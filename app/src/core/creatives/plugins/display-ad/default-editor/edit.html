@@ -24,7 +24,7 @@
       <!-- Format -->
       <div class="col-md-4">
         <div mcs-form-group="full" label-for="format" label-text="Format">
-          <select ng-disabled="disabledEdition" ng-model="displayAd.format" ng-options="iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+          <select ng-disabled="disabledEdition" ng-model="displayAd.format" required ng-options="iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
         </div>
       </div>
     </div>
@@ -32,8 +32,9 @@
     <div class="row">
       <div class="col-md-8">
         <div mcs-form-group="full" label-for="destination_dom" label-text="Destination domain">
-          <input ng-disabled="disabledEdition" ng-model="displayAd.destination_domain" type="text" class="form-control input" id="destination_dom" pattern="^([a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]\.)+([a-zA-Z0-9]{2,})$">
-          <span id="helpBlock" class="help-block">This is the final redirect location domain (without http or params)<br/>eg: destination.mybrand.com</span>
+          <input ng-disabled="disabledEdition" ng-model="displayAd.destination_domain" required type="text" class="form-control input" id="destination_dom" pattern="^([a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]\.)+([a-zA-Z0-9]{2,})$">
+            <span id="helpBlock" class="help-block">This is the final redirect location domain (without http or params) <br/>
+                eg: destination.mybrand.com</span>
         </div>
       </div>
     </div>
@@ -64,9 +65,9 @@
     </div>
     <!-- save or cancel -->
     <div class="mcs-actions-group">
-      <button class="mics-btn mics-btn-finish" ng-click="save(disabledEdition)">Done</button>
-      <button ng-disabled="disabledEdition || !form.$valid" class="mics-btn mics-btn-finish" ng-click="saveAndRefresh()">Save &amp; Refresh</button>
-      <button ng-disabled="disabledEdition || !form.$valid" class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+      <button ng-disabled="!form.$valid" class="mics-btn mics-btn-finish" ng-click="save(disabledEdition)">Done</button>
+      <button ng-disabled="!form.$valid" ng-if="!disabledEdition" class="mics-btn mics-btn-finish" ng-click="saveAndRefresh()">Save &amp; Refresh</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
     </div>
   </form>
 </div>
