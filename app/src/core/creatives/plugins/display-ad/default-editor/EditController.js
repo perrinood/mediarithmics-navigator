@@ -71,6 +71,18 @@ define(['./module'], function (module) {
         DisplayAdService.reset();
         $location.path(Session.getWorkspacePrefixUrl() + '/creatives/display-ad');
       };
+
+      $scope.findWarnings = function (propertyContainer) {
+        var property = propertyContainer.value;
+        var warnings = [];
+        switch(property.technical_name) {
+          case "tag":
+            if (property.value && property.value.value && property.value.value.substr(0, 7) === "http://") {
+              warnings.push("The tag isn't in https, the creative will not be displayed on secured websites.");
+            }
+        }
+        return warnings;
+      };
     }
   ]);
 });

@@ -60,6 +60,17 @@
           <mcs-text-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'STRING'"></mcs-text-property>
           <mcs-ad-layout-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" plugin-id="displayAd.renderer_plugin_id" plugin-version-id="displayAd.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
           <mcs-style-sheet-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
+
+          <div ng-repeat="warning in findWarnings(property)">
+            <div class="mcs-form-row">
+              <div class="mcs-form-group mcs-form-group-default">
+                <p class="alert alert-warning">
+                {{warning}}
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
