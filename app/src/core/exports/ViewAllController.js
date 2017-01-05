@@ -10,7 +10,7 @@ define(['./module'], function (module) {
       $scope.currentPage = 1;
       $scope.itemsPerPage = 10;
 
-      Restangular.all('exports').getList({organisation_id: organisationId, max_result: 200}).then(function (exports) {
+      Restangular.all('exports').getList({organisation_id: organisationId, max_results: 200}).then(function (exports) {
         $scope.exports = exports;
       });
 
