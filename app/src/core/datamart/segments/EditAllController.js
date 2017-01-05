@@ -9,15 +9,24 @@ define(['./module'], function (module) {
 
   module.controller('core/datamart/segments/EditAllController', [
     '$scope', 'Restangular', 'core/common/auth/Session', '$location', '$uibModal', 'core/datamart/segments/report/AudienceSegmentAnalyticsReportService', 'moment',
-    function ($scope, Restangular, Session, $location, $uibModal, AudienceSegmentAnalyticsReportService, moment) {
+    '$filter',
+    function ($scope, Restangular, Session, $location, $uibModal, AudienceSegmentAnalyticsReportService, moment, $filter) {
       var datamartId = Session.getCurrentWorkspace().datamart_id;
-      Restangular.all('audience_segments').getList({datamart_id: datamartId}).then(function (segments) {
+
+      $scope.currentPage = 1;
+      $scope.itemsPerPage = 10;
+
+      Restangular.all('audience_segments').getList({datamart_id: datamartId, max_results: 200}).then(function (segments) {
         var filteredSegments = segments.filter(function (seg){
           return seg.type !== 'USER_PARTITION';
         });
         $scope.segments = filteredSegments;
         $scope.sortType = 'name';
       });
+
+      $scope.filteredSegments = function() {
+        return $filter('filter')($scope.segments, $scope.searchInput);
+      };
 
       $scope.reportDateRange = {startDate: moment(), endDate: moment()};
       var todayDate = {startDate: moment(), endDate: moment()};
