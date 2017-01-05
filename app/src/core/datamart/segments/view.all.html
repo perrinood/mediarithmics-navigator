@@ -57,7 +57,7 @@
         </tr>
       </thead>
       <tbody>
-      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in segments | orderBy:sortType:reverseSort | filter:searchInput">
+      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in filteredSegments() | orderBy:sortType:reverseSort |offset: (currentPage - 1)*itemsPerPage | limitTo: itemsPerPage">
         <td>{{segment.name}}</td>
         <td>{{segment.technical_name}}</td>
         <td>{{segment.type}}</td>
@@ -84,5 +84,10 @@
       </tr>
       </tbody>
     </table>
+    <uib-pagination 
+      total-items="filteredSegments().length" 
+      ng-model="currentPage" 
+      items-per-page="itemsPerPage">
+    </uib-pagination>
   </div>
 </div>
