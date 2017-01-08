@@ -1,0 +1,183 @@
+<div class="mcs-default-container email-campaign-report" ng-controller="core/campaigns/emails/CampaignReportController">
+  <div class="report mcs-default-content">
+    <div class="report-heading">
+      <h2>
+        <div class="pull-right">
+          <a class="mics-btn mics-btn-action" ng-click="editCampaign(campaign)">Edit Campaign</a>
+        </div>
+        <span>{{campaign.name}}</span>
+
+        <div mics-campaign-status="campaign"></div>
+        &nbsp;
+        <button type="button" class="mics-btn mics-btn-action btn-xs" ng-click="refresh()">
+          <span class="glyphicon glyphicon-refresh"></span>
+          Refresh
+        </button>
+      </h2>
+    </div>
+
+    <div ng-class="chartArea">
+      <div class="row">
+        <div class="col-xs-3">
+          <nvd3 options="options1" data="data1"></nvd3>
+          <div class="info-details">
+            <h2 class="main-info">468<br><span>Opened</span></h2>
+            <br>
+            <table class="mics-table">
+              <tbody>
+              <tr>
+                <td>Total opened</td>
+                <td>123</td>
+              </tr>
+              <tr>
+                <td>Average time to open</td>
+                <td>2h 24m 15s</td>
+              </tr>
+              <tr>
+                <td>Complaints</td>
+                <td>123</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <nvd3 options="options2" data="data2"></nvd3>
+          <div class="info-details">
+            <h2 class="main-info">56<br><span>Clicked</span></h2>
+            <br>
+            <table class="mics-table">
+              <tbody>
+              <tr>
+                <td>Total clicks</td>
+                <td>78</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <nvd3 options="options3" data="data3"></nvd3>
+          <div class="info-details">
+            <table class="mics-table">
+              <h2 class="main-info">0<br><span>Unsubscribed</span></h2>
+              <br>
+              <tbody>
+              <tr>
+                <td>Total received</td>
+                <td>977</td>
+              </tr>
+              <tr>
+                <td>Delivered</td>
+                <td>963</td>
+              </tr>
+              <tr>
+                <td>Soft bounced</td>
+                <td>11</td>
+              </tr>
+              <tr>
+                <td>Hard bounced</td>
+                <td>3</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="side-info">
+            <p>Sent on</p>
+            <h3>Tuesday 21/06/2016, 11:30 AM</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- Tab set: Ads, AdGroups and Sites -->
+
+    <div class="breakdown-area">
+      <div class="panel-body">
+        <uib-tabset class="breakdown">
+
+          <!--Sites Tab-->
+          <uib-tab heading="Domain">
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortSitesBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSitesBy(info.key)" class="metrics" ng-repeat="info in sites[0].info">
+                  {{ adPerformance.getMetricName(info.key) }}
+                  <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </uib-tab>
+
+          <!--Audience Segment Tab-->
+          <uib-tab heading="Audience Segments">
+            <h4>Targeted Segments</h4>
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortDiscoveredSegmentsBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                  {{ adPerformance.getMetricName(metric.key) }}
+                  <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <!--<tr ng-repeat="segment in targetedSegments">-->
+              <!--<td>{{segment.name}}</td>-->
+              <!--<td class="metrics" ng-repeat="metric in segment.metrics">-->
+              <!--<span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>-->
+              <!--<span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>-->
+              <!--<span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>-->
+              <!--<span ng-if="!metric.type || metric.value == undefined"> - </span>-->
+              <!--</td>-->
+              <!--</tr>-->
+              </tbody>
+            </table>
+            <br>
+            <h4>Discovered Segments</h4>
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortDiscoveredSegmentsBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                  {{ adPerformance.getMetricName(metric.key) }}
+                  <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <!--<tr ng-repeat="segment in discoveredSegments">-->
+              <!--<td>{{segment.name}}</td>-->
+              <!--<td class="metrics" ng-repeat="metric in segment.metrics">-->
+              <!--<span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>-->
+              <!--<span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>-->
+              <!--<span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>-->
+              <!--<span ng-if="!metric.type || metric.value == undefined"> - </span>-->
+              <!--</td>-->
+              <!--</tr>-->
+              </tbody>
+            </table>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+    </div>
+  </div>
+</div>
