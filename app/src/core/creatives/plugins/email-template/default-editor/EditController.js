@@ -3,41 +3,45 @@ define(['./module'], function (module) {
 
   module.controller('core/creatives/plugins/email-template/default-editor/EditController', [
     '$scope', '$log', '$location', '$stateParams', 'core/common/auth/Session', 'core/creatives/CreativePluginService',
-    'Restangular', '$uibModal','core/common/WaitingService','core/common/ErrorService',
-    'core/creatives/plugins/email-template/EmailTemplateService', 'core/common/properties/RendererPluginInstanceContainer','lodash',
-    function ($scope, $log, $location, $stateParams, Session, CreativePluginService, Restangular, $uibModal, WaitingService, ErrorService, EmailTemplateService, RendererPluginInstanceContainer, _) {
+    'Restangular', '$uibModal', 'core/common/WaitingService', 'core/common/ErrorService',
+    'core/creatives/plugins/email-template/EmailTemplateService', 'core/common/properties/RendererPluginInstanceContainer', 'lodash',
+    function ($scope, $log, $location, $stateParams, Session, CreativePluginService,
+              Restangular, $uibModal, WaitingService, ErrorService,
+              EmailTemplateService, RendererPluginInstanceContainer, _) {
+      $scope.previewWidth = 750;
+      $scope.previewHeight = 500;
 
-      function writeToIfrm(ifrm,content){
-        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-        ifrm.document.open();
-        ifrm.document.write(content);
-        ifrm.document.close();
+      function writeToIframe(iframe, content) {
+        iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
+        iframe.document.open();
+        iframe.document.write(content);
+        iframe.document.close();
       }
 
-      function loadPreview(creativeId){
-        var rawResponseRestangular = Restangular.withConfig(function(RestangularConfigurer) {
-          RestangularConfigurer.setResponseExtractor(function(data, operation, what, url, response, deferred) {
+      function loadPreview(creativeId) {
+        var rawResponseRestangular = Restangular.withConfig(function (RestangularConfigurer) {
+          RestangularConfigurer.setResponseExtractor(function (data, operation, what, url, response, deferred) {
             return response.data;
           });
         });
         rawResponseRestangular.one('email_templates', creativeId).one('preview').get()
-        .then(function(emailRenderResponse){
-          $scope.emailRenderResponse = emailRenderResponse;
+          .then(function (emailRenderResponse) {
+            $scope.emailRenderResponse = emailRenderResponse;
 
-          var ifrmHtml = document.getElementById('email-preview-html');
-          writeToIfrm(ifrmHtml, emailRenderResponse.content ? emailRenderResponse.content.html : "");
+            var iframeHtml = document.getElementById('email-preview-html');
+            writeToIframe(iframeHtml, emailRenderResponse.content ? emailRenderResponse.content.html : "");
 
-          var ifrmText = document.getElementById('email-preview-text');
-          writeToIfrm(ifrmText, emailRenderResponse.content ? emailRenderResponse.content.text : "");
+            var iframeText = document.getElementById('email-preview-text');
+            writeToIframe(iframeText, emailRenderResponse.content ? emailRenderResponse.content.text : "");
 
-        }, function error(reason){
-          var ifrmError = document.getElementById('email-preview-error');
-          if (reason.data && reason.data.error_id){
-            writeToIfrm(ifrmError, "error_id:"+reason.data.error_id);
-          }else{
-            writeToIfrm(ifrmError, reason.data);
-          }
-        });
+          }, function error(reason) {
+            var iframeError = document.getElementById('email-preview-error');
+            if (reason.data && reason.data.error_id) {
+              writeToIframe(iframeError, "error_id:" + reason.data.error_id);
+            } else {
+              writeToIframe(iframeError, reason.data);
+            }
+          });
 
       }
 
@@ -45,35 +49,45 @@ define(['./module'], function (module) {
 
       $scope.organisationId = $stateParams.organisation_id;
       $scope.emailTemplateCtn = new RendererPluginInstanceContainer({}, endpoint);
-      $scope.emailTemplateCtn.load($stateParams.creative_id).then(function(result){
-          loadPreview($stateParams.creative_id);
+      $scope.emailTemplateCtn.load($stateParams.creative_id).then(function (result) {
+        loadPreview($stateParams.creative_id);
       });
 
       //TODO uncomment when logo is ready
       // CreativePluginService.getCreativeTemplateFromEditor("com.mediarithmics.template.email", "basic-editor").then(function (template) {
-        // $scope.creativeTemplate = template;
+      // $scope.creativeTemplate = template;
       // });
 
       $scope.addProperty = function () {
-          var newScope = $scope.$new(true);
-          $uibModal.open({
-              templateUrl: 'src/core/common/properties/create-property.html',
-              scope: newScope,
-              backdrop: 'static',
-              controller: 'core/common/properties/CreatePropertyController'
-          }).result.then(function ok(property){
-            $scope.emailTemplateCtn.createProperty(property.technical_name, property.property_type, property.value);
-          });
+        var newScope = $scope.$new(true);
+        $uibModal.open({
+          templateUrl: 'src/core/common/properties/create-property.html',
+          scope: newScope,
+          backdrop: 'static',
+          controller: 'core/common/properties/CreatePropertyController'
+        }).result.then(function ok(property) {
+          $scope.emailTemplateCtn.createProperty(property.technical_name, property.property_type, property.value);
+        });
+      };
+
+      $scope.iframeComputerSize = function() {
+        $scope.previewWidth = 750;
+        $scope.previewHeight = 500;
+      };
+
+      $scope.iframePhoneSize = function() {
+        $scope.previewWidth = 375;
+        $scope.previewHeight = 667;
       };
 
       $scope.save = function () {
         WaitingService.showWaitingModal();
         var promise = $scope.emailTemplateCtn.save();
 
-        promise.then(function success(){
+        promise.then(function success() {
           WaitingService.hideWaitingModal();
           $location.path(Session.getWorkspacePrefixUrl() + '/creatives/email-template');
-        }, function failure(reason){
+        }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
             error: reason
@@ -85,10 +99,10 @@ define(['./module'], function (module) {
         WaitingService.showWaitingModal();
         var promise = $scope.emailTemplateCtn.save();
 
-        promise.then(function success(){
+        promise.then(function success() {
           WaitingService.hideWaitingModal();
           loadPreview($stateParams.creative_id);
-        }, function failure(reason){
+        }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
             error: reason
@@ -100,11 +114,11 @@ define(['./module'], function (module) {
         $location.path(Session.getWorkspacePrefixUrl() + '/creatives/email-template');
       };
 
-      $scope.refreshPreview = function() {
+      $scope.refreshPreview = function () {
         loadPreview($stateParams.creative_id);
       };
 
-      $scope.getRendererLabel = function(groupId, artifactId) {
+      $scope.getRendererLabel = function (groupId, artifactId) {
         return EmailTemplateService.getRendererLabel(groupId, artifactId);
       };
 

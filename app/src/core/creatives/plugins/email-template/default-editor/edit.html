@@ -11,13 +11,13 @@
 
   <form name="form" role="form" class="mcs-default-edit-content mcs-full-page-form">
     <div class="mcs-default-heading">
-      <h1>Email Template</h1>
+      <h1>Email Message</h1>
     </div>
 
     <div class="row">
       <!-- Name -->
       <div class="col-md-4">
-        <div mcs-form-group="full" label-for="name" label-text="Ad name">
+        <div mcs-form-group="full" label-for="name" label-text="Name">
           <input ng-model="emailTemplateCtn.value.name" type="text" class="form-control input-lg" id="name">
         </div>
       </div>
@@ -48,29 +48,58 @@
           <mcs-style-sheet-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
         </div>
       </div>
+
+
       <div class="col-md-6">
-        <h3>Preview</h3>
-        <div ng-show="!emailRenderResponse">
-          <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-error"></iframe>
-        </div>
-        <uib-tabset class="breakdown" ng-show="emailRenderResponse">
-            <uib-tab heading="Rich media">
-              <br>
-              <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-html"></iframe>
+        <uib-tabset class="breakdown">
+
+          <!--Sites Tab-->
+          <uib-tabset class="breakdown">
+            <uib-tab heading="Preview">
+              <div ng-show="!emailRenderResponse">
+                <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-error"></iframe>
+              </div>
+              <div ng-show="emailRenderResponse">
+                <br>
+                <div class="row">
+                  <div class="col-xs-10"></div>
+                  <div class="col-xs-2">
+                    <button ng-click="iframeComputerSize()" class="btn btn-default">
+                      <img src="images/datamart/device_pc.svg" width="20" height="20" />
+                    </button>
+                    <button ng-click="iframePhoneSize()" class="btn btn-default">
+                      <img src="images/datamart/device_phone.svg" width="20" height="20" />
+                    </button>
+                  </div>
+                </div>
+                <br>
+                <iframe class="email-preview" sandbox="allow-same-origin"  frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" id="email-preview-html"></iframe>
+              </div>
             </uib-tab>
-            <uib-tab heading="Text">
-              <br>
-              <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-text"></iframe>
+            <uib-tab heading="HTML">
+              <div>
+                <!--Add Editor-->
+              </div>
             </uib-tab>
-            <uib-tab heading="Data">
-              <br>
-              <pre>{{emailRenderResponse.data | json}}</pre>
-            </uib-tab>
-        </uib-tabset>
+          </uib-tabset>
+          <!--<uib-tabset class="breakdown" ng-show="emailRenderResponse">-->
+          <!--<uib-tab heading="Rich media">-->
+          <!--<br>-->
+          <!--<iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-html"></iframe>-->
+          <!--</uib-tab>-->
+          <!--<uib-tab heading="Text">-->
+          <!--<br>-->
+          <!--<iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-text"></iframe>-->
+          <!--</uib-tab>-->
+          <!--<uib-tab heading="Data">-->
+          <!--<br>-->
+          <!--<pre>{{emailRenderResponse.data | json}}</pre>-->
+          <!--</uib-tab>-->
+          <!--</uib-tabset>-->
 
       </div>
     </div>
-  
+
     <!-- save or cancel -->
     <div class="mcs-actions-group">
       <button class="mics-btn mics-btn-finish" ng-click="save()">Done</button>
