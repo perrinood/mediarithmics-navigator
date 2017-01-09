@@ -21,21 +21,21 @@
         <div class="col-xs-3">
           <nvd3 options="options1" data="data1"></nvd3>
           <div class="info-details">
-            <h2 class="main-info">468<br><span>Opened</span></h2>
+            <h2 class="main-info">{{mainInfo.opened}}<br><span>Opened</span></h2>
             <br>
             <table class="mics-table">
               <tbody>
               <tr>
                 <td>Total opened</td>
-                <td>123</td>
+                <td>{{mainInfo.totalOpened}}</td>
               </tr>
               <tr>
                 <td>Average time to open</td>
-                <td>2h 24m 15s</td>
+                <td>{{mainInfo.timeToOpen}}</td>
               </tr>
               <tr>
                 <td>Complaints</td>
-                <td>123</td>
+                <td>{{mainInfo.complaints}}</td>
               </tr>
               </tbody>
             </table>
@@ -44,13 +44,13 @@
         <div class="col-xs-3">
           <nvd3 options="options2" data="data2"></nvd3>
           <div class="info-details">
-            <h2 class="main-info">56<br><span>Clicked</span></h2>
+            <h2 class="main-info">{{mainInfo.clicked}}<br><span>Clicked</span></h2>
             <br>
             <table class="mics-table">
               <tbody>
               <tr>
                 <td>Total clicks</td>
-                <td>78</td>
+                <td>{{mainInfo.totalClicks}}</td>
               </tr>
               </tbody>
             </table>
@@ -60,24 +60,24 @@
           <nvd3 options="options3" data="data3"></nvd3>
           <div class="info-details">
             <table class="mics-table">
-              <h2 class="main-info">0<br><span>Unsubscribed</span></h2>
+              <h2 class="main-info">{{mainInfo.unsubscribed}}<br><span>Unsubscribed</span></h2>
               <br>
               <tbody>
               <tr>
                 <td>Total received</td>
-                <td>977</td>
+                <td>{{mainInfo.totalReceived}}</td>
               </tr>
               <tr>
                 <td>Delivered</td>
-                <td>963</td>
+                <td>{{mainInfo.delivered}}</td>
               </tr>
               <tr>
                 <td>Soft bounced</td>
-                <td>11</td>
+                <td>{{mainInfo.softBounced}}</td>
               </tr>
               <tr>
                 <td>Hard bounced</td>
-                <td>3</td>
+                <td>{{mainInfo.hardBounced}}</td>
               </tr>
               </tbody>
             </table>
@@ -86,7 +86,7 @@
         <div class="col-xs-3">
           <div class="side-info">
             <p>Sent on</p>
-            <h3>Tuesday 21/06/2016, 11:30 AM</h3>
+            <h3>{{mainInfo.date}}</h3>
           </div>
         </div>
       </div>
