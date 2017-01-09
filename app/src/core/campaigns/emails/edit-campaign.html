@@ -37,34 +37,6 @@
       <input ng-model="campaignCtn.value.reply_to" type="text" class="form-control input-lg" id="reply_to"/>
     </div>
 
-    <!------------------------ Select template (creative)------------------------>
-    <div class="mcs-form-group">
-      <div class="mics-block-heading">
-        <div class="btn-group">
-          <a class="mics-btn mics-btn-add" ng-click="selectExistingEmailTemplates()">Select email template</a>
-        </div>
-        <span>Email template</span>
-      </div>
-        <table class="fragment-list-audience-segment" ng-show="campaignCtn.emailTemplates.length">
-          <thead>
-          <tr>
-            <th>Email template name</th>
-            <th>Created</th>
-            <th class="actions">Action</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="template in campaignCtn.emailTemplates" fetch-creative="template.email_template_id as creative with rendererProperties">
-            <td>{{creative.name}}</td>
-            <td>{{creative.created}}</td>
-            <td class="actions">
-              <button class="mics-btn mics-btn-delete" ng-click="removeTemplate(template)">Remove</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-    </div>
-
     <!------------------------ Select Audience Segments ------------------------>
     <div class="mcs-form-group">
       <div class="mics-block-heading">
@@ -91,6 +63,42 @@
       </table>
     </div>
 
+    <!------------------------ Select template (creative)------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-add" ng-click="selectExistingEmailTemplates()">Select email template</a>
+        </div>
+        <span>Email template</span>
+      </div>
+      <div class="row" ng-show="campaignCtn.emailTemplates.length">
+        <div class="col-md-12">
+          <h3>Preview</h3>
+          <iframe class="creative-preview" frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" ng-src="{{previewUrl}}"></iframe>
+        </div>
+      </div>
+
+      <!--<table class="fragment-list-audience-segment" ng-show="campaignCtn.emailTemplates.length">-->
+        <!--<thead>-->
+        <!--<tr>-->
+          <!--<th>Email template name</th>-->
+          <!--<th>Created</th>-->
+          <!--<th class="actions">Action</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr ng-repeat="template in campaignCtn.emailTemplates" fetch-creative="template.email_template_id as creative with rendererProperties">-->
+          <!--<td>{{creative.name}}</td>-->
+          <!--<td>{{creative.created}}</td>-->
+          <!--<td class="actions">-->
+            <!--<button class="mics-btn mics-btn-delete" ng-click="removeTemplate(template)">Remove</button>-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+      <!--</table>-->
+    </div>
+
+
     <!------------------------ Advanced options ------------------------>
     <div class="panel-group" id="accordion">
       <div class="panel panel-default">
@@ -115,10 +123,11 @@
                 <span>Email routers</span>
                 <a class="mics-btn mics-btn-add" uib-dropdown-toggle type="button" ng-click="addEmailRouters()">Add Email Router</a>
               </div>
-            </div><br>
+            </div>
+            <br>
             <div class="row" ng-show="campaignCtn.emailRouters.length">
               <div class="col-md-12">
-                <table class="mics-table" >
+                <table class="mics-table">
                   <thead>
                   <tr>
                     <th>Email Router Name</th>
