@@ -17,7 +17,7 @@ define(['./module'], function (module) {
       // Archived
       $scope.displayArchived = false;
       var options = {
-        max_results: 200,
+        max_results: 300,
         organisation_id: Session.getCurrentWorkspace().organisation_id,
         creative_type: 'DISPLAY_AD'
       };
