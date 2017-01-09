@@ -230,7 +230,6 @@ label {
   border: 1px black !important;
 }
 
-
 .mics-block-heading {
   background: $mcs-light-grey;
   padding: 21px;
@@ -3019,7 +3018,6 @@ a.category-item {
   }
 }
 
-
 /**
  * ------------------------------------------------ Email Dashboard ---------------------------------------------------------
  */
@@ -3056,4 +3054,8 @@ a.category-item {
 .email-preview {
   border: 1px solid #111111;
   box-sizing: content-box
+}
+
+.ace_editor {
+  height: 500px;
 }

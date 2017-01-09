@@ -1,4 +1,4 @@
-define(['./module'], function (module) {
+define(['./module', 'ui.ace'], function (module) {
   'use strict';
 
   module.controller('core/creatives/plugins/email-template/default-editor/EditController', [
@@ -10,6 +10,18 @@ define(['./module'], function (module) {
               EmailTemplateService, RendererPluginInstanceContainer, _) {
       $scope.previewWidth = 750;
       $scope.previewHeight = 500;
+      $scope.htmlContent = "<!DOCTYPE html>\n<html>\n<body>\n\n<h1>My First Heading</h1>\n<p>My first paragraph.</p>\n\n</body>\n</html>";
+
+      // Ace Editor Options
+      $scope.aceOptions = {
+        mode: "html",
+        onLoad: function (_ace) {
+          // HACK to have the ace instance in the scope
+          $scope.modeChanged = function () {
+            _ace.getSession().setMode("ace/mode/html");
+          };
+        }
+      };
 
       function writeToIframe(iframe, content) {
         iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
@@ -27,13 +39,8 @@ define(['./module'], function (module) {
         rawResponseRestangular.one('email_templates', creativeId).one('preview').get()
           .then(function (emailRenderResponse) {
             $scope.emailRenderResponse = emailRenderResponse;
-
             var iframeHtml = document.getElementById('email-preview-html');
-            writeToIframe(iframeHtml, emailRenderResponse.content ? emailRenderResponse.content.html : "");
-
-            var iframeText = document.getElementById('email-preview-text');
-            writeToIframe(iframeText, emailRenderResponse.content ? emailRenderResponse.content.text : "");
-
+            writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
           }, function error(reason) {
             var iframeError = document.getElementById('email-preview-error');
             if (reason.data && reason.data.error_id) {
@@ -70,12 +77,12 @@ define(['./module'], function (module) {
         });
       };
 
-      $scope.iframeComputerSize = function() {
+      $scope.iframeComputerSize = function () {
         $scope.previewWidth = 750;
         $scope.previewHeight = 500;
       };
 
-      $scope.iframePhoneSize = function() {
+      $scope.iframePhoneSize = function () {
         $scope.previewWidth = 375;
         $scope.previewHeight = 667;
       };

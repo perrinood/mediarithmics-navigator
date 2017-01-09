@@ -13,6 +13,7 @@ define(['angular'], function () {
       'ui.keypress',
       'ui.unique',
       'ui.router',
+      'ui.ace',
       'ct.ui.router.extras',
       'nvd3',
       'core/configuration',

@@ -56,30 +56,29 @@
           <!--Sites Tab-->
           <uib-tabset class="breakdown">
             <uib-tab heading="Preview">
+              <br>
               <div ng-show="!emailRenderResponse">
                 <iframe sandbox="allow-same-origin" frameborder="0" width="750" height="500" id="email-preview-error"></iframe>
               </div>
               <div ng-show="emailRenderResponse">
-                <br>
                 <div class="row">
                   <div class="col-xs-10"></div>
                   <div class="col-xs-2">
                     <button ng-click="iframeComputerSize()" class="btn btn-default">
-                      <img src="images/datamart/device_pc.svg" width="20" height="20" />
+                      <img src="images/datamart/device_pc.svg" width="20" height="20"/>
                     </button>
                     <button ng-click="iframePhoneSize()" class="btn btn-default">
-                      <img src="images/datamart/device_phone.svg" width="20" height="20" />
+                      <img src="images/datamart/device_phone.svg" width="20" height="20"/>
                     </button>
                   </div>
                 </div>
                 <br>
-                <iframe class="email-preview" sandbox="allow-same-origin"  frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" id="email-preview-html"></iframe>
+                <iframe class="email-preview" sandbox="allow-same-origin" frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" id="email-preview-html"></iframe>
               </div>
             </uib-tab>
             <uib-tab heading="HTML">
-              <div>
-                <!--Add Editor-->
-              </div>
+              <br>
+              <div ui-ace="aceOptions" ng-model="htmlContent"></div>
             </uib-tab>
           </uib-tabset>
           <!--<uib-tabset class="breakdown" ng-show="emailRenderResponse">-->
