@@ -119,10 +119,9 @@ define(['./module', 'ui.ace'], function (module) {
 
       $scope.sendEmail = function () {
         if ($scope.recipient !== undefined && $scope.htmlContent !== undefined && $scope.organisationId !== undefined) {
-          Restangular.one('email_templates', $stateParams.creative_id).one('send_test').post({
+          Restangular.one('email_templates', $stateParams.creative_id).all('send_test').post({
             organisation_id: $scope.organisationId,
-            email: $scope.recipient,
-            html: $scope.htmlContent
+            email: $scope.recipient
           }).then(function() {
             $scope.messageSent = "Message sent";
           });
