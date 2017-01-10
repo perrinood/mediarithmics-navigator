@@ -33,7 +33,7 @@
     "grunt-google-cdn": "~0.2.0",
     "grunt-karma": "0.8.2",
     "grunt-newer": "~0.5.4",
-    "grunt-nexus-deployer": "0.0.4",
+    "grunt-nexus-deployer": "0.2.0",
     "grunt-ngmin": "~0.0.2",
     "grunt-rev": "~0.1.0",
     "grunt-shell": "^0.7.0",
