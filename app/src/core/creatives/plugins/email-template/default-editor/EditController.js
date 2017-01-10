@@ -10,7 +10,8 @@ define(['./module', 'ui.ace'], function (module) {
               EmailTemplateService, RendererPluginInstanceContainer, _) {
       $scope.previewWidth = 750;
       $scope.previewHeight = 500;
-      $scope.htmlContent = "<!DOCTYPE html>\n<html>\n<body>\n\n<h1>My First Heading</h1>\n<p>My first paragraph.</p>\n\n</body>\n</html>";
+      $scope.htmlContent = "";
+      $scope.previewUrl = "";
 
       // Ace Editor Options
       $scope.aceOptions = {
@@ -122,7 +123,7 @@ define(['./module', 'ui.ace'], function (module) {
           Restangular.one('email_templates', $stateParams.creative_id).all('send_test').post({
             organisation_id: $scope.organisationId,
             email: $scope.recipient
-          }).then(function() {
+          }).then(function () {
             $scope.messageSent = "Message sent";
           });
         }

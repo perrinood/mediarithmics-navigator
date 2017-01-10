@@ -24,6 +24,13 @@ define(['./module', 'moment'], function (module, moment) {
         } else {
           campaignCtn.load(campaignId).then(function () {
             $scope.campaignCtn = campaignCtn;
+            $log.debug($scope.campaignCtn);
+            var templateId = campaignCtn.emailTemplates[0].email_template_id;
+            loadEmailTemplate(templateId).then(function (emailRenderResponse) {
+              $scope.emailRenderResponse = emailRenderResponse;
+              var iframeHtml = document.getElementById('email-preview-html');
+              writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
+            });
           });
         }
       });
@@ -77,12 +84,40 @@ define(['./module', 'moment'], function (module, moment) {
         }
       });
 
-      $scope.$on("mics-email-template:selected", function (event, params) {
-        Restangular.one("email_templates/" + params.template.id).get({organisation_id: organisationId}).then(function (template) {
-          $scope.previewWidth = 800;
-          $scope.previewHeight = 400;
+      function writeToIframe(iframe, content) {
+        iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
+        iframe.document.open();
+        iframe.document.write(content);
+        iframe.document.close();
+      }
+
+
+      function loadEmailTemplate(emailTemplateId) {
+        $scope.previewWidth = 750;
+        $scope.previewHeight = 500;
+        var rawResponseRestangular = Restangular.withConfig(function (RestangularConfigurer) {
+          RestangularConfigurer.setResponseExtractor(function (data, operation, what, url, response, deferred) {
+            return response.data;
+          });
         });
-        $scope.previewUrl = $sce.trustAsResourceUrl(configuration.WS_URL + "/email_templates/" + params.template.id + "/preview?access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()));
+        return rawResponseRestangular.one('email_templates', emailTemplateId).one('preview').get();
+      }
+
+      $scope.$on("mics-email-template:selected", function (event, params) {
+        loadEmailTemplate(params.template.id).then(function (emailRenderResponse) {
+          $scope.emailRenderResponse = emailRenderResponse;
+          var iframeHtml = document.getElementById('email-preview-html');
+          writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
+        }, function error(reason) {
+          var iframeError = document.getElementById('email-preview-error');
+          if (reason.data && reason.data.error) {
+            writeToIframe(iframeError, "Error: " + reason.data.error);
+          } else {
+            writeToIframe(iframeError, reason.data);
+          }
+        });
+
+        // $scope.previewUrl = $sce.trustAsResourceUrl(configuration.WS_URL + "/email_templates/" + params.template.id + "/preview?access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()));
         var templateSelection = {email_template_id: params.template.id};
         campaignCtn.addEmailTemplate(templateSelection);
       });

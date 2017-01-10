@@ -71,31 +71,12 @@
         </div>
         <span>Email template</span>
       </div>
-      <div class="row" ng-show="campaignCtn.emailTemplates.length">
+      <div class="row" ng-show="emailRenderResponse">
         <div class="col-md-12">
           <h3>Preview</h3>
-          <iframe class="creative-preview" frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" ng-src="{{previewUrl}}"></iframe>
+          <iframe id="email-preview-html" class="creative-preview" frameborder="0" width="{{previewWidth}}" height="{{previewHeight}}"></iframe>
         </div>
       </div>
-
-      <!--<table class="fragment-list-audience-segment" ng-show="campaignCtn.emailTemplates.length">-->
-        <!--<thead>-->
-        <!--<tr>-->
-          <!--<th>Email template name</th>-->
-          <!--<th>Created</th>-->
-          <!--<th class="actions">Action</th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--<tr ng-repeat="template in campaignCtn.emailTemplates" fetch-creative="template.email_template_id as creative with rendererProperties">-->
-          <!--<td>{{creative.name}}</td>-->
-          <!--<td>{{creative.created}}</td>-->
-          <!--<td class="actions">-->
-            <!--<button class="mics-btn mics-btn-delete" ng-click="removeTemplate(template)">Remove</button>-->
-          <!--</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-      <!--</table>-->
     </div>
 
 

@@ -35,7 +35,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         chart: {
           type: 'pieChart',
           height: 300,
-          width: 400,
+          width: 300,
           transitionDuration: 500,
           donut: true,
           color: ['#00ad68', '#E6E6E6'],
@@ -80,57 +80,39 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
         if (campaign.id === "1699") {
           $scope.mainInfo = {
-            opened: 468,
-            totalOpened: 598,
-            timeToOpen: "2h 24m 15s",
+            opened: 14272,
+            totalOpened: 16413,
+            timeToOpen: "3h 51m 15s",
             complaints: 0,
-            clicked: 56,
-            totalClicks: 78,
+            clicked: 1213,
+            totalClicks: 1334,
             unsubscribed: 0,
-            totalReceived: 977,
-            delivered: 963,
-            softBounced: 11,
-            hardBounced: 3,
-            date: "Thursday 03/11/2016, 11:30 AM"
+            totalSent: 35894,
+            delivered: 35837,
+            softBounced: 146,
+            hardBounced: 57,
+            date: "Monday 11/07/2016, 11:30 AM"
           };
-          $scope.data1 = [{key: "", y: 48.6}, {key: "", y: 52.4}];
-          $scope.data2 = [{key: "", y: 7.5}, {key: "", y: 92.5}];
+          $scope.data1 = [{key: "", y: 39.8}, {key: "", y: 60.2}];
+          $scope.data2 = [{key: "", y: 8.5}, {key: "", y: 91.5}];
           $scope.data3 = [{key: "", y: 0}, {key: "", y: 100}];
         } else if (campaign.id === "1704") {
           $scope.mainInfo = {
-            opened: 856,
-            totalOpened: 1003,
-            timeToOpen: "2h 12m 37s",
+            opened: 19672,
+            totalOpened: 22623,
+            timeToOpen: "3h 09m 37s",
             complaints: 0,
-            clicked: 132,
-            totalClicks: 139,
-            unsubscribed: 2,
-            totalReceived: 1312,
-            delivered: 1278,
-            softBounced: 30,
-            hardBounced: 4,
-            date: "Wednesday 23/11/2016, 15:32 PM"
-          };
-          $scope.data1 = [{key: "", y: 56.6}, {key: "", y: 45.4}];
-          $scope.data2 = [{key: "", y: 11}, {key: "", y: 89}];
-          $scope.data3 = [{key: "", y: 1}, {key: "", y: 99}];
-        } else if (campaign.id === "1705") {
-          $scope.mainInfo = {
-            opened: 668,
-            totalOpened: 742,
-            timeToOpen: "2h 32m 18s",
-            complaints: 0,
-            clicked: 88,
-            totalClicks: 98,
+            clicked: 1711,
+            totalClicks: 1883,
             unsubscribed: 0,
-            totalReceived: 835,
-            delivered: 812,
-            softBounced: 22,
-            hardBounced: 1,
-            date: "Friday 02/12/2016, 10:17 AM"
+            totalSent: 48796,
+            delivered: 48721,
+            softBounced: 195,
+            hardBounced: 75,
+            date: "Tuesday 03/01/2017, 15:32 PM"
           };
-          $scope.data1 = [{key: "", y: 72.5}, {key: "", y: 27.5}];
-          $scope.data2 = [{key: "", y: 14.3}, {key: "", y: 85.7}];
+          $scope.data1 = [{key: "", y: 40.4}, {key: "", y: 59.6}];
+          $scope.data2 = [{key: "", y: 8.7}, {key: "", y: 91.3}];
           $scope.data3 = [{key: "", y: 0}, {key: "", y: 100}];
         } else {
           $scope.mainInfo = {
@@ -141,7 +123,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
             clicked: 0,
             totalClicks: 0,
             unsubscribed: 0,
-            totalReceived: 0,
+            totalSent: 0,
             delivered: 0,
             softBounced: 0,
             hardBounced: 0,
