@@ -16,8 +16,10 @@ define(['./module'], function (module) {
         // $scope.creativeTemplate = template;
       // });
 
-      Restangular.all('plugins').getList({plugin_type: "EMAIL_TEMPLATE_RENDERER"}).then(function(result){
-        $scope.emailTemplateRenderers = result;
+      Restangular.all('plugins').getList({plugin_type: "EMAIL_TEMPLATE_RENDERER"}).then(function(results){
+        $scope.emailTemplateRenderers = _.filter(results, function(renderer) {
+          return EmailTemplateService.getRendererLabel(renderer.group_id, renderer.artifact_id) != undefined;
+        });
       });
 
       function createCreative(name, renderer) {

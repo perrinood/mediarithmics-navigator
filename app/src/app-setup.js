@@ -16,6 +16,8 @@ define([
   'ui',
   'ui.router',
   'ui.router.extras',
+  'ace',
+  'ui.ace',
   'lodash',
   'js-xlsx',
   'clipboard',

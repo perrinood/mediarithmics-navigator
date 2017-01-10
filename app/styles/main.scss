@@ -230,7 +230,6 @@ label {
   border: 1px black !important;
 }
 
-
 .mics-block-heading {
   background: $mcs-light-grey;
   padding: 21px;
@@ -3017,4 +3016,46 @@ a.category-item {
     .actions {
     }
   }
+}
+
+/**
+ * ------------------------------------------------ Email Dashboard ---------------------------------------------------------
+ */
+
+.email-campaign-report {
+  .info-details {
+    margin-top: -100px;
+  }
+
+  .main-info {
+    text-align: center;
+    margin: 0;
+    line-height: 17px;
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  .side-info {
+    margin-top: 50px;
+    font-size: 16px;
+    h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+  }
+}
+
+/**
+ * ------------------------------------------------ Email Editor ---------------------------------------------------------
+ */
+
+.email-preview {
+  border: 1px solid #111111;
+  box-sizing: content-box
+}
+
+.ace_editor {
+  height: 500px;
 }

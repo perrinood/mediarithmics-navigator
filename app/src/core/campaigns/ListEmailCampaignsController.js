@@ -91,12 +91,12 @@ define(['./module'], function (module) {
       };
 
       $scope.getCampaignDashboardUrl = function (campaign) {
-        return Session.getWorkspacePrefixUrl()+ '/campaigns/email/edit/' + campaign.id;
-        // return "/" + campaign.organisation_id + "/campaigns/" + campaign.type.toLowerCase() + "/report/" + campaign.id + "/basic";
+        // return Session.getWorkspacePrefixUrl() + '/campaigns/email/edit/' + campaign.id;
+        return Session.getWorkspacePrefixUrl() + "/campaigns/" + campaign.type.toLowerCase() + "/report/" + campaign.id + "/basic";
       };
 
       $scope.newCampaign = function () {
-        $location.path(Session.getWorkspacePrefixUrl()+ '/campaigns/email/edit');
+        $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email/edit');
       };
 
       $scope.editCampaign = function (campaign) {

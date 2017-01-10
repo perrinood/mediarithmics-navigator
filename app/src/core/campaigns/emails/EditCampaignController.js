@@ -7,10 +7,13 @@ define(['./module', 'moment'], function (module, moment) {
    */
 
   module.controller('core/campaigns/emails/EditCampaignController', [
-    'jquery', '$scope', '$uibModal', '$log', '$location', '$stateParams', 'lodash', 'core/campaigns/CampaignPluginService',
-    'core/common/WaitingService', 'core/common/ErrorService', 'core/campaigns/goals/GoalsService', 'Restangular', 'core/campaigns/emails/EmailCampaignContainer','core/common/auth/Session',
-    function (jQuery, $scope, $uibModal, $log, $location, $stateParams, _, CampaignPluginService, WaitingService, ErrorService, GoalsService, Restangular, EmailCampaignContainer, Session) {
-
+    'jquery', '$scope', '$uibModal', '$log', '$location', '$stateParams', '$sce', 'lodash', 'core/configuration',
+    'core/campaigns/CampaignPluginService', 'core/common/WaitingService', 'core/common/ErrorService', 'core/campaigns/goals/GoalsService',
+    'Restangular', 'core/campaigns/emails/EmailCampaignContainer', 'core/common/auth/Session', 'core/common/auth/AuthenticationService',
+    function (jQuery, $scope, $uibModal, $log, $location, $stateParams, $sce, _, configuration,
+              CampaignPluginService, WaitingService, ErrorService, GoalsService,
+              Restangular, EmailCampaignContainer, Session, AuthenticationService) {
+      var organisationId = Session.getCurrentWorkspace().organisation_id;
       var campaignId = $stateParams.campaign_id;
       var campaignCtn = {};
 
@@ -19,43 +22,43 @@ define(['./module', 'moment'], function (module, moment) {
         if (!campaignId) {
           $scope.campaignCtn = campaignCtn;
         } else {
-            campaignCtn.load(campaignId).then(function(){
-              $scope.campaignCtn = campaignCtn;
-            });
+          campaignCtn.load(campaignId).then(function () {
+            $scope.campaignCtn = campaignCtn;
+          });
         }
       });
 
-      $scope.selectExistingAudienceSegments = function() {
+      $scope.selectExistingAudienceSegments = function () {
         var newScope = $scope.$new(true);
         newScope.segmentSelectionType = "EMAIL";
         $uibModal.open({
           templateUrl: 'src/core/datamart/segments/ChooseExistingAudienceSegmentsPopin.html',
-          scope : newScope,
-          backdrop : 'static',
+          scope: newScope,
+          backdrop: 'static',
           controller: 'core/datamart/segments/ChooseExistingAudienceSegmentsPopinController',
           size: "lg"
         });
       };
 
-      $scope.selectExistingEmailTemplates = function() {
+      $scope.selectExistingEmailTemplates = function () {
         var newScope = $scope.$new(true);
         newScope.selectedTemplate = campaignCtn.emailTemplates[0];
         $uibModal.open({
           templateUrl: 'src/core/campaigns/emails/chooseExistingEmailTemplates.html',
-          scope : newScope,
-          backdrop : 'static',
+          scope: newScope,
+          backdrop: 'static',
           controller: 'core/campaigns/emails/ChooseExistingEmailTemplatesController',
           size: "lg"
         });
       };
 
-      $scope.addEmailRouters = function() {
+      $scope.addEmailRouters = function () {
         var newScope = $scope.$new(true);
         newScope.selectedRouters = campaignCtn.emailRouters;
         $uibModal.open({
           templateUrl: 'src/core/campaigns/emails/chooseExistingEmailRouters.html',
-          scope : newScope,
-          backdrop : 'static',
+          scope: newScope,
+          backdrop: 'static',
           controller: 'core/campaigns/emails/ChooseExistingEmailRoutersController',
           size: "lg"
         });
@@ -75,28 +78,33 @@ define(['./module', 'moment'], function (module, moment) {
       });
 
       $scope.$on("mics-email-template:selected", function (event, params) {
+        Restangular.one("email_templates/" + params.template.id).get({organisation_id: organisationId}).then(function (template) {
+          $scope.previewWidth = 800;
+          $scope.previewHeight = 400;
+        });
+        $scope.previewUrl = $sce.trustAsResourceUrl(configuration.WS_URL + "/email_templates/" + params.template.id + "/preview?access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()));
         var templateSelection = {email_template_id: params.template.id};
         campaignCtn.addEmailTemplate(templateSelection);
       });
 
       $scope.$on("mics-email-router:selected", function (event, params) {
         campaignCtn.emailRouters = [];
-        params.routers.map(function(r){
+        params.routers.map(function (r) {
           var routerSelection = {email_router_id: r.id, email_router_version_id: r.version_id};
           campaignCtn.addEmailRouter(routerSelection);
         });
 
       });
 
-      $scope.removeRouter = function(router) {
+      $scope.removeRouter = function (router) {
         campaignCtn.removeEmailRouter(router);
       };
 
-      $scope.removeTemplate = function(template) {
+      $scope.removeTemplate = function (template) {
         campaignCtn.removeEmailTemplate(template);
       };
 
-      $scope.removeSegment = function(segment) {
+      $scope.removeSegment = function (segment) {
         campaignCtn.removeAudienceSegment(segment);
       };
 
@@ -104,16 +112,16 @@ define(['./module', 'moment'], function (module, moment) {
       $scope.save = function () {
         WaitingService.showWaitingModal();
         var promise = null;
-        if (campaignCtn.id){
+        if (campaignCtn.id) {
           promise = campaignCtn.update();
         } else {
           promise = campaignCtn.persist();
         }
 
-        promise.then(function success(){
+        promise.then(function success() {
           WaitingService.hideWaitingModal();
-          $location.path(Session.getWorkspacePrefixUrl()+  '/campaigns/email');
-        }, function failure(reason){
+          $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+        }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
             error: reason
@@ -125,7 +133,7 @@ define(['./module', 'moment'], function (module, moment) {
         // if ($scope.campaign && $scope.campaign.id) {
         //   $location.path('/' + $scope.campaign.organisation_id + '/campaigns/display/report/' + $scope.campaign.id + '/basic');
         // } else {
-        $location.path(Session.getWorkspacePrefixUrl()+ '/campaigns/email');
+        $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
         // }
       };
 

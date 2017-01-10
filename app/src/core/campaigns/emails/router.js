@@ -14,6 +14,17 @@ define(['./module'], function (module) {
           url: '/{organisation_id}/campaigns/email/edit',
           templateUrl: 'src/core/campaigns/emails/edit-campaign.html',
           data: {navbar: 'src/core/layout/header/navbar/empty-navbar/empty-navbar.html'}
+        })
+        .state('campaigns/email/report', {
+          url: '/{organisation_id}/campaigns/email/report/:campaign_id/:template',
+          templateUrl: 'src/core/campaigns/emails/show-report.html',
+          data: {
+            category: 'campaigns',
+            sidebar: {
+              templateUrl: 'src/core/campaigns/campaigns-sidebar.html',
+              selected: 'email_campaigns'
+            }
+          }
         });
     }
   ]);
