@@ -12,6 +12,7 @@ define(['./module', 'ui.ace'], function (module) {
       $scope.previewHeight = 500;
       $scope.htmlContent = "";
       $scope.previewUrl = "";
+      $scope.recipient = "";
 
       // Ace Editor Options
       $scope.aceOptions = {

@@ -3,7 +3,7 @@
       <br/>
       <div mics-pl-upload="micsPlUpload" ng-if="micsPlUpload">
            <button class="browse-button mics-btn mics-btn-add" ng-disabled="isNotValid(property.value.uri)" ng-show="property.value.uri">Upload and overwrite</button>
-           <a class="mics-btn mics-btn-delete" ng-click="download(property.value.uri)" ng-disabled="isNotValid(property.value.uri)" >Download File</a>
+           <a class="mics-btn mics-btn-delete plupload-download" ng-click="download(property.value.uri)" ng-disabled="isNotValid(property.value.uri)" >Download File</a>
       </div>
 
 </div>

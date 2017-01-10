@@ -96,7 +96,7 @@
 
     <!-- Tab set: Ads, AdGroups and Sites -->
 
-    <div class="breakdown-area">
+    <div class="breakdown-area" ng-hide="true">
       <div class="panel-body">
         <uib-tabset class="breakdown">
 
@@ -137,15 +137,15 @@
               </tr>
               </thead>
               <tbody>
-              <!--<tr ng-repeat="segment in targetedSegments">-->
-              <!--<td>{{segment.name}}</td>-->
-              <!--<td class="metrics" ng-repeat="metric in segment.metrics">-->
-              <!--<span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>-->
-              <!--<span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>-->
-              <!--<span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>-->
-              <!--<span ng-if="!metric.type || metric.value == undefined"> - </span>-->
-              <!--</td>-->
-              <!--</tr>-->
+              <tr ng-repeat="segment in targetedSegments">
+              <td>{{segment.name}}</td>
+              <td class="metrics" ng-repeat="metric in segment.metrics">
+              <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+              <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+              <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+              <span ng-if="!metric.type || metric.value == undefined"> - </span>
+              </td>
+              </tr>
               </tbody>
             </table>
             <br>
@@ -164,15 +164,15 @@
               </tr>
               </thead>
               <tbody>
-              <!--<tr ng-repeat="segment in discoveredSegments">-->
-              <!--<td>{{segment.name}}</td>-->
-              <!--<td class="metrics" ng-repeat="metric in segment.metrics">-->
-              <!--<span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>-->
-              <!--<span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>-->
-              <!--<span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>-->
-              <!--<span ng-if="!metric.type || metric.value == undefined"> - </span>-->
-              <!--</td>-->
-              <!--</tr>-->
+              <tr ng-repeat="segment in discoveredSegments">
+              <td>{{segment.name}}</td>
+              <td class="metrics" ng-repeat="metric in segment.metrics">
+              <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+              <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+              <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+              <span ng-if="!metric.type || metric.value == undefined"> - </span>
+              </td>
+              </tr>
               </tbody>
             </table>
           </uib-tab>
