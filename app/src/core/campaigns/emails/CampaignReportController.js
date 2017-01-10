@@ -35,6 +35,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         chart: {
           type: 'pieChart',
           height: 300,
+          width: 400,
           transitionDuration: 500,
           donut: true,
           color: ['#00ad68', '#E6E6E6'],
@@ -58,7 +59,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           css: {
             'position': 'absolute',
             'top': '120px',
-            'left': '183px',
             'font-weight': 'bold',
             'font-size': '22px'
           }

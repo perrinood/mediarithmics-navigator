@@ -12,8 +12,9 @@ define(['./module'], function (module) {
       var service = {};
 
       var rendererLabels = {
-          "com.mediarithmics.template.email.dynamic-template": "Dynamic template",
-          "com.ividence.email-renderer":"Custom template"
+        // "com.mediarithmics.template.email.dynamic-template": "Dynamic template",
+        "com.mediarithmics.email-renderer.email-handlebars-template": "Dynamic template",
+        "com.ividence.email-renderer":"Custom template"
       };
 
       service.getRendererLabel = function(groupId, artifactId) {
