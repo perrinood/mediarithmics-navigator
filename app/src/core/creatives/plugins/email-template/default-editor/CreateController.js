@@ -3,8 +3,8 @@ define(['./module'], function (module) {
 
   module.controller('core/creatives/plugins/email-template/default-editor/CreateController', [
     '$scope', '$location', 'core/common/auth/Session', 'core/creatives/CreativePluginService', '$log', '$q',
-    "Restangular", 'core/creatives/plugins/email-template/EmailTemplateService','core/common/properties/RendererPluginInstanceContainer',
-    function ($scope, $location, Session, CreativePluginService, $log, $q, Restangular, EmailTemplateService, RendererPluginInstanceContainer) {
+    "Restangular", 'core/creatives/plugins/email-template/EmailTemplateService','core/common/properties/RendererPluginInstanceContainer', 'lodash',
+    function ($scope, $location, Session, CreativePluginService, $log, $q, Restangular, EmailTemplateService, RendererPluginInstanceContainer, _) {
 
       $scope.wrapper = {
         emailTemplateName: "",
@@ -18,7 +18,7 @@ define(['./module'], function (module) {
 
       Restangular.all('plugins').getList({plugin_type: "EMAIL_TEMPLATE_RENDERER"}).then(function(results){
         $scope.emailTemplateRenderers = _.filter(results, function(renderer) {
-          return EmailTemplateService.getRendererLabel(renderer.group_id, renderer.artifact_id) != undefined;
+          return EmailTemplateService.getRendererLabel(renderer.group_id, renderer.artifact_id) !== undefined;
         });
       });
 
