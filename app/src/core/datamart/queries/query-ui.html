@@ -9,7 +9,7 @@
       <h4>List of criteria</h4>
 
       <div class="panel-group" id="accordion">
-        <div class="panel panel-default" ng-repeat="family in criteriaContainer.families">
+        <div class="panel panel-default" ng-repeat="family in criteriaContainer.families | orderBy: 'name'">
           <div class="panel-heading">
             <h4 class="panel-title">
               <a data-toggle="collapse" data-parent="#accordion"
