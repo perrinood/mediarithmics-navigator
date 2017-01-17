@@ -8,7 +8,7 @@ define(['./module', 'moment-duration-format'], function (module) {
     'lodash', 'moment', '$log', '$location', '$q',
     function ($scope, $stateParams, Restangular, Common, $, Session, lodash, moment, $log, $location, $q) {
 
-      $scope.INITIAL_VISITS = 10;
+      var INITIAL_ACTIVITIES_LIMIT = 10;
 
       $scope.datamartId = Session.getCurrentDatamartId();
       $scope.organisationId = $stateParams.organisation_id;
@@ -31,6 +31,8 @@ define(['./module', 'moment-duration-format'], function (module) {
         options = {live: $stateParams.live === "true"};
       }
 
+      options.limit = INITIAL_ACTIVITIES_LIMIT;
+
       var userTimelinesUrl;
 
       if ($stateParams.property) {
@@ -39,13 +41,16 @@ define(['./module', 'moment-duration-format'], function (module) {
         userTimelinesUrl = $stateParams.userPointId;
       }
 
+      $scope.timelines = [];
+
       function scopeTimelines(timelines) {
-        $scope.timelines = timelines;
+        $scope.timelines = $scope.timelines.concat(timelines);
+        return timelines;
       }
 
-      function retrieveSiteIdAndAppIdFromTimelines() {
+      function retrieveSiteIdAndAppIdFromTimelines(activities) {
 
-        var sitesOrAppsId = $scope.timelines.reduce(function (acc, next) {
+        var sitesOrAppsId = activities.reduce(function (acc, next) {
           var nextSiteId = (next.$site_id || next.$app_id); 
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
         }, []);
@@ -55,7 +60,7 @@ define(['./module', 'moment-duration-format'], function (module) {
         });
 
         function scopeSitesOrAppsAndDevicesWithTimelines(sitesOrApps) {
-          $scope.timelines.forEach(function (timelineActivity) {
+          activities.forEach(function (timelineActivity) {
             timelineActivity.siteOrApp = lodash.find(sitesOrApps, function (siteOrApp) {
               return siteOrApp.id === (timelineActivity.$site_id || timelineActivity.$app_id);
             });
@@ -92,7 +97,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
         .then(waitForDevices)
-        .then(retrieveSiteIdAndAppIdFromTimelines);
+        .then(retrieveSiteIdAndAppIdFromTimelines($scope.timelines));
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
@@ -212,9 +217,21 @@ define(['./module', 'moment-duration-format'], function (module) {
        just a part of the timeline
        */
 
-      $scope.showMore = false;
+      $scope.showMore = true;
       $scope.loadMoreActions = function () {
         $scope.showMore = false;
+
+        var oldestDisplayedActivityDate = $scope.timelines[$scope.timelines.length -1].$ts;
+
+        options.to = moment(oldestDisplayedActivityDate).format('YYYY-MM-DD');
+        
+        //TODO handle platform activities
+        $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
+          .then(scopeTimelines)
+          .then(retrieveSiteIdAndAppIdFromTimelines)
+          .then(function(){
+            $scope.showMore = true;
+          });
 
       };
 
