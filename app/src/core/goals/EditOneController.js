@@ -92,8 +92,8 @@ define(['./module'], function (module) {
         function displayPixelTrackingUrl() {
           var currentDatamartToken = Session.getCurrentDatamartToken();
           var newScope = $scope.$new(true);
+          newScope.pixelTrackingUrl = '//events.mediarithmics.com/v1/touches/pixel?$ev=$conversion&$dat_token=' + currentDatamartToken + '&$goal_id=' + $scope.goal.id;
 
-          newScope.pixelTrackingUrl = '//events.mediarithmics.com/v1/touches/pixel?$ev=$conversion&$dat_token=' + currentDatamartToken + '&goal_id=' + $scope.goal.id;
 
           function logResult() {
             $log.debug("Get pixel code modal closed");
