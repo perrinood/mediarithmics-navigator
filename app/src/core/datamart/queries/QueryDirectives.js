@@ -588,7 +588,9 @@ define(['./module'], function (module) {
         };
     }]);
 
-    module.directive('fixPositionWhenAtTop', ['$window', function ($window) {
+  // TODO Rethink query tool page design. This directive exists only because of bad design.
+  // fix-position-when-at-top breaks scrolling when the list of criteria is longer than the page height defined by the group of conditions
+  module.directive('fixPositionWhenAtTop', ['$window', function ($window) {
 
         var windowWrapper = angular.element($window);
 
