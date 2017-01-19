@@ -39,6 +39,10 @@ define(['./module'], function (module) {
         count: 10           // count per page
       });
 
+      $scope.updateStatistics = function () {
+        updateStatistics($scope, ServiceUsageReportService);
+      };
+
       function updateStatistics($scope, ServiceUsageReportService) {
         var currentStatObj = $scope.statisticsQuery = {
           rand: Math.random().toString(36).substring(8),
