@@ -57,7 +57,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="campaign in displayCampaigns | offset: (currentPageDisplayCampaign - 1)*itemsPerPage | orderBy: 'name' | limitTo: itemsPerPage">
+        <tr ng-repeat="campaign in displayCampaigns | offset: (currentPageDisplayCampaign - 1)*itemsPerPage | limitTo: itemsPerPage">
           <td><div mics-campaign-status="campaign"></div></td>
           <td class="clickable-box"><a ng-href="#{{getCampaignDashboardUrl(campaign)}}">{{campaign.name}}</a></td>
           <td class="clickable-box" ng-if="administrator">
