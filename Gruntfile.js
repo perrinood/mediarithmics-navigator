@@ -91,7 +91,7 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {
-        files: ['<%= yeoman.app %>/src/**/*.js'],
+        files: ['<%= yeoman.app %>/angular/src/**/*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: true
@@ -120,7 +120,7 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/*.html',
-          '<%= yeoman.app %>/src/**/*.html',
+          '<%= yeoman.app %>/angular/src/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -169,7 +169,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/src/**/*.js'
+        '<%= yeoman.app %>/angular/src/**/*.js'
       ],
       test: {
         options: {
@@ -203,8 +203,8 @@ module.exports = function (grunt) {
       target: {
         src: ['<%= yeoman.app %>/index.html'],
         exclude: [
-          'bower_components/bootstrap/dist/css/bootstrap.css', // this is `@import`ed in the scss file
-          'bower_components/bootstrap-sass/assets/javascripts/bootstrap/*' // already included in the file bower_components/bootstrap/dist/js/bootstrap.js
+          'angular/bower_components/bootstrap/dist/css/bootstrap.css', // this is `@import`ed in the scss file
+          'angular/bower_components/bootstrap-sass/assets/javascripts/bootstrap/*' // already included in the file angular/bower_components/bootstrap/dist/js/bootstrap.js
         ]
       }
     },
@@ -214,7 +214,7 @@ module.exports = function (grunt) {
     filerev: {
       files: {
         src: [
-          '<%= yeoman.dist %>/src/**/*.js',
+          '<%= yeoman.dist %>/angular/src/**/*.js',
           '<%= yeoman.dist %>/scripts/**/*.js',
           '<%= yeoman.dist %>/styles/**/*.css',
           '<%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
@@ -237,7 +237,7 @@ module.exports = function (grunt) {
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
       html: [
-        '<%= yeoman.dist %>/src/**/*.html',
+        '<%= yeoman.dist %>/angular/src/**/*.html',
         '<%= yeoman.dist %>/*.html'
       ],
       css: ['<%= yeoman.dist %>/styles/**/*.css'],
@@ -292,7 +292,7 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: '<%= yeoman.dist %>',
-            src: ['*.html', 'src/**/*.html'],
+            src: ['*.html', 'angular/src/**/*.html'],
             dest: '<%= yeoman.dist %>'
           }
         ]
@@ -318,7 +318,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           waitSeconds: 0,
-          baseUrl: "app/src",
+          baseUrl: "app/angular/src",
           mainConfigFile: "app/main.js",
           name: "navigator",
           optimize: "none",
@@ -378,9 +378,9 @@ module.exports = function (grunt) {
               '*.{ico,png,txt}',
               '.htaccess',
               '*.html',
-              'src/**/*.html',
-              'bower_components/**/*',
-              'src/**/*.{jpe?g,png}',
+              'angular/src/**/*.html',
+              'angular/bower_components/**/*',
+              'angular/src/**/*.{jpe?g,png}',
               'fonts/*'
             ]
           },
@@ -398,7 +398,7 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            cwd: '<%= yeoman.app %>/bower_components/video.js/dist/video-js/font/',
+            cwd: '<%= yeoman.app %>/angular/bower_components/video.js/dist/video-js/font/',
             dest: '<%= yeoman.dist %>/styles/font',
             src: '*'
           }
@@ -424,7 +424,7 @@ module.exports = function (grunt) {
 //            dot: true,
 //            cwd: '<%= yeoman.app %>',
 //            dest: '<%= yeoman.dist %>/scripts/vendor',
-//            src: [ 'bower_components/require/require.js']
+//            src: [ 'angular/bower_components/require/require.js']
 //        }]
 //      },
       styles: {
@@ -441,12 +441,12 @@ module.exports = function (grunt) {
         actions: [
           {
             name: 'requirejs-newpath',
-            search: '<script data-main=".*" src="bower_components/requirejs/require.js"></script>',
+            search: '<script data-main=".*" src="angular/bower_components/requirejs/require.js"></script>',
             replace: function (match) {
               var regex = /data-main="(.*)" /;
               var result = regex.exec(match);
               var revFileName = grunt.filerev.summary['dist/scripts/' + result[1]].replace('dist', '');
-              return '<script data-main="' + revFileName + '" src="bower_components/requirejs/require.js"></script>';
+              return '<script data-main="' + revFileName + '" src="angular/bower_components/requirejs/require.js"></script>';
             }
 
           }
@@ -461,9 +461,9 @@ module.exports = function (grunt) {
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/src',
+        javascriptsDir: '<%= yeoman.app %>/angular/src',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
+        importPath: '<%= yeoman.app %>/angular/bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -522,7 +522,7 @@ module.exports = function (grunt) {
 
     genRequireJsFiles: {
       config: {
-        src: '<%= yeoman.app %>/src/**/module.json',
+        src: '<%= yeoman.app %>/angular/src/**/module.json',
         template: 'define([{{{requires}}}],function(){});',
         templateModule: 'define(["angular"],function(){' +
         '"use strict";' +

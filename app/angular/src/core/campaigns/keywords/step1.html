@@ -1,0 +1,66 @@
+<div ng-controller="core/campaigns/keywords/Step1Controller" class="mcs-default-container">
+
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-campaign-type ">
+      <img src="/images/plugins/keywords-targeting-small.png"><br/>
+      <h4>Keywords Targeting</h4>
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="isCreationMode">Create Keywords Campaign</h1>
+
+      <h1 ng-if="!isCreationMode">Edit Keywords Campaign</h1>
+    </div>
+    <div ng-include="'angular/src/core/campaigns/keywords/breadcrumb.html'"></div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="keywords_step1_name" label-text="Campaign name">
+      <input required class="input-lg" ng-model="campaign.name" type="text" id="keywords_step1_name">
+    </div>
+
+    <!-- Weekly budget -->
+    <div mcs-form-group="" label-for="keywords_step1_budget" label-text="Weekly budget (20&euro; min.)">
+      <div class="input-group">
+        <input required ng-model="campaign.max_budget_per_period" type="text" min="20" id="keywords_step1_budget">
+        <span class="input-group-addon">&euro;</span>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div mcs-form-group="select" label-for="keywords_step1_schedule" label-text="Schedule">
+
+
+      <select ng-model="$parent.schedule" id="keywords_step1_schedule">
+        <option value="">Ongoing (no end date)</option>
+        <option value="custom">Custom</option>
+
+
+      </select>
+      <input ng-show="$parent.schedule === 'custom'"
+             type="daterange"
+             class="form-control range"
+             ng-model="$parent.campaignDateRange"
+             format="L"
+          />
+      {{$parent.schedule }}
+    </div>
+
+    <!-- Location -->
+    <div mcs-form-group="select" label-for="keywords_step1_location" label-text="Location">
+      <!-- TODO activate -->
+      <select ng-model="location" id="keywords_step1_location">
+        <option value="">Worldwide</option>
+        <!-- <option></option> -->
+      </select>
+    </div>
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">cancel</a>
+      <button class="mics-btn mics-btn-continue">next</button>
+    </div>
+  </form>
+</div>

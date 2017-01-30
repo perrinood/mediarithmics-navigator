@@ -3,7 +3,7 @@ node_modules/
 dist/
 .tmp/
 .sass-cache/
-app/bower_components/
+app/angular/bower_components/
 .idea/
 .vscode/
 .editorconfig

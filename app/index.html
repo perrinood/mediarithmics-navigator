@@ -18,17 +18,17 @@
 
   <!-- CSS -->
   <!-- build:css styles/vendor.css -->
-  <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.css"/>
-  <link rel="stylesheet" href="bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css"/>
-  <link rel="stylesheet" href="bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css"/>
-  <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
-  <link rel="stylesheet" href="bower_components/joint/dist/joint.min.css">
-  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css">
+  <link rel="stylesheet" href="angular/bower_components/ng-table/dist/ng-table.css"/>
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" href="angular/bower_components/nvd3/build/nv.d3.css">
+  <link rel="stylesheet" href="angular/bower_components/joint/dist/joint.min.css">
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css">
   <!-- endbuild -->
   <!-- build:css styles/video.css -->
-  <link rel="stylesheet" href="bower_components/videojs-contrib-ads/src/videojs.ads.css">
-  <link rel="stylesheet" href="bower_components/videojs-vast/videojs.vast.css">
-  <link rel="stylesheet" href="bower_components/video.js/dist/video-js/video-js.css">
+  <link rel="stylesheet" href="angular/bower_components/videojs-contrib-ads/src/videojs.ads.css">
+  <link rel="stylesheet" href="angular/bower_components/videojs-vast/videojs.vast.css">
+  <link rel="stylesheet" href="angular/bower_components/video.js/dist/video-js/video-js.css">
   <!-- endbuild -->
   <!-- build:css({.tmp,app}) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
@@ -36,23 +36,56 @@
   <link rel="stylesheet" href="styles/font/stylesheet.css">
 
 </head>
-<body class="mcs-app" ng-controller="LayoutController">
+<body>
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
   <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div ng-include="'src/core/layout/header/header.html'"></div>
+<div id="mcs-app" class="mcs-app" ng-controller="LayoutController">
+  <div ng-include="'angular/src/core/layout/header/header.html'"></div>
 
-<div ng-include="'src/core/layout/sidebar/sidebar.html'" ng-class="{'hidden': !showSidebar }"></div>
+  <div ng-include="'angular/src/core/layout/sidebar/sidebar.html'" ng-class="{'hidden': !showSidebar }"></div>
 
-<div ng-class="{'content-with-sidebar': showSidebar }">
-  <div ui-view="" class="container-fluid"></div>
+  <div ng-class="{'content-with-sidebar': showSidebar }">
+    <div ui-view="" class="container-fluid"></div>
+  </div>
 </div>
 
+<div id="mcs-react-app" class="mcs-react-app"></div>
+
+<script>
+  function switchApp(newUrl) {
+
+    var angularContainer = document.getElementById("mcs-app");
+    var reactContainer = document.getElementById("mcs-react-app");
+
+    function isAngularApp(url) {
+      return url.indexOf('#') !== -1;
+    }
+
+    if (isAngularApp(newUrl)) {
+      angularContainer.style.display = "block";
+      reactContainer.style.display = "none";
+    } else {
+      angularContainer.style.display = "none";
+      reactContainer.style.display = "block";
+    }
+
+  }
+
+  function onHashChange(location) {
+    return switchApp(location.newURL);
+  }
+
+  switchApp(window.location.href);
+  window.onhashchange = onHashChange;
+
+</script>
+
 <!--[if lt IE 9]>
-<script src="bower_components/es5-shim/es5-shim.js"></script>
-<script src="bower_components/json3/lib/json3.min.js"></script>
+<script src="angular/bower_components/es5-shim/es5-shim.js"></script>
+<script src="angular/bower_components/json3/lib/json3.min.js"></script>
 <![endif]-->
 
 <noscript>
@@ -88,21 +121,21 @@
 and the videojs-vast plugin expecting from the vast-client plugin to to always be globally declared,
 are two of the factors making these dependencies injections impossible. -->
 <!-- build:js scripts/video.js -->
-<script src="bower_components/video.js/dist/video-js/video.js"></script>
-<script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
-<script src="bower_components/vast-client-js/vast-client.js"></script>
-<script src="bower_components/videojs-vast/videojs.vast.js"></script>
+<script src="angular/bower_components/video.js/dist/video-js/video.js"></script>
+<script src="angular/bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
+<script src="angular/bower_components/vast-client-js/vast-client.js"></script>
+<script src="angular/bower_components/videojs-vast/videojs.vast.js"></script>
 <!-- The xlsx lib checks if jszip exists before anything. AGAIN we need jszip and then xlsx after minification.-->
-<script src="bower_components/js-xlsx/jszip.js"></script>
+<script src="angular/bower_components/js-xlsx/jszip.js"></script>
 <!-- endbuild -->
 <script>
 var require = {
   waitSeconds: 60,
-  paths: {'core/configuration': '../conf/app-configuration'}
+  paths: {'core/configuration': '../../conf/app-configuration'}
 };
 </script>
 <script src="conf/plugins-configuration.js"></script>
-<script data-main="main.js" src="bower_components/requirejs/require.js"></script>
+<script data-main="main.js" src="angular/bower_components/requirejs/require.js"></script>
 
 <script>
   require.onResourceLoad = function(context, map, depArray) {
