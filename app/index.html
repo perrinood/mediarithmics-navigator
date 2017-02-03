@@ -42,17 +42,16 @@
   <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div id="mcs-app" class="mcs-app" ng-controller="LayoutController">
+<div  class="mcs-app" ng-controller="LayoutController">
   <div ng-include="'angular/src/core/layout/header/header.html'"></div>
 
   <div ng-include="'angular/src/core/layout/sidebar/sidebar.html'" ng-class="{'hidden': !showSidebar }"></div>
 
   <div ng-class="{'content-with-sidebar': showSidebar }">
-    <div ui-view="" class="container-fluid"></div>
+    <div id="mcs-app" ui-view="" class="container-fluid"></div>
+    <div id="mcs-react-app" class="mcs-react-app"></div>
   </div>
 </div>
-
-<div id="mcs-react-app" class="mcs-react-app"></div>
 
 <script>
   function switchApp(newUrl) {
@@ -60,11 +59,17 @@
     var angularContainer = document.getElementById("mcs-app");
     var reactContainer = document.getElementById("mcs-react-app");
 
+<<<<<<< refs/remotes/upstream/master
     function isAngularApp(url) {
       return url.indexOf('#') !== -1;
+=======
+    function isReactApp(url) {
+      console.log(url.match(/v2/));
+      return url.match(/v2/);
+>>>>>>> Bootstrap react app
     }
 
-    if (isAngularApp(newUrl)) {
+    if (!isReactApp(newUrl)) {
       angularContainer.style.display = "block";
       reactContainer.style.display = "none";
     } else {
@@ -165,6 +170,10 @@ var require = {
     throw err;
   };
 </script>
+
+<script type="text/javascript" src="http://localhost:3000/v2/manifest.js"></script>
+<script type="text/javascript" src="http://localhost:3000/v2/vendor.js"></script>
+<script type="text/javascript" src="http://localhost:3000/v2/app.js"></script>
 
 
 </body>

@@ -3,7 +3,9 @@ define(['app-setup', 'angularAMD', 'jquery'],
     'use strict';
 
     jQuery("#mics_loading").remove();
-
+    app.config(function($logProvider){
+      $logProvider.debugEnabled(false);
+    });
     app.run(['$rootScope', '$location', '$log', 'core/common/auth/AuthenticationService', 'core/common/auth/Session', "lodash", "core/login/constants", "core/common/ErrorReporting","$state","$stateParams", "$urlRouter",
       function ($rootScope, $location, $log, AuthenticationService, Session, _, LoginConstants, ErrorReporting, $state, $stateParams, $urlRouter ) {
         var defaults = _.partialRight(_.assign, function (a, b) {

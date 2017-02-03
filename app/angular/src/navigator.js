@@ -97,7 +97,7 @@ define(['navigator-setup', 'angularAMD', 'lodash', 'async', 'jquery', 'plupload'
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
           var state = $injector.get('$state');
-          state.go('404');
+          //state.go('404');
           return $location.path();
         });
 
