@@ -14,7 +14,7 @@ define(['./module'], function (module) {
       $scope.newSegment = function () {
         var newScope = $scope.$new(true);
         newScope.segment = {};
-        newScope.queryContainer = $scope.queryContainer;
+        newScope.queryContainer = $scope.queryContainer.copy();
         $uibModal.open({
           templateUrl: 'src/core/datamart/queries/new-segment.html',
           scope: newScope,
@@ -25,7 +25,7 @@ define(['./module'], function (module) {
 
       $scope.newQueryExport = function () {
         var newScope = $scope.$new(true);
-        newScope.queryContainer = $scope.queryContainer;
+        newScope.queryContainer = $scope.queryContainer.copy();
         var modal = $uibModal.open({
           templateUrl: 'src/core/datamart/queries/new-query-export.html',
           scope: newScope,
