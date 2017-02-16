@@ -47,6 +47,11 @@ module.exports = function (grunt) {
 
   var isSnapshot = version.indexOf("SNAPSHOT") !== -1;
 
+  var webpack = require('webpack');
+  var webpackMiddleware = require("webpack-dev-middleware");
+  var webpackDevConfig = require('./config/webpack.config.dev.js');
+  var paths = require('./config/paths');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -133,7 +138,11 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35729,
+        middleware: function(connect, options, middlewares) {
+          middlewares.unshift(webpackMiddleware(webpack(webpackDevConfig), { publicPath: paths.publicPath }));
+          return middlewares;
+        }
       },
       livereload: {
         options: {

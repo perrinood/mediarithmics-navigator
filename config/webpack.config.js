@@ -1,55 +1,50 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const paths = require('./paths');
-const babel = require('./babel');
+const babelOptions = require('./babel');
 const pkg = require('../package.json');
 
 const config = {
 
   entry: {
-    app: path.join(paths.appSrc, '/index.js'),
-    vendor: Object.keys(pkg.dependencies)
+    app: path.join(paths.reactAppSrc, '/index.js'),
+    'react-vendors': Object.keys(pkg.dependencies)
   },
 
   output: {
-    path: paths.appBuild,
-    publicPath: paths.public
+    path: paths.appPath,
+    publicPath: paths.publicPath
   },
 
   module: {
     rules: [
       {
-        test: /\.js?$/,
-        use: ['eslint-loader'],
-        include: paths.appSrc,
-        enforce: 'pre',
-        exclude: path.join(paths.appSrc, 'components/')
+        test: /\.js$/,
+        include: paths.reactAppSrc,
+        use: 'eslint-loader',
+        enforce: 'pre'
       },
       {
         test: /\.js$/,
-        include: paths.appSrc,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: babel
-          }
-        ]
+        include: paths.reactAppSrc,
+        use: {
+          loader: 'babel-loader',
+          options: babelOptions
+        }
       }
     ]
   },
 
   plugins: [
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: paths.appHtml
+    }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest']
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
-    }),
-    new webpack.DefinePlugin({
-      BASE_NAME: JSON.stringify(paths.public)
-    }),
+      names: ['react-vendors', 'manifest']
+    })
   ]
 
 };
