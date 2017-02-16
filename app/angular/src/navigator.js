@@ -91,8 +91,15 @@ define(['navigator-setup', 'angularAMD', 'lodash', 'async', 'jquery', 'plupload'
 
 //        $urlRouterProvider.when('', '/init-session');
 //        $urlRouterProvider.when('/', '/init-session');
+
+        function handleRedirection($match, $stateParams) {
+          if (!$match.organisationId.match(/v2/)) {
+            return '/:organisationId/campaigns/display';
+          }
+        }
+
         $urlRouterProvider.when('/:organisationId/settings', '/:organisationId/settings/useraccount');
-        $urlRouterProvider.when('/:organisationId', '/:organisationId/campaigns/display');
+        $urlRouterProvider.when('/:organisationId', handleRedirection);
         $urlRouterProvider.when('/:organisationId/campaigns', '/:organisationId/campaigns/display');
 
         $urlRouterProvider.otherwise(function ($injector, $location) {

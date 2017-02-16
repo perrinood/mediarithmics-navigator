@@ -40,7 +40,7 @@ define(['./module'], function (module) {
           organisationId = workspaceString;
         } else if (workspaceString && workspaceString.match(/^o\d+d[^\d]+/)) {
           organisationId = workspaceString.match(/o(\d+).*/)[1];
-        } else if (workspaceString) {
+        } else if (workspaceString && workspaceString.match(/o(\d+)d(\d+)/)) {
           organisationId = workspaceString.match(/o(\d+)d(\d+)/)[1];
           datamartId = workspaceString.match(/o(\d+)d(\d+)/)[2];
         }
