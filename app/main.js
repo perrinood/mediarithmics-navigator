@@ -26,7 +26,7 @@ require.config({
 
         "jszipGlobal": "./core/common/globals/jszipGlobal",
         "jszip": "../bower_components/js-xlsx/jszip",
-        "js-xlsx": "../bower_components/js-xlsx/xlsx",
+        "js-xlsx": "../bower_components/js-xlsx/dist/xlsx.core.min",
         "file-saver": "../bower_components/file-saver.js/FileSaver",
         "clipboard": "../bower_components/clipboard/dist/clipboard",
         "autofill-event": "../bower_components/autofill-event/src/autofill-event",
