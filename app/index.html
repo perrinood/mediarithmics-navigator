@@ -59,13 +59,8 @@
     var angularContainer = document.getElementById("mcs-app");
     var reactContainer = document.getElementById("mcs-react-app");
 
-<<<<<<< refs/remotes/upstream/master
-    function isAngularApp(url) {
-      return url.indexOf('#') !== -1;
-=======
     function isReactApp(url) {
       return url.match(/v2/);
->>>>>>> Bootstrap react app
     }
 
     if (!isReactApp(newUrl)) {
@@ -139,6 +134,7 @@ var require = {
 };
 </script>
 <script src="conf/plugins-configuration.js"></script>
+<script src="conf/react-configuration.js"></script>
 <script data-main="main.js" src="angular/bower_components/requirejs/require.js"></script>
 
 <script>
