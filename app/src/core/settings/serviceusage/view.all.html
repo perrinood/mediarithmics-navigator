@@ -3,30 +3,36 @@
     <div class="mcs-default-heading">
       <h1>Service Usage Report</h1>
     </div>
-  </div>
 
-  <div class="service-usage-date-controller pull-right">
-    <form class="form-inline pull-right" role="form">
-      <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
-    </form>
-    <span ng-show="statisticsQuery.isRunning" class="pull-right">
-      <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
-    </span>
-    <div class="dropdown pull-right" uib-dropdown>
-      <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle type="button">Export <span class="caret"></span></button>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="Choose Export Format">
-        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('xlsx')">Everything in Excel format(.xlsx)</a></li>
-      </ul>
+    <div class="pull-left">
+      <button type="button" class="mics-btn mics-btn-action btn-xs" ng-click="updateStatistics()">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Refresh
+      </button>
     </div>
-  </div>
+    <div class="service-usage-date-controller pull-right">
+      <form class="form-inline pull-right" role="form">
+        <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L" ranges="reportDefaultDateRanges" opens="'left'">
+      </form>
+      <span ng-show="statisticsQuery.isRunning" class="pull-right">
+        <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
+      </span>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle type="button">Export <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="Choose Export Format">
+          <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('xlsx')">Everything in Excel format(.xlsx)</a></li>
+        </ul>
+      </div>
+    </div>
 
-  <table class="mics-table js-auto-hide-actions table-hover" ng-table="tableParams" show-filter="true">
-    <tr ng-repeat="usage in $data">
-      <td data-title="'Provider Name'" sortable="'provider_name'" filter="{provider_name:'text'}">{{usage.provider_name}}</td>
-      <td data-title="'Campaign Name'" sortable="'campaign_name'" filter="{campaign_name:'text'}">{{usage.campaign_name}}</td>
-      <td data-title="'Service Name'" sortable="'service_name'" filter="{service_name:'text'}">{{usage.service_name}}</td>
-      <td data-title="'Service Element Name'" sortable="'segment_name'" filter="{segment_name:'text'}">{{usage.segment_name}}</td>
-      <td data-title="'Usage'" sortable="'unit_count'">{{usage.unit_count}}</td>
-    </tr>
-  </table>
+    <table class="mics-table js-auto-hide-actions table-hover" ng-table="tableParams" show-filter="true">
+      <tr ng-repeat="usage in $data">
+        <td data-title="'Provider Name'" sortable="'provider_name'" filter="{provider_name:'text'}">{{usage.provider_name}}</td>
+        <td data-title="'Campaign Name'" sortable="'campaign_name'" filter="{campaign_name:'text'}">{{usage.campaign_name}}</td>
+        <td data-title="'Service Name'" sortable="'service_name'" filter="{service_name:'text'}">{{usage.service_name}}</td>
+        <td data-title="'Service Element Name'" sortable="'segment_name'" filter="{segment_name:'text'}">{{usage.segment_name}}</td>
+        <td data-title="'Usage'" sortable="'unit_count'">{{usage.unit_count.toFixed(2)}}</td>
+      </tr>
+    </table>
+  </div>
 </div>

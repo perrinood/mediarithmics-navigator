@@ -5,11 +5,10 @@
     </div>
   </div>
   <div class="row" ng-show="!error">
-    <div class="col-md-3" fix-position-when-at-top>
+    <div class="col-md-3">
       <h4>List of criteria</h4>
-
       <div class="panel-group" id="accordion">
-        <div class="panel panel-default" ng-repeat="family in criteriaContainer.families">
+        <div class="panel panel-default" ng-repeat="family in criteriaContainer.families | orderBy: 'name'">
           <div class="panel-heading">
             <h4 class="panel-title">
               <a data-toggle="collapse" data-parent="#accordion"
@@ -112,12 +111,12 @@
                         </button>
                       </div>
                       Group #{{i+1}}
-                                    <span ng-if="!groupContainer.value.excluded" class="glyphicon glyphicon-ok"
-                                          aria-hidden="true" title="Include group"
-                                          ng-click="toggleExclude(groupContainer)"></span>
-                                    <span ng-if="groupContainer.value.excluded"
-                                          class="glyphicon glyphicon-remove-circle" aria-hidden="true"
-                                          title="Exclude group" ng-click="toggleExclude(groupContainer)"></span>
+                      <span ng-if="!groupContainer.value.excluded" class="glyphicon glyphicon-ok"
+                            aria-hidden="true" title="Include group"
+                            ng-click="toggleExclude(groupContainer)"></span>
+                      <span ng-if="groupContainer.value.excluded"
+                            class="glyphicon glyphicon-remove-circle" aria-hidden="true"
+                            title="Exclude group" ng-click="toggleExclude(groupContainer)"></span>
                     </div>
                     <div class="panel-body">
                       <div id="group {{groupContainer.id}}"
@@ -128,7 +127,7 @@
                                ng-class="{
                                                       'drop-allowed': familyMatchesForDrop(elementContainer.family)
                                                    }"
-                               >
+                          >
                             <div class="pull-right">
                               <button type="button" class="btn btn-default btn-xs"
                                       aria-label="remove"
@@ -149,22 +148,22 @@
                           <div class="panel-body">
                             <div ng-repeat="(k,condition) in elementContainer.conditions">
                               <div ng-if="condition.value.property_selector_name !== 'INDEX'">
-                              <div class="form-group">
-                                <div class="row">
-                                  <div class="col-md-10">
-                                    <mcs-query-condition
-                                        condition="condition"></mcs-query-condition>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <button type="button" class="btn btn-default pull-right"
-                                            aria-label="remove"
-                                            ng-click="removeCond(groupContainer, elementContainer, condition)">
+                                <div class="form-group">
+                                  <div class="row">
+                                    <div class="col-md-10">
+                                      <mcs-query-condition
+                                          condition="condition"></mcs-query-condition>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <button type="button" class="btn btn-default pull-right"
+                                              aria-label="remove"
+                                              ng-click="removeCond(groupContainer, elementContainer, condition)">
                                                                     <span class="glyphicon glyphicon-remove"
                                                                           aria-hidden="true"></span>
-                                    </button>
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
                               </div>
                             </div>
                             <!--ng-class="isDropAllowedOnElement(dragEl, elementContainer)"-->
@@ -238,7 +237,7 @@
                 <div ng-show="!resultsLoading && !resultsError">
                   <div ng-show="statistics.total == 0">No Results</div>
                   <div ng-show="results.length == 0 && statistics.total != 0">Click refresh to
-                    view results
+                                                                              view results
                   </div>
 
                 </div>

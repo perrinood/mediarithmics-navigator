@@ -170,7 +170,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       var buildMetricsExportHeaders = function (metricsType) {
         var headers = ["Status", "Name", "Format"];
         if (metricsType === metricsTypes.sites) {
-          headers = ["Name"];
+          headers = ["Display Network","Name"];
         } else if (metricsType === metricsTypes.adGroups) {
           headers = ["Status", "Name"];
         }
@@ -188,7 +188,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           if (metricsType === metricsTypes.adGroups) {
             row = [metrics[i].status, metrics[i].name];
           } else if (metricsType === metricsTypes.sites) {
-            row = [metrics[i].name];
+            row = [metrics[i].display_network_name, metrics[i].name];
           }
           for (var j = 0; j < metrics[i].info.length; ++j) {
             row.push(metrics[i].info[j].value || '');
