@@ -6,15 +6,15 @@ define(['./module'], function (module) {
     '$scope', '$log', 'Restangular', 'core/common/auth/Session', 'lodash', '$stateParams', '$location', 'core/configuration', 'ngTableParams', '$window', 'core/common/auth/AuthenticationService', "core/common/WaitingService", "core/common/ErrorService", "core/bidOptimizer/PropertyContainer", "$q",
     function($scope, $log, Restangular, Session, _, $stateParams, $location, configuration, NgTableParams, $window, AuthenticationService, waitingService, errorService, PropertyContainer, $q) {
       var isEdit = $stateParams.id ? true : false;
-      var visitAnalyserId = $stateParams.id;
+      var activityAnalyserId = $stateParams.id;
       var type = $stateParams.type;
 
-      Restangular.one('visit_analyzer_models', visitAnalyserId).get().then(function (visitAnalyser) {
-        $scope.visitAnalyser = visitAnalyser;
+      Restangular.one('visit_analyzer_models', activityAnalyserId).get().then(function (activityAnalyser) {
+        $scope.activityAnalyser = activityAnalyser;
       });
 
       $scope.properties = [];
-      Restangular.one('visit_analyzer_models', visitAnalyserId).all("properties").getList().then(function (properties) {
+      Restangular.one('visit_analyzer_models', activityAnalyserId).all("properties").getList().then(function (properties) {
         for(var i=0; i < properties.length; i++) {
           // load the property container
           var propertyCtn = new PropertyContainer(properties[i]);
@@ -28,7 +28,7 @@ define(['./module'], function (module) {
       };
 
       $scope.next = function () {
-        var promises = [$scope.visitAnalyser.put()];
+        var promises = [$scope.activityAnalyser.put()];
         for(var i = 0; i < $scope.properties.length; i++) {
           promises.push($scope.properties[i].update());
         }
