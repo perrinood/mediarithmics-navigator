@@ -93,6 +93,6 @@
   },
   "scripts": {
     "test": "grunt test",
-    "start": "node scripts/start.js"
+    "start": "grunt serve"
   }
 }
