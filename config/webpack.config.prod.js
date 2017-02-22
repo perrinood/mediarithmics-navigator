@@ -5,24 +5,22 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('./paths');
 const config = require('./webpack.config');
 
-const devConfig = {
-
-  devtool: 'eval',
+const prodConfig = {
 
   output: {
-    filename: '[name].js',
-    path: paths.appPath,
-    publicPath: paths.publicPath
+    filename: '[name].[chunkhash].js',
+    path: paths.appDistPath,
+    publicPath: paths.publicDistPath
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml
-    }),
+      template: paths.appDistHtml,
+      filename: '../index.html'
+    })
   ]
 
 };
 
-module.exports = merge(config, devConfig);
+module.exports = merge(config, prodConfig);

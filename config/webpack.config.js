@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const paths = require('./paths');
 const babelOptions = require('./babel');
@@ -11,11 +10,6 @@ const config = {
   entry: {
     app: path.join(paths.reactAppSrc, '/index.js'),
     'react-vendors': Object.keys(pkg.dependencies)
-  },
-
-  output: {
-    path: paths.appPath,
-    publicPath: paths.publicPath
   },
 
   module: {
@@ -38,10 +32,6 @@ const config = {
   },
 
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: paths.appHtml
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['react-vendors', 'manifest']
     })

@@ -42,6 +42,8 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
 
+  grunt.loadNpmTasks('grunt-webpack');
+
   // var version = grunt.file.readJSON("package.json").version;
   var version = "1.0-build-" + (process.env.BUILD_NUMBER || "DEV") + "-rev-" + require('child_process').execSync("git rev-parse --short HEAD").toString().trim();
 
@@ -50,6 +52,7 @@ module.exports = function (grunt) {
   var webpack = require('webpack');
   var webpackMiddleware = require("webpack-dev-middleware");
   var webpackDevConfig = require('./config/webpack.config.dev.js');
+  var webpackProdConfig = require('./config/webpack.config.prod.js');
   var paths = require('./config/paths');
 
   // Define the configuration for all the tasks
@@ -538,6 +541,10 @@ module.exports = function (grunt) {
         'return angular.module("{{{name}}}", [{{{dependencies}}}]);' +
         '});'
       }
+    },
+
+    webpack: {
+      build: webpackProdConfig
     }
   });
 
@@ -635,6 +642,7 @@ module.exports = function (grunt) {
     'copy:generated_iab',
     'htmlmin',
     'versionFile',
+    'webpack:build',
     'compress'
   ]);
 
