@@ -48,15 +48,6 @@
           <mcs-style-sheet-property ng-disabled="property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
         </div>
 
-        <div class="row">
-          <div class="col-xs-6">
-            <input type="email" class="form-control" placeholder="Email" ng-model="recipient">
-          </div>
-          <div class="col-xs-2">
-            <button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue" type="button" ng-click="sendEmail()">Send</button>
-          </div>
-        </div>
-        <p>{{messageSent}}</p>
 
       </div>
 

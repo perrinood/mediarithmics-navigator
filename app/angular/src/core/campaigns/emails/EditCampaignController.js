@@ -13,9 +13,13 @@ define(['./module', 'moment'], function (module, moment) {
     function (jQuery, $scope, $uibModal, $log, $location, $stateParams, $sce, _, configuration,
               CampaignPluginService, WaitingService, ErrorService, GoalsService,
               Restangular, EmailCampaignContainer, Session, AuthenticationService) {
-      var organisationId = Session.getCurrentWorkspace().organisation_id;
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
       var campaignId = $stateParams.campaign_id;
       var campaignCtn = {};
+
+      $scope.recipient = "";
+      $scope.htmlContent = "";
+      $scope.messageSent = "";
 
       CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.email", "default-editor").then(function (template) {
         campaignCtn = new EmailCampaignContainer(template.editor_version_id);
@@ -69,6 +73,17 @@ define(['./module', 'moment'], function (module, moment) {
           controller: 'core/campaigns/emails/ChooseExistingEmailRoutersController',
           size: "lg"
         });
+      };
+
+      $scope.sendEmail = function () {
+        if ($scope.recipient !== undefined && $scope.htmlContent !== undefined && $scope.organisationId !== undefined) {
+          Restangular.one('email_templates', $stateParams.creative_id).all('send_test').post({
+            organisation_id: $scope.organisationId,
+            email: $scope.recipient
+          }).then(function () {
+            $scope.messageSent = "Message sent";
+          });
+        }
       };
 
       $scope.$on("mics-audience-segment:selected", function (event, params) {
