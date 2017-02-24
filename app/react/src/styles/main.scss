@@ -3046,6 +3046,30 @@ a.category-item {
       font-size: 18px;
     }
   }
+
+  .report-toolbar {
+    @include make-row();
+    .date-export-toolbar {
+      @include make-md-column(12);
+      .report-date-controller {
+        min-width: 270px;
+        padding: 0;
+        input.range {
+          width: 240px;
+          background-color: $mcs-light-blue;
+          color: $mcs-light-blue-not;
+          @include use-bold-font();
+          font-size: ceil(($font-size-base * 1.5));
+        }
+        @extend .text-right;
+
+        > * {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
 }
 
 /**

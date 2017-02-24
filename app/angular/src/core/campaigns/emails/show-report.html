@@ -16,87 +16,108 @@
       </h2>
     </div>
 
-    <div ng-class="chartArea">
-      <div class="row">
-        <div class="col-xs-3">
-          <nvd3 options="options1" data="data1"></nvd3>
-          <div class="info-details">
-            <h2 class="main-info">{{mainInfo.opened}}<br><span>Opened</span></h2>
-            <br>
-            <table class="mics-table">
-              <tbody>
-              <tr>
-                <td>Total opened</td>
-                <td>{{mainInfo.totalOpened}}</td>
-              </tr>
-              <tr>
-                <td>Average time to open</td>
-                <td>{{mainInfo.timeToOpen}}</td>
-              </tr>
-              <tr>
-                <td>Complaints</td>
-                <td>{{mainInfo.complaints}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-xs-3">
-          <nvd3 options="options2" data="data2"></nvd3>
-          <div class="info-details">
-            <h2 class="main-info">{{mainInfo.clicked}}<br><span>Clicked</span></h2>
-            <br>
-            <table class="mics-table">
-              <tbody>
-              <tr>
-                <td>Total clicks</td>
-                <td>{{mainInfo.totalClicks}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-xs-3">
-          <nvd3 options="options3" data="data3"></nvd3>
-          <div class="info-details">
-            <table class="mics-table">
-              <h2 class="main-info">{{mainInfo.unsubscribed}}<br><span>Unsubscribed</span></h2>
-              <br>
-              <tbody>
-              <tr>
-                <td>Total sent</td>
-                <td>{{mainInfo.totalSent}}</td>
-              </tr>
-              <tr>
-                <td>Delivered</td>
-                <td>{{mainInfo.delivered}}</td>
-              </tr>
-              <tr>
-                <td>Soft bounced</td>
-                <td>{{mainInfo.softBounced}}</td>
-              </tr>
-              <tr>
-                <td>Hard bounced</td>
-                <td>{{mainInfo.hardBounced}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-xs-3">
-          <div class="side-info">
-            <p>Sent on</p>
-            <h3>{{mainInfo.date}}</h3>
-          </div>
-        </div>
-      </div>
-    </div>
+    <uib-tabset class="mics-page-main-tabs">
+      <uib-tab>
+        <uib-tab-heading>
+          Overview
+        </uib-tab-heading>
 
-    <hr/>
+        <div class="report-toolbar">
+          <div class="date-export-toolbar">
+            <div class="report-date-controller">
+              <!-- date picker https://github.com/sagivf/ng-bs-daterangepicker -->
+              <form class="form-inline pull-right" role="form">
+                <input type="daterange" ng-model="date.reportDateRange" class="form-control range" format="L"
+                       ranges="reportDefaultDateRanges" opens="'left'">
+              </form>
+              <span ng-show="statisticsQuery.isRunning || exportQuery.isRunning" class="pull-right">
+                    <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
+                  </span>
+            </div>
+          </div>
+        </div>
 
-    <!-- Tab set: Ads, AdGroups and Sites -->
+        <div ng-class="chartArea">
+          <div class="row">
+            <div class="col-xs-3">
+              <nvd3 options="options1" data="data1"></nvd3>
+              <div class="info-details">
+                <h2 class="main-info">{{mainInfo.opened}}<br><span>Opened</span></h2>
+                <br>
+                <table class="mics-table">
+                  <tbody>
+                  <tr>
+                    <td>Total opened</td>
+                    <td>{{mainInfo.totalOpened}}</td>
+                  </tr>
+                  <tr>
+                    <td>Average time to open</td>
+                    <td>{{mainInfo.timeToOpen}}</td>
+                  </tr>
+                  <tr>
+                    <td>Complaints</td>
+                    <td>{{mainInfo.complaints}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <nvd3 options="options2" data="data2"></nvd3>
+              <div class="info-details">
+                <h2 class="main-info">{{mainInfo.clicked}}<br><span>Clicked</span></h2>
+                <br>
+                <table class="mics-table">
+                  <tbody>
+                  <tr>
+                    <td>Total clicks</td>
+                    <td>{{mainInfo.totalClicks}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <nvd3 options="options3" data="data3"></nvd3>
+              <div class="info-details">
+                <table class="mics-table">
+                  <h2 class="main-info">{{mainInfo.unsubscribed}}<br><span>Unsubscribed</span></h2>
+                  <br>
+                  <tbody>
+                  <tr>
+                    <td>Total sent</td>
+                    <td>{{mainInfo.totalSent}}</td>
+                  </tr>
+                  <tr>
+                    <td>Delivered</td>
+                    <td>{{mainInfo.delivered}}</td>
+                  </tr>
+                  <tr>
+                    <td>Soft bounced</td>
+                    <td>{{mainInfo.softBounced}}</td>
+                  </tr>
+                  <tr>
+                    <td>Hard bounced</td>
+                    <td>{{mainInfo.hardBounced}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="side-info">
+                <p>Sent on</p>
+                <h3>{{mainInfo.date}}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div class="breakdown-area" ng-hide="true">
+        <hr/>
+
+        <!-- Tab set: Ads, AdGroups and Sites -->
+
+        <div class="breakdown-area" ng-hide="true">
       <div class="panel-body">
         <uib-tabset class="breakdown">
 
@@ -179,5 +200,7 @@
         </uib-tabset>
       </div>
     </div>
+     </uib-tab>
+    </uib-tabset>
   </div>
 </div>

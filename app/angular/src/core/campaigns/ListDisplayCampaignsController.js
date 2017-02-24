@@ -57,7 +57,7 @@ define(['./module'], function (module) {
       }
 
       Restangular.all('display_campaigns').getList(params).then(function (displayCampaigns) {
-        $scope.displayCampaigns = displayCampaigns.filter(function(campaign){ return campaign.type === "DISPLAY"});
+        $scope.displayCampaigns = displayCampaigns.filter(function(campaign){ return campaign.type === "DISPLAY" ;});
       });
 
       $scope.$watch('reportDateRange', function () {

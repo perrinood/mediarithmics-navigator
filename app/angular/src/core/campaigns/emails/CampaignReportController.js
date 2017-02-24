@@ -7,9 +7,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
   module.controller('core/campaigns/emails/CampaignReportController', [
     '$scope', '$http', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/emails/EmailCampaignService',
     'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'd3', 'moment', '$interval', '$q', 'core/common/ErrorService',
-    'core/common/auth/AuthenticationService', '$timeout',
+    'core/common/auth/AuthenticationService', '$timeout', 'CampaignAnalyticsReportService',
     function ($scope, $http, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, EmailCampaignService, CampaignPluginService,
-              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout) {
+              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout, CampaignAnalyticsReportService) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       // Chart
@@ -18,6 +18,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       $scope.chartArea = "chart-area";
       $scope.charts = ['clicks', 'impressions'];
       $scope.getChartName = ChartsService.getChartName;
+
+      $scope.date = {reportDateRange: CampaignAnalyticsReportService.getDateRange()};
+      $scope.reportDefaultDateRanges = CampaignAnalyticsReportService.getDefaultDateRanges();
 
       // Tabs Set
       $scope.reverseSort = true;
@@ -167,6 +170,20 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           controller: 'core/campaigns/DeleteController'
         });
       };
+
+      /**
+       * Stats
+       */
+      $scope.$watchGroup(['date.reportDateRange'], function (values) {
+      //        if (angular.isDefined(values[0]) && angular.isDefined(values[1])) {
+      //          $scope.timeFilter = $scope.timeFilters[0];
+      //          updateStatistics($scope, $stateParams.campaign_id, CampaignAnalyticsReportService, ChartsService, $scope.charts, $q, ErrorService);
+      //        }
+        console.log("new date",values);
+      });
+
+
+
     }
   ]);
 });
