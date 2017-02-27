@@ -7,8 +7,8 @@ app/angular/bower_components/
 .idea/
 .vscode/
 .editorconfig
-index.js
-module.js
+app/angular/**/index.js
+app/angular/**/module.js
 generated/
 *.zip
 npm-debug.log
