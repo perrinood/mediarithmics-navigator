@@ -35,7 +35,7 @@ define(['./module'], function (module) {
       });
 
       $scope.takeScreenshot = function (creativeId) {
-        Restangular.one('creatives', creativeId).all('screenshots').post({}, { organisation_id: $scope.organisationId }).then(function (response) {
+        Restangular.one('creatives', creativeId).all('screenshots').post([], { organisation_id: $scope.organisationId }).then(function (response) {
           $log.debug("Screenshot was taken!" + response);
         });
       };
