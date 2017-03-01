@@ -3,6 +3,7 @@ import Route from 'react-router/lib/Route';
 import IndexRedirect from 'react-router/lib/IndexRedirect';
 
 import { Navigator } from '../containers/Navigator';
+import { NotFound } from '../containers/NotFound';
 
 import CampaignRouter from './Campaign';
 
@@ -20,6 +21,7 @@ export default (store) => { // eslint-disable-line no-unused-vars
       <Route path="/v2" component={Navigator}>
         <IndexRedirect to="/v2/campaign" />
         {CampaignRouter}
+        <Route path="*" component={NotFound} />
       </Route>
       <Route path="*" component={NoMatch} />
     </div>
