@@ -20,7 +20,6 @@ export default (store) => { // eslint-disable-line no-unused-vars
     <div>
       <Route path="/" component={Navigator}>
         <Route path="/v2">
-          <IndexRedirect to="/v2/campaign" />
           {CampaignRouter}
           <Route path="*" component={NotFound} />
         </Route>

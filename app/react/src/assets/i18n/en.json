@@ -1,3 +1,8 @@
 {
-  "CAMPAIGN_COMPONENT": "Campaign component"
+  "CAMPAIGN_COMPONENT": "Campaign component",
+
+  "CAMPAIGNS": "Campaigns",
+  "CREATIVES": "Creatives",
+  "LIBRARY": "Library"
+  
 }
