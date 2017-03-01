@@ -1,6 +1,5 @@
 import React from 'react';
 import Route from 'react-router/lib/Route';
-import IndexRedirect from 'react-router/lib/IndexRedirect';
 
 import { Navigator } from '../containers/Navigator';
 import { NotFound } from '../containers/NotFound';
