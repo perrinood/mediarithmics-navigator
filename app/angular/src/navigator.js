@@ -94,7 +94,8 @@ define(['navigator-setup', 'angularAMD', 'lodash', 'async', 'jquery', 'plupload'
 
         function handleRedirection($match, $stateParams) {
           if (!$match.organisationId.match(/v2/)) {
-            return '/:organisationId/campaigns/display';
+            var organisationId = $stateParams.organisation_id || $match.organisationId;
+            return '/' + organisationId + '/campaigns/display';
           }
         }
 
