@@ -18,12 +18,14 @@ class NoMatch extends React.Component {
 export default (store) => { // eslint-disable-line no-unused-vars
   return (
     <div>
-      <Route path="/v2" component={Navigator}>
-        <IndexRedirect to="/v2/campaign" />
-        {CampaignRouter}
-        <Route path="*" component={NotFound} />
+      <Route path="/" component={Navigator}>
+        <Route path="/v2">
+          <IndexRedirect to="/v2/campaign" />
+          {CampaignRouter}
+          <Route path="*" component={NotFound} />
+        </Route>
+        <Route path="*" component={NoMatch} />
       </Route>
-      <Route path="*" component={NoMatch} />
     </div>
   );
 };

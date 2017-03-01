@@ -42,16 +42,17 @@
   <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div  class="mcs-app" ng-controller="LayoutController">
+<div id="mcs-app" class="mcs-app" ng-controller="LayoutController">
   <div ng-include="'angular/src/core/layout/header/header.html'"></div>
 
   <div ng-include="'angular/src/core/layout/sidebar/sidebar.html'" ng-class="{'hidden': !showSidebar }"></div>
 
   <div ng-class="{'content-with-sidebar': showSidebar }">
-    <div id="mcs-app" ui-view="" class="container-fluid"></div>
-    <div id="mcs-react-app" class="mcs-react-app"></div>
+    <div ui-view="" class="container-fluid"></div>
   </div>
 </div>
+
+<div id="mcs-react-app" class="mcs-react-app"></div>
 
 <script>
   function switchApp(newUrl) {
