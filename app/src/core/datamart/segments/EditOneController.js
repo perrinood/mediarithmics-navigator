@@ -84,7 +84,7 @@ define(['./module'], function (module) {
 
         if ($scope.realTime.active){
           $scope.segment.evaluation_mode = 'REAL_TIME';
-        } else {
+        } else if ($scope.segment.evaluation_mode !== 'LIVE') {
           $scope.segment.evaluation_mode = 'PERIODIC';
         }
 
