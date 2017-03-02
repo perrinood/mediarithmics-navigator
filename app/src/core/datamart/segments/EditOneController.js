@@ -13,6 +13,10 @@ define(['./module'], function (module) {
 
       $scope.isCreationMode = !segmentId;
 
+      $scope.realTime = {
+        active: false
+      };      
+
       if (!segmentId) {
         $scope.segmentLifetime = "never";
         if (type === 'USER_QUERY'){
@@ -20,7 +24,7 @@ define(['./module'], function (module) {
             type : type,
             datamart_id: Session.getCurrentDatamartId(),
             evaluation_mode: 'PERIODIC',
-            evaluation_period: 30,
+            evaluation_period: 1,
             evaluation_period_unit: 'DAY'
           };
           var queryContainer = new QueryContainer(Session.getCurrentDatamartId());
@@ -37,6 +41,7 @@ define(['./module'], function (module) {
           $scope.segment = segment;
 
           if (segment.type === 'USER_QUERY'){
+            $scope.realTime.active = segment.evaluation_mode === 'REAL_TIME';
             var queryContainer = new QueryContainer(Session.getCurrentDatamartId(), segment.query_id);
             queryContainer.load().then(function sucess(loadedQueryContainer){
               $scope.queryContainer = loadedQueryContainer;
@@ -75,6 +80,12 @@ define(['./module'], function (module) {
           $scope.segment.default_lifetime = null;
         } else {
           $scope.segment.default_lifetime = moment.duration($scope.segmentLifetimeNumber,$scope.segmentLifetimeUnit).asMinutes();
+        }
+
+        if ($scope.realTime.active){
+          $scope.segment.evaluation_mode = 'REAL_TIME';
+        } else {
+          $scope.segment.evaluation_mode = 'PERIODIC';
         }
 
         if(segmentId) {
