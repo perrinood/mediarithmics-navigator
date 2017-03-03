@@ -155,7 +155,6 @@
       <div class="mics-default-block">
         <div class="row goals-selection" ng-repeat="goalType in goalTypes">
           <div class="col-xs-2">
-            <hr ng-show="isConversionType(goalType.key)"/>
             <label>
               <input type="checkbox" ng-change="selectConversion(goalType)" ng-model="checkedGoalTypes[goalType.key]">
               <strong> {{goalType.name}}</strong>
