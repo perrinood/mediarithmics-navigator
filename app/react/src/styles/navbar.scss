@@ -1,0 +1,21 @@
+.navbar-nav.navbar-right {
+  li > p {
+    padding: 3px 20px;
+  }
+
+  .profile-picture,
+  li > img {
+    cursor: pointer;
+    height: 30px;
+  }
+
+  li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  li > img {
+    margin: 10px;
+  }
+
+}

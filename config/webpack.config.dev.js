@@ -1,9 +1,12 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const paths = require('./paths');
-const config = require('./webpack.config');
+const configFactory = require('./webpack.config');
+
+const customFontPath = 'app/react/src/assets/fonts/';
 
 const devConfig = {
 
@@ -16,6 +19,7 @@ const devConfig = {
   },
 
   plugins: [
+    new ExtractTextPlugin('style.css'),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
@@ -25,4 +29,4 @@ const devConfig = {
 
 };
 
-module.exports = merge(config, devConfig);
+module.exports = merge(configFactory(customFontPath, false), devConfig);

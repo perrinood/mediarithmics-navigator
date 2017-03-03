@@ -2,22 +2,28 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import Loading from 'mcs-react-loading';
-import Header from 'mcs-react-header';
+
+import { NavigatorHeader } from '../Header';
 
 import * as i18nActions from '../../services/i18n/i18nActions';
-
-import logoUrl from '../../assets/images/mediarithmics-small-white.png';
-import imgUrl from '../../assets/images/user.svg';
+import * as sessionActions from '../../services/session/SessionActions';
 
 class Navigator extends Component {
 
   componentDidMount() {
 
     const {
-      initI18n
+      initI18n,
+      user,
+      token,
+      getConnectedUser
     } = this.props;
 
     initI18n();
+
+    if (token && !Object.keys(user).length) {
+      getConnectedUser();
+    }
 
   }
 
@@ -29,34 +35,6 @@ class Navigator extends Component {
       translations
     } = this.props;
 
-    // todo retrieve organiation and/or datamard from workspace
-    const navigationItems = [
-      {
-        url: '/o1dundefined/campaigns/display',
-        label: translations.CAMPAIGNS
-      },
-      {
-        url: '/o1dundefined/creatives/display-ad',
-        label: translations.CREATIVES
-      },
-      {
-        url: '/o1dundefined/library/placementlists',
-        label: translations.LIBRARY
-      }
-    ];
-
-    const profileItems = [];
-
-    const logo = {
-      url: logoUrl,
-      alt: 'mediarithmics'
-    };
-
-    const img = {
-      url: imgUrl,
-      alt: 'profile'
-    };
-
     if (!isReady) {
       return <Loading />;
     }
@@ -64,7 +42,7 @@ class Navigator extends Component {
     return (
       <IntlProvider locale={locale} key={locale} messages={translations}>
         <div>
-          <Header navigationItems={navigationItems} profileItems={profileItems} logo={logo} img={img} />
+          <NavigatorHeader {...this.props} />
           {this.props.children}
         </div>
       </IntlProvider>
@@ -81,16 +59,22 @@ Navigator.propTypes = {
   isReady: PropTypes.bool.isRequired,
   locale: PropTypes.string,
   translations: PropTypes.objectOf(PropTypes.string).isRequired,
-  initI18n: PropTypes.func.isRequired
+  initI18n: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  token: PropTypes.string.isRequired,
+  getConnectedUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   isReady: state.translationsState.isReady,
-  translations: state.translationsState.translations
+  translations: state.translationsState.translations,
+  user: state.sessionState.user,
+  token: state.persistedState.access_token
 });
 
 const mapDispatchToProps = {
-  initI18n: i18nActions.initI18n
+  initI18n: i18nActions.initI18n,
+  getConnectedUser: sessionActions.getConnectedUser
 };
 
 Navigator = connect(

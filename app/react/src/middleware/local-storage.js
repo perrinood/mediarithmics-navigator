@@ -35,7 +35,7 @@ function initLocalStorage() {
 }
 
 function getItemLocalStorage(property) {
-  return localStorage.getItem(property);
+  return localStorage.getItem(property) || getItemCookie(property);
 }
 
 function getItemCookie(property) {

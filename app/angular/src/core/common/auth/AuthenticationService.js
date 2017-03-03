@@ -3,8 +3,8 @@ define(['./module'], function (module) {
 
   /* define the Authentication service */
   module.factory('core/common/auth/AuthenticationService', [
-    '$q', '$log', '$document', 'Restangular', "jquery",
-    function($q, $log, $document, Restangular, $) {
+    '$q', '$log', '$document', 'Restangular', "jquery", '$window',
+    function($q, $log, $document, Restangular, $, $window) {
 
       var tokenRefresherTimer = null;
 
@@ -16,6 +16,8 @@ define(['./module'], function (module) {
         // set the token for REST API calls
         $.cookie("access_token", accessToken);
         $.cookie("access_token_expiration_date", new Date().getTime() + expiresIn * 1000);
+        $window.localStorage.setItem("access_token", accessToken);
+        $window.localStorage.setItem("access_token_expiration_date", new Date().getTime() + expiresIn * 1000);
       };
 
       service.getAccessToken = function() {
@@ -35,6 +37,7 @@ define(['./module'], function (module) {
 
       service.resetAccessToken = function() {
         $.removeCookie("access_token");
+        $window.localStorage.removeItem("access_token");
       };
 
       service.hasAccessToken = function() {
@@ -51,6 +54,7 @@ define(['./module'], function (module) {
       service.setRefreshToken = function(refreshToken, expires) {
         // store the refresh token in a cookie
         $.cookie("refresh_token", refreshToken, {expires: expires});
+        $window.localStorage.setItem("refresh_token", refreshToken);
         service.resetTokenRefresher();
         service.setupTokenRefresher();
       };
@@ -63,6 +67,7 @@ define(['./module'], function (module) {
 
       service.resetRefreshToken = function() {
         $.removeCookie("refresh_token");
+        $window.localStorage.removeItem("refresh_token");
         this.resetTokenRefresher();
       };
 

@@ -15,4 +15,6 @@ const PersistentReducers = {
   persistedState
 };
 
-export default PersistentReducers;
+export {
+  PersistentReducers
+};

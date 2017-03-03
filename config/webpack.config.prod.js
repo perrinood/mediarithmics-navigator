@@ -1,9 +1,12 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const paths = require('./paths');
-const config = require('./webpack.config');
+const configFactory = require('./webpack.config');
+
+const customFontPath = `${paths.public}/src/assets/fonts/`;
 
 const prodConfig = {
 
@@ -14,6 +17,7 @@ const prodConfig = {
   },
 
   plugins: [
+    new ExtractTextPlugin('style.[chunkhash].css'),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appDistHtml,
@@ -29,4 +33,4 @@ const prodConfig = {
 
 };
 
-module.exports = merge(config, prodConfig);
+module.exports = merge(configFactory(customFontPath, true), prodConfig);

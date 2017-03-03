@@ -5,7 +5,7 @@ import { getToken } from './auth';
 const MCS_CONSTANTS = window.MCS_CONSTANTS || {}; // eslint-disable-line no-undef
 const LOCAL_URL = '/';
 const API_URL = `${MCS_CONSTANTS.API_URL}/v1/`;
-const PRIVATE_API_URL = `${MCS_CONSTANTS.PRIVATE_API_URL}/v1/`;
+const ADMIN_API_URL = `${MCS_CONSTANTS.ADMIN_API_URL}/v1/`;
 
 function callApi(method, endpoint, params = {}, body, authenticated, options) {
 
@@ -15,7 +15,7 @@ function callApi(method, endpoint, params = {}, body, authenticated, options) {
     return str.length ? `?${str}` : '';
   };
 
-  let url = options.adminApi ? PRIVATE_API_URL : options.localUrl ? LOCAL_URL : API_URL;
+  let url = options.adminApi ? ADMIN_API_URL : options.localUrl ? LOCAL_URL : API_URL;
   url = `${url}${endpoint}${paramsToQueryString(params)}`;
 
   const token = getToken();
@@ -44,7 +44,7 @@ function callApi(method, endpoint, params = {}, body, authenticated, options) {
 
   const parseJson = (response) => {
     return response.json()
-            .then(json => ({ json, response }));
+      .then(json => ({ json, response }));
   };
 
   const checkStatus = ({ json, response }) => {
@@ -55,12 +55,12 @@ function callApi(method, endpoint, params = {}, body, authenticated, options) {
   };
 
   return fetch(url, config) // eslint-disable-line no-undef
-        .then(parseJson)
-        .then(checkStatus)
-        .catch(response => {
-          const error = response.error ? response : { error: 'UNKNOWN_ERROR' };
-          throw error;
-        });
+    .then(parseJson)
+    .then(checkStatus)
+    .catch(response => {
+      const error = response.error ? response : { error: 'UNKNOWN_ERROR' };
+      throw error;
+    });
 }
 
 export const CALL_API = Symbol('Call Api');
@@ -109,10 +109,10 @@ export default store => next => action => {
   dispatch(onRequest(requestType));
 
   return callApi(method, endpoint, params, body, authenticated, options)
-        .then(json => dispatch(onRequestSuccess(successType, json)))
-        .catch(error => {
-          dispatch(onRequestFailure(failureType, error));
-          return Promise.reject(error);
-        });
+    .then(json => dispatch(onRequestSuccess(successType, json)))
+    .catch(error => {
+      dispatch(onRequestFailure(failureType, error));
+      return Promise.reject(error);
+    });
 
 };

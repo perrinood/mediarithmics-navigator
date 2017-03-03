@@ -11,12 +11,6 @@ export function requireAuthentication(Component) {
       this.checkAuth(this.props.authenticated);
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //   if (nextProps.authenticated !== this.props.authenticated) {
-    //     this.checkAuth(nextProps.authenticated);
-    //   }
-    // }
-
     checkAuth(authenticated) {
       const {
         refreshToken,
@@ -24,18 +18,16 @@ export function requireAuthentication(Component) {
           pathname,
           search
         },
-        history,
         getAccessTokens,
-        getConnectedUser
+        getConnectedUser,
+        router
       } = this.props;
-
-      console.log(this.props);
 
       const redirectAfterLogin = `${pathname}${search}`;
       const nextUrl = `${redirectAfterLogin}`;
-      const loginUrl = `/login?next=${redirectAfterLogin}`;
+      const loginUrl = `${PUBLIC_URL}/login?next=${redirectAfterLogin}`; // eslint-disable-line no-undef
       const redirect = (path) => {
-        history.push(path);
+        return Promise.resolve(router.replace(path));
       };
 
       if (refreshToken) {
@@ -43,7 +35,7 @@ export function requireAuthentication(Component) {
           getAccessTokens()
             .then(getConnectedUser)
             .then(redirect(nextUrl))
-            .catch(redirect(loginUrl));
+            .catch(() => redirect(loginUrl));
         }
       } else {
         redirect(loginUrl);
@@ -73,7 +65,8 @@ export function requireAuthentication(Component) {
       pathname: PropTypes.string
     }).isRequired,
     getAccessTokens: PropTypes.func.isRequired,
-    getConnectedUser: PropTypes.func.isRequired
+    getConnectedUser: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
   };
 
   const mapStateToProps = (state) => ({

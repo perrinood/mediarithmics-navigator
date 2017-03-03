@@ -14,12 +14,11 @@ const getAccessToken = () => {
   return (dispatch, getState) => {
 
     const {
-      loginState,
       persistedState
     } = getState();
 
     const body = {
-      refresh_token: loginState.refresh_token || persistedState.refresh_token
+      refresh_token: persistedState.refresh_token
     };
 
     return dispatch({
@@ -64,36 +63,42 @@ const sessionState = (state = defaultSessionState, action) => {
   switch (action.type) {
 
     case GET_ACCESS_TOKEN_REQUEST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true
-      });
+      };
     case GET_CONNECTED_USER_REQUEST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true
-      });
+      };
 
     case GET_ACCESS_TOKEN_SUCCESS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         access_token: action.response.data.access_token
-      });
+      };
     case GET_CONNECTED_USER_SUCCESS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         user: action.response.data,
         authenticated: true
-      });
+      };
 
     case GET_ACCESS_TOKEN_FAILURE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         error: action.response.error
-      });
+      };
     case GET_CONNECTED_USER_FAILURE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         error: action.response.error
-      });
+      };
 
     case LOGOUT:
       return defaultSessionState;

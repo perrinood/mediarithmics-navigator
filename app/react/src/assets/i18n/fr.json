@@ -3,6 +3,15 @@
 
   "CAMPAIGNS": "Campaignes",
   "CREATIVES": "Creatives",
-  "LIBRARY": "Bibliothèque"
+  "LIBRARY": "Bibliothèque",
+  
+  "LOGIN": "Login",
+  "LOGOUT": "Logout",
+
+  "EMAIL_ADDRESS": "Adresse email",
+  "EMAIL_PLACEHOLDER": "Entrez votre adresse email",
+  "PASSWORD_PLACEHOLDER": "Entre votre mot de passe",
+  "FORGOT_PASSWORD": "Mot de passe oublié ?",
+  "SUBMIT": "Valider"
 
 }

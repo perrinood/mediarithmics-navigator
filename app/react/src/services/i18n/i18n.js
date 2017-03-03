@@ -32,21 +32,24 @@ const translationsState = (state = defaultTranslationsState, action) => {
 
   switch (action.type) {
     case FETCH_TRANSLATIONS_REQUEST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isReady: false,
         isLoading: true
-      });
+      };
     case FETCH_TRANSLATIONS_SUCCESS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         translations: action.response,
         isReady: true,
         isLoading: false
-      });
+      };
     case FETCH_TRANSLATIONS_FAILURE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isReady: false,
         isLoading: false
-      });
+      };
     default:
       return state;
   }
