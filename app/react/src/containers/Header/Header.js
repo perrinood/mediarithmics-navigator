@@ -13,12 +13,15 @@ class NavigatorHeader extends Component {
   constructor(props) {
     super(props);
     this.buildNavigationItems = this.buildNavigationItems.bind(this);
+    this.buildWorkspaceItems = this.buildWorkspaceItems.bind(this);
     this.buildProfileItems = this.buildProfileItems.bind(this);
   }
 
   render() {
 
+    const homeUrl = '/';
     const navigationItems = this.buildNavigationItems();
+    const workspaceItems = this.buildWorkspaceItems();
     const profileItems = this.buildProfileItems();
 
     const logo = {
@@ -31,7 +34,7 @@ class NavigatorHeader extends Component {
       alt: 'profile'
     };
 
-    return <Header navigationItems={navigationItems} profileItems={profileItems} logo={logo} img={img} />;
+    return <Header homeUrl={homeUrl} navigationItems={navigationItems} workspaceItems={workspaceItems} profileItems={profileItems} logo={logo} img={img} />;
 
   }
 
@@ -44,7 +47,10 @@ class NavigatorHeader extends Component {
       },
       {
         url: '/v2/campaign',
-        label: <FormattedMessage id="CAMPAIGNS" />
+        label: <FormattedMessage id="CAMPAIGNS" />,
+        activeLinks: [
+          '/v2/campaign'
+        ]
       },
       {
         url: '/o1dundefined/campaigns/display',
@@ -59,6 +65,24 @@ class NavigatorHeader extends Component {
         label: <FormattedMessage id="LIBRARY" />
       }
     ];
+  }
+
+  buildWorkspaceItems() {
+
+    const {
+      user
+    } = this.props;
+
+    // use session workspace to get active workspace
+    const getWorkspaceItems = workspaces => workspaces.map(workspace => (
+      {
+        label: workspace.organisation_name,
+        onClick: () => {},
+        isActive: false
+      }
+    ));
+
+    return (user.workspaces && user.workspaces.length) ? getWorkspaceItems(user.workspaces) : [];
   }
 
   buildProfileItems() {

@@ -1,1 +1,4 @@
-@import 'navbar.scss';
+@import '~@blueprintjs/core/dist/blueprint.css';
+
+@import 'mcs-react-header/src/styles/Header.scss';
+@import 'mcs-react-nav-link/src/styles/NavLink.scss';
