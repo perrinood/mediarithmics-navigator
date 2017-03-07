@@ -21,7 +21,7 @@ export default (store) => { // eslint-disable-line no-unused-vars
   return (
     <div>
       <Route path="/" component={Navigator}>
-        <Route path={PUBLIC_URL} component={TemporaryView}>
+        <Route path={`${PUBLIC_URL}(/organisation/:organisationId)(/datamart/:datamartId)`} component={TemporaryView}>
           { LoginRouter(store) }
           { CampaignRouter }
           <Route path="*" component={NotFound} />

@@ -16,13 +16,19 @@ class Navigator extends Component {
       initI18n,
       user,
       token,
-      getConnectedUser
+      params: {
+        organisationId,
+        datamartId
+      },
+      getConnectedUser,
+      initWorkspace
     } = this.props;
 
     initI18n();
 
     if (token && !Object.keys(user).length) {
-      getConnectedUser();
+      getConnectedUser()
+        .then(() => initWorkspace(organisationId, datamartId));
     }
 
   }
@@ -61,20 +67,28 @@ Navigator.propTypes = {
   translations: PropTypes.objectOf(PropTypes.string).isRequired,
   initI18n: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  params: PropTypes.shape({
+    organisationId: PropTypes.string,
+    datamartId: PropTypes.string,
+  }).isRequired,
   token: PropTypes.string.isRequired,
-  getConnectedUser: PropTypes.func.isRequired
+  getConnectedUser: PropTypes.func.isRequired,
+  initWorkspace: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isReady: state.translationsState.isReady,
   translations: state.translationsState.translations,
   user: state.sessionState.user,
+  activeWorkspace: state.sessionState.activeWorkspace,
   token: state.persistedState.access_token
 });
 
 const mapDispatchToProps = {
   initI18n: i18nActions.initI18n,
-  getConnectedUser: sessionActions.getConnectedUser
+  getConnectedUser: sessionActions.getConnectedUser,
+  initWorkspace: sessionActions.initWorkspace
 };
 
 Navigator = connect(

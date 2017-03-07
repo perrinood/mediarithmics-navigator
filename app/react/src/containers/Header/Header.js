@@ -70,19 +70,21 @@ class NavigatorHeader extends Component {
   buildWorkspaceItems() {
 
     const {
-      user
+      activeWorkspace,
+      workspaces,
+      switchWorkspace
     } = this.props;
 
     // use session workspace to get active workspace
-    const getWorkspaceItems = workspaces => workspaces.map(workspace => (
+    const getWorkspaceItems = workspacesItems => workspacesItems.map(workspaceItem => (
       {
-        label: workspace.organisation_name,
-        onClick: () => {},
+        label: workspaceItem.organisation_name,
+        onClick: () => switchWorkspace(workspaceItem),
         isActive: false
       }
     ));
 
-    return (user.workspaces && user.workspaces.length) ? getWorkspaceItems(user.workspaces) : [];
+    return getWorkspaceItems(workspaces);
   }
 
   buildProfileItems() {
@@ -99,7 +101,7 @@ class NavigatorHeader extends Component {
     };
 
     const login = () => {
-      return redirect('/login');
+      return redirect('/v2/login');
     };
 
     const loginItem = {
@@ -111,7 +113,7 @@ class NavigatorHeader extends Component {
       label: <p><FormattedMessage id="LOGOUT" /></p>,
       onClick: () => {
         logout();
-        return redirect('/login');
+        return redirect('/v2/login');
       }
     };
 
@@ -129,17 +131,23 @@ class NavigatorHeader extends Component {
 
 NavigatorHeader.propTypes = {
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  activeWorkspace: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  workspaces: PropTypes.arrayOf(PropTypes.object).isRequired,
   authenticated: PropTypes.bool.isRequired,
+  switchWorkspace: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
 
 const mapStateToProps = state => ({
   authenticated: state.sessionState.authenticated,
-  user: state.sessionState.user
+  user: state.sessionState.user,
+  activeWorkspace: state.sessionState.activeWorkspace,
+  workspaces: state.sessionState.workspaces
 });
 
 const mapDispatchToProps = {
+  switchWorkspace: sessionActions.switchWorkspace,
   logout: sessionActions.logout
 };
 

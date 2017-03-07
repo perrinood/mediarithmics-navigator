@@ -8,6 +8,9 @@ const GET_ACCESS_TOKEN_REQUEST = 'GET_ACCESS_TOKEN_REQUEST';
 const GET_ACCESS_TOKEN_SUCCESS = 'GET_ACCESS_TOKEN_SUCCESS';
 const GET_ACCESS_TOKEN_FAILURE = 'GET_ACCESS_TOKEN_FAILURE';
 
+const INIT_WORKSPACE = 'INIT_WORKSPACE';
+const SWITCH_WORKSPACE = 'SWITCH_WORKSPACE';
+
 const LOGOUT = 'LOGOUT';
 
 const getAccessToken = () => {
@@ -46,17 +49,52 @@ const getConnectedUser = () => {
   };
 };
 
+const initWorkspace = (organisationId, datamartId) => {
+  return {
+    type: INIT_WORKSPACE,
+    workspace: {
+      organisationId,
+      datamartId
+    }
+  };
+};
+
+const switchWorkspace = workspace => {
+  return {
+    type: SWITCH_WORKSPACE,
+    workspace
+  };
+};
+
 const logout = () => {
   return {
     type: LOGOUT
   };
 };
 
+const setActiveWorkspace = (workspace, user) => {
+
+  let activeWorkspace = {};
+
+  if (!workspace.organisationId && user.default_workspace) {
+    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === user.default_workspace.toString());
+  } else if (!workspace.organisationId) {
+    activeWorkspace = user.workspaces[0];
+  } else {
+    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === workspace.organisationId)[0];
+  }
+
+  return activeWorkspace;
+};
+
 
 const defaultSessionState = {
   user: {},
+  activeWorkspace: {},
+  workspaces: [],
   authenticated: false
 };
+
 
 const sessionState = (state = defaultSessionState, action) => {
 
@@ -84,6 +122,7 @@ const sessionState = (state = defaultSessionState, action) => {
         ...state,
         isFetching: false,
         user: action.response.data,
+        workspaces: action.response.data.workspaces,
         authenticated: true
       };
 
@@ -100,6 +139,18 @@ const sessionState = (state = defaultSessionState, action) => {
         error: action.response.error
       };
 
+    case INIT_WORKSPACE:
+      return {
+        ...state,
+        activeWorkspace: setActiveWorkspace(action.workspace, state.user)
+      };
+
+    case SWITCH_WORKSPACE:
+      return {
+        ...state,
+        activeWorkspace: setActiveWorkspace(action.workspace, state.user)
+      };
+
     case LOGOUT:
       return defaultSessionState;
 
@@ -113,6 +164,8 @@ const sessionState = (state = defaultSessionState, action) => {
 export {
 getAccessToken,
 getConnectedUser,
+initWorkspace,
+switchWorkspace,
 logout,
 
 sessionState
