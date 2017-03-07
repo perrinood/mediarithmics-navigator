@@ -2,12 +2,8 @@ define(['./module'], function (module) {
   'use strict';
 
   module.factory('core/campaigns/goals/GoalsService', function () {
-    var visitKey = 'VISIT_SITE';
-    var clickKey = 'CLICK_ON_AD';
     var conversionKey = 'CONVERSION';
     var goalTypesList = [
-      {key: clickKey, name: 'Click On Ad', description: 'Stop Campaign On Click'},
-      {key: visitKey, name: 'Website Visit', description: 'Stop Campaign On Visit'},
       {key: conversionKey, name: 'Conversion Goal', description: ''}
     ];
 
