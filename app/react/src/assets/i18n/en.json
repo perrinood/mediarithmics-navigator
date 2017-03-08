@@ -1,9 +1,12 @@
 {
   "CAMPAIGN_COMPONENT": "Campaign component",
 
+  "AUDIENCE": "Audience",
+  "CATALOGS": "Catalogs",
   "CAMPAIGNS": "Campaigns",
   "CREATIVES": "Creatives",
   "LIBRARY": "Library",
+
   "LOGIN": "Login",
   "LOGOUT": "Logout",
 

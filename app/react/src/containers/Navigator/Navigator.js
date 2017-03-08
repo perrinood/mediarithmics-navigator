@@ -16,19 +16,47 @@ class Navigator extends Component {
       initI18n,
       user,
       token,
-      params: {
-        organisationId,
-        datamartId
+      params,
+      location: {
+        pathname
       },
+      router,
       getConnectedUser,
       initWorkspace
     } = this.props;
+
+    const validateUrl = () => {
+
+      const {
+        checkUrl
+      } = this.props;
+
+      checkUrl(pathname);
+
+      const {
+        isReactUrl
+      } = this.props;
+
+      const {
+        activeWorkspace: {
+          organisationId,
+          datamartId
+        }
+      } = this.props;
+
+      if (isReactUrl && params.organisationId !== organisationId) {
+        const redirectUrl = `o${organisationId}d${datamartId}/campaigns/display`;
+        router.push(redirectUrl);
+      }
+
+    };
 
     initI18n();
 
     if (token && !Object.keys(user).length) {
       getConnectedUser()
-        .then(() => initWorkspace(organisationId, datamartId));
+        .then(() => initWorkspace(params.organisationId, params.datamartId))
+        .then(validateUrl);
     }
 
   }
@@ -68,13 +96,17 @@ Navigator.propTypes = {
   initI18n: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  isReactUrl: PropTypes.bool.isRequired,
   params: PropTypes.shape({
     organisationId: PropTypes.string,
     datamartId: PropTypes.string,
   }).isRequired,
+  location: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  router: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   token: PropTypes.string.isRequired,
   getConnectedUser: PropTypes.func.isRequired,
   initWorkspace: PropTypes.func.isRequired,
+  checkUrl: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -82,13 +114,15 @@ const mapStateToProps = state => ({
   translations: state.translationsState.translations,
   user: state.sessionState.user,
   activeWorkspace: state.sessionState.activeWorkspace,
+  isReactUrl: state.sessionState.isReactUrl,
   token: state.persistedState.access_token
 });
 
 const mapDispatchToProps = {
   initI18n: i18nActions.initI18n,
   getConnectedUser: sessionActions.getConnectedUser,
-  initWorkspace: sessionActions.initWorkspace
+  initWorkspace: sessionActions.initWorkspace,
+  checkUrl: sessionActions.checkUrl
 };
 
 Navigator = connect(

@@ -11,6 +11,8 @@ const GET_ACCESS_TOKEN_FAILURE = 'GET_ACCESS_TOKEN_FAILURE';
 const INIT_WORKSPACE = 'INIT_WORKSPACE';
 const SWITCH_WORKSPACE = 'SWITCH_WORKSPACE';
 
+const IS_REACT_URL = 'IS_REACT_URL';
+
 const LOGOUT = 'LOGOUT';
 
 const getAccessToken = () => {
@@ -66,6 +68,13 @@ const switchWorkspace = workspace => {
   };
 };
 
+const checkUrl = url => {
+  return {
+    type: IS_REACT_URL,
+    url
+  };
+};
+
 const logout = () => {
   return {
     type: LOGOUT
@@ -76,22 +85,42 @@ const setActiveWorkspace = (workspace, user) => {
 
   let activeWorkspace = {};
 
-  if (!workspace.organisationId && user.default_workspace) {
-    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === user.default_workspace.toString());
-  } else if (!workspace.organisationId) {
-    activeWorkspace = user.workspaces[0];
-  } else {
-    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === workspace.organisationId)[0];
+  const getDefaultOrFirstWorkspace = () => {
+
+    let defaultOrFirstWorkspace = {};
+
+    if (user.default_workspace) {
+      defaultOrFirstWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === user.default_workspace.toString());
+    }
+
+    if (!defaultOrFirstWorkspace || !defaultOrFirstWorkspace.organisationId) {
+      defaultOrFirstWorkspace = user.workspaces[0];
+    }
+
+    return defaultOrFirstWorkspace;
+  };
+
+  if (workspace.organisationId) {
+    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === workspace.organisationId);
+  }
+
+  if (!activeWorkspace || !activeWorkspace.organisationId) {
+    activeWorkspace = getDefaultOrFirstWorkspace();
   }
 
   return activeWorkspace;
 };
 
+const isReactUrl = url => {
+  const regex = new RegExp(PUBLIC_URL); // eslint-disable-line no-undef
+  return url.search(regex) >= 0;
+};
 
 const defaultSessionState = {
   user: {},
   activeWorkspace: {},
   workspaces: [],
+  isReactUrl: false,
   authenticated: false
 };
 
@@ -151,6 +180,12 @@ const sessionState = (state = defaultSessionState, action) => {
         activeWorkspace: setActiveWorkspace(action.workspace, state.user)
       };
 
+    case IS_REACT_URL:
+      return {
+        ...state,
+        isReactUrl: isReactUrl(action.url)
+      };
+
     case LOGOUT:
       return defaultSessionState;
 
@@ -164,6 +199,7 @@ const sessionState = (state = defaultSessionState, action) => {
 export {
 getAccessToken,
 getConnectedUser,
+checkUrl,
 initWorkspace,
 switchWorkspace,
 logout,

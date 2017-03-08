@@ -50,6 +50,18 @@
   <div ng-class="{'content-with-sidebar': showSidebar }">
     <div ui-view="" class="container-fluid"></div>
   </div>
+
+  <div id="mics_loading">
+    <div id="mics_loading_progress">
+      <img src="./images/ajax-loader.gif" alt="The application is loading, please wait." class="ajax-loader" />
+      <!-- <h1>Navigator is loading&nbsp;<small>please wait</small></h1> -->
+      <!-- <span id="mics_loading_progress_current"></span> -->
+    </div>
+    <div id="mics_loading_error" style="display:none;">
+      An unexpected error occured while loading the application.<br /> Try reloading the page or contact your support.
+    </div>
+  </div>
+  
 </div>
 
 <div id="mcs-react-app" class="mcs-react-app"></div>
@@ -102,18 +114,6 @@
     <!--   TODO : explain why our website is awesome and you should allow js here to manage your campaigns. -->
   </p>
 </noscript>
-
-<div id="mics_loading">
-  <div id="mics_loading_progress">
-    <img src="./images/ajax-loader.gif" alt="The application is loading, please wait." class="ajax-loader" />
-    <!-- <h1>Navigator is loading&nbsp;<small>please wait</small></h1> -->
-    <!-- <span id="mics_loading_progress_current"></span> -->
-  </div>
-  <div id="mics_loading_error" style="display:none;">
-    An unexpected error occured while loading the application.<br />
-    Try reloading the page or contact your support.
-  </div>
-</div>
 
 
 <!-- Scripts -->

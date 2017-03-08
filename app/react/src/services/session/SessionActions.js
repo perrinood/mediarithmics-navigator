@@ -3,6 +3,7 @@ import {
   getConnectedUser,
   initWorkspace,
   switchWorkspace,
+  checkUrl,
   logout
 } from './Session';
 
@@ -11,5 +12,6 @@ export {
   getConnectedUser,
   initWorkspace,
   switchWorkspace,
+  checkUrl,
   logout
 };

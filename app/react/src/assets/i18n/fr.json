@@ -1,6 +1,8 @@
 {
   "CAMPAIGN_COMPONENT": "Composant Campaign",
 
+  "AUDIENCE": "Audience",
+  "CATALOGS": "Catalogues",
   "CAMPAIGNS": "Campaignes",
   "CREATIVES": "Creatives",
   "LIBRARY": "Bibliothèque",
