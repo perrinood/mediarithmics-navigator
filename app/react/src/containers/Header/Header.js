@@ -55,11 +55,16 @@ class NavigatorHeader extends Component {
       activeWorkspace: {
         organisation_id: organisationId,
         datamart_id: datamartId
+      },
+      location: {
+        pathname
       }
     } = this.props;
 
     const campaignsUrl = `/v2/organisation/${organisationId}${datamartId ? `/datamart/${datamartId}` : ''}/campaign`;
     const currentWorkspaceId = this.getCurrentWorkspaceId();
+
+    const isActiveUrl = path => pathname.search(path) >= 0;
 
     const datamartEntries = datamartId ? [
       {
@@ -80,9 +85,7 @@ class NavigatorHeader extends Component {
       {
         url: campaignsUrl,
         label: <FormattedMessage id="CAMPAIGNS" />,
-        activeLinks: [
-          '/v2/campaign'
-        ]
+        active: isActiveUrl('campaign'),
       }
     ];
 
@@ -188,6 +191,7 @@ NavigatorHeader.propTypes = {
   activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaces: PropTypes.arrayOf(PropTypes.object).isRequired,
   authenticated: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   switchWorkspace: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
