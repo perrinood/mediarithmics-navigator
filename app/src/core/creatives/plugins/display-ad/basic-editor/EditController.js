@@ -3,8 +3,8 @@ define(['./module'], function (module) {
 
   module.controller('core/creatives/plugins/display-ad/basic-editor/EditController', [
     '$scope', '$log', '$location', '$stateParams', 'core/creatives/plugins/display-ad/DisplayAdService', 'core/common/auth/Session',
-    'core/creatives/CreativePluginService', '$controller', "core/common/ErrorService", '$state', 'core/common/IabService', 'lodash',
-    function ($scope, $log, $location, $stateParams, DisplayAdService, Session, CreativePluginService, $controller, errorService, $state, IabService, _) {
+    'core/creatives/CreativePluginService', '$controller', "core/common/ErrorService", '$state', 'core/common/IabService', 'lodash', 'Restangular',
+    function ($scope, $log, $location, $stateParams, DisplayAdService, Session, CreativePluginService, $controller, errorService, $state, IabService, _, Restangular) {
 
       $scope.$on("display-ad:loaded", function () {
         $scope.iabAdSizes = _.map(IabService.getAdSizes($scope.displayAd.subtype), function (size) {
@@ -34,12 +34,22 @@ define(['./module'], function (module) {
         }
       });
 
+      $scope.takeScreenshot = function (creativeId) {
+        Restangular.one('creatives', creativeId).all('screenshots').post([], { organisation_id: $scope.organisationId }).then(function (response) {
+          $log.debug("Screenshot was taken!" + response);
+        });
+      };
+
       $scope.save = function (disabledEdition) {
         $log.debug("save display ad : ", $scope.display_ad);
         if (disabledEdition) {
+          if ($stateParams.creative_id !== undefined) {
+            $scope.takeScreenshot($stateParams.creative_id);
+          }
           $location.path(Session.getWorkspacePrefixUrl() + '/creatives/display-ad');
         } else {
-          DisplayAdService.save().then(function () {
+          DisplayAdService.save().then(function (displayAdContainer) {
+            $scope.takeScreenshot(displayAdContainer.id);
             $location.path(Session.getWorkspacePrefixUrl() + '/creatives/display-ad');
           }, function failure(response) {
             errorService.showErrorModal({
@@ -52,6 +62,7 @@ define(['./module'], function (module) {
       $scope.saveAndRefresh = function () {
         $log.debug("save display ad : ", $scope.display_ad);
         DisplayAdService.save().then(function (displayAdContainer) {
+          $scope.takeScreenshot(displayAdContainer.id);
           // $state.reload();
           // see https://github.com/angular-ui/ui-router/issues/582
           $state.transitionTo($state.current, $stateParams, {
