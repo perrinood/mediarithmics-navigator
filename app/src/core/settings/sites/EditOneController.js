@@ -31,8 +31,8 @@ define(['./module', 'jquery'], function (module, $) {
 
           //visit analyser
           if(site.visit_analyzer_model_id !== null){
-            Restangular.one('visit_analyzer_models', site.visit_analyzer_model_id).get().then(function(visitAnalyser) {
-            $scope.visitAnalyser = visitAnalyser;
+            Restangular.one('visit_analyzer_models', site.visit_analyzer_model_id).get().then(function(activityAnalyser) {
+            $scope.activityAnalyser = activityAnalyser;
             });
           }
 
