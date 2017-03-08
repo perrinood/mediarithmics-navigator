@@ -19,20 +19,10 @@ define(['./module'], function (module) {
       return type === conversionKey;
     }
 
-    function isClickType(type) {
-      return type === clickKey;
-    }
-
-    function isVisitType(type) {
-      return type === visitKey;
-    }
-
     return {
       getGoalTypesList: getGoalTypesList,
       getConversionType: getConversionType,
       isConversionType: isConversionType,
-      isClickType: isClickType,
-      isVisitType: isVisitType
     };
   });
 });
