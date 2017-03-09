@@ -126,7 +126,7 @@ const buildWorkspaces = workspaces => {
 
 };
 
-const setActiveWorkspace = (workspace, workspaces, defaultWorkspace) => {
+const setActiveWorkspace = (workspace, workspaces, defaultWorkspace, init = false) => {
 
   let activeWorkspace = {};
 
@@ -145,8 +145,14 @@ const setActiveWorkspace = (workspace, workspaces, defaultWorkspace) => {
     return defaultOrFirstWorkspace;
   };
 
-  if (workspace.organisationId) {
-    activeWorkspace = workspaces.find(userWorkspace => userWorkspace.organisationId === workspace.organisationId);
+  if (init) {
+    if (workspace.datamartId) {
+      activeWorkspace = workspaces.find(userWorkspace => (userWorkspace.organisationId === workspace.organisationId) && (userWorkspace.datamartId === workspace.datamartId));
+    } else {
+      activeWorkspace = workspaces.find(userWorkspace => userWorkspace.organisationId === workspace.organisationId);
+    }
+  } else {
+    activeWorkspace = workspace;
   }
 
   if (!activeWorkspace || !activeWorkspace.organisationId) {
@@ -216,7 +222,7 @@ const sessionState = (state = defaultSessionState, action) => {
     case INIT_WORKSPACE:
       return {
         ...state,
-        activeWorkspace: setActiveWorkspace(action.workspace, state.workspaces, state.user.default_workspace)
+        activeWorkspace: setActiveWorkspace(action.workspace, state.workspaces, state.user.default_workspace, true)
       };
 
     case SWITCH_WORKSPACE:
