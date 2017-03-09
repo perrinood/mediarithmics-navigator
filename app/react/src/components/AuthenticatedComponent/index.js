@@ -34,7 +34,7 @@ export function requireAuthentication(Component) {
         if (!authenticated) {
           getAccessTokens()
             .then(getConnectedUser)
-            .then(redirect(nextUrl))
+            .then(() => redirect(nextUrl))
             .catch(() => redirect(loginUrl));
         }
       } else {

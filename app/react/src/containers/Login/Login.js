@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from 'mcs-react-button';
 import Alert from 'mcs-react-alert';
 
-import * as loginActions from './LoginActions';
+import * as loginActions from './redux/LoginActions';
 import * as sessionActions from '../../services/session/SessionActions';
 
 import { Input } from '../../components/Forms';
@@ -18,6 +18,10 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.submitCredentials = this.submitCredentials.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.props.resetLogin();
   }
 
   /**
@@ -109,6 +113,7 @@ Login.propTypes = {
     })
   }).isRequired,
   refreshToken: PropTypes.func.isRequired,
+  resetLogin: PropTypes.func.isRequired,
   getAccessToken: PropTypes.func.isRequired,
   getConnectedUser: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
@@ -122,6 +127,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   refreshToken: loginActions.refreshToken,
+  resetLogin: loginActions.resetLogin,
   getAccessToken: sessionActions.getAccessToken,
   getConnectedUser: sessionActions.getConnectedUser
 };

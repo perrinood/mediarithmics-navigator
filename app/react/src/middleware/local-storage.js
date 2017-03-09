@@ -35,6 +35,7 @@ function initLocalStorage() {
 }
 
 function getItemLocalStorage(property) {
+  // use both until we have the angular app
   return localStorage.getItem(property) || getItemCookie(property);
 }
 
@@ -59,6 +60,8 @@ function setItemCookie(property) {
 }
 
 function removeItemLocalStorage(property) {
+  // use both until we have the angular app
+  removeItemCookie(property);
   return localStorage.removeItem(property);
 }
 

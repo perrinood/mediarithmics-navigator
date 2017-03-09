@@ -3,7 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import { PersistentReducers } from './PersistentReducers';
 import { SessionReducers } from '../services/session';
-import { LoginReducers } from '../containers/Login';
+import { LoginReducers } from '../containers/Login/redux';
 import { i18nReducers } from '../services/i18n';
 
 const allReducers = Object.assign(
