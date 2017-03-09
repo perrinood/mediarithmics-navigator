@@ -81,7 +81,50 @@ const logout = () => {
   };
 };
 
-const setActiveWorkspace = (workspace, user) => {
+const buildWorkspace = (workspace, datamart) => {
+
+  const {
+    organisation_name: organisationName,
+    organisation_id: organisationId,
+    administrator,
+  } = workspace;
+
+  const {
+    datamart_id: datamartId,
+    datamart_name: datamartName
+  } = (datamart || {});
+
+  return {
+    organisationName,
+    organisationId,
+    administrator,
+    datamartId,
+    datamartName
+  };
+
+};
+
+const buildWorkspaces = workspaces => {
+
+  const builtWorkspaces = [];
+
+  workspaces.forEach(workspace => {
+
+    if (workspace.datamarts.length) {
+      workspace.datamarts.forEach(datamart => {
+        builtWorkspaces.push(buildWorkspace(workspace, datamart));
+      });
+    } else {
+      builtWorkspaces.push(buildWorkspace(workspace));
+    }
+
+  });
+
+  return builtWorkspaces;
+
+};
+
+const setActiveWorkspace = (workspace, workspaces, defaultWorkspace) => {
 
   let activeWorkspace = {};
 
@@ -89,19 +132,19 @@ const setActiveWorkspace = (workspace, user) => {
 
     let defaultOrFirstWorkspace = {};
 
-    if (user.default_workspace) {
-      defaultOrFirstWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === user.default_workspace.toString());
+    if (defaultWorkspace) {
+      defaultOrFirstWorkspace = workspaces.find(userWorkspace => userWorkspace.organisationId === defaultWorkspace.toString());
     }
 
     if (!defaultOrFirstWorkspace || !defaultOrFirstWorkspace.organisationId) {
-      defaultOrFirstWorkspace = user.workspaces[0];
+      defaultOrFirstWorkspace = workspaces[0];
     }
 
     return defaultOrFirstWorkspace;
   };
 
   if (workspace.organisationId) {
-    activeWorkspace = user.workspaces.find(userWorkspace => userWorkspace.organisation_id === workspace.organisationId);
+    activeWorkspace = workspaces.find(userWorkspace => userWorkspace.organisationId === workspace.organisationId);
   }
 
   if (!activeWorkspace || !activeWorkspace.organisationId) {
@@ -151,7 +194,7 @@ const sessionState = (state = defaultSessionState, action) => {
         ...state,
         isFetching: false,
         user: action.response.data,
-        workspaces: action.response.data.workspaces,
+        workspaces: buildWorkspaces(action.response.data.workspaces),
         authenticated: true
       };
 
@@ -171,13 +214,13 @@ const sessionState = (state = defaultSessionState, action) => {
     case INIT_WORKSPACE:
       return {
         ...state,
-        activeWorkspace: setActiveWorkspace(action.workspace, state.user)
+        activeWorkspace: setActiveWorkspace(action.workspace, state.workspaces, state.user.default_workspace)
       };
 
     case SWITCH_WORKSPACE:
       return {
         ...state,
-        activeWorkspace: setActiveWorkspace(action.workspace, state.user)
+        activeWorkspace: setActiveWorkspace(action.workspace, state.workspaces, state.user.default_workspace)
       };
 
     case IS_REACT_URL:
