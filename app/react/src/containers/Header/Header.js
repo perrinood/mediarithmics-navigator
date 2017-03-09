@@ -20,7 +20,11 @@ class NavigatorHeader extends Component {
 
   render() {
 
-    const homeUrl = `${this.getCurrentWorkspaceId()}/campaigns/display`;
+    const {
+      authenticated
+    } = this.props;
+
+    const homeUrl = authenticated ? `${this.getCurrentWorkspaceId()}/campaigns/display` : '';
     const navigationItems = this.buildNavigationItems();
     const workspaceItems = this.buildWorkspaceItems();
     const profileItems = this.buildProfileItems();
@@ -58,7 +62,8 @@ class NavigatorHeader extends Component {
       },
       location: {
         pathname
-      }
+      },
+      authenticated
     } = this.props;
 
     const currentWorkspaceId = this.getCurrentWorkspaceId();
@@ -108,7 +113,7 @@ class NavigatorHeader extends Component {
       }
     ];
 
-    return datamartEntries.concat(reactEntries).concat(angularEntries);
+    return authenticated ? datamartEntries.concat(reactEntries).concat(angularEntries) : [];
   }
 
   buildWorkspaceItems() {

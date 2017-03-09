@@ -87,17 +87,28 @@ class Login extends Component {
          next
        }
      },
-     router
+     router,
+     initWorkspace
     } = this.props;
 
     const redirect = () => {
-      const nextUrl = next ? next : '/v2';
-      router.replace(nextUrl);
+
+      const {
+        activeWorkspace: {
+          organisationId,
+          datamartId
+        }
+      } = this.props;
+
+      const redirectUrl = `o${organisationId}d${datamartId}/campaigns/display`;
+      const nextUrl = next ? next : redirectUrl;
+      router.push(nextUrl);
     };
 
     refreshToken(credentialsForm)
       .then(getAccessToken)
       .then(getConnectedUser)
+      .then(() => initWorkspace())
       .then(redirect);
 
   }
@@ -107,6 +118,7 @@ class Login extends Component {
 Login.propTypes = {
   translations: PropTypes.objectOf(PropTypes.string).isRequired,
   loginState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   location: PropTypes.shape({
     query: PropTypes.shape({
       next: PropTypes.string
@@ -116,20 +128,23 @@ Login.propTypes = {
   resetLogin: PropTypes.func.isRequired,
   getAccessToken: PropTypes.func.isRequired,
   getConnectedUser: PropTypes.func.isRequired,
+  initWorkspace: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
 
 const mapStateToProps = state => ({
   translations: state.translationsState.translations,
-  loginState: state.loginState
+  loginState: state.loginState,
+  activeWorkspace: state.sessionState.activeWorkspace
 });
 
 const mapDispatchToProps = {
   refreshToken: loginActions.refreshToken,
   resetLogin: loginActions.resetLogin,
   getAccessToken: sessionActions.getAccessToken,
-  getConnectedUser: sessionActions.getConnectedUser
+  getConnectedUser: sessionActions.getConnectedUser,
+  initWorkspace: sessionActions.initWorkspace
 };
 
 Login = connect(

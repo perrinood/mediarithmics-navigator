@@ -86,7 +86,8 @@ class Navigator extends Component {
 }
 
 Navigator.defaultProps = {
-  locale: 'en'
+  locale: 'en',
+  token: null
 };
 
 Navigator.propTypes = {
@@ -103,7 +104,7 @@ Navigator.propTypes = {
   }).isRequired,
   location: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   router: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string,
   getConnectedUser: PropTypes.func.isRequired,
   initWorkspace: PropTypes.func.isRequired,
   checkUrl: PropTypes.func.isRequired

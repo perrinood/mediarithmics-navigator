@@ -25,7 +25,9 @@ export function requireAuthentication(Component) {
 
       const redirectAfterLogin = `${pathname}${search}`;
       const nextUrl = `${redirectAfterLogin}`;
-      const loginUrl = `${PUBLIC_URL}/login?next=${redirectAfterLogin}`; // eslint-disable-line no-undef
+      // don't use redirection until angular app is living
+      // const loginUrl = `${PUBLIC_URL}/login?next=${redirectAfterLogin}`; // eslint-disable-line no-undef
+      const loginUrl = `${PUBLIC_URL}/login`; // eslint-disable-line no-undef
       const redirect = (path) => {
         return Promise.resolve(router.replace(path));
       };
