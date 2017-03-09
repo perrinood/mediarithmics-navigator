@@ -87,6 +87,7 @@ const buildWorkspace = (workspace, datamart) => {
     organisation_name: organisationName,
     organisation_id: organisationId,
     administrator,
+    role
   } = workspace;
 
   const {
@@ -98,6 +99,7 @@ const buildWorkspace = (workspace, datamart) => {
     organisationName,
     organisationId,
     administrator,
+    role,
     datamartId,
     datamartName
   };

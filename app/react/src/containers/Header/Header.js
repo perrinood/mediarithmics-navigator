@@ -42,8 +42,8 @@ class NavigatorHeader extends Component {
   getCurrentWorkspaceId() {
     const {
       activeWorkspace: {
-        organisation_id: organisationId,
-        datamart_id: datamartId
+        organisationId,
+        datamartId
       }
     } = this.props;
     return `/o${organisationId}d${datamartId}`;
@@ -53,18 +53,22 @@ class NavigatorHeader extends Component {
 
     const {
       activeWorkspace: {
-        organisation_id: organisationId,
-        datamart_id: datamartId
+        // organisationId,
+        datamartId
       },
       location: {
         pathname
       }
     } = this.props;
 
-    const campaignsUrl = `/v2/organisation/${organisationId}${datamartId ? `/datamart/${datamartId}` : ''}/campaign`;
     const currentWorkspaceId = this.getCurrentWorkspaceId();
 
-    const isActiveUrl = path => pathname.search(path) >= 0;
+    /*
+      To add a new link to the navbar use an object with the property active.
+      Use isActiveUrl function by passing the path of the route.
+      The property is used by the NavLink component to apply an active class to the element.
+    */
+    const isActiveUrl = path => pathname.search(path) >= 0; // eslint-disable-line no-unused-vars
 
     const datamartEntries = datamartId ? [
       {
@@ -77,19 +81,19 @@ class NavigatorHeader extends Component {
       },
     ] : [];
 
-    const testEntries = [
-      {
-        url: '/v2/login',
-        label: <FormattedMessage id="LOGIN" />
-      },
-      {
-        url: campaignsUrl,
-        label: <FormattedMessage id="CAMPAIGNS" />,
-        active: isActiveUrl('campaign'),
-      }
+    const reactEntries = [
+      /*
+        To test until a real link is implemented
+        const campaignsUrl = `/v2/organisation/${organisationId}${datamartId ? `/datamart/${datamartId}` : ''}/campaign`;
+        {
+          url: campaignsUrl,
+          label: <FormattedMessage id="CAMPAIGNS" />,
+          active: isActiveUrl('campaign'),
+        }
+      */
     ];
 
-    const defaultEntries = [
+    const angularEntries = [
       {
         url: `${currentWorkspaceId}/campaigns/display`,
         label: <FormattedMessage id="CAMPAIGNS" />
@@ -104,7 +108,7 @@ class NavigatorHeader extends Component {
       }
     ];
 
-    return datamartEntries.concat(testEntries).concat(defaultEntries);
+    return datamartEntries.concat(reactEntries).concat(angularEntries);
   }
 
   buildWorkspaceItems() {
@@ -126,7 +130,7 @@ class NavigatorHeader extends Component {
 
     const getWorkspaceItems = () => workspaces.map(workspace => {
 
-      const isActive = workspace.organisationId === activeWorkspace.organisationId;
+      const isActive = (workspace.organisationId === activeWorkspace.organisationId) && (workspace.role === activeWorkspace.role) && (workspace.datamartId === activeWorkspace.datamartId);
 
       return {
         label: getLabel(workspace),
