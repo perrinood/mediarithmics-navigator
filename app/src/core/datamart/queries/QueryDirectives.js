@@ -274,8 +274,9 @@ define(['./module'], function (module) {
 
                     //TODO [later release] add dataEvaluationType (SCALAR/ARRAY/TABLE)
                     //to get rid of those if and constructor checks
-                    $scope.displayValue = function (value, dataType) {
-                        if (dataType === 'DATE'){
+                    $scope.displayValue = function (value, selector) {
+                        var realValueType = QueryService.getPropertySelectorValueType(selector.value_type, selector.expression);
+                        if (realValueType === 'DATE'){
                             if (Array.isArray(value)){
                                 return value.map(function (v){
                                   if (Array.isArray(v)){
