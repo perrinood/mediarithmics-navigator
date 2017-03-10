@@ -55,6 +55,12 @@ define(['./module'], function (module) {
         return !!$scope.params.url && !!$scope.params.destination_domain;
       };
 
+      $scope.takeScreenshot = function (creativeId) {
+        Restangular.one('creatives', creativeId).all('screenshots').post([], { organisation_id: $scope.organisationId }).then(function (response) {
+          $log.debug("Screenshot was taken!" + response);
+        });
+      };
+
       function saveCreativeWrapper(userDefinedCreative) {
         var isFlash = userDefinedCreative.asset.mime_type === "application/x-shockwave-flash";
         var options = {
@@ -86,6 +92,7 @@ define(['./module'], function (module) {
         $log.debug("Creating creative: ", userDefinedCreative);
         return creativeContainer.persist().then(function success() {
           $log.warn("emit mics-creative:selected", creativeContainer.value);
+          $scope.takeScreenshot(creativeContainer.id);
           $scope.$emit("mics-creative:selected", {creative: creativeContainer});
         }, function failure(response) {
           errorService.showErrorModal({error: response});

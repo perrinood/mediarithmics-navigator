@@ -81,26 +81,26 @@
       <div class="row-fluid">
           <div class="form-inline">
             <h3>
-              Visit Analyser
-              <span class="badge site" data-html="true" uib-popover-html="'The visit analyser user for the domain'" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
+              Activity Analyser
+              <span class="badge site" data-html="true" uib-popover-html="'The activity analyser user for the domain'" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
                <div ng-include="'angular/src/core/visitanalysers/choose-visit-analyser.html'" class="form-group"></div>
             </h3>
           </div>
           <br>
 
-          <table class="mics-table js-auto-hide-actions" ng-hide="!visitAnalyser">
+          <table class="mics-table js-auto-hide-actions" ng-hide="!activityAnalyser">
             <thead>
             <tr>
               <th>Name</th>
-              <th>Visit Analyser Processor</th>
+              <th>Activity Analyser Processor</th>
               <th>Provider</th>
               </tr>
             </thead>
             <tbody>
-            <tr fetch-plugin-properties-from-version="visitAnalyser.visit_analyzer_plugin_id as visitAnalyserProperties">
-              <td>{{visitAnalyser.name}}</td>
-              <td>{{visitAnalyserProperties['name'].value}}</td>
-              <td>{{visitAnalyserProperties['provider'].value}}</td>
+            <tr fetch-plugin-properties-from-version="activityAnalyser.activity_analyzer_plugin_id as activityAnalyserProperties">
+              <td>{{activityAnalyser.name}}</td>
+              <td>{{activityAnalyserProperties['name'].value}}</td>
+              <td>{{activityAnalyserProperties['provider'].value}}</td>
               </tr>
             </tbody>
           </table>

@@ -24,10 +24,10 @@ define(['./module'], function (module) {
               $scope.appToken = app.token;
             }
 
-            // visit analyser
+            // activity analyser
             if (app.visit_analyzer_model_id !== null) {
-              Restangular.one('visit_analyzer_models', app.visit_analyzer_model_id).get().then(function (visitAnalyser) {
-                $scope.visitAnalyser = visitAnalyser;
+              Restangular.one('visit_analyzer_models', app.visit_analyzer_model_id).get().then(function (activityAnalyser) {
+                $scope.activityAnalyser = activityAnalyser;
               });
             }
           });
