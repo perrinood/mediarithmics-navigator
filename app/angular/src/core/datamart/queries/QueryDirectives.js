@@ -436,18 +436,19 @@ define(['./module'], function (module) {
               scope.selectedDomain = selectedDomainId;
 
               if (scope.condition.value.property_selector_name === 'SITE_ID'){
-                //Let's fetch datamart's sites resources
-                Restangular.all("datamarts/" + Session.getCurrentDatamartId() + "/sites").getList({"organisation_id": Session.getCurrentWorkspace().organisation_id, "max_results":200}).then(function(sites) {
+                //Let's fetch datamart's channels resources
+                Restangular.all("datamarts/" + Session.getCurrentDatamartId() + "/channels").getList({"organisation_id": Session.getCurrentWorkspace().organisation_id, "max_results":200}).then(function(channels) {
 
-                  scope.domainSources = sites;
-                  var siteMatch = _.find(sites, _.matchesProperty('id',selectedDomainId));
+                  scope.domainSources = channels;
+                  var siteMatch = _.find(channels, _.matchesProperty('id',selectedDomainId));
+
                   if (siteMatch){
                     scope.selectedDomain = siteMatch;
                   }
 
                 });
               } else if (scope.condition.value.property_selector_name === 'ORIGIN_CAMPAIGN_ID'){
-                var params = {organisation_id: Session.getCurrentWorkspace().organisation_id};
+                  var params = {organisation_id: Session.getCurrentWorkspace().organisation_id};
                 if (scope.condition.value.property_selector_family === 'USER_EMAILS'){
                   params.campaign_type = 'EMAIL';
                 } else if (scope.condition.value.property_selector_family === 'USER_DISPLAY_ADS'){
@@ -462,7 +463,7 @@ define(['./module'], function (module) {
                 });
 
               } else if (scope.condition.value.property_selector_name === 'SEGMENT_ID'){
-                //Let's fetch datamart's audience segment's resources
+                  //Let's fetch datamart's audience segment's resources
                 Restangular.all("audience_segments").getList({"datamart_id": Session.getCurrentDatamartId(), "with_source_datamarts":1}).then(function(segments) {
                   var currentDatamart = Session.getCurrentWorkspace().datamart;
                   var sourcesDatamart = Session.getCurrentWorkspace().sourcesDatamart;

@@ -79,7 +79,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
     // For unspeakable reasons (and hopefully soon-to-be-fixed ones) this triggers a huuuuge boost.
     // I'll work on these, please continue my combat if I fall.
     setTimeout(function () {
-      promises.push(CampaignAnalyticsReportService.mediaPerformance(campaignId, $scope.hasCpa, "-click_count", 30).then(function (data) {
+      promises.push(CampaignAnalyticsReportService.mediaPerformance(campaignId, $scope.hasCpa, "-".concat($scope.orderBy), 30).then(function (data) {
         // an other refresh was triggered, don't do anything !
         if (currentStatObj.rand !== $scope.statisticsQuery.rand) {
           return;
@@ -170,7 +170,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       var buildMetricsExportHeaders = function (metricsType) {
         var headers = ["Status", "Name", "Format"];
         if (metricsType === metricsTypes.sites) {
-          headers = ["Name"];
+          headers = ["Display Network","Name"];
         } else if (metricsType === metricsTypes.adGroups) {
           headers = ["Status", "Name"];
         }
@@ -188,7 +188,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           if (metricsType === metricsTypes.adGroups) {
             row = [metrics[i].status, metrics[i].name];
           } else if (metricsType === metricsTypes.sites) {
-            row = [metrics[i].name];
+            row = [metrics[i].display_network_name, metrics[i].name];
           }
           for (var j = 0; j < metrics[i].info.length; ++j) {
             row.push(metrics[i].info[j].value || '');
@@ -244,7 +244,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         };
 
         // Get all the media data on export
-        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", null).then(buildSites).then(function (builtMediaPerformances) {
+        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-".concat($scope.orderBy), null).then(buildSites).then(function (builtMediaPerformances) {
 
           currentExportObj.isRunning = false;
 
@@ -342,10 +342,11 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       };
 
       $scope.sortSitesBy = function (key) {
-        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, "-click_count", 30).then(function (mediaPerformance) {
+        $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
+        $scope.orderBy = key;
+        var sortBy = ($scope.reverseSort ? "-" : "").concat($scope.orderBy);
+        CampaignAnalyticsReportService.mediaPerformance($stateParams.campaign_id, $scope.hasCpa, sortBy, 30).then(function (mediaPerformance) {
           $scope.mediaPerformance = mediaPerformance;
-          $scope.reverseSort = (key !== $scope.orderBy) ? false : !$scope.reverseSort;
-          $scope.orderBy = key;
           buildSites(mediaPerformance).then(function (sites) {
             $scope.sites = sort(sites);
           });
