@@ -259,7 +259,7 @@
                       <a class="mics-btn mics-btn-action btn-xs" target="_blank"
                          ng-href="{{goToTimeline(row['user_point_id'])}}">User overview</a>
                     </td>
-                    <td ng-repeat="column in selectedColumns">{{displayValue(row['cells'][column.json_path],column.value_type)}}</td>
+                    <td ng-repeat="column in selectedColumns">{{displayValue(row['cells'][column.json_path],column)}}</td>
                   </tr>
                   </tbody>
                 </table>
