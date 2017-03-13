@@ -17,7 +17,9 @@ define(['./module'], function (module) {
                     name : $scope.segment.name,
                     type : "USER_QUERY",
                     query_id : queryId,
-                    evaluation_mode : 'LIVE',
+                    evaluation_mode: 'PERIODIC',
+                    evaluation_period: 1,
+                    evaluation_period_unit: 'DAY',
                     datamart_id: Session.getCurrentDatamartId()
                 };
 
@@ -37,7 +39,9 @@ define(['./module'], function (module) {
                     name : $scope.segment.name,
                     type : "USER_QUERY",
                     query_id : queryId,
-                    evaluation_mode : 'LIVE',
+                    evaluation_mode: 'PERIODIC',
+                    evaluation_period: 1,
+                    evaluation_period_unit: 'DAY',
                     datamart_id: Session.getCurrentDatamartId()
                 };
 
