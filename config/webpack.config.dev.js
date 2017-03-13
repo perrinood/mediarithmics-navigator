@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const paths = require('./paths');
 const configFactory = require('./webpack.config');
@@ -19,7 +18,6 @@ const devConfig = {
   },
 
   plugins: [
-    new ExtractTextPlugin('style.css'),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       inject: true,

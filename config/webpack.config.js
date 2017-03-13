@@ -7,7 +7,7 @@ const babelOptions = require('./babel');
 const pkg = require('../package.json');
 
 const extractSass = new ExtractTextPlugin({
-  filename: 'app/react/src/styles/[name].css',
+  filename: '[name].[chunkhash].css',
   disable: process.env.NODE_ENV === 'development'
 });
 

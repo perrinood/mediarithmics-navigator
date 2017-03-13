@@ -1,7 +1,6 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const paths = require('./paths');
 const configFactory = require('./webpack.config');
@@ -17,7 +16,6 @@ const prodConfig = {
   },
 
   plugins: [
-    new ExtractTextPlugin('style.[chunkhash].css'),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appDistHtml,
