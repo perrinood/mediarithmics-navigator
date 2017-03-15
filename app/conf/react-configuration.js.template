@@ -3,8 +3,7 @@
 
   var MCS_CONSTANTS = {
     NAVIGATOR_URL: 'http://navigator.mediarithmics.local',
-    API_URL: 'http://api.mediarithmics.local',
-    ADMIN_API_URL: 'http://admin-api.mediarithmics.local:8090'
+    API_URL: 'http://api.mediarithmics.local'
   };
 
   window.MCS_CONSTANTS = MCS_CONSTANTS;

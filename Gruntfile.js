@@ -640,9 +640,9 @@ module.exports = function (grunt) {
     'regex-replace:dist',
     'usemin',
     'copy:generated_iab',
+    'webpack:build',
     'htmlmin',
     'versionFile',
-    'webpack:build',
     'compress'
   ]);
 
