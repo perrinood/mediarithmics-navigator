@@ -2,8 +2,8 @@ define(['./module', "autofill-event"], function (module) {
   'use strict';
 
   module.controller('core/login/MainController', [
-    '$scope', '$location', '$log', '$rootScope', 'jquery', 'core/common/auth/AuthenticationService', 'core/common/auth/Session', 'core/login/constants',
-    function($scope, $location, $log, $rootScope, $, AuthenticationService, Session, LoginConstants) {
+    '$scope', '$location', '$log', '$rootScope', '$window', 'jquery', 'core/common/auth/AuthenticationService', 'core/common/auth/Session', 'core/login/constants',
+    function($scope, $location, $log, $rootScope, $window, $, AuthenticationService, Session, LoginConstants) {
       if (Session.isInitialized()) {
         $location.path(Session.getWorkspacePrefixUrl());
       }
@@ -24,7 +24,12 @@ define(['./module', "autofill-event"], function (module) {
       function initSession () {
         $scope.authError = false;
         Session.init().then(function() {
+
+          // broadcast login success event
+          var event = new Event(LoginConstants.LOGIN_SUCCESS);
+          $window.dispatchEvent(event);
           $rootScope.$broadcast(LoginConstants.LOGIN_SUCCESS);
+
           var newPath = AuthenticationService.popPendingPath();
           if(!newPath) {
             newPath = Session.getWorkspacePrefixUrl();

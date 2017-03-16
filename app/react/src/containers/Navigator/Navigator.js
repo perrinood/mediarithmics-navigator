@@ -51,12 +51,22 @@ class Navigator extends Component {
 
     };
 
+    const retrieveUser = () => {
+      return getConnectedUser()
+        .then(() => initWorkspace(params.organisationId, params.datamartId))
+        .then(validateUrl);
+    };
+
     initI18n();
 
     if (token && !Object.keys(user).length) {
-      getConnectedUser()
-        .then(() => initWorkspace(params.organisationId, params.datamartId))
-        .then(validateUrl);
+      retrieveUser();
+    } else {
+      // todo remove later
+      // as the angular app will be bootstraped first, we need to know if the user has logged in through the angular app
+      window.addEventListener('core/login/constants/LOGIN_SUCCESS', () => { // eslint-disable-line no-undef
+        retrieveUser();
+      }, false);
     }
 
   }
