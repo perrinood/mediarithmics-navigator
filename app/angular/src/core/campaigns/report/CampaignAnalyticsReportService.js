@@ -26,7 +26,15 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
     "winning_bid_price": {name: "Winning Bid Price", type: "currency"},
     "losing_bid_price": {name: "Losing Bid Price", type: "currency"},
     "avg_winning_bid_price": {name: "Avg Winning Bid Price", type: "currency"},
-    "avg_losing_bid_price": {name: "Avg Losing Bid Price", type: "currency"}
+    "avg_losing_bid_price": {name: "Avg Losing Bid Price", type: "currency"},
+
+    //email
+    "email_sent": {name: "Email Sent", type: "number"},
+    "email_unsubscribed": {name: "Email Unsubscribed", type: "number"},
+    "email_hard_bounced": {name: "Email Hard Bounced", type: "number"},
+    "email_soft_bounced": {name: "Email Soft Bounced", type: "number"},
+    "email_complaints": {name: "Email Complaints", type: "number"},
+
   };
 
 
@@ -45,6 +53,17 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
 
         function buildDisplayCampaignResource() {
           return $resource(WS_URL + "/reports/display_campaign_performance_report", {},
+            {
+              get: {
+                method: 'GET',
+                headers: {'Authorization': AuthenticationService.getAccessToken()}
+              }
+            }
+          );
+        }
+
+        function buildEmailCampaignResource() {
+          return $resource(WS_URL + "/reports/delivery_report", {},
             {
               get: {
                 method: 'GET',
@@ -265,6 +284,33 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           );
         };
 
+        ReportService.emailPerformance = function (campaignId) {
+          return this.getPerformance(buildEmailCampaignResource(), "", "email_sent,impressions,email_unsubscribed,email_hard_bounced,email_soft_bounced,clicks", "campaign_id==" + campaignId)
+            .$promise.then(function (response) {
+              var report = response.data.report_view;
+              var firstLine = report.rows[0] || [];
+              return {
+                "email_sent": firstLine[_.indexOf(report.columns_headers, "email_sent")] || 0,
+                "email_unsubscribed": firstLine[_.indexOf(report.columns_headers, "email_unsubscribed")] || 0,
+                "email_hard_bounced": firstLine[_.indexOf(report.columns_headers, "email_hard_bounced")] || 0,
+                "email_soft_bounced": firstLine[_.indexOf(report.columns_headers, "email_soft_bounced")] || 0,
+                "email_complaints": firstLine[_.indexOf(report.columns_headers, "email_complaints")] || 0,
+                "clicks": firstLine[_.indexOf(report.columns_headers, "clicks")] || 0,
+                "impressions": firstLine[_.indexOf(report.columns_headers, "impressions")] || 0
+              };
+            }).catch(function (e) {
+              return {
+               "email_sent": 0,
+               "email_unsubscribed": 0,
+               "email_hard_bounced": 0,
+               "email_soft_bounced": 0,
+               "email_complaints": 0,
+               "clicks": 0,
+               "impressions": 0
+             };
+
+            });
+        };
 
         ReportService.kpi = function (campaignId, hasCpa) {
           var cpa = hasCpa ? ",cpa" : "";

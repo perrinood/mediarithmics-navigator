@@ -11,6 +11,7 @@ define(['./module', 'ui.ace'], function (module) {
       $scope.previewWidth = 750;
       $scope.previewHeight = 500;
       $scope.htmlContent = "";
+      $scope.plainText = "";
 
       // Ace Editor Options
       $scope.aceOptions = {
@@ -41,6 +42,7 @@ define(['./module', 'ui.ace'], function (module) {
             $scope.emailRenderResponse = emailRenderResponse;
             var iframeHtml = document.getElementById('email-preview-html');
             $scope.htmlContent = emailRenderResponse.content.html;
+            $scope.plainText = emailRenderResponse.content.plainText;
             writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
           }, function error(reason) {
             var iframeError = document.getElementById('email-preview-error');
