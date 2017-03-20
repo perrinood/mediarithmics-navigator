@@ -9,6 +9,7 @@
 
   "LOGIN": "Login",
   "LOGOUT": "Logout",
+  "ACCOUNT_SETTINGS": "Account & Settings",
 
   "EMAIL_ADDRESS": "Email Address",
   "EMAIL_PLACEHOLDER": "Type your email address",

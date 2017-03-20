@@ -77,7 +77,7 @@ class NavigatorHeader extends Component {
 
     const datamartEntries = datamartId ? [
       {
-        url: `${currentWorkspaceId}/datamart/segment`,
+        url: `${currentWorkspaceId}/datamart/segments`,
         label: <FormattedMessage id="AUDIENCE" />
       },
       {
@@ -124,7 +124,7 @@ class NavigatorHeader extends Component {
       switchWorkspace
     } = this.props;
 
-    const getLabel = workspace => `${workspace.organisationName} ${activeWorkspace.datarmartName ? `[${activeWorkspace.datarmartName}]` : ''}`;
+    const getLabel = workspace => `${workspace.organisationName} ${workspace.datamartName ? `[${workspace.datamartName}]` : ''}`;
 
     const getActiveWorkespace = () => {
       return {
@@ -179,15 +179,25 @@ class NavigatorHeader extends Component {
       label: <p><FormattedMessage id="LOGOUT" /></p>,
       onClick: () => {
         logout();
-        return redirect(loginUrl);
+        // should use redirect(loginUrl) later
+        window.location = '/#/logout'; // eslint-disable-line no-undef
+      }
+    };
+
+    const account = {
+      label: <p><FormattedMessage id="ACCOUNT_SETTINGS" /></p>,
+      onClick: () => {
+        window.location = `/#${this.getCurrentWorkspaceId()}/settings/useraccount`; // eslint-disable-line no-undef
       }
     };
 
     const userItem = user ? { label: <p>{user.email}</p> } : null;
+    const accountItem = user ? account : null;
     const authenticatedItem = authenticated ? logoutItem : loginItem;
 
     return [
       userItem,
+      accountItem,
       authenticatedItem
     ];
 

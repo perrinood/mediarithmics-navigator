@@ -10,6 +10,25 @@ import * as sessionActions from '../../services/session/SessionActions';
 
 class Navigator extends Component {
 
+  constructor(props) {
+    super(props);
+    this.validateUrl = this.validateUrl.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      activeWorkspace
+    } = this.props;
+
+    const {
+      activeWorkspace: nextActiveWorkspace
+    } = nextProps;
+
+    if (activeWorkspace.datamartId !== nextActiveWorkspace.datamartId) {
+      this.validateUrl();
+    }
+  }
+
   componentDidMount() {
 
     const {
@@ -17,44 +36,21 @@ class Navigator extends Component {
       user,
       token,
       params,
-      location: {
-        pathname
-      },
-      router,
       getConnectedUser,
+      getWorkspaces,
       initWorkspace
     } = this.props;
 
-    const validateUrl = () => {
-
-      const {
-        checkUrl
-      } = this.props;
-
-      checkUrl(pathname);
-
-      const {
-        isReactUrl
-      } = this.props;
-
-      const {
-        activeWorkspace: {
-          organisationId,
-          datamartId
-        }
-      } = this.props;
-
-      if (isReactUrl && params.organisationId !== organisationId) {
-        const redirectUrl = `o${organisationId}d${datamartId}/campaigns/display`;
-        router.push(redirectUrl);
-      }
-
+    const workspace = {
+      organisationId: params.organisationId,
+      datamartId: params.datamartId
     };
 
     const retrieveUser = () => {
       return getConnectedUser()
-        .then(() => initWorkspace(params.organisationId, params.datamartId))
-        .then(validateUrl);
+        .then(() => getWorkspaces(workspace))
+        .then(() => initWorkspace(workspace))
+        .then(this.validateUrl);
     };
 
     initI18n();
@@ -93,6 +89,36 @@ class Navigator extends Component {
     );
   }
 
+  validateUrl() {
+
+    const {
+      checkUrl,
+      location: {
+        pathname
+      },
+      router
+    } = this.props;
+
+    checkUrl(pathname);
+
+    const {
+      isReactUrl
+    } = this.props;
+
+    const {
+      activeWorkspace: {
+        organisationId,
+        datamartId
+      }
+    } = this.props;
+
+    const url = `${PUBLIC_URL}/organisation/${organisationId}/datamart/${datamartId}/campaign`; // eslint-disable-line no-undef
+
+    if (isReactUrl) {
+      router.replace(url);
+    }
+  }
+
 }
 
 Navigator.defaultProps = {
@@ -116,6 +142,7 @@ Navigator.propTypes = {
   router: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   token: PropTypes.string,
   getConnectedUser: PropTypes.func.isRequired,
+  getWorkspaces: PropTypes.func.isRequired,
   initWorkspace: PropTypes.func.isRequired,
   checkUrl: PropTypes.func.isRequired
 };
@@ -132,6 +159,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   initI18n: i18nActions.initI18n,
   getConnectedUser: sessionActions.getConnectedUser,
+  getWorkspaces: sessionActions.getWorkspaces,
   initWorkspace: sessionActions.initWorkspace,
   checkUrl: sessionActions.checkUrl
 };

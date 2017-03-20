@@ -8,6 +8,10 @@ const GET_ACCESS_TOKEN_REQUEST = 'GET_ACCESS_TOKEN_REQUEST';
 const GET_ACCESS_TOKEN_SUCCESS = 'GET_ACCESS_TOKEN_SUCCESS';
 const GET_ACCESS_TOKEN_FAILURE = 'GET_ACCESS_TOKEN_FAILURE';
 
+const GET_WORKSPACES_REQUEST = 'GET_WORKSPACES_REQUEST';
+const GET_WORKSPACES_SUCCESS = 'GET_WORKSPACES_SUCCESS';
+const GET_WORKSPACES_FAILURE = 'GET_WORKSPACES_FAILURE';
+
 const INIT_WORKSPACE = 'INIT_WORKSPACE';
 const SWITCH_WORKSPACE = 'SWITCH_WORKSPACE';
 
@@ -51,13 +55,32 @@ const getConnectedUser = () => {
   };
 };
 
-const initWorkspace = (organisationId, datamartId) => {
+const getWorkspaces = workspace => {
+  return (dispatch, getState) => {
+
+    const {
+      sessionState: {
+        user
+      }
+    } = getState();
+
+    const organisationId = workspace.organisationId || user.default_workspace;
+
+    return dispatch({
+      [CALL_API]: {
+        method: 'get',
+        endpoint: `organisations/${organisationId}/workspace`,
+        authenticated: true,
+        types: [GET_WORKSPACES_REQUEST, GET_WORKSPACES_SUCCESS, GET_WORKSPACES_FAILURE]
+      }
+    });
+  };
+};
+
+const initWorkspace = workspace => {
   return {
     type: INIT_WORKSPACE,
-    workspace: {
-      organisationId,
-      datamartId
-    }
+    workspace
   };
 };
 
@@ -81,7 +104,7 @@ const logout = () => {
   };
 };
 
-const buildWorkspace = (workspace, datamart) => {
+const buildWorkspace = (workspace, datamart = {}) => {
 
   const {
     organisation_name: organisationName,
@@ -91,9 +114,9 @@ const buildWorkspace = (workspace, datamart) => {
   } = workspace;
 
   const {
-    datamart_id: datamartId,
-    datamart_name: datamartName
-  } = (datamart || {});
+    id: datamartId,
+    name: datamartName
+  } = datamart;
 
   return {
     organisationName,
@@ -172,7 +195,9 @@ const defaultSessionState = {
   activeWorkspace: {},
   workspaces: [],
   isReactUrl: false,
-  authenticated: false
+  authenticated: false,
+  isFetching: false,
+  isFetchingWorkspaces: false
 };
 
 
@@ -190,6 +215,11 @@ const sessionState = (state = defaultSessionState, action) => {
         ...state,
         isFetching: true
       };
+    case GET_WORKSPACES_REQUEST:
+      return {
+        ...state,
+        isFetchingWorkspaces: true
+      };
 
     case GET_ACCESS_TOKEN_SUCCESS:
       return {
@@ -202,8 +232,13 @@ const sessionState = (state = defaultSessionState, action) => {
         ...state,
         isFetching: false,
         user: action.response.data,
-        workspaces: buildWorkspaces(action.response.data.workspaces),
         authenticated: true
+      };
+    case GET_WORKSPACES_SUCCESS:
+      return {
+        ...state,
+        isFetchingWorkspaces: false,
+        workspaces: buildWorkspaces([action.response.data])
       };
 
     case GET_ACCESS_TOKEN_FAILURE:
@@ -217,6 +252,12 @@ const sessionState = (state = defaultSessionState, action) => {
         ...state,
         isFetching: false,
         error: action.response.error
+      };
+    case GET_WORKSPACES_FAILURE:
+      return {
+        ...state,
+        isFetchingWorkspaces: false,
+        workspaces: defaultSessionState.workspaces
       };
 
     case INIT_WORKSPACE:
@@ -250,6 +291,7 @@ const sessionState = (state = defaultSessionState, action) => {
 export {
 getAccessToken,
 getConnectedUser,
+getWorkspaces,
 checkUrl,
 initWorkspace,
 switchWorkspace,

@@ -1,6 +1,7 @@
 import {
   getAccessToken,
   getConnectedUser,
+  getWorkspaces,
   initWorkspace,
   switchWorkspace,
   checkUrl,
@@ -10,6 +11,7 @@ import {
 export {
   getAccessToken,
   getConnectedUser,
+  getWorkspaces,
   initWorkspace,
   switchWorkspace,
   checkUrl,
