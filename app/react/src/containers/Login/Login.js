@@ -87,8 +87,7 @@ class Login extends Component {
          next
        }
      },
-     router,
-     initWorkspace
+     router
     } = this.props;
 
     const redirect = () => {
@@ -108,7 +107,6 @@ class Login extends Component {
     refreshToken(credentialsForm)
       .then(getAccessToken)
       .then(getConnectedUser)
-      .then(() => initWorkspace())
       .then(redirect);
 
   }
@@ -128,7 +126,6 @@ Login.propTypes = {
   resetLogin: PropTypes.func.isRequired,
   getAccessToken: PropTypes.func.isRequired,
   getConnectedUser: PropTypes.func.isRequired,
-  initWorkspace: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
@@ -143,8 +140,7 @@ const mapDispatchToProps = {
   refreshToken: loginActions.refreshToken,
   resetLogin: loginActions.resetLogin,
   getAccessToken: sessionActions.getAccessToken,
-  getConnectedUser: sessionActions.getConnectedUser,
-  initWorkspace: sessionActions.initWorkspace
+  getConnectedUser: sessionActions.getConnectedUser
 };
 
 Login = connect(

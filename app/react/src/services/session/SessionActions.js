@@ -2,7 +2,7 @@ import {
   getAccessToken,
   getConnectedUser,
   getWorkspaces,
-  initWorkspace,
+  initActiveWorkspace,
   switchWorkspace,
   checkUrl,
   logout
@@ -12,7 +12,7 @@ export {
   getAccessToken,
   getConnectedUser,
   getWorkspaces,
-  initWorkspace,
+  initActiveWorkspace,
   switchWorkspace,
   checkUrl,
   logout

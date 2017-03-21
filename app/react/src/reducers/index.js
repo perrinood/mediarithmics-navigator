@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import { routerReducer } from 'react-router-redux';
 
 import { PersistentReducers } from './PersistentReducers';
 import { HeaderReducers } from '../containers/Header/redux';
@@ -13,6 +14,7 @@ const allReducers = Object.assign(
   // external reducers
   {
     form: formReducer,
+    routing: routerReducer,
   },
 
   PersistentReducers,

@@ -77,7 +77,7 @@ const getWorkspaces = workspace => {
   };
 };
 
-const initWorkspace = workspace => {
+const initActiveWorkspace = workspace => {
   return {
     type: INIT_WORKSPACE,
     workspace
@@ -293,7 +293,7 @@ getAccessToken,
 getConnectedUser,
 getWorkspaces,
 checkUrl,
-initWorkspace,
+initActiveWorkspace,
 switchWorkspace,
 logout,
 
