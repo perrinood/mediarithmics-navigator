@@ -21,7 +21,8 @@ class NavigatorHeader extends Component {
   render() {
 
     const {
-      authenticated
+      authenticated,
+      isVisible
     } = this.props;
 
     const homeUrl = authenticated ? `${this.getCurrentWorkspaceId()}/campaigns/display` : '';
@@ -39,7 +40,7 @@ class NavigatorHeader extends Component {
       alt: 'profile'
     };
 
-    return <Header homeUrl={homeUrl} navigationItems={navigationItems} workspaceItems={workspaceItems} profileItems={profileItems} logo={logo} img={img} />;
+    return isVisible ? <Header homeUrl={homeUrl} navigationItems={navigationItems} workspaceItems={workspaceItems} profileItems={profileItems} logo={logo} img={img} /> : null;
 
   }
 
@@ -89,11 +90,11 @@ class NavigatorHeader extends Component {
     const reactEntries = [
       /*
         To test until a real link is implemented
-        const campaignsUrl = `/v2/organisation/${organisationId}${datamartId ? `/datamart/${datamartId}` : ''}/campaign`;
+        const campaignsUrl = `/v2/organisation/${organisationId}${datamartId ? `/datamart/${datamartId}` : ''}/campaigns`;
         {
           url: campaignsUrl,
           label: <FormattedMessage id="CAMPAIGNS" />,
-          active: isActiveUrl('campaign'),
+          active: isActiveUrl('campaigns'),
         }
       */
     ];
@@ -209,6 +210,7 @@ NavigatorHeader.propTypes = {
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaces: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isVisible: PropTypes.bool.isRequired,
   authenticated: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   switchWorkspace: PropTypes.func.isRequired,
@@ -220,7 +222,8 @@ const mapStateToProps = state => ({
   authenticated: state.sessionState.authenticated,
   user: state.sessionState.user,
   activeWorkspace: state.sessionState.activeWorkspace,
-  workspaces: state.sessionState.workspaces
+  workspaces: state.sessionState.workspaces,
+  isVisible: state.headerState.isVisible
 });
 
 const mapDispatchToProps = {

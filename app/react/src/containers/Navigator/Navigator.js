@@ -25,7 +25,7 @@ class Navigator extends Component {
     } = nextProps;
 
     if (activeWorkspace.datamartId !== nextActiveWorkspace.datamartId) {
-      this.validateUrl();
+      this.validateUrl(nextActiveWorkspace);
     }
   }
 
@@ -50,7 +50,7 @@ class Navigator extends Component {
       return getConnectedUser()
         .then(() => getWorkspaces(workspace))
         .then(() => initWorkspace(workspace))
-        .then(this.validateUrl);
+        .then(() => this.validateUrl());
     };
 
     initI18n();
@@ -89,7 +89,7 @@ class Navigator extends Component {
     );
   }
 
-  validateUrl() {
+  validateUrl(workspace) {
 
     const {
       checkUrl,
@@ -105,14 +105,15 @@ class Navigator extends Component {
       isReactUrl
     } = this.props;
 
-    const {
-      activeWorkspace: {
-        organisationId,
-        datamartId
-      }
-    } = this.props;
+    const currentWorkspace = workspace ? {
+      organisationId: workspace.organisationId,
+      datamartId: workspace.datamartId
+    } : {
+      organisationId: this.props.activeWorkspace.organisationId,
+      datamartId: this.props.activeWorkspace.datamartId
+    };
 
-    const url = `${PUBLIC_URL}/organisation/${organisationId}/datamart/${datamartId}/campaign`; // eslint-disable-line no-undef
+    const url = `${PUBLIC_URL}/organisation/${currentWorkspace.organisationId}/datamart/${currentWorkspace.datamartId}/campaigns`; // eslint-disable-line no-undef
 
     if (isReactUrl) {
       router.replace(url);
