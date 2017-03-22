@@ -25,9 +25,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         CampaignAnalyticsReportService.emailPerformance(campaignId).then(function (data) {
           $scope.emailStats = data;
 
-          var emailOpenedPercent = $scope.emailStats > 0 ? $scope.emailStats.impressions * 100 / $scope.emailStats : 0.0;
-          var emailClickedPercent = $scope.emailStats  > 0 ? $scope.emailStats.clicks * 100 / $scope.emailStats  : 0.0;
-          var emailUnsubscribedPercent = $scope.emailStats  > 0 ? $scope.emailStats.email_unsubscribed * 100 / $scope.emailStats  : 0.0;
+          var emailOpenedPercent = ($scope.emailStats.email_sent > 0 ? $scope.emailStats.impressions * 100 / $scope.emailStats.email_sent : 0.0).toFixed(2);
+          var emailClickedPercent = ($scope.emailStats.email_sent  > 0 ? $scope.emailStats.clicks * 100 / $scope.emailStats.email_sent  : 0.0).toFixed(2);
+          var emailUnsubscribedPercent = ($scope.emailStats.email_sent  > 0 ? $scope.emailStats.email_unsubscribed * 100 / $scope.emailStats.email_sent  : 0.0).toFixed(2);
 
           $scope.dataOpenedEmail = [{key: "Emails opened", y: emailOpenedPercent }, {key: "Emails not opened", y:  100 - emailOpenedPercent}];
           $scope.dataClickedEmail = [{key: "Emails clicked", y: emailClickedPercent }, {key: "Emails not clicked", y: 100 - emailClickedPercent}];
