@@ -285,7 +285,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         };
 
         ReportService.emailPerformance = function (campaignId) {
-          return this.getPerformance(buildEmailCampaignResource(), "", "email_sent,impressions,email_unsubscribed,email_hard_bounced,email_soft_bounced,clicks", "campaign_id==" + campaignId)
+          return this.getPerformance(buildEmailCampaignResource(), "", "email_sent,impressions,email_unsubscribed,email_hard_bounced,email_soft_bounced,clicks,email_complaints", "campaign_id==" + campaignId)
             .$promise.then(function (response) {
               var report = response.data.report_view;
               var firstLine = report.rows[0] || [];
