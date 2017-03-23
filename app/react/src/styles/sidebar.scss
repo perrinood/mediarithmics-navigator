@@ -1,0 +1,51 @@
+.mcs-content-with-sidebar {
+  margin-left: 210px;
+  min-width: 768px;
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.mcs-sidebar {
+  .mcs-sidebar-background {
+    width: 200px;
+    border-right: 1px solid $mcs-light-grey;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+  }
+  .mcs-sidebar-content {
+    width: 185px;
+    max-width: 185px;
+    padding-left: 20px;
+    float: left;
+
+    .mcs-lm-nav {
+      @extend .nav;
+    }
+
+    .mcs-lm-nav-pills {
+      @extend .nav-pills;
+    }
+
+    .mcs-lm-nav-stacked {
+      @extend .nav-stacked;
+      > li {
+
+        // Active state
+        &.active > a {
+          &,
+          &:hover,
+          &:focus {
+            color: $dark-blue;
+            background-color: white;
+            font-weight: bold;
+            border-left: 4px solid $dark-blue;
+          }
+        }
+      }
+    }
+  }
+}
+

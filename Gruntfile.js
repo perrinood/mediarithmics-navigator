@@ -109,10 +109,6 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
-      },
       genRequireJsFiles: {
         files: ['/app/**/module.json'],
         tasks: ['genRequireJsFiles:config']
@@ -498,13 +494,13 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'compass:server'
+        // 'compass:server'
       ],
       test: [
         'compass'
       ],
       dist: [
-        'compass:dist',
+        // 'compass:dist',
         'imagemin',
         'svgmin'
       ]

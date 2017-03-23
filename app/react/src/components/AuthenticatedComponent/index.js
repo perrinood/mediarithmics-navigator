@@ -7,7 +7,7 @@ export function requireAuthentication(Component) {
 
   class AuthenticatedComponent extends React.Component {
 
-    componentWillMount() {
+    componentDidMount() {
       this.checkAuth(this.props.authenticated);
     }
 

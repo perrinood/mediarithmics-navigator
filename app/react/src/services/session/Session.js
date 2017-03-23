@@ -118,13 +118,16 @@ const buildWorkspace = (workspace, datamart = {}) => {
     name: datamartName
   } = datamart;
 
+  const workspaceId = `o${organisationId}d${datamartId}`;
+
   return {
     organisationName,
     organisationId,
     administrator,
     role,
     datamartId,
-    datamartName
+    datamartName,
+    workspaceId
   };
 
 };

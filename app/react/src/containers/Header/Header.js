@@ -12,7 +12,6 @@ class NavigatorHeader extends Component {
 
   constructor(props) {
     super(props);
-    this.getCurrentWorkspaceId = this.getCurrentWorkspaceId.bind(this);
     this.buildNavigationItems = this.buildNavigationItems.bind(this);
     this.buildWorkspaceItems = this.buildWorkspaceItems.bind(this);
     this.buildProfileItems = this.buildProfileItems.bind(this);
@@ -22,10 +21,13 @@ class NavigatorHeader extends Component {
 
     const {
       authenticated,
-      isVisible
+      isVisible,
+      activeWorkspace: {
+        workspaceId
+      }
     } = this.props;
 
-    const homeUrl = authenticated ? `${this.getCurrentWorkspaceId()}/campaigns/display` : '';
+    const homeUrl = authenticated ? `/${workspaceId}/campaigns/display` : '';
     const navigationItems = this.buildNavigationItems();
     const workspaceItems = this.buildWorkspaceItems();
     const profileItems = this.buildProfileItems();
@@ -44,30 +46,19 @@ class NavigatorHeader extends Component {
 
   }
 
-  getCurrentWorkspaceId() {
-    const {
-      activeWorkspace: {
-        organisationId,
-        datamartId
-      }
-    } = this.props;
-    return `/o${organisationId}d${datamartId}`;
-  }
-
   buildNavigationItems() {
 
     const {
       activeWorkspace: {
         // organisationId,
-        datamartId
+        datamartId,
+        workspaceId
       },
       location: {
         pathname
       },
       authenticated
     } = this.props;
-
-    const currentWorkspaceId = this.getCurrentWorkspaceId();
 
     /*
       To add a new link to the navbar use an object with the property active.
@@ -78,11 +69,11 @@ class NavigatorHeader extends Component {
 
     const datamartEntries = datamartId ? [
       {
-        url: `${currentWorkspaceId}/datamart/segments`,
+        url: `/${workspaceId}/datamart/segments`,
         label: <FormattedMessage id="AUDIENCE" />
       },
       {
-        url: `${currentWorkspaceId}/datamart/categories`,
+        url: `/${workspaceId}/datamart/categories`,
         label: <FormattedMessage id="CATALOGS" />
       },
     ] : [];
@@ -101,15 +92,15 @@ class NavigatorHeader extends Component {
 
     const angularEntries = [
       {
-        url: `${currentWorkspaceId}/campaigns/display`,
+        url: `/${workspaceId}/campaigns/display`,
         label: <FormattedMessage id="CAMPAIGNS" />
       },
       {
-        url: `${currentWorkspaceId}/creatives/display-ad`,
+        url: `/${workspaceId}/creatives/display-ad`,
         label: <FormattedMessage id="CREATIVES" />
       },
       {
-        url: `${currentWorkspaceId}/library/placementlists`,
+        url: `/${workspaceId}/library/placementlists`,
         label: <FormattedMessage id="LIBRARY" />
       }
     ];
@@ -157,6 +148,9 @@ class NavigatorHeader extends Component {
     const {
       authenticated,
       user,
+      activeWorkspace: {
+        workspaceId
+      },
       logout,
       router
     } = this.props;
@@ -188,7 +182,7 @@ class NavigatorHeader extends Component {
     const account = {
       label: <p><FormattedMessage id="ACCOUNT_SETTINGS" /></p>,
       onClick: () => {
-        window.location = `/#${this.getCurrentWorkspaceId()}/settings/useraccount`; // eslint-disable-line no-undef
+        window.location = `/#/${workspaceId}/settings/useraccount`; // eslint-disable-line no-undef
       }
     };
 

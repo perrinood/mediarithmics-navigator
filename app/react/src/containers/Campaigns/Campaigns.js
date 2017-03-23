@@ -8,9 +8,9 @@ class Campaigns extends Component {
   render() {
     return (
       <div>
-        <CampaignsSidebar />
-        <div>
-          <FormattedMessage id="CAMPAIGN_COMPONENT" />
+        <CampaignsSidebar {...this.props} />
+        <div className="mcs-content-with-sidebar">
+          { this.props.children || <FormattedMessage id="CAMPAIGN_COMPONENT" /> }
         </div>
       </div>
     );

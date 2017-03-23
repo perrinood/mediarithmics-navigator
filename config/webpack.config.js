@@ -50,7 +50,7 @@ const configFactory = (customFontPath, eslintFailOnError) => {
               'css-loader?sourceMap',
               'resolve-url-loader',
               `sass-loader?${JSON.stringify({
-                sourceMap: true,
+                sourceMap: false,
                 includePaths: [paths.appNodeModules],
                 data: `$custom_font_path: '${customFontPath}';`
               })}`

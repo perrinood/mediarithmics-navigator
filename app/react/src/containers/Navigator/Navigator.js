@@ -18,18 +18,18 @@ class Navigator extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      user
+      authenticated,
+      activeWorkspace
     } = this.props;
 
     const {
       activeWorkspace: nextActiveWorkspace,
-      params: nextParams,
-      user: nextUser
+      params: nextParams
     } = nextProps;
 
-    if (user.id || user.id !== nextUser.id) {
+    if (authenticated) {
       if (nextParams.organisationId) {
-        if (nextParams.organisationId !== nextActiveWorkspace.organisationId) {
+        if (nextParams.organisationId !== activeWorkspace.organisationId) {
           const workspace = {
             organisationId: nextParams.organisationId,
             datamartId: nextParams.datamartId
@@ -99,8 +99,6 @@ class Navigator extends Component {
       initActiveWorkspace
     } = this.props;
 
-    console.log(workspace);
-
     return getWorkspaces(workspace)
       .then(() => initActiveWorkspace(workspace))
       .then(() => this.validateUrl());
@@ -144,7 +142,7 @@ Navigator.propTypes = {
   locale: PropTypes.string,
   translations: PropTypes.objectOf(PropTypes.string).isRequired,
   initI18n: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  authenticated: PropTypes.bool.isRequired,
   activeWorkspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isReactUrl: PropTypes.bool.isRequired,
   params: PropTypes.shape({
@@ -162,7 +160,7 @@ Navigator.propTypes = {
 const mapStateToProps = state => ({
   isReady: state.translationsState.isReady,
   translations: state.translationsState.translations,
-  user: state.sessionState.user,
+  authenticated: state.sessionState.authenticated,
   activeWorkspace: state.sessionState.activeWorkspace,
   isReactUrl: state.sessionState.isReactUrl,
   token: state.persistedState.access_token

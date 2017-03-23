@@ -1,7 +1,7 @@
 /*
  * Mediarithmics navigator style sheet
  */
-$icon-font-path: "../angular/bower_components/bootstrap-sass/assets/fonts/bootstrap/";
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 // override bootstrap variables
 $font-family-sans-serif: "LLCircularWeb-Book", "Source Sans Pro", Helvetica, Arial, sans-serif;
 
@@ -91,7 +91,7 @@ $state-danger-text: $mcs-red;
   }
 }
 
-@import "bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 .top-warning {
   padding: 5px;
@@ -290,9 +290,9 @@ input.ng-invalid, select.ng-invalid {
   border-color: $brand-danger !important;
 }
 
-@import "compass/css3/border-radius";
-@import "compass/css3/transition";
-@import "compass/css3/images";
+@import "~compass-mixins/lib/compass/css3/_border-radius";
+@import "~compass-mixins/lib/compass/css3/_transition";
+@import "~compass-mixins/lib/compass/css3/_images";
 
 .mics-toggle-block {
   .toggle-text-target {
