@@ -170,7 +170,7 @@ define(['./module', 'moment'], function (module, moment) {
 
         promise.then(function success() {
           WaitingService.hideWaitingModal();
-          $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
         }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
