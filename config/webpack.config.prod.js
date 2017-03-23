@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
 
 const paths = require('./paths');
 const configFactory = require('./webpack.config');
@@ -34,6 +36,18 @@ const prodConfig = {
         comments: true,
         screw_ie8: true
       }
+    }),
+    new OptimizeCSSAssetsPlugin({
+      cssProcessor: cssnano,
+      cssProcessorOptions: {
+        discardComments: {
+          removeAll: true,
+        },
+        // Run cssnano in safe mode to avoid
+        // potentially unsafe transformations.
+        safe: true
+      },
+      canPrint: false,
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')

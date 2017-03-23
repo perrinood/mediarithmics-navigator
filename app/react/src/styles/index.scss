@@ -1,4 +1,5 @@
-@import '~@blueprintjs/core/dist/blueprint.css';
+$icon-font-path: "~@blueprintjs/core/resources/icons";
+@import '~@blueprintjs/core/src/blueprint.scss';
 
 @import 'main.scss';
 @import 'sidebar.scss';
