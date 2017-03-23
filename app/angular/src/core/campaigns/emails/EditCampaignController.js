@@ -183,7 +183,7 @@ define(['./module', 'moment'], function (module, moment) {
         // if ($scope.campaign && $scope.campaign.id) {
         //   $location.path('/' + $scope.campaign.organisation_id + '/campaigns/display/report/' + $scope.campaign.id + '/basic');
         // } else {
-        $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+        $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
         // }
       };
 

@@ -42,17 +42,6 @@
       <input ng-model="campaignCtn.value.from_name" type="text" class="form-control input-lg" id="from_name"/>
     </div>
 
-    <div class="row">
-      <div class="col-xs-3">
-        <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient">
-      </div>
-      <div class="col-xs-2">
-        <button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
-      </div>
-    </div>
-    <div>
-      <p>{{messageSent}}</p>
-    </div>
     <br/>
     <!--<div>-->
       <!--<div mcs-form-group="number" label-for="send_email" label-text="">-->
