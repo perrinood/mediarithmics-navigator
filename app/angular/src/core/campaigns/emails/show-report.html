@@ -206,10 +206,16 @@
         <div>
           <div class="row">
             <div class="col-xs-3">
-              <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient">
+              Send a test Email
             </div>
-            <div class="col-xs-2">
-              <button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
+            <br/>
+            <div>
+              <div class="col-xs-3">
+                <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient">
+              </div>
+              <div class="col-xs-2">
+                <button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
+              </div>
             </div>
           </div>
           <div>
