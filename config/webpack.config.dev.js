@@ -27,4 +27,4 @@ const devConfig = {
 
 };
 
-module.exports = merge(configFactory(customFontPath, false), devConfig);
+module.exports = merge(configFactory(false, customFontPath, false), devConfig);
