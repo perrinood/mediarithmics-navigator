@@ -1,0 +1,29 @@
+<div ng-controller="core/keywords/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="isCreationMode">Create Keywords List</h1>
+      <h1 ng-if="!isCreationMode">Edit Keywords List</h1>
+    </div>
+
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="keywords_list_name" label-text="Keywords List Name">
+      <input required class="input-lg" ng-model="keywordsList.keywordList.name" type="text" id="keywords_list_name">
+    </div>
+
+    <div ng-include="'angular/src/core/keywords/edit.one.inc.html'"></div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>
+
+

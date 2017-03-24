@@ -1,0 +1,20 @@
+{
+  "CAMPAIGN_COMPONENT": "Composant Campaign",
+
+  "AUDIENCE": "Audience",
+  "CATALOGS": "Catalogues",
+  "CAMPAIGNS": "Campagnes",
+  "CREATIVES": "Creatives",
+  "LIBRARY": "Bibliothèque",
+  
+  "LOGIN": "Connexion",
+  "LOGOUT": "Déconnexion",
+  "ACCOUNT_SETTINGS": "Comptes et paramètres",
+
+  "EMAIL_ADDRESS": "Adresse email",
+  "EMAIL_PLACEHOLDER": "Entrez votre adresse email",
+  "PASSWORD_PLACEHOLDER": "Entrez votre mot de passe",
+  "FORGOT_PASSWORD": "Mot de passe oublié ?",
+  "SUBMIT": "Valider"
+
+}

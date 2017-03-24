@@ -1,0 +1,7 @@
+Gruntfile.js
+karma*
+test/
+dist/
+app/angular/
+app/conf/
+app/main.js

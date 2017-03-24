@@ -1,0 +1,187 @@
+<div ng-controller="core/goals/EditOneController" class="mcs-default-container site-content">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form onsubmit="done()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1>Goal</h1>
+    </div>
+
+    <div class="row" ng-show='error'>
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">{{error}}</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div mcs-form-group="" label-for="name" label-text="Name">
+          <input ng-model="goal.name" type="text" class="form-control input-lg" id="name">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mcs-default-heading">
+      <h3>Conversion value</h3>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="conversionValue.addConversionValue"> Add conversion value
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-if="conversionValue.addConversionValue">
+
+      <div class="col-md-2">
+        <label for="default_goal_value">Default value
+          <span class="badge help-badge" data-html="true" uib-popover-html="'The Default Goal value'" uib-popover-template="" popover-trigger="mouseenter" popover-placement="right">?</span>
+        </label>
+        <input ng-model="conversionValue.defaultGoalValue" type="text" class="form-control input-lg" id="default_goal_value">
+      </div>
+      <div class="col-md-2">
+        <label>Currency
+        </label>
+        <select class="form-control input-lg" ng-model="conversionValue.goalValueCurrency">
+          <option value="EUR">EUR</option>
+        </select>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="mcs-default-heading">
+      <h3>Trigger</h3>
+    </div>
+    
+    <div class="mics-block-heading-2">
+      <span>Conversion tracking through a trigger</span>
+    </div>
+
+    <div class="radio">
+      <label>
+        <input type="radio" name="triggers" id="query" ng-model="trigger" value="query"> Trigger via query
+      </label>
+    </div>
+
+    <div ng-if="trigger === 'query'">
+      <div class="row" >
+        <div class="col-md-12 mics-block-heading-2">
+          <div class="btn-group">
+            <a class="mics-btn mics-btn-add" ng-if="!queryContainer" ng-click="addTrigger()">Add a trigger</a>
+            <a class="mics-btn mics-btn-edit" ng-if="queryContainer" ng-click="editTrigger()">Edit trigger</a>
+            <a class="mics-btn mics-btn-delete" ng-if="queryContainer" ng-click="removeTrigger()">Remove trigger</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">      
+        <div class="col-md-12">
+          <span ng-if="!queryContainer" class="help-block">No trigger defined</span>
+          <div ng-if="queryContainer" ng-include="'angular/src/core/datamart/queries/query-readonly-view.html'"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="radio">
+      <label>
+        <input type="radio" name="triggers" id="pixel" ng-model="trigger" value="pixel"> 
+        Trigger via pixel
+        <a class="mics-btn mics-btn-edit" ng-if="trigger === 'pixel'" ng-click="getPixelTrackingUrl()">Get pixel tracking url</a>
+      </label>
+    </div>
+  
+    <div class="mcs-default-heading">
+      <h3>Attribution models</h3>
+    </div>
+    <div class="mics-block-heading-2">
+      <div class="btn-group">
+        <div class="dropdown" uib-dropdown>
+          <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
+            Add an attribution model
+            <!-- <span class="caret"></span> -->
+          </button>
+
+          <ul class="dropdown-menu" role="menu" aria-labelledby="Add Attribution model">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" ng-click="addDirectAttributionModel()">
+                Direct
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" ng-click="addAttributionModel()">
+                From processor
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <span>Attribution models</span>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <span ng-if="!attributionModels.length" class="help-block">No attribution models defined</span>
+        <table class="mics-table js-auto-hide-actions" ng-show="attributionModels.length">
+          <thead>
+            <tr>
+              <th>Attribution type</th>
+              <th>Attribution model processor</th>
+              <th>Default</th>
+              <th class="actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="attributionModel in attributionModels">
+              <td>{{attributionModel.value.attribution_type}}</td>
+              <td ng-show="attributionModel.value.attribution_model_id">
+                {{attributionModel.value.attribution_model_name}} ({{attributionModel.value.group_id}}:{{attributionModel.value.artifact_id}})
+              </td>
+              <td ng-show="!attributionModel.value.attribution_model_id">N/A</td>
+              <td><input name="defaultAttributionModel" type="radio" ng-model="attributionModel.selectedAsDefault" value="true" ng-change="updateDefaultAttributionModel(attributionModel)"/></td>
+              <td class="actions">
+                <a class="mics-btn mics-btn-delete" ng-click="deleteAttributionModel(attributionModel)">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <br/>
+
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+              Advanced Options
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+
+            <div mcs-form-group="" label-for="goal_technical_name" label-text="Technical Name">
+              <input ng-model="goal.technical_name" type="text" id="goal_technical_name">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <a class="mics-btn mics-btn-finish" ng-disabled="disabled" ng-click="done()" >Done</a>
+    </div>
+  </form>
+</div>

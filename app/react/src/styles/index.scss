@@ -1,0 +1,8 @@
+$icon-font-path: "~@blueprintjs/core/resources/icons";
+@import '~@blueprintjs/core/src/blueprint.scss';
+
+@import 'main.scss';
+@import 'sidebar.scss';
+
+@import 'mcs-react-header/src/styles/Header.scss';
+@import 'mcs-react-nav-link/src/styles/NavLink.scss';
