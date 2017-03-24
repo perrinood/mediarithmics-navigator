@@ -6,13 +6,6 @@
           <a class="mics-btn mics-btn-action" ng-click="editCampaign(campaign)">Edit Campaign</a>
         </div>
         <span>{{campaign.name}}</span>
-
-        <div mics-campaign-status="campaign"></div>
-        &nbsp;
-        <button type="button" class="mics-btn mics-btn-action btn-xs" ng-click="refresh()">
-          <span class="glyphicon glyphicon-refresh"></span>
-          Refresh
-        </button>
       </h2>
     </div>
 
@@ -209,12 +202,13 @@
               Send a test Email
             </div>
             <br/>
+            recipient {{recipient}}
             <div>
               <div class="col-xs-3">
-                <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient">
+                <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient.email">
               </div>
               <div class="col-xs-2">
-                <button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
+                <button ng-disabled="recipient.email.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
               </div>
             </div>
           </div>

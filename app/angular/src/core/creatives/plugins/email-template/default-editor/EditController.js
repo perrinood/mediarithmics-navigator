@@ -42,7 +42,7 @@ define(['./module', 'ui.ace'], function (module) {
             $scope.emailRenderResponse = emailRenderResponse;
             var iframeHtml = document.getElementById('email-preview-html');
             $scope.htmlContent = emailRenderResponse.content.html;
-            $scope.plainText = emailRenderResponse.content.plainText;
+            $scope.plainText = emailRenderResponse.content.text;
             writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
           }, function error(reason) {
             var iframeError = document.getElementById('email-preview-error');

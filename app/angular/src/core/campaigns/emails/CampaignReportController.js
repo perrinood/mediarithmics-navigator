@@ -7,9 +7,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
   module.controller('core/campaigns/emails/CampaignReportController', [
     '$scope', '$http', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/emails/EmailCampaignService',
     'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'd3', 'moment', '$interval', '$q', 'core/common/ErrorService',
-    'core/common/auth/AuthenticationService', '$timeout', 'CampaignAnalyticsReportService',
+    'core/common/auth/AuthenticationService', '$timeout', 'CampaignAnalyticsReportService', 'core/campaigns/emails/EmailCampaignContainer',
     function ($scope, $http, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, EmailCampaignService, CampaignPluginService,
-              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout, CampaignAnalyticsReportService) {
+              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout, CampaignAnalyticsReportService,EmailCampaignContainer) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       // Chart
@@ -18,8 +18,41 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       $scope.chartArea = "chart-area";
       $scope.getChartName = ChartsService.getChartName;
 
+      $scope.recipient = {email: ""};
+      $scope.messageSent = "";
+
       $scope.date = {reportDateRange: CampaignAnalyticsReportService.getDateRange()};
       $scope.reportDefaultDateRanges = CampaignAnalyticsReportService.getDefaultDateRanges();
+
+      var campaignId = $stateParams.campaign_id;
+      var campaignCtn = {};
+      CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.email", "default-editor").then(function (template) {
+        campaignCtn = new EmailCampaignContainer(template.editor_version_id);
+        if (!campaignId) {
+          $scope.campaignCtn = campaignCtn;
+        } else {
+          campaignCtn.load(campaignId).then(function () {
+            $scope.campaignCtn = campaignCtn;
+            $log.debug("campaignCtn",$scope.campaignCtn);
+            var templateId = campaignCtn.emailTemplates[0].email_template_id;
+            $scope.templateId = templateId;
+
+          });
+        }
+      });
+
+      function loadEmailTemplate(emailTemplateId) {
+        $scope.previewWidth = 750;
+        $scope.previewHeight = 500;
+        var rawResponseRestangular = Restangular.withConfig(function (RestangularConfigurer) {
+          RestangularConfigurer.setResponseExtractor(function (data, operation, what, url, response, deferred) {
+            return response.data;
+          });
+        });
+        return rawResponseRestangular.one('email_templates', emailTemplateId).one('preview').get();
+      }
+
+
 
       function fetchEmailStat(campaignId) {
         CampaignAnalyticsReportService.emailPerformance(campaignId).then(function (data) {
@@ -39,6 +72,17 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
 
         });
       }
+
+       $scope.sendEmail = function () {
+        if ($scope.recipient.email !== undefined && $scope.organisationId !== undefined && $scope.templateId !== undefined) {
+          Restangular.one('email_templates', $scope.templateId).all('send_test').post({
+            organisation_id: $scope.organisationId,
+            email: $scope.recipient.email
+          }).then(function () {
+            $scope.messageSent = "Message sent";
+          });
+        }
+      };
 
       /**
        * Charts

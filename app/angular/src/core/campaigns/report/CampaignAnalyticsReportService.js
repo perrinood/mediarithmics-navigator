@@ -35,6 +35,15 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
     "email_soft_bounced": {name: "Email Soft Bounced", type: "number"},
     "email_complaints": {name: "Email Complaints", type: "number"},
 
+    //uniq metrics
+    "uniq_impressions": {name: "Uniq Imp.", type: "number"},
+    "uniq_clicks": {name: "Uniq Clicks", type: "number"},
+    "uniq_email_sent": {name: "Uniq Email Sent", type: "number"},
+    "uniq_email_unsubscribed": {name: "Uniq Email Unsubscribed", type: "number"},
+    "uniq_email_hard_bounced": {name: "Uniq Email Hard Bounced", type: "number"},
+    "uniq_email_soft_bounced": {name: "Uniq Email Soft Bounced", type: "number"},
+    "uniq_email_complaints": {name: "Uniq Email Complaints", type: "number"}
+
   };
 
 
