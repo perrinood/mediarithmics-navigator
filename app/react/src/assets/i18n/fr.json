@@ -3,17 +3,17 @@
 
   "AUDIENCE": "Audience",
   "CATALOGS": "Catalogues",
-  "CAMPAIGNS": "Campaignes",
+  "CAMPAIGNS": "Campagnes",
   "CREATIVES": "Creatives",
   "LIBRARY": "Bibliothèque",
   
-  "LOGIN": "Login",
-  "LOGOUT": "Logout",
+  "LOGIN": "Connexion",
+  "LOGOUT": "Déconnexion",
   "ACCOUNT_SETTINGS": "Comptes et paramètres",
 
   "EMAIL_ADDRESS": "Adresse email",
   "EMAIL_PLACEHOLDER": "Entrez votre adresse email",
-  "PASSWORD_PLACEHOLDER": "Entre votre mot de passe",
+  "PASSWORD_PLACEHOLDER": "Entrez votre mot de passe",
   "FORGOT_PASSWORD": "Mot de passe oublié ?",
   "SUBMIT": "Valider"
 
