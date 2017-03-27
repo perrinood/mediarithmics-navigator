@@ -62,4 +62,4 @@ const prodConfig = {
 
 };
 
-module.exports = merge(configFactory(customFontPath, true), prodConfig);
+module.exports = merge(configFactory(true, customFontPath, true), prodConfig);

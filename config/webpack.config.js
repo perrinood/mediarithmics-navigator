@@ -11,7 +11,7 @@ const extractSass = new ExtractTextPlugin({
   disable: process.env.NODE_ENV === 'development'
 });
 
-const configFactory = (customFontPath, eslintFailOnError) => {
+const configFactory = (isProduction, customFontPath, eslintFailOnError) => {
 
   return {
 
@@ -64,7 +64,7 @@ const configFactory = (customFontPath, eslintFailOnError) => {
             {
               loader: 'file-loader',
               query: {
-                name: '[name].[ext]'
+                name: `${isProduction ? '/src/assets/images/' : ''}[name].[ext]`
               }
             },
             {
