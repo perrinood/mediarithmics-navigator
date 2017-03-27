@@ -13,7 +13,7 @@ define(['./module', 'moment'], function (module, moment) {
     function (jQuery, $scope, $uibModal, $log, $location, $stateParams, $sce, _, configuration,
               CampaignPluginService, WaitingService, ErrorService, GoalsService,
               Restangular, EmailCampaignContainer, Session, AuthenticationService) {
-      var organisationId = Session.getCurrentWorkspace().organisation_id;
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
       var campaignId = $stateParams.campaign_id;
       var campaignCtn = {};
 
@@ -155,7 +155,7 @@ define(['./module', 'moment'], function (module, moment) {
 
         promise.then(function success() {
           WaitingService.hideWaitingModal();
-          $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
         }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
@@ -168,7 +168,7 @@ define(['./module', 'moment'], function (module, moment) {
         // if ($scope.campaign && $scope.campaign.id) {
         //   $location.path('/' + $scope.campaign.organisation_id + '/campaigns/display/report/' + $scope.campaign.id + '/basic');
         // } else {
-        $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+        $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
         // }
       };
 

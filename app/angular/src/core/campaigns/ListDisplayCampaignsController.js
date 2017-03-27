@@ -51,9 +51,9 @@ define(['./module'], function (module) {
 
       $scope.administrator = currentWorkspace.administrator;
 
-      var params = {organisation_id: currentWorkspace.organisation_id, max_results: 150};
+      var params = {organisation_id: currentWorkspace.organisation_id, max_results: 150, campaign_type: "DISPLAY"};
       if ($scope.administrator) {
-        params = {administration_id: currentWorkspace.organisation_id, max_results: 150};
+        params = {administration_id: currentWorkspace.organisation_id, max_results: 150, campaign_type: "DISPLAY"};
       }
 
       Restangular.all('display_campaigns').getList(params).then(function (displayCampaigns) {

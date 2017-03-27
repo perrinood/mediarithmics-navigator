@@ -27,15 +27,31 @@
       <input ng-model="campaignCtn.value.subject_line" type="text" class="form-control input-lg" id="subject_line"/>
     </div>
 
-    <!-- From name -->
-    <div mcs-form-group="number" label-for="from_name" label-text="From name">
-      <input ng-model="campaignCtn.value.from_name" type="text" class="form-control input-lg" id="from_name"/>
+    <!-- From email -->
+    <div mcs-form-group="number" label-for="from_email" label-text="From email">
+      <input ng-model="campaignCtn.value.from_email" type="text" class="form-control input-lg" id="from_email"/>
     </div>
 
     <!-- Reply to -->
     <div mcs-form-group="number" label-for="reply_to" label-text="Reply to">
       <input ng-model="campaignCtn.value.reply_to" type="text" class="form-control input-lg" id="reply_to"/>
     </div>
+
+    <!-- from name -->
+    <div mcs-form-group="number" label-for="from_name" label-text="From name">
+      <input ng-model="campaignCtn.value.from_name" type="text" class="form-control input-lg" id="from_name"/>
+    </div>
+
+    <br/>
+    <!--<div>-->
+      <!--<div mcs-form-group="number" label-for="send_email" label-text="">-->
+        <!--<input placeholder="Email" ng-model="recipient" type="email" class="form-control input-lg" id="send_email"/>-->
+      <!--</div>-->
+      <!--<button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue" type="button" ng-click="sendEmail()">Send</button>-->
+
+    <!--</div>-->
+    <!--<p>{{messageSent}}</p>-->
+
 
     <!------------------------ Select Audience Segments ------------------------>
     <div class="mcs-form-group">

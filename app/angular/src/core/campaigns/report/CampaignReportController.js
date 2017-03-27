@@ -731,11 +731,6 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
               return d3.time.format('%X')(new Date(d));
             }
           },
-          yAxis: {
-            tickFormat: function (d) {
-              return d3.format('%')(d);
-            }
-          },
           legendPosition: 'right'
         }
       };

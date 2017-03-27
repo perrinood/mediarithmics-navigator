@@ -7,21 +7,82 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
   module.controller('core/campaigns/emails/CampaignReportController', [
     '$scope', '$http', '$location', '$uibModal', '$log', '$stateParams', 'Restangular', 'core/campaigns/report/ChartsService', 'core/campaigns/emails/EmailCampaignService',
     'core/campaigns/CampaignPluginService', 'core/common/auth/Session', 'd3', 'moment', '$interval', '$q', 'core/common/ErrorService',
-    'core/common/auth/AuthenticationService', '$timeout',
+    'core/common/auth/AuthenticationService', '$timeout', 'CampaignAnalyticsReportService', 'core/campaigns/emails/EmailCampaignContainer',
     function ($scope, $http, $location, $uibModal, $log, $stateParams, Restangular, ChartsService, EmailCampaignService, CampaignPluginService,
-              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout) {
+              Session, d3, moment, $interval, $q, ErrorService, AuthenticationService, $timeout, CampaignAnalyticsReportService,EmailCampaignContainer) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       // Chart
       $scope.timeFilters = ['Daily', 'Hourly']; // Time filters order is important
       $scope.timeFilter = $scope.timeFilters[0];
       $scope.chartArea = "chart-area";
-      $scope.charts = ['clicks', 'impressions'];
       $scope.getChartName = ChartsService.getChartName;
 
-      // Tabs Set
-      $scope.reverseSort = true;
-      $scope.orderBy = "clicks";
+      $scope.recipient = {email: ""};
+      $scope.messageSent = "";
+
+      $scope.date = {reportDateRange: CampaignAnalyticsReportService.getDateRange()};
+      $scope.reportDefaultDateRanges = CampaignAnalyticsReportService.getDefaultDateRanges();
+
+      var campaignId = $stateParams.campaign_id;
+      var campaignCtn = {};
+      CampaignPluginService.getCampaignEditor("com.mediarithmics.campaign.email", "default-editor").then(function (template) {
+        campaignCtn = new EmailCampaignContainer(template.editor_version_id);
+        if (!campaignId) {
+          $scope.campaignCtn = campaignCtn;
+        } else {
+          campaignCtn.load(campaignId).then(function () {
+            $scope.campaignCtn = campaignCtn;
+            $log.debug("campaignCtn",$scope.campaignCtn);
+            var templateId = campaignCtn.emailTemplates[0].email_template_id;
+            $scope.templateId = templateId;
+
+          });
+        }
+      });
+
+      function loadEmailTemplate(emailTemplateId) {
+        $scope.previewWidth = 750;
+        $scope.previewHeight = 500;
+        var rawResponseRestangular = Restangular.withConfig(function (RestangularConfigurer) {
+          RestangularConfigurer.setResponseExtractor(function (data, operation, what, url, response, deferred) {
+            return response.data;
+          });
+        });
+        return rawResponseRestangular.one('email_templates', emailTemplateId).one('preview').get();
+      }
+
+
+
+      function fetchEmailStat(campaignId) {
+        CampaignAnalyticsReportService.emailPerformance(campaignId).then(function (data) {
+          $scope.emailStats = data;
+
+          var emailOpenedPercent = ($scope.emailStats.email_sent > 0 ? $scope.emailStats.impressions * 100 / $scope.emailStats.email_sent : 0.0).toFixed(2);
+          var emailClickedPercent = ($scope.emailStats.email_sent  > 0 ? $scope.emailStats.clicks * 100 / $scope.emailStats.email_sent  : 0.0).toFixed(2);
+          var emailUnsubscribedPercent = ($scope.emailStats.email_sent  > 0 ? $scope.emailStats.email_unsubscribed * 100 / $scope.emailStats.email_sent  : 0.0).toFixed(2);
+
+          $scope.dataOpenedEmail = [{key: "Emails opened", y: emailOpenedPercent }, {key: "Emails not opened", y:  100 - emailOpenedPercent}];
+          $scope.dataClickedEmail = [{key: "Emails clicked", y: emailClickedPercent }, {key: "Emails not clicked", y: 100 - emailClickedPercent}];
+          $scope.dataUnsubscribedEmail = [{key: "Emails Unsubscribed", y: emailUnsubscribedPercent }, {key: "Emails not Unsubscribed", y: 100 - emailUnsubscribedPercent}];
+
+          $scope.options1.title.text = $scope.dataOpenedEmail[0].y + " %";
+          $scope.options2.title.text = $scope.dataClickedEmail[0].y + " %";
+          $scope.options3.title.text = $scope.dataUnsubscribedEmail[0].y + " %";
+
+        });
+      }
+
+       $scope.sendEmail = function () {
+        if ($scope.recipient.email !== undefined && $scope.organisationId !== undefined && $scope.templateId !== undefined) {
+          Restangular.one('email_templates', $scope.templateId).all('send_test').post({
+            organisation_id: $scope.organisationId,
+            email: $scope.recipient.email
+          }).then(function () {
+            $scope.messageSent = "Message sent";
+          });
+        }
+      };
 
       /**
        * Charts
@@ -39,6 +100,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           transitionDuration: 500,
           donut: true,
           color: ['#00ad68', '#E6E6E6'],
+          x: function(d) {
+            return d.key;
+          },
           y: function (d) {
             return d.y;
           },
@@ -51,7 +115,13 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
               return d.endAngle / 2 - Math.PI / 2;
             }
           },
-          showLegend: false
+          labelType:"percent",
+          yAxis: {
+            tickFormat: function (d) {
+              return d3.format('.01f')(d) + ' ' + $scope.campaign.currency_code;
+            }
+          },
+          showLegend: true
         },
         title: {
           enable: true,
@@ -78,64 +148,8 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
       EmailCampaignService.getDeepCampaignView($stateParams.campaign_id).then(function (campaign) {
         $scope.campaign = campaign;
 
-        if (campaign.id === "1699") {
-          $scope.mainInfo = {
-            opened: 14272,
-            totalOpened: 16413,
-            timeToOpen: "3h 51m 15s",
-            complaints: 0,
-            clicked: 1213,
-            totalClicks: 1334,
-            unsubscribed: 0,
-            totalSent: 35894,
-            delivered: 35837,
-            softBounced: 146,
-            hardBounced: 57,
-            date: "Monday 11/07/2016, 11:30 AM"
-          };
-          $scope.data1 = [{key: "", y: 39.8}, {key: "", y: 60.2}];
-          $scope.data2 = [{key: "", y: 8.5}, {key: "", y: 91.5}];
-          $scope.data3 = [{key: "", y: 0}, {key: "", y: 100}];
-        } else if (campaign.id === "1704") {
-          $scope.mainInfo = {
-            opened: 19672,
-            totalOpened: 22623,
-            timeToOpen: "3h 09m 37s",
-            complaints: 0,
-            clicked: 1711,
-            totalClicks: 1883,
-            unsubscribed: 0,
-            totalSent: 48796,
-            delivered: 48721,
-            softBounced: 195,
-            hardBounced: 75,
-            date: "Tuesday 03/01/2017, 15:32 PM"
-          };
-          $scope.data1 = [{key: "", y: 40.4}, {key: "", y: 59.6}];
-          $scope.data2 = [{key: "", y: 8.7}, {key: "", y: 91.3}];
-          $scope.data3 = [{key: "", y: 0}, {key: "", y: 100}];
-        } else {
-          $scope.mainInfo = {
-            opened: 0,
-            totalOpened: 0,
-            timeToOpen: "0h 0m 0s",
-            complaints: 0,
-            clicked: 0,
-            totalClicks: 0,
-            unsubscribed: 0,
-            totalSent: 0,
-            delivered: 0,
-            softBounced: 0,
-            hardBounced: 0,
-            date: "No email sent yet"
-          };
-          $scope.data1 = [{key: "", y: 0}, {key: "", y: 100}];
-          $scope.data2 = [{key: "", y: 0}, {key: "", y: 100}];
-          $scope.data3 = [{key: "", y: 0}, {key: "", y: 100}];
-        }
-        $scope.options1.title.text = $scope.data1[0].y + " %";
-        $scope.options2.title.text = $scope.data2[0].y + " %";
-        $scope.options3.title.text = $scope.data3[0].y + " %";
+        fetchEmailStat($scope.campaign.id);
+
       });
 
       /**
@@ -167,6 +181,15 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           controller: 'core/campaigns/DeleteController'
         });
       };
+
+      $scope.$watchGroup(['date.reportDateRange'], function (values) {
+
+        if (values && $scope.campaign){
+          CampaignAnalyticsReportService.setDateRange($scope.date.reportDateRange);
+          fetchEmailStat($scope.campaign.id);
+        }
+      });
+
     }
   ]);
 });

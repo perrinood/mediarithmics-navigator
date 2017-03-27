@@ -11,8 +11,7 @@ define(['./module', 'ui.ace'], function (module) {
       $scope.previewWidth = 750;
       $scope.previewHeight = 500;
       $scope.htmlContent = "";
-      $scope.previewUrl = "";
-      $scope.recipient = "";
+      $scope.plainText = "";
 
       // Ace Editor Options
       $scope.aceOptions = {
@@ -43,6 +42,7 @@ define(['./module', 'ui.ace'], function (module) {
             $scope.emailRenderResponse = emailRenderResponse;
             var iframeHtml = document.getElementById('email-preview-html');
             $scope.htmlContent = emailRenderResponse.content.html;
+            $scope.plainText = emailRenderResponse.content.text;
             writeToIframe(iframeHtml, emailRenderResponse.content && emailRenderResponse.content.html ? emailRenderResponse.content.html : "");
           }, function error(reason) {
             var iframeError = document.getElementById('email-preview-error');
@@ -117,17 +117,6 @@ define(['./module', 'ui.ace'], function (module) {
             error: reason
           });
         });
-      };
-
-      $scope.sendEmail = function () {
-        if ($scope.recipient !== undefined && $scope.htmlContent !== undefined && $scope.organisationId !== undefined) {
-          Restangular.one('email_templates', $stateParams.creative_id).all('send_test').post({
-            organisation_id: $scope.organisationId,
-            email: $scope.recipient
-          }).then(function () {
-            $scope.messageSent = "Message sent";
-          });
-        }
       };
 
       $scope.cancel = function () {

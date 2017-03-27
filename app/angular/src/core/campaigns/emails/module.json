@@ -2,6 +2,7 @@
   "name": "core/campaigns/emails",
   "dependencies": [
     "core/campaigns",
+    "core/campaigns/report",
     "ui.bootstrap",
     "restangular"
   ]
