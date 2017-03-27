@@ -7,4 +7,5 @@
     "ADS_PREVIEW_URL" : "//ads.mediarithmics.local/ads/render",
     "ASSETS_URL" : "http://assets.mediarithmics.local"
   });
+
 })();

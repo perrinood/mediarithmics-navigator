@@ -42,10 +42,18 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
 
+  grunt.loadNpmTasks('grunt-webpack');
+
   // var version = grunt.file.readJSON("package.json").version;
   var version = "1.0-build-" + (process.env.BUILD_NUMBER || "DEV") + "-rev-" + require('child_process').execSync("git rev-parse --short HEAD").toString().trim();
 
   var isSnapshot = version.indexOf("SNAPSHOT") !== -1;
+
+  var webpack = require('webpack');
+  var webpackMiddleware = require("webpack-dev-middleware");
+  var webpackDevConfig = require('./config/webpack.config.dev.js');
+  var webpackProdConfig = require('./config/webpack.config.prod.js');
+  var paths = require('./config/paths');
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -91,7 +99,7 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {
-        files: ['<%= yeoman.app %>/src/**/*.js'],
+        files: ['<%= yeoman.app %>/angular/src/**/*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: true
@@ -100,10 +108,6 @@ module.exports = function (grunt) {
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
-      },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
       },
       genRequireJsFiles: {
         files: ['/app/**/module.json'],
@@ -120,7 +124,7 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/*.html',
-          '<%= yeoman.app %>/src/**/*.html',
+          '<%= yeoman.app %>/angular/src/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -133,7 +137,11 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35729,
+        middleware: function(connect, options, middlewares) {
+          middlewares.unshift(webpackMiddleware(webpack(webpackDevConfig), { publicPath: paths.publicPath }));
+          return middlewares;
+        }
       },
       livereload: {
         options: {
@@ -169,7 +177,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/src/**/*.js'
+        '<%= yeoman.app %>/angular/src/**/*.js'
       ],
       test: {
         options: {
@@ -203,8 +211,8 @@ module.exports = function (grunt) {
       target: {
         src: ['<%= yeoman.app %>/index.html'],
         exclude: [
-          'bower_components/bootstrap/dist/css/bootstrap.css', // this is `@import`ed in the scss file
-          'bower_components/bootstrap-sass/assets/javascripts/bootstrap/*' // already included in the file bower_components/bootstrap/dist/js/bootstrap.js
+          'angular/bower_components/bootstrap/dist/css/bootstrap.css', // this is `@import`ed in the scss file
+          'angular/bower_components/bootstrap-sass/assets/javascripts/bootstrap/*' // already included in the file angular/bower_components/bootstrap/dist/js/bootstrap.js
         ]
       }
     },
@@ -214,7 +222,7 @@ module.exports = function (grunt) {
     filerev: {
       files: {
         src: [
-          '<%= yeoman.dist %>/src/**/*.js',
+          '<%= yeoman.dist %>/angular/src/**/*.js',
           '<%= yeoman.dist %>/scripts/**/*.js',
           '<%= yeoman.dist %>/styles/**/*.css',
           '<%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
@@ -237,7 +245,7 @@ module.exports = function (grunt) {
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
       html: [
-        '<%= yeoman.dist %>/src/**/*.html',
+        '<%= yeoman.dist %>/angular/src/**/*.html',
         '<%= yeoman.dist %>/*.html'
       ],
       css: ['<%= yeoman.dist %>/styles/**/*.css'],
@@ -292,7 +300,7 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: '<%= yeoman.dist %>',
-            src: ['*.html', 'src/**/*.html'],
+            src: ['*.html', 'angular/src/**/*.html'],
             dest: '<%= yeoman.dist %>'
           }
         ]
@@ -318,7 +326,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           waitSeconds: 0,
-          baseUrl: "app/src",
+          baseUrl: "app/angular/src",
           mainConfigFile: "app/main.js",
           name: "navigator",
           optimize: "none",
@@ -378,9 +386,9 @@ module.exports = function (grunt) {
               '*.{ico,png,txt}',
               '.htaccess',
               '*.html',
-              'src/**/*.html',
-              'bower_components/**/*',
-              'src/**/*.{jpe?g,png}',
+              'angular/src/**/*.html',
+              'angular/bower_components/**/*',
+              'angular/src/**/*.{jpe?g,png}',
               'fonts/*'
             ]
           },
@@ -398,7 +406,7 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            cwd: '<%= yeoman.app %>/bower_components/video.js/dist/video-js/font/',
+            cwd: '<%= yeoman.app %>/angular/bower_components/video.js/dist/video-js/font/',
             dest: '<%= yeoman.dist %>/styles/font',
             src: '*'
           }
@@ -424,7 +432,7 @@ module.exports = function (grunt) {
 //            dot: true,
 //            cwd: '<%= yeoman.app %>',
 //            dest: '<%= yeoman.dist %>/scripts/vendor',
-//            src: [ 'bower_components/require/require.js']
+//            src: [ 'angular/bower_components/require/require.js']
 //        }]
 //      },
       styles: {
@@ -441,12 +449,12 @@ module.exports = function (grunt) {
         actions: [
           {
             name: 'requirejs-newpath',
-            search: '<script data-main=".*" src="bower_components/requirejs/require.js"></script>',
+            search: '<script data-main=".*" src="angular/bower_components/requirejs/require.js"></script>',
             replace: function (match) {
               var regex = /data-main="(.*)" /;
               var result = regex.exec(match);
               var revFileName = grunt.filerev.summary['dist/scripts/' + result[1]].replace('dist', '');
-              return '<script data-main="' + revFileName + '" src="bower_components/requirejs/require.js"></script>';
+              return '<script data-main="' + revFileName + '" src="angular/bower_components/requirejs/require.js"></script>';
             }
 
           }
@@ -461,9 +469,9 @@ module.exports = function (grunt) {
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/src',
+        javascriptsDir: '<%= yeoman.app %>/angular/src',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
+        importPath: '<%= yeoman.app %>/angular/bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -486,13 +494,13 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'compass:server'
+        // 'compass:server'
       ],
       test: [
         'compass'
       ],
       dist: [
-        'compass:dist',
+        // 'compass:dist',
         'imagemin',
         'svgmin'
       ]
@@ -522,13 +530,17 @@ module.exports = function (grunt) {
 
     genRequireJsFiles: {
       config: {
-        src: '<%= yeoman.app %>/src/**/module.json',
+        src: '<%= yeoman.app %>/angular/src/**/module.json',
         template: 'define([{{{requires}}}],function(){});',
         templateModule: 'define(["angular"],function(){' +
         '"use strict";' +
         'return angular.module("{{{name}}}", [{{{dependencies}}}]);' +
         '});'
       }
+    },
+
+    webpack: {
+      build: webpackProdConfig
     }
   });
 
@@ -624,6 +636,7 @@ module.exports = function (grunt) {
     'regex-replace:dist',
     'usemin',
     'copy:generated_iab',
+    'webpack:build',
     'htmlmin',
     'versionFile',
     'compress'
