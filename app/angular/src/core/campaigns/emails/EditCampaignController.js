@@ -124,9 +124,9 @@ define(['./module', 'moment'], function (module, moment) {
           promise = campaignCtn.persist();
         }
 
-        promise.then(function success() {
+        promise.then(function success(campaign) {
           WaitingService.hideWaitingModal();
-          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + campaign.id + "/basic");
         }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
@@ -136,11 +136,11 @@ define(['./module', 'moment'], function (module, moment) {
       };
 
       $scope.cancel = function () {
-        // if ($scope.campaign && $scope.campaign.id) {
-        //   $location.path('/' + $scope.campaign.organisation_id + '/campaigns/display/report/' + $scope.campaign.id + '/basic');
-        // } else {
-        $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
-        // }
+         if (! $stateParams.campaign_id) {
+           $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+         } else {
+           $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
+         }
       };
 
     }
