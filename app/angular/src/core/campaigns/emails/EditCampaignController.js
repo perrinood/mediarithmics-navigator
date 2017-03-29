@@ -35,18 +35,6 @@ define(['./module', 'moment'], function (module, moment) {
         }
       });
 
-      $scope.selectExistingAudienceSegments = function () {
-        var newScope = $scope.$new(true);
-        newScope.segmentSelectionType = "EMAIL";
-        $uibModal.open({
-          templateUrl: 'angular/src/core/datamart/segments/ChooseExistingAudienceSegmentsPopin.html',
-          scope: newScope,
-          backdrop: 'static',
-          controller: 'core/datamart/segments/ChooseExistingAudienceSegmentsPopinController',
-          size: "lg"
-        });
-      };
-
       $scope.selectExistingEmailTemplates = function () {
         var newScope = $scope.$new(true);
         newScope.selectedTemplate = campaignCtn.emailTemplates[0];
@@ -70,19 +58,6 @@ define(['./module', 'moment'], function (module, moment) {
           size: "lg"
         });
       };
-
-      $scope.$on("mics-audience-segment:selected", function (event, params) {
-        var existing = _.find(campaignCtn.audienceSegments, function (segmentSelection) {
-          return segmentSelection.audience_segment_id === params.audience_segment.id;
-        });
-        if (!existing) {
-          var segmentSelection = {
-            audience_segment_id: params.audience_segment.id,
-            name: params.audience_segment.name
-          };
-          campaignCtn.addAudienceSegment(segmentSelection);
-        }
-      });
 
       function writeToIframe(iframe, content) {
         iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
@@ -137,10 +112,6 @@ define(['./module', 'moment'], function (module, moment) {
 
       $scope.removeTemplate = function (template) {
         campaignCtn.removeEmailTemplate(template);
-      };
-
-      $scope.removeSegment = function (segment) {
-        campaignCtn.removeAudienceSegment(segment);
       };
 
 

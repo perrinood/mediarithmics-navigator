@@ -52,33 +52,6 @@
     <!--</div>-->
     <!--<p>{{messageSent}}</p>-->
 
-
-    <!------------------------ Select Audience Segments ------------------------>
-    <div class="mcs-form-group">
-      <div class="mics-block-heading">
-        <div class="btn-group">
-          <button class="mics-btn mics-btn-add" ng-click="selectExistingAudienceSegments()">Select Existing Audience Segments</button>
-        </div>
-        <span>Select audience segments</span>
-      </div>
-      <table class="fragment-list-audience-segment" ng-show="campaignCtn.audienceSegments.length">
-        <thead>
-        <tr>
-          <th>Segment name</th>
-          <th class="actions">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="segment in campaignCtn.audienceSegments">
-          <td>{{segment.name}}</td>
-          <td class="actions">
-            <button class="mics-btn mics-btn-delete" ng-click="removeSegment(segment)">Remove</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
     <!------------------------ Select template (creative)------------------------>
     <div class="mcs-form-group">
       <div class="mics-block-heading">
