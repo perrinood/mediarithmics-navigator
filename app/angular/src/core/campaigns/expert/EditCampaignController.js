@@ -284,12 +284,7 @@ define(['./module', 'moment'], function (module, moment) {
           $scope.adGroups = DisplayCampaignService.getAdGroupValues();
         };
 
-
-        /**
-         * Confirm or cancel campaign editing
-         */
-
-        $scope.save = function () {
+        $scope.setDateRange = function() {
           if ($scope.campaignScopeHelper.schedule === 'custom') {
             $scope.campaign.start_date = $scope.campaignScopeHelper.campaignDateRange.startDate.valueOf();
             $scope.campaign.end_date = $scope.campaignScopeHelper.campaignDateRange.endDate.valueOf();
@@ -297,6 +292,14 @@ define(['./module', 'moment'], function (module, moment) {
             $scope.campaign.start_date = null;
             $scope.campaign.end_date = null;
           }
+        };
+
+        /**
+         * Confirm or cancel campaign editing
+         */
+
+        $scope.save = function () {
+
           WaitingService.showWaitingModal();
           DisplayCampaignService.save().then(function (campaignContainer) {
             WaitingService.hideWaitingModal();
