@@ -35,7 +35,7 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
             $scope.campaignCtn = campaignCtn;
             $log.debug("campaignCtn",$scope.campaignCtn);
             if (campaignCtn.emailTemplates.length > 0) {
-              $scope.templateI = campaignCtn.emailTemplates[0].email_template_id;
+              $scope.templateId = campaignCtn.emailTemplates[0].email_template_id;
             }
 
           });
