@@ -35,18 +35,6 @@ define(['./module', 'moment'], function (module, moment) {
         }
       });
 
-      $scope.selectExistingAudienceSegments = function () {
-        var newScope = $scope.$new(true);
-        newScope.segmentSelectionType = "EMAIL";
-        $uibModal.open({
-          templateUrl: 'angular/src/core/datamart/segments/ChooseExistingAudienceSegmentsPopin.html',
-          scope: newScope,
-          backdrop: 'static',
-          controller: 'core/datamart/segments/ChooseExistingAudienceSegmentsPopinController',
-          size: "lg"
-        });
-      };
-
       $scope.selectExistingEmailTemplates = function () {
         var newScope = $scope.$new(true);
         newScope.selectedTemplate = campaignCtn.emailTemplates[0];
@@ -70,19 +58,6 @@ define(['./module', 'moment'], function (module, moment) {
           size: "lg"
         });
       };
-
-      $scope.$on("mics-audience-segment:selected", function (event, params) {
-        var existing = _.find(campaignCtn.audienceSegments, function (segmentSelection) {
-          return segmentSelection.audience_segment_id === params.audience_segment.id;
-        });
-        if (!existing) {
-          var segmentSelection = {
-            audience_segment_id: params.audience_segment.id,
-            name: params.audience_segment.name
-          };
-          campaignCtn.addAudienceSegment(segmentSelection);
-        }
-      });
 
       function writeToIframe(iframe, content) {
         iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
@@ -119,6 +94,11 @@ define(['./module', 'moment'], function (module, moment) {
 
         // $scope.previewUrl = $sce.trustAsResourceUrl(configuration.WS_URL + "/email_templates/" + params.template.id + "/preview?access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()));
         var templateSelection = {email_template_id: params.template.id};
+
+        var tmpEmailTemplates = angular.copy(campaignCtn.emailTemplates);
+        _.map(tmpEmailTemplates, function(emailTemplate) {
+           return campaignCtn.removeEmailTemplate(emailTemplate);
+        });
         campaignCtn.addEmailTemplate(templateSelection);
       });
 
@@ -139,10 +119,6 @@ define(['./module', 'moment'], function (module, moment) {
         campaignCtn.removeEmailTemplate(template);
       };
 
-      $scope.removeSegment = function (segment) {
-        campaignCtn.removeAudienceSegment(segment);
-      };
-
 
       $scope.save = function () {
         WaitingService.showWaitingModal();
@@ -153,9 +129,9 @@ define(['./module', 'moment'], function (module, moment) {
           promise = campaignCtn.persist();
         }
 
-        promise.then(function success() {
+        promise.then(function success(campaign) {
           WaitingService.hideWaitingModal();
-          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
+          $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + campaign.id + "/basic");
         }, function failure(reason) {
           WaitingService.hideWaitingModal();
           ErrorService.showErrorModal({
@@ -165,11 +141,11 @@ define(['./module', 'moment'], function (module, moment) {
       };
 
       $scope.cancel = function () {
-        // if ($scope.campaign && $scope.campaign.id) {
-        //   $location.path('/' + $scope.campaign.organisation_id + '/campaigns/display/report/' + $scope.campaign.id + '/basic');
-        // } else {
-        $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
-        // }
+         if (! $stateParams.campaign_id) {
+           $location.path(Session.getWorkspacePrefixUrl() + '/campaigns/email');
+         } else {
+           $location.path(Session.getWorkspacePrefixUrl() + "/campaigns/email/report/"  + $stateParams.campaign_id + "/basic");
+         }
       };
 
     }

@@ -44,7 +44,7 @@
 
     <!-- Schedule -->
     <div mcs-form-group="select" label-for="schedule" label-text="Schedule">
-      <select ng-model="campaignScopeHelper.schedule" class="form-control" id="schedule">
+      <select ng-model="campaignScopeHelper.schedule" class="form-control" id="schedule"  ng-change="setDateRange()">
         <option value="">Ongoing (no end date)</option>
         <option value="custom" ng-selected="campaign.start_date != null ? 'selected' : ''">Custom</option>
       </select>
