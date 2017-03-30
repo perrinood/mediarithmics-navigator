@@ -14,9 +14,6 @@ define(['./module'], function (module) {
         this.goalSelections = [];
         this.removedGoalSelections = [];
 
-        this.audienceSegments = [];
-        this.removedAudienceSegments = [];
-
         this.emailRouters = [];
         this.removedEmailRouters = [];
 
@@ -30,19 +27,17 @@ define(['./module'], function (module) {
         var campaignResourceP = root.get();
         var emailRoutersP = root.getList('email_routers');
         var emailTemplatesP = root.getList('email_templates');
-        var audienceSegmentsP = root.getList('audience_segments');
         // var goalSelectionsP = meta.getList('goal_selections');
         var self = this;
         var defered = $q.defer();
 
-        $q.all([campaignResourceP, emailRoutersP, emailTemplatesP, audienceSegmentsP/*, goalSelectionsP*/])
+        $q.all([campaignResourceP, emailRoutersP, emailTemplatesP/*, goalSelectionsP*/])
           .then(function (result) {
             self.value = result[0];
             self.id = self.value.id;
 
             self.emailRouters = result[1];
             self.emailTemplates = result[2];
-            self.audienceSegments = result[3];
             // self.goalSelections = result[4];
 
             defered.resolve(self);
@@ -51,50 +46,6 @@ define(['./module'], function (module) {
           });
         return defered.promise;
       };
-
-      EmailCampaignContainer.prototype.removeAudienceSegment = function removeAudienceSegment(segment) {
-        for (var i = 0; i < this.audienceSegments.length; i++) {
-          if (this.audienceSegments[i].audience_segment_id === segment.audience_segment_id) {
-            this.audienceSegments.splice(i, 1);
-            if (segment.id) {
-              this.removedAudienceSegments.push(segment);
-            }
-          }
-        }
-      };
-
-      EmailCampaignContainer.prototype.addAudienceSegment = function addAudienceSegment(selection) {
-        this.audienceSegments.push(selection);
-      };
-
-      function saveAudienceSegmentTask(segment, campaignId) {
-        return function (callback) {
-          $log.debug("saving audience segment", segment.id);
-          var promise;
-          if (segment.id) {
-            promise = segment.put();
-          } else {
-            promise = Restangular.one('email_campaigns', campaignId)
-              .post('audience_segments', segment);
-          }
-          promiseUtils.bindPromiseCallback(promise, callback);
-        };
-      }
-
-      function deleteAudienceSegmentTask(segment) {
-        return function (callback) {
-          $log.info("deleting audience segment", segment.id);
-          var promise;
-          if (segment.id) {
-            promise = segment.remove();
-          } else {
-            var deferred = $q.defer();
-            promise = deferred.promise;
-            deferred.resolve();
-          }
-          promiseUtils.bindPromiseCallback(promise, callback);
-        };
-      }
 
       EmailCampaignContainer.prototype.removeEmailRouter = function removeEmailRouter(router) {
         for (var i = 0; i < this.emailRouters.length; i++) {
@@ -194,10 +145,6 @@ define(['./module'], function (module) {
       EmailCampaignContainer.prototype.persistDependencies = function persistDependencies(campaignId) {
         var self = this;
 
-        var deleteAudienceSegmentTasks = _.map(self.removedAudienceSegments, function(segment) {
-          return deleteAudienceSegmentTask(segment);
-        });
-
         var deleteEmailRouterTasks = _.map(self.removedEmailRouters, function(router) {
           return deleteEmailRouterTask(router);
         });
@@ -206,20 +153,12 @@ define(['./module'], function (module) {
           return deleteEmailTemplateTask(template);
         });
 
-        var addedSegments = _.filter(self.audienceSegments, function(segment) {
-          return !segment.id;
-        });
-
         var addedRouters = _.filter(self.emailRouters, function(router) {
           return !router.id;
         });
 
         var addedTemplates = _.filter(self.emailTemplates, function(template) {
           return !template.id;
-        });
-
-        var saveAudienceSegmentTasks = _.map(addedSegments, function(segment) {
-          return saveAudienceSegmentTask(segment, campaignId);
         });
 
         var saveEmailRouterTasks = _.map(addedRouters, function(router) {
@@ -231,10 +170,8 @@ define(['./module'], function (module) {
         });
 
         var pList = [];
-        pList = pList.concat(deleteAudienceSegmentTasks);
         pList = pList.concat(deleteEmailRouterTasks);
         pList = pList.concat(deleteEmailTemplateTasks);
-        pList = pList.concat(saveAudienceSegmentTasks);
         pList = pList.concat(saveEmailRouterTasks);
         pList = pList.concat(saveEmailTemplateTasks);
 
