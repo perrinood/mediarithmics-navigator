@@ -94,6 +94,11 @@ define(['./module', 'moment'], function (module, moment) {
 
         // $scope.previewUrl = $sce.trustAsResourceUrl(configuration.WS_URL + "/email_templates/" + params.template.id + "/preview?access_token=" + encodeURIComponent(AuthenticationService.getAccessToken()));
         var templateSelection = {email_template_id: params.template.id};
+
+        var tmpEmailTemplates = angular.copy(campaignCtn.emailTemplates);
+        _.map(tmpEmailTemplates, function(emailTemplate) {
+           return campaignCtn.removeEmailTemplate(emailTemplate);
+        });
         campaignCtn.addEmailTemplate(templateSelection);
       });
 

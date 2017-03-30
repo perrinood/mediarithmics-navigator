@@ -34,8 +34,9 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
           campaignCtn.load(campaignId).then(function () {
             $scope.campaignCtn = campaignCtn;
             $log.debug("campaignCtn",$scope.campaignCtn);
-            var templateId = campaignCtn.emailTemplates[0].email_template_id;
-            $scope.templateId = templateId;
+            if (campaignCtn.emailTemplates.length > 0) {
+              $scope.templateI = campaignCtn.emailTemplates[0].email_template_id;
+            }
 
           });
         }
