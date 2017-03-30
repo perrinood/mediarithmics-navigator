@@ -35,7 +35,7 @@
             <div class="col-xs-3">
               <nvd3 options="options1" data="dataOpenedEmail"></nvd3>
               <div class="info-details">
-                <h2 class="main-info">{{emailStats.impressions}}<br><span>Opened</span></h2>
+                <h2 class="main-info">{{emailStats.uniq_impressions}}<br><span>Opened</span></h2>
                 <br>
                 <table class="mics-table">
                   <tbody>
@@ -59,7 +59,7 @@
 
               <nvd3 options="options2" data="dataClickedEmail"></nvd3>
               <div class="info-details">
-                <h2 class="main-info">{{emailStats.clicks}}<br><span>Clicked</span></h2>
+                <h2 class="main-info">{{emailStats.uniq_clicks}}<br><span>Clicked</span></h2>
                 <br>
                 <table class="mics-table">
                   <tbody>
@@ -75,7 +75,7 @@
               <nvd3 options="options3" data="dataUnsubscribedEmail"></nvd3>
               <div class="info-details">
                 <table class="mics-table">
-                  <h2 class="main-info">{{emailStats.email_unsubscribed}}<br><span>Unsubscribed</span></h2>
+                  <h2 class="main-info">{{emailStats.uniq_email_unsubscribed}}<br><span>Unsubscribed</span></h2>
                   <br>
                   <tbody>
                   <tr>

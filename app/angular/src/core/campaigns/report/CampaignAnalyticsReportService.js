@@ -294,8 +294,11 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
         };
 
         ReportService.emailPerformance = function (campaignId) {
-          return this.getPerformance(buildEmailCampaignResource(), "", "email_sent,impressions,email_unsubscribed,email_hard_bounced,email_soft_bounced,clicks,email_complaints", "campaign_id==" + campaignId)
-            .$promise.then(function (response) {
+          return this.getPerformance(buildEmailCampaignResource(), "", "email_sent,impressions,email_unsubscribed," +
+          "email_hard_bounced,email_soft_bounced,clicks,email_complaints,uniq_impressions,uniq_clicks,"+
+          "uniq_email_sent,uniq_email_unsubscribed,uniq_email_hard_bounced,uniq_email_soft_bounced,uniq_email_complaints",
+           "campaign_id==" + campaignId).$promise.then(function (response) {
+
               var report = response.data.report_view;
               var firstLine = report.rows[0] || [];
               return {
@@ -305,7 +308,14 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
                 "email_soft_bounced": firstLine[_.indexOf(report.columns_headers, "email_soft_bounced")] || 0,
                 "email_complaints": firstLine[_.indexOf(report.columns_headers, "email_complaints")] || 0,
                 "clicks": firstLine[_.indexOf(report.columns_headers, "clicks")] || 0,
-                "impressions": firstLine[_.indexOf(report.columns_headers, "impressions")] || 0
+                "impressions": firstLine[_.indexOf(report.columns_headers, "impressions")] || 0,
+                "uniq_impressions" : firstLine[_.indexOf(report.columns_headers, "uniq_impressions")] || 0,
+                "uniq_clicks" : firstLine[_.indexOf(report.columns_headers, "uniq_clicks")] || 0,
+                "uniq_email_sent" : firstLine[_.indexOf(report.columns_headers, "uniq_email_sent")] || 0,
+                "uniq_email_unsubscribed" : firstLine[_.indexOf(report.columns_headers, "uniq_email_unsubscribed")] || 0,
+                "uniq_email_hard_bounced" : firstLine[_.indexOf(report.columns_headers, "uniq_email_hard_bounced")] || 0,
+                "uniq_email_soft_bounced" : firstLine[_.indexOf(report.columns_headers, "uniq_email_soft_bounced")] || 0,
+                "uniq_email_complaints" : firstLine[_.indexOf(report.columns_headers, "uniq_email_complaints")] || 0
               };
             }).catch(function (e) {
               return {
@@ -315,7 +325,14 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
                "email_soft_bounced": 0,
                "email_complaints": 0,
                "clicks": 0,
-               "impressions": 0
+               "impressions": 0,
+               "uniq_impressions" : 0,
+               "uniq_clicks" : 0,
+               "uniq_email_sent" : 0,
+               "uniq_email_unsubscribed" : 0,
+               "uniq_email_hard_bounced" : 0,
+               "uniq_email_soft_bounced" : 0,
+               "uniq_email_complaints" : 0
              };
 
             });
