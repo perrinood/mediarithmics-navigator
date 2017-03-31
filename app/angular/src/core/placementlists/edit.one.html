@@ -18,7 +18,7 @@
       <input required class="input-lg" ng-model="placementList.name" type="text" id="placement_list_name">
     </div>
 
-    <uib-tabset ng-show="!isCreationMode" class="mics-page-main-tabs">
+    <uib-tabset ng-if="!isCreationMode" class="mics-page-main-tabs">
       <!--WEB DESCRIPTORS-->
       <uib-tab active="activeTab[0]" ng-show="webPlacementListParams.data.length">
         <uib-tab-heading>
