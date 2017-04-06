@@ -15,7 +15,7 @@ define(['./module'], function (module) {
       }
 
       $scope.availableCreatives = Restangular.all("creatives").getList({
-        max_results : 300,
+        max_results : 1000,
         creative_type : creativeType,
         archived : false,
         organisation_id : Session.getCurrentWorkspace().organisation_id
