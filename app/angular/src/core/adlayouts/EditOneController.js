@@ -14,12 +14,12 @@ define(['./module', 'jquery'], function (module, $) {
       });
       $scope.pluploadOptions = {
         url: configuration.WS_URL + "/ad_templates?organisation_id=" + organisationId,
-        chunks_size: '100kb',
+        chunks_size: "100kb",
         filters: {
           mime_types: [
             {title: "Ad Layout Templates", extensions: "ssp"}
           ],
-          max_file_size: "100kb"
+          max_file_size: "200kb"
         },
         multipart_params: {names: ""}
       };
