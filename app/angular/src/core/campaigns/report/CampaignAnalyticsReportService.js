@@ -358,7 +358,7 @@ define(['./module', 'lodash', 'core/common/ReportWrapper'], function (module, _,
           return this.buildPerformanceReport(
             buildDisplayCampaignResource(),
             "impressions,clicks,cpm,ctr,cpc,impressions_cost,cpa",
-            "organisation==" + organisation_id
+            "organisation_id==" + organisation_id
           );
         };
 
