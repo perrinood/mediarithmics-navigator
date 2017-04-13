@@ -139,7 +139,7 @@
                     <ul>
                          <li ng-repeat="itemKey in getMapKeys(item)" ng-switch="itemKey">
                             <span ng-switch-when="$catalog_token"><mcs-timeline-event-key key="itemKey"></mcs-timeline-event-key> : <a href="{{ catalogUrl(item.$catalog_token) }}" target="_blank">{{item.$catalog_token}}</a></span>
-                            <span ng-switch-when="$id"><mcs-timeline-event-key key="itemKey"><mcs-timeline-event-key> : <a href="{{ itemUrl(item.$catalog_token, item.$id) }}" target="_blank">{{item.$id}}</a></mcs-timeline-event-key>
+                            <span ng-switch-when="$id"><mcs-timeline-event-key key="itemKey"></mcs-timeline-event-key> : <a href="{{ itemUrl(item.$catalog_token, item.$id) }}" target="_blank">{{item.$id}}</a></span>
                             <span ng-switch-default><mcs-timeline-event-key key="itemKey"></mcs-timeline-event-key> : {{"" + item[itemKey]}}</span>
                         </li>
                     </ul>
