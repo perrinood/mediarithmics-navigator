@@ -57,7 +57,7 @@ define(['./module'], function (module) {
       };
 
       $scope.buildAllCampaignsExportData = function () {
-        return CampaignAnalyticsReportService.allCampaigns().then(function (report) {
+        return CampaignAnalyticsReportService.allCampaigns(Session.getCurrentWorkspace().organisation_id).then(function (report) {
           var dataExport = [
             ["All Campaigns"],
             ["From " + $scope.reportDateRange.startDate.format("DD-MM-YYYY"), "To " + $scope.reportDateRange.endDate.format("DD-MM-YYYY")],
