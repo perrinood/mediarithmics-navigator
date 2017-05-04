@@ -9,8 +9,21 @@ define(['./module'], function (module) {
       $scope.addedPostalCodes = [];
 
       $scope.input.country = "";
-
+      $scope.input.countries = [];
+      $scope.input.type= "zipcode";
       $scope.postalCodesList = undefined;
+
+      $scope.$watch("input.country", function(newValue, oldValue){
+        if(newValue !== undefined || newValue !== "") {
+          if (newValue !== '') {
+            $scope.input.countries.push(newValue);
+          }
+        }
+      });
+
+      $scope.removeCountry = function(country) {
+        $scope.input.countries.splice($scope.input.countries.indexOf(country), 1);
+      };
 
       $scope.$watch("input.postalCodesList", function (newValue, oldValue) {
         if(newValue === undefined || newValue === "") {
