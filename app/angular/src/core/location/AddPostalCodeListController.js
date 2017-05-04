@@ -7,22 +7,23 @@ define(['./module'], function (module) {
 
       $scope.input = {};
       $scope.addedPostalCodes = [];
+      $scope.addedCountries = [];
 
       $scope.input.country = "";
-      $scope.input.countries = [];
+
       $scope.input.type= "zipcode";
       $scope.postalCodesList = undefined;
 
       $scope.$watch("input.country", function(newValue, oldValue){
         if(newValue !== undefined || newValue !== "") {
           if (newValue !== '') {
-            $scope.input.countries.push(newValue);
+            $scope.addedCountries.push(newValue);
           }
         }
       });
 
       $scope.removeCountry = function(country) {
-        $scope.input.countries.splice($scope.input.countries.indexOf(country), 1);
+        $scope.addedCountries.splice($scope.addedCountries.indexOf(country), 1);
       };
 
       $scope.$watch("input.postalCodesList", function (newValue, oldValue) {
@@ -34,16 +35,30 @@ define(['./module'], function (module) {
       });
 
       $scope.done = function () {
-        var postalCodeAdded;
-        for (var i = 0; i < $scope.addedPostalCodes.length; i++) {
-          postalCodeAdded = $scope.addedPostalCodes[i];
-          $scope.$emit("mics-location:postal-code-added", {
-            id: IdGenerator.getId(),
-            type: 'POSTAL_CODE',
-            country: $scope.input.country,
-            postal_code : postalCodeAdded
-          });
+        
+        if ($scope.addedCountries.length) {
+           var addedCountries;
+           for (var i = 0; i < $scope.addedCountries.length; i++) {
+              addedCountries = $scope.addedCountries[i];
+              $scope.$emit("mics-location:postal-code-added", {
+                id: IdGenerator.getId(),
+                type: 'COUNTRY',
+                country: addedCountries
+              });
+            }
+        } else if ($scope.addedPostalCodes.length !== 0) {
+          var postalCodeAdded;
+           for (var i = 0; i < $scope.addedPostalCodes.length; i++) {
+              postalCodeAdded = $scope.addedPostalCodes[i];
+              $scope.$emit("mics-location:postal-code-added", {
+                id: IdGenerator.getId(),
+                type: 'POSTAL_CODE',
+                country: $scope.input.country,
+                postal_code : postalCodeAdded
+              });
+            }
         }
+       
         $uibModalInstance.close();
       };
 

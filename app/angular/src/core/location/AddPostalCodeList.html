@@ -527,15 +527,15 @@
               <option value="ZW">Zimbabwe</option>
           </select>
       </div>
-      <div class="" ng-hide="input.countries.length === 0">
+      <div class="" ng-hide="addedCountries.length === 0">
         <label>Selected Countries:</label>
-        <p class="" ng-repeat="country in input.countries track by $index"><button ng-click="removeCountry(country)" type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ country }}</p>
+        <p class="" ng-repeat="country in addedCountries track by $index"><button ng-click="removeCountry(country)" type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ country }}</p>
       </div>
       </div>
       </form>
   </div>
   <div class="modal-footer">
-    <a class="mics-btn mics-btn-finish" ng-show="addedPostalCodes.length && input.country != ''" ng-click="done()">Done</a>
+    <a class="mics-btn mics-btn-finish" ng-show="addedCountries.length || (addedPostalCodes.length && input.country != '')" ng-click="done()">Done</a>
     <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
   </div>
 </div>
