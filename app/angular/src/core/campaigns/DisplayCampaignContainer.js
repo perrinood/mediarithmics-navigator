@@ -195,6 +195,10 @@ define(['./module'], function (module) {
         this.locations.push(location);
       };
 
+      DisplayCampaignContainer.prototype.addCountryLocation = function (location) {
+        this.locations.push(location);
+      };
+
       DisplayCampaignContainer.prototype.getLocations = function () {
         return this.locations;
       };

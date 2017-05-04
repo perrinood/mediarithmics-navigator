@@ -241,6 +241,10 @@ define(['./module', 'moment'], function (module, moment) {
           DisplayCampaignService.addPostalCodeLocation(params);
         });
 
+        $scope.$on("mics-location:country-added", function (event, params) {
+          DisplayCampaignService.addCountryLocation(params);
+        });
+
         $scope.deleteLocation = function (elem) {
           if (elem === undefined) {
             return;

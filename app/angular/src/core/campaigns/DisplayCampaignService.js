@@ -272,6 +272,12 @@ define(['./module'], function (module) {
         return this.campaignCtn.addPostalCodeLocation(location);
       };
 
+      service.addCountryLocation = function (location) {
+
+        $log.debug("> add location to ", this.campaignCtn, location);
+        return this.campaignCtn.addCountryLocation(location);
+      };
+
       service.removeLocation = function (location) {
 
         $log.debug("> add location to ", this.campaignCtn, location);

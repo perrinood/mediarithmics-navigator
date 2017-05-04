@@ -36,17 +36,17 @@ define(['./module'], function (module) {
 
       $scope.done = function () {
         
-        if ($scope.addedCountries.length) {
+        if ($scope.addedCountries.length !==0 && $scope.input.type==='country') {
            var addedCountries;
-           for (var i = 0; i < $scope.addedCountries.length; i++) {
-              addedCountries = $scope.addedCountries[i];
-              $scope.$emit("mics-location:postal-code-added", {
+           for (var j = 0; j < $scope.addedCountries.length; j++) {
+              addedCountries = $scope.addedCountries[j];
+              $scope.$emit("mics-location:country-added", {
                 id: IdGenerator.getId(),
-                type: 'COUNTRY',
+                type: 'GEOCODE',
                 country: addedCountries
               });
             }
-        } else if ($scope.addedPostalCodes.length !== 0) {
+        } else if ($scope.addedPostalCodes.length !== 0 && $scope.input.type==='zipcode') {
           var postalCodeAdded;
            for (var i = 0; i < $scope.addedPostalCodes.length; i++) {
               postalCodeAdded = $scope.addedPostalCodes[i];
