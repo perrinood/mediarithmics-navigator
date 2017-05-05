@@ -11,12 +11,11 @@ define(['./module'], function (module) {
         {name: "Image file (.png, .jpg, .gif), for skins", groupId: "com.mediarithmics.creative.display", artifactId: "image-script"},
         {name: "Flash file (.swf)", groupId: "com.mediarithmics.creative.display", artifactId: "flash-iframe"},
         {name: "Dynamic template", groupId: "com.mediarithmics.creative.display", artifactId: "dynamic-template"},
-        {name: "External ad server", groupId: "com.mediarithmics.creative.display", artifactId: "external-display-ad-renderer"}
+        {name: "External ad server", groupId: "com.mediarithmics.creative.display", artifactId: "external-display-ad-renderer"},
+        {name: "Ividence template", groupId: "com.ividence", artifactId: "display-ad-renderer"}
       ];
       // TODO handle multiple groups / artifacts renderers according to the organisation
-      if ($scope.organisationId === "1051" || $scope.organisationId === "1042") {
-        $scope.groupArtifacts.push({name: "Ividence template", groupId: "com.ividence", artifactId: "display-ad-renderer"});
-      }
+            
       $scope.wrapper = {
         groupArtifact: undefined,
         name: undefined
