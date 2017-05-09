@@ -98,6 +98,9 @@ define(['./module'], function (module) {
             }, {
               name: "Skin",
               format: "1800x1000"
+            }, {
+              name: "Native Ad",
+              format: "600x600"
             }];
         }
       };
