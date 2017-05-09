@@ -42,7 +42,7 @@ define(['./module'], function (module) {
               addedCountries = $scope.addedCountries[j];
               $scope.$emit("mics-location:country-added", {
                 id: IdGenerator.getId(),
-                type: 'GEOCODE',
+                type: 'GEONAME',
                 country: addedCountries
               });
             }
