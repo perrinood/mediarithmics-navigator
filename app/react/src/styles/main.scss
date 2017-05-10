@@ -1450,6 +1450,13 @@ table.fragment-list-keyword-list {
     @include make-md-column(12);
     max-height: 300px; /* TODO : arbitrary value */
     overflow: auto;
+    .countrySelector {
+      margin-top:20px;
+      margin-bottom:20px;
+      label {
+        font-weight: bold;
+      }
+    }
   }
 }
 

@@ -22,6 +22,28 @@ define(['./module'], function (module) {
         }
       });
 
+      $scope.formatCountry = function(country) {
+        switch (country) {
+          case 'FR':
+            return 'France';
+          case 'DE':
+            return 'Germany';
+          case 'IT':
+            return 'Italy';
+          case 'NL':
+            return 'Netherlands';
+          case 'SE':
+            return 'Sweden';
+          case 'CH':
+            return 'Switzerland';
+          case 'GB':
+            return 'United Kingdom';
+          case 'US':
+            return 'United States';
+        }
+          
+      }
+
       $scope.removeCountry = function(country) {
         $scope.addedCountries.splice($scope.addedCountries.indexOf(country), 1);
       };
