@@ -5,17 +5,54 @@
 
   <div class="modal-body">
       <form>
-      <div mcs-form-group="select" label-for="country" label-text="Country">
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="zipcode" checked  ng-model="input.type">
+              Target by Zip Code
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios2" ng-model="input.type" value="country">
+              Target by Country
+          </label>
+        </div>
+      <div mcs-form-group="select" label-for="country" label-text="Country" ng-show="input.type === 'zipcode'">
           <select class="form-control"  id="country" ng-model="input.country" required="true">
               <option value="FR">France</option>
+              <option value="DE">Germany</option>
+              <option value="IT">Italy</option>
+              <option value="NL">Netherlands</option>
+              <option value="SE">Sweden</option>
+              <option value="CH">Switzerland</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
           </select>
       </div>
 
-    <textarea  class="form-control" ng-model="input.postalCodesList" placeholder="Postal codes separated by comma"></textarea>
+      <textarea  class="form-control" ng-model="input.postalCodesList" placeholder="Postal codes separated by comma" ng-show="input.type === 'zipcode'"></textarea>
+      <div class="" ng-show="input.type === 'country'">
+        <div mcs-form-group="select" label-for="country" label-text="Country" >
+          <select class="form-control"  id="country" ng-model="input.country" required="true">
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+              <option value="IT">Italy</option>
+              <option value="NL">Netherlands</option>
+              <option value="SE">Sweden</option>
+              <option value="CH">Switzerland</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+          </select>
+      </div>
+      <div class="countrySelector" ng-hide="addedCountries.length === 0">
+        <label>Selected Countries:</label>
+        <p class="" ng-repeat="country in addedCountries track by $index"><button ng-click="removeCountry(country)" type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ formatCountry(country) }}</p>
+      </div>
+      </div>
       </form>
   </div>
   <div class="modal-footer">
-    <a class="mics-btn mics-btn-finish" ng-show="addedPostalCodes.length && input.country != ''" ng-click="done()">Done</a>
+    <a class="mics-btn mics-btn-finish" ng-show="addedCountries.length || (addedPostalCodes.length && input.country != '')" ng-click="done()">Done</a>
     <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
   </div>
 </div>
