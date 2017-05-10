@@ -41,8 +41,7 @@ define(['./module'], function (module) {
           case 'US':
             return 'United States';
         }
-          
-      }
+      };
 
       $scope.removeCountry = function(country) {
         $scope.addedCountries.splice($scope.addedCountries.indexOf(country), 1);
