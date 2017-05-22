@@ -19,7 +19,7 @@ define(['./module'], function(module) {
   module.filter('isNotEmpty', [function() {
     return function(object) {
       return !angular.equals({}, object);
-    }
+    };
   }]);
 
   module.directive("mcsTimelineEventKey", [function() {
