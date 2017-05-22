@@ -1,11 +1,11 @@
-define(['./module'], function (module) {
+define(['./module'], function(module) {
 
   'use strict';
 
   module.filter('eventKey', [function() {
 
     function decorateFilter(input) {
-      if(input.indexOf("$") === 0 ){
+      if (input.indexOf("$") === 0) {
         return input.slice(1);
       } else {
         return input;
@@ -16,7 +16,13 @@ define(['./module'], function (module) {
     return decorateFilter;
   }]);
 
-  module.directive("mcsTimelineEventKey", [function () {
+  module.filter('isNotEmpty', [function() {
+    return function(object) {
+      return !angular.equals({}, object);
+    }
+  }]);
+
+  module.directive("mcsTimelineEventKey", [function() {
     return {
       restrict: 'E',
       scope: {
@@ -28,7 +34,8 @@ define(['./module'], function (module) {
 
   module.directive('mcsTimeline', [
     'Restangular', 'core/datamart/common/Common', 'jquery', 'core/common/auth/Session',
-    'lodash', 'moment', function (Restangular, Common, $, Session, lodash, moment) {
+    'lodash', 'moment',
+    function(Restangular, Common, $, Session, lodash, moment) {
 
       return {
         restrict: 'E',
@@ -44,21 +51,21 @@ define(['./module'], function (module) {
 
           scope.INITIAL_ACTIONS_PER_ACTIVITY = 4;
 
-          scope.itemUrl = function (catalogToken, itemId) {
-            return '#'+Session.getWorkspacePrefixUrl() + '/datamart/items/' + catalogToken + '/' + itemId;
+          scope.itemUrl = function(catalogToken, itemId) {
+            return '#' + Session.getWorkspacePrefixUrl() + '/datamart/items/' + catalogToken + '/' + itemId;
           };
 
-          scope.catalogUrl = function (catalogToken) {
-            return '#'+Session.getWorkspacePrefixUrl() + "/datamart/categories/" + catalogToken;
+          scope.catalogUrl = function(catalogToken) {
+            return '#' + Session.getWorkspacePrefixUrl() + "/datamart/categories/" + catalogToken;
           };
 
           // Transforms a duration to human a readable 'X days Y hours Z minutes' format
-          scope.toHumanReadableDuration = function (duration) {
+          scope.toHumanReadableDuration = function(duration) {
             return moment.duration(duration, 'seconds').format("d [days] h [hours] m [minutes] s [seconds]");
           };
 
           // Determines if the entry corresponding to an agent in the filter box should be enabled or not
-          scope.isAgentEnabled = function (agent) {
+          scope.isAgentEnabled = function(agent) {
             // count visible agents
             var visible = 0;
             for (var i = 0; i < scope.agents.length; i++) {
@@ -73,13 +80,13 @@ define(['./module'], function (module) {
           };
 
           // Returns the start_date property of the activity for ordering
-          scope.orderByVisitStartDate = function (activity) {
+          scope.orderByVisitStartDate = function(activity) {
             return activity.visit.start_date;
           };
 
 
           // Determines the number of actions to display for a visit depending on it's expanded/collapsed state
-          scope.getLimit = function (activity) {
+          scope.getLimit = function(activity) {
             if (activity && activity.expanded) {
               return activity.expanded ? activity.actions.length : scope.INITIAL_ACTIONS_PER_ACTIVITY;
             } else {
@@ -89,7 +96,7 @@ define(['./module'], function (module) {
 
 
           // Handles the loaded actions of a visit by storing it back to the corresponding activity object
-          scope.handleActions = function (actions) {
+          scope.handleActions = function(actions) {
             // find activity by id
             var activity = Common.collections.findById(scope.activities, actions.parentResource.parentResource.id + '_' + actions.parentResource.id);
 
@@ -97,15 +104,15 @@ define(['./module'], function (module) {
           };
 
 
-          scope.getMapKeys = function (obj, key) {
-            return obj ? lodash(Object.keys(obj)).filter(function (n) {
+          scope.getMapKeys = function(obj, key) {
+            return obj ? lodash(Object.keys(obj)).filter(function(n) {
               return n.indexOf("$$") < 0;
             }).sortBy().value() : [];
           };
 
 
           // Handles the loaded timeline by constructing an activity for each visit, then loads all actions for each
-          scope.handleVisits = function (timeline) {
+          scope.handleVisits = function(timeline) {
             // if there are more visits avaialble, but a limit is set, show the 'load more' button
 
             //$scope.showLoadMore = true;
@@ -115,8 +122,14 @@ define(['./module'], function (module) {
             for (var j = 0; j < timeline.length; j++) {
               // assemble an activity and a composite id for it
               var event = timeline[j];
-              var agent = lodash.find(scope.agents, {'user_agent_id': event.agent_id});
-              var activity = {id: agent.id + '_' + event.id, agent: agent, visit: event};
+              var agent = lodash.find(scope.agents, {
+                'user_agent_id': event.agent_id
+              });
+              var activity = {
+                id: agent.id + '_' + event.id,
+                agent: agent,
+                visit: event
+              };
 
               activity.actions = [];
               activity.expanded = false;
@@ -142,7 +155,7 @@ define(['./module'], function (module) {
 
           //used to show the footer only when the timeline is ready
           //otherwise we show the footer even when we do not have a timeline
-          scope.isTimeLineReady = function () {
+          scope.isTimeLineReady = function() {
 
             return typeof scope.timelines !== "undefined";
           };
@@ -170,7 +183,7 @@ define(['./module'], function (module) {
 
           scope.getDeviceType = function(activity) {
 
-            switch(activity.$type) {
+            switch (activity.$type) {
               case 'SITE_VISIT':
                 return activity.formFactor || 'UNDETERMINED';
               case 'APP_VISIT':
@@ -184,7 +197,7 @@ define(['./module'], function (module) {
           };
 
           // prevent dropdown from closing on checkbox interaction
-          element.find('.dropdown-menu').click(function (e) {
+          element.find('.dropdown-menu').click(function(e) {
             e.stopPropagation();
           });
 
@@ -192,7 +205,8 @@ define(['./module'], function (module) {
         templateUrl: 'angular/src/core/datamart/timeline/timeline-content.html'
       };
 
-    }]);
+    }
+  ]);
 
 
 });

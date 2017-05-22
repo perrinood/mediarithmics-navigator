@@ -54,7 +54,7 @@
         <li ng-if="timelineActivity.$location.$source">source: {{timelineActivity.$location.$source}}</li>
       </ul>
     </div>
-    <div ng-if="timelineActivity.$topics">
+    <div ng-if="timelineActivity.$topics | isNotEmpty">
       Topics:
       <ul>
         <li ng-repeat="key in getMapKeys(timelineActivity.$topics)">

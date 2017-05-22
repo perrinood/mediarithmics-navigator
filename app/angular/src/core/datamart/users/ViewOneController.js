@@ -50,8 +50,6 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       function retrieveSiteIdAndAppIdFromTimelines(activities) {
 
-        var activities = $scope.timelines;
-
         var sitesOrAppsId = activities.reduce(function (acc, next) {
           var nextSiteId = (next.$site_id || next.$app_id); 
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
@@ -82,13 +80,13 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       }
 
-      function waitForDevices() {
+      function waitForDevices(previousPromise) {
 
         var deferred = $q.defer();
 
         $scope.$watch('devices', function (newValue, oldValue) {
           if (newValue) {
-            deferred.resolve();
+            deferred.resolve(previousPromise);
           }
         });
 
@@ -164,7 +162,6 @@ define(['./module', 'moment-duration-format'], function (module) {
           $scope.userAccountId = lodash.find($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_ACCOUNT';
           });
-
 
           $scope.userPoint = lodash.find($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_POINT';
