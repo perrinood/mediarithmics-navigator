@@ -50,6 +50,8 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       function retrieveSiteIdAndAppIdFromTimelines(activities) {
 
+        var activities = $scope.timelines;
+
         var sitesOrAppsId = activities.reduce(function (acc, next) {
           var nextSiteId = (next.$site_id || next.$app_id); 
           return nextSiteId && (acc.indexOf(nextSiteId) === -1) ? acc.concat(nextSiteId) : acc;
@@ -97,7 +99,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
         .then(waitForDevices)
-        .then(retrieveSiteIdAndAppIdFromTimelines($scope.timelines));
+        .then(retrieveSiteIdAndAppIdFromTimelines);
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
