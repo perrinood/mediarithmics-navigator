@@ -1,6 +1,6 @@
 <select ng-if="!readOnly" class="form-control input-sm" ng-model="condition.value.value">
     <option ng-repeat="domainSource in domainSources | orderBy: ['sourceDatamartName','name']" ng-selected="{{condition.value.value == domainSource.id}}" value="{{domainSource.id}}">
-    {{domainSource.sourceDatamartName ? '[' + domainSource.sourceDatamartName + ']&nbsp;&nbsp;' : ''}}{{(domainSource.type == 'MOBILE_APPLICATION') ? 'APP - ' + domainSource.name: domainSource.type + ' - ' + domainSource.name}}
+ {{domainSource.sourceDatamartName ? '[' + domainSource.sourceDatamartName + ']&nbsp;&nbsp;' : ''}}{{domainSource.name}}
     </option>
 </select>
 <span ng-if="readOnly">{{selectedDomain.sourceDatamartName ? '[' + selectedDomain.sourceDatamartName + ']&nbsp;&nbsp;' : ''}} {{selectedDomain.name}}</span>
