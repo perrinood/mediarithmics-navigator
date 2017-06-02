@@ -40,6 +40,15 @@ define(['./module'], function (module) {
           {operator:"IS_NOT_EMPTY", label:"is not empty"},
           {operator:"IN", label:"in"},
           {operator:"NOT_IN", label:"not in"}],
+        "LIST_OF_TEXT": [
+          { operator: "CONTAINS", label: "contains" },
+          { operator: "NOT_CONTAINS", label: "doesn't contain" },
+          { operator: "START_WITH", label: "starts with" },
+          { operator: "NOT_START_WITH", label: "doesn't start with" },
+          { operator: "IS_EMPTY", label: "is empty" },
+          { operator: "IS_NOT_EMPTY", label: "is not empty" },
+          { operator: "IN", label: "in" },
+          { operator: "NOT_IN", label: "not in" }],
         "INTEGER": [
           {operator:"EQUAL", label:"="},
           {operator:"NOT_EQUAL", label:"!="},
