@@ -16,9 +16,9 @@ define(['./module'], function(module) {
     return decorateFilter;
   }]);
 
-  module.filter('isNotEmpty', [function() {
+  module.filter('isNotEmptyOrNull', [function() {
     return function(object) {
-      return !angular.equals({}, object);
+      return object && !angular.equals({}, object);
     };
   }]);
 
