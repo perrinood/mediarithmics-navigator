@@ -7,7 +7,7 @@ define(['./module'], function (module) {
       var organisationId = Session.getCurrentWorkspace().organisation_id;
       $scope.currentSegmentsPage = 1;
       $scope.segmentsPerPage = 10;
-      $scope.segments = Restangular.all("audience_segments").getList({organisation_id: organisationId}).$object;
+      $scope.segments = Restangular.all("audience_segments").getList({organisation_id: organisationId, max_results: 600}).$object;
       $scope.selectedSegments = [];
 
       $scope.filteredSegments = function () {

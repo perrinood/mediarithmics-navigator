@@ -19,6 +19,8 @@ app/conf/react-configuration.js
 .tags*
 .DS_Store
 Icon?
-
-
+app/bower_components/
+app/src/
+app/version.json
+app/version.txt
 

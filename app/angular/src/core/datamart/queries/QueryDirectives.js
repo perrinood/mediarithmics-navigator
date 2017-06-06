@@ -477,7 +477,7 @@ define(['./module'], function (module) {
 
               } else if (scope.condition.value.property_selector_name === 'SEGMENT_ID'){
                   //Let's fetch datamart's audience segment's resources
-                Restangular.all("audience_segments").getList({"datamart_id": Session.getCurrentDatamartId(), "with_source_datamarts":1}).then(function(segments) {
+                Restangular.all("audience_segments").getList({"datamart_id": Session.getCurrentDatamartId(), "with_source_datamarts":1, max_results: 600}).then(function(segments) {
                   var currentDatamart = Session.getCurrentWorkspace().datamart;
                   var sourcesDatamart = Session.getCurrentWorkspace().sourcesDatamart;
 
