@@ -6,7 +6,7 @@ define(['./module'], function (module) {
     function ($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session) {
       var organisationId = Session.getCurrentWorkspace().organisation_id;
 
-      $scope.segments = Restangular.all("audience_segments").getList({organisation_id: organisationId}).$object;
+      $scope.segments = Restangular.all("audience_segments").getList({organisation_id: organisationId, max_results: 600}).$object;
       $scope.selectedSegments = [];
 
       $scope.done = function () {

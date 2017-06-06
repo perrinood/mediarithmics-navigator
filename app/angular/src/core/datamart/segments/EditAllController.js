@@ -17,7 +17,7 @@ define(['./module'], function (module) {
       $scope.currentPage = 1;
       $scope.itemsPerPage = 10;
 
-      Restangular.all('audience_segments').getList({datamart_id: datamartId, max_results: 200, with_third_parties: true}).then(function (segments) {
+      Restangular.all('audience_segments').getList({datamart_id: datamartId, max_results: 600, with_third_parties: true}).then(function (segments) {
         var filteredSegments = segments.filter(function (seg){
           return seg.type !== 'USER_PARTITION';
         });

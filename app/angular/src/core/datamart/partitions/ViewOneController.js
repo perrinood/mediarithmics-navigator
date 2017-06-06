@@ -33,7 +33,7 @@ define(['./module'], function (module) {
 
       $q.all([
         Restangular.one('audience_partitions', partitionId).get(),
-        Restangular.all('audience_segments').getList({ datamart_id: datamartId, audience_partition_id: partitionId})
+        Restangular.all('audience_segments').getList({ datamart_id: datamartId, audience_partition_id: partitionId, max_results: 600})
       ]).then(function (res) {
         var partition = res[0];
         var segments = res[1];
