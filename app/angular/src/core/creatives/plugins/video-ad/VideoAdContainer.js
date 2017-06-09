@@ -16,7 +16,7 @@ define(['./module'], function (module) {
           name: "",
           type: "VIDEO_AD",
           subtype: options.subtype,
-          format: "",
+          ad_format_id: "",
           organisation_id: "",
           renderer_group_id: options.renderer.groupId,
           renderer_artifact_id: options.renderer.artifactId,

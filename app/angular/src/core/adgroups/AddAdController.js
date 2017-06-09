@@ -2,12 +2,13 @@ define(['./module'], function (module) {
   'use strict';
 
   module.controller('core/adgroups/AddAdController', [
-    '$scope', '$uibModalInstance', 'lodash', 'core/common/IabService',
-    function ($scope, $uibModalInstance, _, IabService) {
+    '$scope', '$uibModalInstance', 'lodash', 'core/common/IabService', 'core/common/auth/Session',
+    function ($scope, $uibModalInstance, _, IabService, Session) {
       $scope.ad = {};
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
-      $scope.iabAdSizes = _.map(IabService.getAdSizes("BANNER"), function (size) {
-        return size.format;
+      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+        $scope.iabAdSizes = formats;
       });
 
       $scope.done = function () {

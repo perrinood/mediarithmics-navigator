@@ -24,7 +24,7 @@
       <!-- Format -->
       <div class="col-md-4">
         <div mcs-form-group="full" label-for="format" label-text="Format">
-          <select ng-disabled="disabledEdition" ng-model="displayAd.format" required ng-options="iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+          <select ng-disabled="disabledEdition" ng-model="displayAd.ad_format_id" required ng-options="iabAdSize.id as iabAdSize.format for iabAdSize in iabAdSizes" id="format"></select>
         </div>
       </div>
     </div>

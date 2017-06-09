@@ -5,10 +5,11 @@ define(['./module'], function (module) {
     '$scope', '$log', '$location', '$stateParams', 'core/creatives/plugins/display-ad/DisplayAdService', 'core/common/auth/Session',
     'core/creatives/CreativePluginService', '$controller', "core/common/ErrorService", '$state', 'core/common/IabService', 'lodash', 'Restangular',
     function ($scope, $log, $location, $stateParams, DisplayAdService, Session, CreativePluginService, $controller, errorService, $state, IabService, _, Restangular) {
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       $scope.$on("display-ad:loaded", function () {
-        $scope.iabAdSizes = _.map(IabService.getAdSizes($scope.displayAd.subtype), function (size) {
-          return size.format;
+        IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+          $scope.iabAdSizes = formats;
         });
       });
 
@@ -41,7 +42,7 @@ define(['./module'], function (module) {
       };
 
       $scope.save = function (disabledEdition) {
-        $log.debug("save display ad : ", $scope.display_ad);
+        $log.debug("save display ad : ", $scope.displayAd);
         if (disabledEdition) {
           if ($stateParams.creative_id !== undefined) {
             $scope.takeScreenshot($stateParams.creative_id);
@@ -60,7 +61,7 @@ define(['./module'], function (module) {
       };
 
       $scope.saveAndRefresh = function () {
-        $log.debug("save display ad : ", $scope.display_ad);
+        $log.debug("save display ad : ", $scope.displayAd);
         DisplayAdService.save().then(function (displayAdContainer) {
           $scope.takeScreenshot(displayAdContainer.id);
           // $state.reload();
