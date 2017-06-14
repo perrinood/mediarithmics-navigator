@@ -17,7 +17,7 @@ define(['./module', 'angular'], function (module, angular) {
           name: "",
           type: "DISPLAY_AD",
           subtype: options.subtype,
-          ad_format_id: "",
+          format: "300x250",
           organisation_id: "",
           renderer_group_id: options.renderer.groupId,
           renderer_artifact_id: options.renderer.artifactId,

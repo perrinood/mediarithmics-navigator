@@ -7,7 +7,7 @@ define(['./module'], function (module) {
       $scope.ad = {};
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
-      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then(function(formats) {
         $scope.iabAdSizes = formats;
       });
 

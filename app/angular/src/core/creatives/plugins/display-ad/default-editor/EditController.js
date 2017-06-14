@@ -29,7 +29,7 @@ define(['./module'], function (module) {
       $scope.$on("display-ad:loaded", function () {
         // The parent controller has loaded the creative, you can use it now (check DisplayAdService)
         $log.info("display-ad:loaded");
-        IabService.getAdSizes($scope.displayAd.subtype, $scope.organisationId).then((formats) => {
+        IabService.getAdSizes($scope.displayAd.subtype, $scope.organisationId).then(function(formats) {
           $scope.iabAdSizes = formats;
         });
       });

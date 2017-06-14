@@ -6,7 +6,7 @@ define(['./module', 'jquery'], function (module, $) {
     function ($scope, $log, Restangular, Session, _, $stateParams, $location, IabService) {
       var organisationId = Session.getCurrentWorkspace().organisation_id;
       $scope.organisationId = organisationId;
-      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then(function(formats) {
         $scope.iabAdSizes = formats;
       });
       $scope.adLayout = {

@@ -72,19 +72,7 @@ define(['./module'], function (module) {
         // uncomment to filter archived
         options.archived = newValue;
 
-        Restangular.all('display_ads').getList(options).then(function (creatives) {
-          Restangular.one('reference_tables/formats').get({ organisation_id: $scope.organisationId })
-            .then((formats) => {
-              for (let i = 0; i < formats.length; ++i) {
-                for (let j = 0; j < creatives.length; ++j) {
-                  if (creatives[j].ad_format_id === formats[i].id) {
-                    creatives[j].format = formats[i].width + "x" + formats[i].height;
-                  }
-                }
-              }
-              $scope.creatives = creatives;
-            });
-        });
+        $scope.creatives = Restangular.all('display_ads').getList(options).$object;
       });
 
       /**

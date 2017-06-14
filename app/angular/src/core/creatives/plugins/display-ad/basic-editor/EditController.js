@@ -8,12 +8,12 @@ define(['./module'], function (module) {
       $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
 
       $scope.$on("display-ad:loaded", function () {
-        IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+        IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then(function (formats) {
           $scope.iabAdSizes = formats;
         });
       });
 
-      $controller('core/creatives/plugins/display-ad/common/CommonEditController', {$scope: $scope});
+      $controller('core/creatives/plugins/display-ad/common/CommonEditController', { $scope: $scope });
 
       $scope.$on("display-ad:loaded", function () {
         // The parent controller has loaded the creative, you can use it now (check DisplayAdService)

@@ -9,7 +9,7 @@ define(['./module', 'jquery'], function (module, $) {
       $scope.editMode = $state.current.name === "adlayouts/editVersion";
       $scope.selectedFiles = [];
       $scope.adLayoutVersion = {};
-      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then((formats) => {
+      IabService.getAdSizes("DISPLAY_AD", $scope.organisationId).then(function(formats) {
         $scope.iabAdSizes = formats;
       });
       $scope.pluploadOptions = {

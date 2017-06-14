@@ -39,7 +39,8 @@ define(['./module'], function (module) {
             groupId: "com.mediarithmics.creative.display",
             artifactId: "default-editor"
           },
-          subtype: "BANNER"
+          subtype: "BANNER",
+          format: "300x250"
         };
         var creativeContainer = DisplayAdService.initCreateDisplayAd(options);
 

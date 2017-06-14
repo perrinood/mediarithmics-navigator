@@ -7,10 +7,10 @@ define(['./module'], function (module) {
    */
   module.controller('core/creatives/plugins/display-ad/common/CommonEditController', [
     '$scope', '$sce', '$log', '$location', '$stateParams', 'core/creatives/plugins/display-ad/DisplayAdService',
-    'core/common/auth/Session', 'core/creatives/CreativePluginService', 'core/configuration', '$state', 'Restangular',
+    'core/common/auth/Session', 'core/creatives/CreativePluginService', 'core/configuration', '$state',
     function ($scope, $sce, $log, $location, $stateParams, DisplayAdService,
-              Session, CreativePluginService, configuration, $state, Restangular) {
-      const creativeId = $stateParams.creative_id;
+              Session, CreativePluginService, configuration, $state) {
+      var creativeId = $stateParams.creative_id;
 
       $scope.getRendererTitle = function (displayAd) {
         if (!displayAd) {
@@ -42,38 +42,26 @@ define(['./module'], function (module) {
         $scope.creativeTemplate = template;
       });
 
-      function retrieveFormat() {
-        return Restangular.one('display_ads', $scope.displayAd.id).one('format').get().then(function (format) {
-          $scope.previewWidth = parseInt(format.width);
-          $scope.previewHeight = parseInt(format.height);
-          $scope.displayAd.ad_format_id = format.id;
-          $scope.displayAd.format = format.width + "x" + format.height;
-        }, () => {
-          $log.debug("Display ad has no format");
-        });
-      }
+      DisplayAdService.initEditDisplayAd(creativeId).then(function () {
+        $scope.displayAd = DisplayAdService.getDisplayAdValue();
+        $scope.properties = DisplayAdService.getProperties();
+        $scope.audits = DisplayAdService.getAudits();
+        $scope.disabledEdition = $scope.displayAd.audit_status !== "NOT_AUDITED";
+        var tagType = "iframe";
+        try {
+          tagType = $scope.properties.find(function (prop) {return prop.value.technical_name === "tag_type";}).value.value.value || "iframe";
+        } catch (e) {}
 
-      DisplayAdService.initEditDisplayAd(creativeId)
-        .then(() => {
-          $scope.displayAd = DisplayAdService.getDisplayAdValue();
-          $scope.properties = DisplayAdService.getProperties();
-          $scope.audits = DisplayAdService.getAudits();
-          $scope.disabledEdition = $scope.displayAd.audit_status !== "NOT_AUDITED";
-          let tagType = "iframe";
-          try {
-            tagType = $scope.properties.find(function (prop) {return prop.value.technical_name === "tag_type";}).value.value.value || "iframe";
-          } catch (e) {}
-
-          if (tagType === "script") {
-            $scope.previewUrl = $sce.trustAsResourceUrl('data:text/html;charset=utf-8,' + encodeURI('<html><body style="margin: 0;"><script type="text/javascript" src="https:' + configuration.ADS_PREVIEW_URL + '?ctx=PREVIEW&rid=' + $scope.displayAd.id + '&caid=preview' + '"></script></body></html>'));
-          } else {
-            $scope.previewUrl = $sce.trustAsResourceUrl(configuration.ADS_PREVIEW_URL + "?ctx=PREVIEW&rid=" + $scope.displayAd.id + "&caid=preview");
-          }
-        })
-        .then(retrieveFormat)
-        .then(() => {
-          $scope.$emit("display-ad:loaded");
-        });
+        if (tagType === "script") {
+          $scope.previewUrl = $sce.trustAsResourceUrl('data:text/html;charset=utf-8,' + encodeURI('<html><body style="margin: 0;"><script type="text/javascript" src="https:' + configuration.ADS_PREVIEW_URL + '?ctx=PREVIEW&rid=' + $scope.displayAd.id + '&caid=preview' + '"></script></body></html>'));
+        } else {
+          $scope.previewUrl = $sce.trustAsResourceUrl(configuration.ADS_PREVIEW_URL + "?ctx=PREVIEW&rid=" + $scope.displayAd.id + "&caid=preview");
+        }
+        var format = $scope.displayAd.format.split("x");
+        $scope.previewWidth = format[0];
+        $scope.previewHeight = format[1];
+        $scope.$emit("display-ad:loaded");
+      });
     }
   ]);
 });

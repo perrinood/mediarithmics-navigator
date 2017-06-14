@@ -16,7 +16,7 @@ define(['./module'], function (module) {
       $scope.$on("video-ad:loaded", function () {
         // The parent controller has loaded the creative, you can use it now (check VideoAdService)
         $log.info("video-ad:loaded");
-        IabService.getAdSizes($scope.videoAd.subtype, $scope.organisationId).then((formats) => {
+        IabService.getAdSizes($scope.videoAd.subtype, $scope.organisationId).then(function(formats) {
           $scope.iabAdSizes = formats;
         });
       });
