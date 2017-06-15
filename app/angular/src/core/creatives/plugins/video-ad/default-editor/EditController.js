@@ -5,7 +5,7 @@ define(['./module'], function (module) {
     '$scope', '$sce', '$log', '$location', '$stateParams', 'core/creatives/plugins/video-ad/VideoAdService', 'core/common/auth/Session',
     'core/creatives/CreativePluginService', '$controller', 'core/common/ErrorService', '$state', 'core/common/IabService', 'lodash',
     function ($scope, $sce, $log, $location, $stateParams, VideoAdService, Session, CreativePluginService, $controller, errorService, $state, IabService, _) {
-
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
       $controller('core/creatives/plugins/video-ad/common/CommonEditController', {$scope: $scope});
 
       $scope.trustResource = function (src) {
@@ -16,8 +16,8 @@ define(['./module'], function (module) {
       $scope.$on("video-ad:loaded", function () {
         // The parent controller has loaded the creative, you can use it now (check VideoAdService)
         $log.info("video-ad:loaded");
-        $scope.iabAdSizes = _.map(IabService.getAdSizes($scope.videoAd.subtype), function (size) {
-          return size.format;
+        IabService.getAdSizes($scope.videoAd.subtype, $scope.organisationId).then(function(formats) {
+          $scope.iabAdSizes = formats;
         });
       });
 

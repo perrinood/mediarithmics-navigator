@@ -3,9 +3,10 @@ define(['./module'], function (module) {
 
   module.controller('core/adgroups/ChooseExistingAdsController', [
     '$scope', '$uibModalInstance', '$document', '$log', 'core/campaigns/DisplayCampaignService', 'Restangular', 'core/common/auth/Session', 'core/common/ads/AdService',
-    function($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService) {
+    function ($scope, $uibModalInstance, $document, $log, DisplayCampaignService, Restangular, Session, AdService) {
       $scope.currentPageCreative = 1;
       $scope.itemsPerPage = 10;
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
       var creativeType = "ALL";
 
       if (AdService.getSelectedAdType() === AdService.getAdTypes().DISPLAY_AD) {
@@ -15,10 +16,10 @@ define(['./module'], function (module) {
       }
 
       $scope.availableCreatives = Restangular.all("creatives").getList({
-        max_results : 1000,
-        creative_type : creativeType,
-        archived : false,
-        organisation_id : Session.getCurrentWorkspace().organisation_id
+        max_results: 1000,
+        creative_type: creativeType,
+        archived: false,
+        organisation_id: $scope.organisationId
       }).$object;
 
       $scope.selectedCreatives = [];

@@ -11,14 +11,16 @@ define(['./module'], function (module) {
       /**
        * Variables
        */
-        // Pagination
+      $scope.organisationId = Session.getCurrentWorkspace().organisation_id;
+      $scope.creativeformat = null;
+      // Pagination
       $scope.currentPageCreative = 1;
       $scope.itemsPerPage = 10;
       // Archived
       $scope.displayArchived = false;
       var options = {
         max_results: 1000,
-        organisation_id: Session.getCurrentWorkspace().organisation_id,
+        organisation_id: $scope.organisationId,
         creative_type: 'DISPLAY_AD'
       };
       // Identify administrator
@@ -33,7 +35,7 @@ define(['./module'], function (module) {
       // Quick Creative Upload Options
       $scope.pluploadOptions = {
         multi_selection: true,
-        url: configuration.ADS_UPLOAD_URL + "?organisation_id=" + Session.getCurrentWorkspace().organisation_id,
+        url: configuration.ADS_UPLOAD_URL + "?organisation_id=" + $scope.organisationId,
         filters: {
           mime_types: [
             {title: "Image files", extensions: "jpg,jpeg,png,gif"},
@@ -70,9 +72,7 @@ define(['./module'], function (module) {
         // uncomment to filter archived
         options.archived = newValue;
 
-        Restangular.all('creatives').getList(options).then(function (creatives) {
-          $scope.creatives = creatives;
-        });
+        $scope.creatives = Restangular.all('display_ads').getList(options).$object;
       });
 
       /**
