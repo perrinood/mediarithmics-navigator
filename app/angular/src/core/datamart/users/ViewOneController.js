@@ -80,13 +80,13 @@ define(['./module', 'moment-duration-format'], function (module) {
 
       }
 
-      function waitForDevices() {
+      function waitForDevices(previousPromise) {
 
         var deferred = $q.defer();
 
         $scope.$watch('devices', function (newValue, oldValue) {
           if (newValue) {
-            deferred.resolve();
+            deferred.resolve(previousPromise);
           }
         });
 
@@ -97,7 +97,7 @@ define(['./module', 'moment-duration-format'], function (module) {
       $scope.userEndpoint.customGETLIST('user_timelines/' + userTimelinesUrl + '/user_activities', options)
         .then(scopeTimelines)
         .then(waitForDevices)
-        .then(retrieveSiteIdAndAppIdFromTimelines($scope.timelines));
+        .then(retrieveSiteIdAndAppIdFromTimelines);
 
 
       $scope.$watch('toggle.showPlatform',function(newValue, oldValue){
@@ -162,7 +162,6 @@ define(['./module', 'moment-duration-format'], function (module) {
           $scope.userAccountId = lodash.find($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_ACCOUNT';
           });
-
 
           $scope.userPoint = lodash.find($scope.userIdentifiers,function(userIdentifier){
             return userIdentifier.type  === 'USER_POINT';
