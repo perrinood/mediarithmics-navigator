@@ -74,6 +74,19 @@ define(['./module'], function (module) {
 
       var saveSegment = function (queryId) {
 
+        function updateActivationStatusIfNeeded(promise, activation) {
+          if (activation.value.id === undefined && activation.value.status === 'ACTIVE') {
+            return promise.then(function () {
+              $log.info("start activation", activation);
+              activation.value.status = 'ACTIVE';
+              return activation.save();
+            });
+          } else {
+            return promise;
+          }
+
+        }
+
         //check if an active segment with the same technical name doesn't exist
         Restangular.all('audience_segments').getList({ datamart_id: $scope.segment.datamart_id, technical_name: $scope.segment.technical_name }).then(function (segments) {
           if (segments.length === 0) {
@@ -97,18 +110,6 @@ define(['./module'], function (module) {
             } else {
               $scope.segment.query_id = queryId;
               promise = Restangular.all('audience_segments').post($scope.segment, { organisation_id: Session.getCurrentWorkspace().organisation_id });
-            }
-            function updateActivationStatusIfNeeded(promise, activation) {
-              if (activation.value.id === undefined && activation.value.status === 'ACTIVE') {
-                return promise.then(function () {
-                  $log.info("start activation", activation);
-                  activation.value.status = 'ACTIVE';
-                  return activation.save();
-                });
-              } else {
-                return promise;
-              }
-
             }
             promise.then(function (audienceSegment) {
               var promises = [];
@@ -139,7 +140,7 @@ define(['./module'], function (module) {
             $scope.error = 'The Technical Name "' + $scope.segment.technical_name + '" is already used';
           }
         }
-        )
+        );
 
 
       };
