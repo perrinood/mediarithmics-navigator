@@ -149,7 +149,10 @@ define(['./module', 'angular', 'lodash'], function (module, angular, _) {
         $scope.adGroups = sort(campaign.ad_groups);
         var ads = _.flatten(
           campaign.ad_groups.map(function (adGroup) {
-            return adGroup.ads;
+            return adGroup.ads.map(function(ad) {
+              ad.ad_group_name = adGroup.name;
+              return ad;
+            });
           })
         );
         $scope.ads = sort(ads);

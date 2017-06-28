@@ -149,7 +149,7 @@
                             popover-trigger="mouseenter"
                             ng-if="ad.creative_audit_status == 'AUDIT_FAILED' || ad.creative_audit_status == 'AUDIT_PARTIALLY_PASSED'">!</span>
                     </td>
-                    <td><a href="#{{getCreativeUrl(ad)}}">{{ad.name}}</a></td>
+                    <td><a href="#{{getCreativeUrl(ad)}}">{{ad.name}} - {{ad.ad_group_name}}</a></td>
                     <td>{{ad.format}}</td>
                     <td class="metrics" ng-repeat="info in ad.info">
                   <span ng-if="info.type == 'currency' && info.value != undefined">
