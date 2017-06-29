@@ -219,6 +219,12 @@
               </select>
             </div>
 
+            <div mcs-form-group="" label-for="targeted_operating_systems" label-text="Targeted operating systems">
+              <select ng-model="campaign.targeted_operating_systems" type="text" id="targeted_operating_systems"
+                      ng-options="os.code as os.name for os in getOperatingSystems(campaign.targeted_devices)">
+              </select>
+            </div>
+
             <div mcs-form-group="" label-for="user_activation_segments" label-text="Create following user activation segments">
               <label><input type="checkbox" ng-change="addUserActivationSegment('clickers')" ng-model="checkedUserActivationSegments['clickers']" ng-disabled="disabledUserActivationSegments['clickers']"/> Clickers
                 <span class="badge" uib-popover="Create a segment with all users that clicked in this campaign" popover-trigger="mouseenter" popover-placement="right">?</span>
