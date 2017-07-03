@@ -87,61 +87,71 @@ define(['./module'], function (module) {
 
         }
 
-        //check if an active segment with the same technical name doesn't exist
-        Restangular.all('audience_segments').getList({ datamart_id: $scope.segment.datamart_id, technical_name: $scope.segment.technical_name }).then(function (segments) {
-          if (segments.length === 0) {
-            var promise = null;
+        function pushSegment() {
+          var promise = null;
 
-            //compute default_lifetime
-            if ($scope.segmentLifetime === 'never') {
-              $scope.segment.default_lifetime = null;
-            } else {
-              $scope.segment.default_lifetime = moment.duration($scope.segmentLifetimeNumber, $scope.segmentLifetimeUnit).asMinutes();
-            }
-
-            if ($scope.realTime.active) {
-              $scope.segment.evaluation_mode = 'REAL_TIME';
-            } else if ($scope.segment.evaluation_mode !== 'LIVE') {
-              $scope.segment.evaluation_mode = 'PERIODIC';
-            }
-
-            if (segmentId) {
-              promise = $scope.segment.put();
-            } else {
-              $scope.segment.query_id = queryId;
-              promise = Restangular.all('audience_segments').post($scope.segment, { organisation_id: Session.getCurrentWorkspace().organisation_id });
-            }
-            promise.then(function (audienceSegment) {
-              var promises = [];
-              if ($scope.activations) {
-                for (var i = 0; i < $scope.activations.length; i++) {
-                  var activation = $scope.activations[i];
-                  var p = activation.save();
-                  promises.push(updateActivationStatusIfNeeded(p, activation));
-                }
-                return $q.all(promises).then(function () {
-                  return audienceSegment;
-                });
-              } else {
-                return audienceSegment;
-              }
-            }, function failure() {
-              $scope.error = 'There was an error while saving segment';
-              $log.info("failure");
-            }).then(function success(audienceSegment) {
-              $log.info("success");
-              $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments/" + audienceSegment.type + "/" + audienceSegment.id + "/report");
-            }, function failure() {
-              $scope.error = 'There was an error while saving segment';
-              $log.info("failure");
-            });
-
+          //compute default_lifetime
+          if ($scope.segmentLifetime === 'never') {
+            $scope.segment.default_lifetime = null;
           } else {
-            $scope.error = 'The Technical Name "' + $scope.segment.technical_name + '" is already used';
+            $scope.segment.default_lifetime = moment.duration($scope.segmentLifetimeNumber, $scope.segmentLifetimeUnit).asMinutes();
           }
-        }
-        );
 
+          if ($scope.realTime.active) {
+            $scope.segment.evaluation_mode = 'REAL_TIME';
+          } else if ($scope.segment.evaluation_mode !== 'LIVE') {
+            $scope.segment.evaluation_mode = 'PERIODIC';
+          }
+
+          if (segmentId) {
+            promise = $scope.segment.put();
+          } else {
+            $scope.segment.query_id = queryId;
+            promise = Restangular.all('audience_segments').post($scope.segment, { organisation_id: Session.getCurrentWorkspace().organisation_id });
+          }
+          promise.then(function (audienceSegment) {
+            var promises = [];
+            if ($scope.activations) {
+              for (var i = 0; i < $scope.activations.length; i++) {
+                var activation = $scope.activations[i];
+                var p = activation.save();
+                promises.push(updateActivationStatusIfNeeded(p, activation));
+              }
+              return $q.all(promises).then(function () {
+                return audienceSegment;
+              });
+            } else {
+              return audienceSegment;
+            }
+          }, function failure() {
+            $scope.error = 'There was an error while saving segment';
+            $log.info("failure");
+          }).then(function success(audienceSegment) {
+            $log.info("success");
+            $location.path(Session.getWorkspacePrefixUrl() + "/datamart/segments/" + audienceSegment.type + "/" + audienceSegment.id + "/report");
+          }, function failure() {
+            $scope.error = 'There was an error while saving segment';
+            $log.info("failure");
+          });
+        }
+
+        //we search technical name if it's defined and not empty
+        //and if technical name is an ampty string we set it as undefined
+        $scope.segment.technical_name = $scope.segment.technical_name === "" ? undefined : $scope.segment.technical_name;
+        if ($scope.segment.technical_name !== undefined) {
+          //check if an active segment with the same technical name doesn't exist
+          Restangular.all('audience_segments').getList({ datamart_id: $scope.segment.datamart_id, technical_name: $scope.segment.technical_name }).then(function (segments) {
+            if (segments.length === 0) {
+              pushSegment();
+
+            } else {
+              $scope.error = 'The Technical Name "' + $scope.segment.technical_name + '" is already used';
+            }
+          }
+          );
+        } else {
+          pushSegment();
+        }
 
       };
 
