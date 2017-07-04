@@ -17,8 +17,9 @@ define(['./module', 'moment'], function (module, moment) {
       $scope.getConversionType = GoalsService.getConversionType;
       $scope.checkedGoalTypes = [];
       $scope.conversionGoals = [];
+      $scope.targetedOperatingSystems = [{ code: "ALL", name: "All Operating Systems" }];
       $scope.campaignScopeHelper = {
-        campaignDateRange: {startDate: moment(), endDate: moment().add(20, 'days')},
+        campaignDateRange: { startDate: moment(), endDate: moment().add(20, 'days') },
         schedule: ''
       };
 
@@ -29,11 +30,11 @@ define(['./module', 'moment'], function (module, moment) {
       function updateUserActivationSegments() {
         $scope.userActivationSegments = DisplayCampaignService.getUserActivationSegments();
         $scope.checkedUserActivationSegments = [];
-        for(var i = 0; i < $scope.userActivationSegments.length ; i++) {
+        for (var i = 0; i < $scope.userActivationSegments.length; i++) {
           $scope.checkedUserActivationSegments[$scope.userActivationSegments[i].clickers ? "clickers" : "exposed"] = true;
         }
         $scope.disabledUserActivationSegments = [];
-        for(var j = 0; j < $scope.userActivationSegments.length ; j++) {
+        for (var j = 0; j < $scope.userActivationSegments.length; j++) {
           $scope.disabledUserActivationSegments[$scope.userActivationSegments[j].clickers ? "clickers" : "exposed"] = ($scope.userActivationSegments[j].id !== undefined && $scope.userActivationSegments[j].id.indexOf('T') === -1);
         }
 
@@ -45,7 +46,7 @@ define(['./module', 'moment'], function (module, moment) {
         $scope.adGroups = DisplayCampaignService.getAdGroupValues();
         $scope.inventorySources = DisplayCampaignService.getInventorySources();
         $scope.goalSelections = DisplayCampaignService.getGoalSelections();
-        $scope.campaignScopeHelper.defaultGoalSelection = _.find(DisplayCampaignService.getGoalSelections(), {"default": true});
+        $scope.campaignScopeHelper.defaultGoalSelection = _.find(DisplayCampaignService.getGoalSelections(), { "default": true });
         // Init selected goals
         updateSelectedGoals();
         updateUserActivationSegments();
@@ -110,7 +111,7 @@ define(['./module', 'moment'], function (module, moment) {
           });
         };
 
-        $scope.$watch("campaignScopeHelper.campaignDateRange", function(range) {
+        $scope.$watch("campaignScopeHelper.campaignDateRange", function (range) {
           if (range && $scope.campaignScopeHelper.schedule === 'custom') {
             $scope.campaign.start_date = range.startDate.valueOf();
             $scope.campaign.end_date = range.endDate.valueOf();
@@ -119,7 +120,7 @@ define(['./module', 'moment'], function (module, moment) {
 
         $scope.addUserActivationSegment = function (type) {
 
-          if(!$scope.checkedUserActivationSegments[type]) {
+          if (!$scope.checkedUserActivationSegments[type]) {
             DisplayCampaignService.removeUserActivationSegment(type);
           } else {
             DisplayCampaignService.addUserActivationSegment(type);
@@ -219,6 +220,21 @@ define(['./module', 'moment'], function (module, moment) {
           updateSelectedGoals();
         };
 
+        $scope.updateOperatingSystems = function(targetedDevice) {
+          if (targetedDevice === "ALL" || targetedDevice === "ONLY_DESKTOP") {
+            $scope.campaign.targeted_operating_systems = 'ALL';
+            $scope.targetedOperatingSystems = [{ code: "ALL", name: "All Operating Systems" }];
+          } else {
+            $scope.targetedOperatingSystems = [
+              { code: "ALL", name: "All Operating Systems" },
+              { code: "IOS", name: "iOS" },
+              { code: "ANDROID", name: "Android" },
+              { code: "WINDOWS_PHONE", name: "Windows Phone" },
+            ];
+          }
+        };
+        $scope.updateOperatingSystems();
+
         /**
          * Inventory Source
          */
@@ -226,7 +242,6 @@ define(['./module', 'moment'], function (module, moment) {
         $scope.removeInventorySource = function (source) {
           DisplayCampaignService.removeInventorySource(source);
         };
-
 
         $scope.$on("mics-inventory-source:selected", function (event, inventorySource) {
           DisplayCampaignService.addInventorySource({
@@ -288,7 +303,7 @@ define(['./module', 'moment'], function (module, moment) {
           $scope.adGroups = DisplayCampaignService.getAdGroupValues();
         };
 
-        $scope.setDateRange = function() {
+        $scope.setDateRange = function () {
           if ($scope.campaignScopeHelper.schedule === 'custom') {
             $scope.campaign.start_date = $scope.campaignScopeHelper.campaignDateRange.startDate.valueOf();
             $scope.campaign.end_date = $scope.campaignScopeHelper.campaignDateRange.endDate.valueOf();
@@ -303,7 +318,6 @@ define(['./module', 'moment'], function (module, moment) {
          */
 
         $scope.save = function () {
-
           WaitingService.showWaitingModal();
           DisplayCampaignService.save().then(function (campaignContainer) {
             WaitingService.hideWaitingModal();

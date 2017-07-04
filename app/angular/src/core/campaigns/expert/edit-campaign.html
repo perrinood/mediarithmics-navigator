@@ -44,7 +44,7 @@
 
     <!-- Schedule -->
     <div mcs-form-group="select" label-for="schedule" label-text="Schedule">
-      <select ng-model="campaignScopeHelper.schedule" class="form-control" id="schedule"  ng-change="setDateRange()">
+      <select ng-model="campaignScopeHelper.schedule" class="form-control" id="schedule" ng-change="setDateRange()">
         <option value="">Ongoing (no end date)</option>
         <option value="custom" ng-selected="campaign.start_date != null ? 'selected' : ''">Custom</option>
       </select>
@@ -203,7 +203,7 @@
         <div id="collapseOne" class="panel-collapse collapse">
           <div class="panel-body">
             <div mcs-form-group="" label-for="targeted_devices" label-text="Targeted devices">
-              <select ng-model="campaign.targeted_devices" type="text" id="targeted_devices">
+              <select ng-model="campaign.targeted_devices" ng-change="updateOperatingSystems(campaign.targeted_devices)" type="text" id="targeted_devices">
                 <option value="ALL">All devices</option>
                 <option value="ONLY_DESKTOP">Only desktop</option>
                 <option value="ONLY_MOBILE">Only mobile</option>
@@ -216,6 +216,12 @@
               <select ng-model="campaign.targeted_medias" type="text" id="targeted_medias">
                 <option value="WEB">Only websites</option>
                 <option value="MOBILE_APP">Only mobile apps</option>
+              </select>
+            </div>
+
+            <div mcs-form-group="" label-for="targeted_operating_systems" label-text="Targeted operating systems">
+              <select ng-model="campaign.targeted_operating_systems" type="text" id="targeted_operating_systems"
+                      ng-options="os.code as os.name for os in targetedOperatingSystems">
               </select>
             </div>
 
