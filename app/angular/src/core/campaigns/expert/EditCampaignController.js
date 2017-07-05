@@ -220,7 +220,7 @@ define(['./module', 'moment'], function (module, moment) {
           updateSelectedGoals();
         };
 
-        $scope.updateOperatingSystems = function(targetedDevice) {
+        function updateOperatingSystems(targetedDevice) {
           if (targetedDevice === "ALL" || targetedDevice === "ONLY_DESKTOP") {
             $scope.campaign.targeted_operating_systems = 'ALL';
             $scope.targetedOperatingSystems = [{ code: "ALL", name: "All Operating Systems" }];
@@ -232,8 +232,13 @@ define(['./module', 'moment'], function (module, moment) {
               { code: "WINDOWS_PHONE", name: "Windows Phone" },
             ];
           }
-        };
-        $scope.updateOperatingSystems();
+        }
+
+        $scope.$watch("campaign.targeted_devices", function (device) {
+          if (device !== undefined) {
+            updateOperatingSystems(device);
+          }
+        });
 
         /**
          * Inventory Source
