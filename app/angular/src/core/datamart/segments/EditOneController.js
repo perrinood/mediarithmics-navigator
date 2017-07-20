@@ -137,7 +137,7 @@ define(['./module'], function (module) {
 
         //we search technical name if it's defined and not empty
         //and if technical name is an ampty string we set it as undefined
-        $scope.segment.technical_name = $scope.segment.technical_name === "" ? undefined : $scope.segment.technical_name;
+        $scope.segment.technical_name = ($scope.segment.technical_name === "" || $scope.segment.technical_name === null) ? undefined : $scope.segment.technical_name;
         if ($scope.segment.technical_name !== undefined) {
           //check if an active segment with the same technical name doesn't exist
           Restangular.all('audience_segments').getList({ datamart_id: $scope.segment.datamart_id, technical_name: $scope.segment.technical_name }).then(function (segments) {
