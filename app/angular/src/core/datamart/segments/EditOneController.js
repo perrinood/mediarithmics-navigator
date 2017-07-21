@@ -143,8 +143,11 @@ define(['./module'], function (module) {
           Restangular.all('audience_segments').getList({ datamart_id: $scope.segment.datamart_id, technical_name: $scope.segment.technical_name }).then(function (segments) {
             if (segments.length === 0) {
               pushSegment();
-
-            } else {
+            } 
+            else if (segments[0].id === $scope.segment.id){
+              pushSegment();
+            }
+             else {
               $scope.error = 'The Technical Name "' + $scope.segment.technical_name + '" is already used';
             }
           }
