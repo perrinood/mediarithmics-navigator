@@ -15,7 +15,9 @@ define(['./module'], function (module) {
         {name: "Ividence template", groupId: "com.ividence", artifactId: "display-ad-renderer"}
       ];
       // TODO handle multiple groups / artifacts renderers according to the organisation
-            
+      if ($scope.organisationId === "1147") {
+        $scope.groupArtifacts.push({name: "AntVoice Ad-Renderer", groupId: "ant.mics.plugin.renderer", artifactId: "basic_renderer"});
+      }
       $scope.wrapper = {
         groupArtifact: undefined,
         name: undefined
