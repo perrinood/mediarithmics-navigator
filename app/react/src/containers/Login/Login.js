@@ -26,7 +26,7 @@ class Login extends Component {
 
   /**
    * Rendering
-   **/
+   */
   render() {
 
     const {
