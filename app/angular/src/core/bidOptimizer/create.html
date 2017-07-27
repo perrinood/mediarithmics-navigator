@@ -1,0 +1,44 @@
+<div class="choose-existing-bid-optimizer">
+  <div class="modal-header">
+    <h3>Create Bid Optimizer</h3>
+  </div>
+
+  <div class="modal-body form-inline">
+    <label for="new_bid_optimizer_name">Name</label>
+    <input id="new_bid_optimizer_name" ng-model="bidOptimizer.name" class="form-control"/><br/>
+    <br/>
+    <table class="fragment-list-bid-optimizer-engine">
+      <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Bid Optimizer Engine</th>
+        <th>Data Miner</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="availableBidOptimizerEngine in availableBidOptimizerEngines" fetch-plugin-properties="availableBidOptimizerEngine.id as properties">
+        <td>
+          <input
+              type="radio"
+              name="available_bid_optimizer_engine"
+              ng-model="bidOptimizer.bidOptimizerEngine"
+              value="{{availableBidOptimizerEngine.group_id}}/{{availableBidOptimizerEngine.artifact_id}}"
+              id="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}"
+          />
+        </td>
+        <td>
+          <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['name'].value}}</label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_engine_{{availableBidOptimizerEngine.id}}">{{properties['provider'].value}}</label>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="bidOptimizerIsOk()" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>

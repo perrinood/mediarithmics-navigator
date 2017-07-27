@@ -1,0 +1,43 @@
+<!-- <div class="edit-query-popin"> -->
+  <div class="modal-header">
+    <div class="row"><div class="col-md-8">
+    <h3 ng-if="!editMode">Add user activity trigger</h3>
+    <h3 ng-if="editMode">Edit user activity trigger</h3>
+  </div>
+  <div class="col-md-4" ng-if="enableEvaluationMode">
+    <div class="form-inline">
+      <div class="radio">
+        <label>
+          <input type="radio" name="evaluationMode" id="liveMode" value="LIVE" ng-model="evaluationContainer.evaluation_mode">
+          Live
+        </label>
+      </div>
+    </div>
+    <div class="form-inline">
+      <div class="radio">
+        <label>
+          <input type="radio" name="evaluationMode" id="periodicMode" value="PERIODIC" ng-model="evaluationContainer.evaluation_mode">
+          Periodic every
+        </label>
+      </div>
+        <input type="number" class="form-control input-sm evaluation_period" ng-model="evaluationContainer.evaluation_period">
+        <select class="form-control input-sm" ng-model="evaluationContainer.evaluation_period_unit">
+          <option value="MINUTE">Minute</option>
+          <option value="HOUR">Hour</option>
+          <option value="DAY">Day</option>
+          <option value="WEEK">Week</option>
+          <option value="MONTH">Month</option>
+        </select>
+    </div>
+    </div></div>
+  </div>
+
+  <div class="modal-body">
+      <mcs-query-tool query-container="queryContainer" selected-values-enabled="enableSelectedValues"></mcs-query-tool>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-click="done()">OK</a>
+    <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+  </div>
+<!-- </div> -->

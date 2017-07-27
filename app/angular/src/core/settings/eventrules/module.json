@@ -1,0 +1,6 @@
+{
+  "name": "core/settings/eventrules",
+  "dependencies": [
+    "core/common"
+  ]
+}

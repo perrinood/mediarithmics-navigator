@@ -1,0 +1,7 @@
+{
+  "name": "core/settings/useraccount",
+  "dependencies": [
+    "core/common",
+    "restangular"
+  ]
+}

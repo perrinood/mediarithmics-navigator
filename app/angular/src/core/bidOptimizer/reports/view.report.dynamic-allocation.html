@@ -1,0 +1,82 @@
+<div>
+  <div class="row">
+    <form role="form">
+      <div class="row col-xs-12">
+        <div class="form-group  pull-left  ">
+          <label for="campaignSelect">Campaign:</label>
+          <select id="campaignSelect" class="form-control" ng-options="m.name for m in campaigns track by m.id" ng-model="selectedCampaign" ng-change="refreshAdGroups()">
+          </select>
+        </div>
+      </div>
+      <div class="row col-xs-12">
+        <div class="form-group  pull-left">
+          <label for="adGroupSelect">Ad Group:</label>
+          <select id="adGroupSelect" class="form-control" ng-options="m.name for m in adGroupsForCampaign track by m.id" ng-model="selectedAdGroup" ng-change="reloadAllocations()">
+          </select>
+        </div>
+      </div>
+      <div class="row col-xs-12" ng-show="selectedEnvironment.goal">
+        <h3> Optimized Goal : <span>{{selectedEnvironment.goal.name}}</span>
+          <a class="mics-btn mics-btn-action"
+             href="#{{workspace}}/goals/{{selectedEnvironment.goal.id}}/report"> Details</a>
+        </h3>
+      </div>
+    </form>
+    <br>
+  </div>
+  <br>
+  <div class="row">
+    <uib-tabset class="breakdown">
+      <uib-tab heading="Allocation Table" ng-if="tableReady">
+        <br>
+        <table ng-table-dynamic="allocationsTable with cols" class="mics-table" show-filter="true">
+          <tr ng-repeat="row in $data">
+            <td ng-repeat="col in $columns" ng-bind-html="col.getValue(this, row)">{{row[col.field]}}</td>
+          </tr>
+        </table>
+        <table class="table allocation-table-sum">
+          <tbody>
+          <tr>
+            <td>Filtered Weighted Conversions</td>
+            <td>{{sum(allocationsData, allocationsTable,"WEIGHTED_CONVERSIONS")}}</td>
+          </tr>
+          <tr>
+            <td>Filtered Percent of Daily Budget</td>
+            <td>{{sum(allocationsData, allocationsTable,"RATIO_TO_SPEND") * 100 | number:3}}%</td>
+          </tr>
+          <tr>
+            <td>Total Weighted Conversions</td>
+            <td>{{totalWeightedConversions}}</td>
+          </tr>
+          <tr>
+            <td>Total Percent of Daily Budget</td>
+            <td>{{totalDailyBudgetPercentage * 100 | number:3}}%</td>
+          </tr>
+          </tbody>
+        </table>
+      </uib-tab>
+      <uib-tab heading="Ignored Contexts" ng-if="tableReady">
+        <div>
+          <br>
+          <table ng-table-dynamic="ignoredContexts with cols" class="mics-table" show-filter="true">
+            <tr ng-repeat="row in $data">
+              <td ng-repeat="col in $columns" ng-bind-html="col.getValue(this, row)">{{row[col.field]}}</td>
+            </tr>
+          </table>
+          <table class="table allocation-table-sum">
+            <tbody>
+            <tr>
+              <td>Filtered Weighted Conversions</td>
+              <td>{{sum(ignoredContextsData, ignoredContexts,"WEIGHTED_CONVERSIONS")}}</td>
+            </tr>
+            <tr>
+              <td>Total Weighted Conversions</td>
+              <td>{{totalIgnoredContextsWeightedConversions}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+</div>

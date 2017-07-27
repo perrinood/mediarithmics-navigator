@@ -1,0 +1,55 @@
+<div class="choose-existing-ad-layouts-list">
+  <div class="modal-header">
+    <h3>Select Ad Layout</h3><h4> for <strong>{{displayAdRenderer.artifactId}} v{{displayAdRenderer.version}}</strong></h4>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-6">
+        <table class="mics-table table-fixed table-hover">
+          <thead>
+          <tr>
+            <th class="col-xs-1">&nbsp;</th>
+            <th class="col-xs-5">Ad Layout</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-click="selectAdLayout(adLayout)" class="clickableRow" ng-repeat="adLayout in adLayouts">
+            <td class="col-xs-1"><input type="checkbox" id="adLayout.id" ng-checked="adLayout.id == selectedAdLayout.id"></td>
+            <td class="col-xs-5">{{adLayout.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div ng-show="!adLayouts.length" style="color: indianred"> Please create an Ad Layout in the library</div>
+      </div>
+
+      <div class="col-xs-6">
+        <div ng-show="!selectedAdLayout" style="color: indianred"> Please Select an Ad Layout</div>
+        <div ng-show="selectedAdLayout && adLayouts.length && !versions.length" style="color: indianred"> Please create a version for {{selectedAdLayout.name}}</div>
+        <table ng-show="selectedAdLayout && versions.length" class="mics-table table-fixed table-hover">
+          <thead>
+          <tr>
+            <th class="col-xs-1">&nbsp;</th>
+            <th class="col-xs-1">Version</th>
+            <th class="col-xs-2">Filename</th>
+            <th class="col-xs-1">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-click="selectVersion(version)" class="clickableRow" ng-repeat="version in versions">
+            <td class="col-xs-1"><input type="checkbox" id="version.id" ng-checked="version.id === selectedVersion.id"></td>
+            <td class="col-xs-2">{{version.version_id}}</td>
+            <td class="col-xs-2">{{version.filename}}</td>
+            <td class="col-xs-1">{{version.status}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+    <a ng-disabled="!selectedAdLayout || !selectedVersion" ng-click="done()" class="mics-btn mics-btn-finish">Ok</a>
+  </div>
+</div>

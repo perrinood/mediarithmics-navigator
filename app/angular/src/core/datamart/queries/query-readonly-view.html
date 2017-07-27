@@ -1,0 +1,117 @@
+<div class="row" ng-show="queryLoadError">
+  <div class="col-md-12">
+    <div class="alert alert-danger" role="alert">{{queryLoadError}}</div>
+  </div>
+</div>
+
+<div class="col-md-12" ng-if="queryContainer">
+  <uib-tabset>
+    <uib-tab heading="Query conditions">
+      <div class="query-tab">
+        <span class="help-block" ng-if="!queryContainer.hasConditions()">No conditions defined, query matchs all</span>
+        <div ng-repeat="(i,groupContainer) in queryContainer.groupContainers">
+          <div ng-class="{'panel panel-success':!groupContainer.value.excluded, 'panel panel-danger':groupContainer.value.excluded}">
+            <div class="panel-heading">
+              Group #{{i+1}}
+              <span ng-if="!groupContainer.value.excluded" class="glyphicon glyphicon-ok" aria-hidden="true" title="Include group"></span>
+              <span ng-if="groupContainer.value.excluded" class="glyphicon glyphicon-remove-circle" aria-hidden="true" title="Exclude group"></span>
+            </div>
+            <div class="panel-body">
+              <div id="group {{groupContainer.id}}" ng-repeat="(j,elementContainer) in groupContainer.elementContainers">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <span ng-if="elementContainer.hasIndexSelector()">
+                      {{elementContainer.selectedIndexOptionLabel}}
+                    </span>
+                    <span ng-if="!elementContainer.hasIndexSelector()">
+                      {{elementContainer.family}}
+                    </span>
+                  </div>
+                  <div class="panel-body">
+                    <div ng-repeat="(k,condition) in elementContainer.conditions">
+                      <div ng-if="condition.value.property_selector_name !== 'INDEX'">
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="conditions-readonly-display">
+                                <div ng-if="condition.value.property_selector_expression">
+                                  <div class="btn-expression-default">{{condition.value.property_selector_expression}}</div>
+                                  <span>{{condition.getSelectorLabel()}}</span>
+                                </div>
+                                <div ng-if="!condition.value.property_selector_expression">
+                                  {{condition.getSelectorLabel()}}
+                                </div>
+                                <span>{{condition.getOperatorLabel()}}</span>
+
+                                <div ng-switch="condition.getSelectorValueType()">
+                                  <div ng-switch-when="ID">
+                                      <mcs-query-condition-value-id condition="condition" read-only="true"></mcs-query-condition-value-id>
+                                  </div>
+                                  <div ng-switch-when="BOOLEAN">
+                                    <span>{{condition.value.value | lowercase}}</span>
+                                  </div>
+                                  <div ng-switch-when="DATE">
+                                    <div ng-switch="condition.value.operator">
+                                      <div ng-switch-when="RELATIVE_GT">
+                                          <mcs-query-condition-value-relative-date condition="condition" read-only="true"></mcs-query-condition-value-relative-date>
+                                      </div>
+                                      <div ng-switch-when="RELATIVE_LT">
+                                          <mcs-query-condition-value-relative-date condition="condition" read-only="true"></mcs-query-condition-value-relative-date>
+                                      </div>
+                                      <div ng-switch-when="BETWEEN">
+                                          <mcs-query-condition-value-date-range condition="condition" read-only="true"></mcs-query-condition-value-date-range>
+                                      </div>
+                                      <div ng-switch-default>
+                                          <span>{{ condition.value.value | date }}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div ng-switch-default>
+                                    <span>{{condition.value.value}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uib-tab>
+    <uib-tab ng-if="selectedValuesEnabled" heading="Selected values">
+      <div class="query-tab">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div ng-if="!queryContainer.selectedValues">
+              <span class="help-block">No selected values defined</span>
+            </div>
+            <div class="selected-value" ng-repeat="selectedValue in queryContainer.selectedValues">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="conditions-readonly-display">
+                    <div ng-if="selectedValue.value.expression">
+                      <div class="btn-expression-default">{{selectedValue.value.expression}}</div>
+                      <span><strong>{{selectedValue.getFamilyName()}}</strong> : {{selectedValue.getSelectorLabel()}}</span>
+                    </div>
+                    <div ng-if="!selectedValue.value.expression">
+                      <strong>{{selectedValue.getFamilyName()}}</strong> : {{selectedValue.getSelectorLabel()}}
+                    </div>
+                    <span>{{condition.getOperatorLabel()}}</span>
+                    <span ng-if="selectedValue.value.alias">as</span>
+                    <span ng-if="selectedValue.value.alias">{{selectedValue.value.alias}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uib-tab>
+  </uib-tabset>
+</div>

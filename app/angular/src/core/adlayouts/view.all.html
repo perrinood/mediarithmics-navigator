@@ -1,0 +1,77 @@
+<div ng-controller="core/adlayouts/ViewAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Ad Layouts</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class="col-md-6">
+        <a href="#/{{currentWorkspaceId}}/library/adlayouts/new" class="mics-btn mics-btn-add">
+          New Ad Layout
+        </a>
+      </div>
+      <div class="form-group col-md-3 pull-right">
+        <input class="form-control"
+               type="text"
+               ng-model="adLayoutName"
+               placeholder="Search">
+      </div>
+    </div>
+    <table class="mics-table table-hover js-auto-hide-actions" ng-show="adLayouts.length">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Optimal Formats</th>
+        <th>Renderer</th>
+        <th>Renderer Version</th>
+        <th class="actions">Actions</th>
+      </tr>
+      </thead>
+      <tbody data-ng-repeat="adLayout in filteredAdLayouts() | offset: (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <tr data-target="#demo{{$index}}" data-toggle="collapse" class="accordion-toggle clickableRow" title="Click to collapse/expand this ad layout versions">
+        <td>{{adLayout.name}}</td>
+        <td>{{adLayout.optimal_formats}}</td>
+        <td>{{adRenderers[adLayout.renderer_id]}}</td>
+        <td>{{adLayoutRendererVersions[adLayout.id]}}</td>
+        <td class="actions">
+          <a ng-click="createNewVersion(adLayout, $event)" class="mics-btn mics-btn-add">New Version</a>
+        </td>
+      </tr>
+      <tr ng-show="adLayout.versions.length" class="disable-highlight">
+        <td colspan="6" class="hiddenRow ">
+          <div class="accordian-body collapse mics-sub-table" id="demo{{$index}}">
+            <h4><strong>{{adLayout.name}}</strong> versions</h4>
+            <div class="span12">
+              <table class="table table-condensed table-striped">
+                <thead>
+                <tr>
+                  <th>Version Id</th>
+                  <th>Creation Date</th>
+                  <th>Filename</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="version in adLayout.versions">
+                  <td>{{version.version_id}}</td>
+                  <td>{{version.creation_date | date}}</td>
+                  <td>{{version.filename}}</td>
+                  <td>{{version.status}}</td>
+                  <td class="mics-sub-table-actions ">
+                    <a ng-show="version.status === 'DRAFT'" ng-click="publish(version, $event)" class="mics-btn mics-btn-finish">Publish</a>
+                    <a ng-show="version.status === 'DRAFT'" href="#/{{currentWorkspaceId}}/library/adlayouts/{{version.ad_layout_id}}/version/{{version.id}}" class="mics-btn mics-btn-action">Edit</a>
+                    <a ng-show="version.status !== 'DRAFT'" ng-click="duplicate(adLayout, version, $event)" class="mics-btn mics-btn-add">Duplicate</a>
+                    <a ng-show="version.status !== 'ARCHIVED'" ng-click="archive(adLayout, version, $event)" class="mics-btn mics-btn-delete">Archive</a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <uib-pagination total-items="adLayouts.length" ng-model="currentPage" items-per-page="itemsPerPage"></uib-pagination>
+  </div>
+</div>

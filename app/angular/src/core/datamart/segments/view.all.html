@@ -1,0 +1,101 @@
+<div ng-controller="core/datamart/segments/EditAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Audience Segments<button type="button" class="mics-btn mics-btn-action btn-xs" ng-click="refresh()">
+          <span class="glyphicon glyphicon-refresh"></span>Refresh
+        </button>
+      </h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class ="col-md-6">
+        <div class="dropdown" uib-dropdown>
+          <button class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
+            New Audience Segment
+            <!-- <span class="caret"></span> -->
+          </button>
+
+          <ul class="dropdown-menu" role="menu" aria-labelledby="New Audience Segment">
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="createAudienceSegment('USER_LIST')">
+              User List
+            </a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="createAudienceSegment('USER_QUERY')">
+              User Query
+            </a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="createAudienceSegment('USER_LOOK_ALIKE')">
+              User Look Alike
+            </a></li>
+          </ul>
+
+        </div>
+      </div>
+      <div class="form-group col-md-3 pull-right">
+        <input class="form-control"
+               type="text"
+               ng-model="searchInput"
+               placeholder="Search">
+      </div>
+    </div>
+    <table class="mics-table table-hover clickableRow js-auto-hide-actions" ng-show="segments.length">
+      <thead>
+        <tr>
+          <th ng-click="sortType = 'name'; reverseSort = !reverseSort">
+            Name
+            <span ng-show="sortType == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+
+          <th ng-click="sortType = 'provider_name'; reverseSort = !reverseSort">
+            Provider
+            <span ng-show="sortType == 'provider_name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+
+
+          <th ng-click="sortType = 'technical_name'; reverseSort = !reverseSort">
+            Technical Name
+            <span ng-show="sortType == 'technical_name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'type'; reverseSort = !reverseSort">
+            Type
+            <span ng-show="sortType == 'type'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th class="metrics" ng-repeat="metric in audienceSegmentStats.getMetrics()">
+            {{audienceSegmentStats.getMetricName(metric) }}
+          </th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-click="detailsAudienceSegment(segment, $event)" ng-repeat="segment in filteredSegments() | orderBy:sortType:reverseSort |offset: (currentPage - 1)*itemsPerPage | limitTo: itemsPerPage">
+        <td>{{segment.name}}</td>
+        <td>{{segment.provider_name}}</td>
+        <td>{{segment.technical_name}}</td>
+        <td>{{segment.type}}</td>
+        <td class="metrics " ng-repeat="metricValue in audienceSegmentStats.getRow(segment.id) track by $index">
+                <span ng-if="metricValue.type == 'currency'">
+                  {{metricValue.value | number:2 | currencyWithSymbol:campaign.currency_code}}
+                </span>
+                <span ng-if="metricValue.type == 'percent'">
+                  {{metricValue.value | number}} %
+                </span>
+                <span ng-if="metricValue.type == 'number'">
+                  {{metricValue.value | number}}
+                </span>
+                <span ng-if="!metricValue.type">
+                  -
+                </span>
+          </td>
+
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" ng-click="detailsAudienceSegment(segment, $event)">Details</a>
+          <a class="mics-btn mics-btn-action" ng-click="editAudienceSegment(segment, $event)">Edit</a>
+          <a class="mics-btn mics-btn-delete" ng-click="deleteAudienceSegment(segment, $event)">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <uib-pagination 
+      total-items="filteredSegments().length" 
+      ng-model="currentPage" 
+      items-per-page="itemsPerPage">
+    </uib-pagination>
+  </div>
+</div>

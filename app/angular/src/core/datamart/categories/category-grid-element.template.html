@@ -1,0 +1,6 @@
+<!-- List element -->
+<a href="{{ urlPrefix + '/' + element.category_id }}" ng-repeat="element in data" class="list-group-item">
+  <div class="list-group-cell-element">{{ element.category_id }}</div>
+  <div class="list-group-cell-element">{{ element.market }}</div>
+  <div class="list-group-cell-element">{{ languageMapping.map(element.language) }}</div>
+</a>

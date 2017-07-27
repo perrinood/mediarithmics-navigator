@@ -1,0 +1,4 @@
+{"name":"core/layout", "dependencies": ["core/common", "core/layout/header", "core/layout/sidebar"]}
+
+
+

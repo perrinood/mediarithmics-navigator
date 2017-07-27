@@ -1,0 +1,52 @@
+<div ng-controller="core/exports/ViewOneQueryController" class="mcs-default-container">
+<div class="mcs-export-content">
+  <div class="mcs-default-heading">
+    <h1>
+      '{{export.name}}' as {{export.output_format}}
+      <a class="mics-btn mics-btn-action pull-right" href="#/{{currentWorkspaceId}}/library/exports/{{exportId}}/edit">Edit</a>
+    </h1>
+  </div>
+  <uib-tabset class="mics-page-main-tabs">
+  <uib-tab heading="Executions">
+
+  <br>
+  <button ng-click="executeExport()" class="mics-btn mics-btn-add">Run the export</button>
+
+  <button ng-click="reload()" class="mics-btn mics-btn-action btn-xs pull-right"><span class="glyphicon glyphicon-refresh"></span>Refresh</button>
+  <br>
+  <br>
+
+  <table class="mics-table" ng-table="tableParams">
+    <thead>
+      <tr>
+        <th>status</th>
+        <th>creation date</th>
+        <th>duration</th>
+        <th class="actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="execution in $data">
+        <td class="job-status-{{execution.status}}">{{execution.status}}</td>
+        <td>{{execution.creation_date|date:'medium'}}</td>
+        <td><span ng-show="execution.duration">{{execution.duration|humanDuration:'milliseconds'}}</span></td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-delete" ng-click="downloadResult(execution)" ng-show="execution.status == 'SUCCEEDED'">Download result</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </uib-tab>
+
+  <uib-tab heading="Query">
+    <div class="row">
+      <br>
+      <mcs-query-read-only-view query-container="queryContainer"></mcs-query-read-only-view>
+    </div>
+  </uib-tab>
+
+  </uib-tabset>
+
+</div>
+</div>
+

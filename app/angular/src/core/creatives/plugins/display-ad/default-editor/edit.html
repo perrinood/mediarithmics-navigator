@@ -1,0 +1,88 @@
+<div class="mcs-default-container" ng-controller='core/creatives/plugins/display-ad/default-editor/EditController'>
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-creative-type">
+      <h4>{{getRendererTitle(displayAd)}}</h4>
+    </div>
+  </div>
+
+  <form name="form" role="form" class="mcs-default-edit-content mcs-full-page-form">
+    <div class="mcs-default-heading">
+      <h1>Display Ad</h1>
+    </div>
+
+    <div class="row">
+      <!-- Name -->
+      <div class="col-md-8">
+        <div mcs-form-group="full" label-for="name" label-text="Ad name">
+          <input ng-disabled="disabledEdition" ng-model="displayAd.name" type="text" class="form-control input-lg" id="name">
+        </div>
+      </div>
+
+      <!-- Format -->
+      <div class="col-md-4">
+        <div mcs-form-group="full" label-for="format" label-text="Format">
+          <select ng-show="!isCustomFormat" ng-disabled="disabledEdition" ng-model="displayAd.format" required ng-options="iabAdSize as iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+          <input ng-show="isCustomFormat" ng-model="displayAd.format" />
+          <a href="" ng-show="!isCustomFormat" ng-click="isCustomFormat = true">custom format</a>
+          <a href="" ng-show="isCustomFormat" ng-click="isCustomFormat = false">standard format</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div mcs-form-group="full" label-for="destination_dom" label-text="Destination domain">
+          <input ng-disabled="disabledEdition" ng-model="displayAd.destination_domain" required type="text" class="form-control input" id="destination_dom" pattern="^([a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9]\.)+([a-zA-Z0-9]{2,})$">
+            <span id="helpBlock" class="help-block">This is the final redirect location domain (without http or params) <br/>
+                eg: destination.mybrand.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Preview</h3>
+        <iframe class="creative-preview" frameborder="0" scrolling="no" width="{{previewWidth}}" height="{{previewHeight}}" ng-src="{{previewUrl}}"></iframe>
+      </div>
+    </div>
+
+    <div ng-include="'angular/src/core/creatives/plugins/display-ad/common/AuditStatus.inc.html'"></div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Properties</h3>
+        <div ng-repeat="property in properties">
+          <mcs-number-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'INT'"></mcs-number-property>
+          <mcs-url-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'URL'"></mcs-url-property>
+          <mcs-pixel-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'PIXEL_TAG'"></mcs-pixel-property>
+          <mcs-data-file-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'DATA_FILE'"></mcs-data-file-property>
+          <mcs-asset-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'ASSET'"></mcs-asset-property>
+          <mcs-text-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" ng-if="property.value.property_type == 'STRING'"></mcs-text-property>
+          <mcs-ad-layout-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" plugin-id="displayAd.renderer_plugin_id" plugin-version-id="displayAd.renderer_version_id" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'AD_LAYOUT'"></mcs-ad-layout-property>
+          <mcs-style-sheet-property ng-disabled="disabledEdition || property.value.origin == 'PLUGIN_STATIC'" property="property.value" organisation-id="organisationId" ng-if="property.value.property_type == 'STYLE_SHEET'"></mcs-style-sheet-property>
+
+          <div ng-repeat="warning in findWarnings(property)">
+            <div class="mcs-form-row">
+              <div class="mcs-form-group mcs-form-group-default">
+                <p class="alert alert-warning">
+                {{warning}}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- save or cancel -->
+    <div class="mcs-actions-group">
+      <button ng-disabled="!form.$valid" class="mics-btn mics-btn-finish" ng-click="save(disabledEdition)">Done</button>
+      <button ng-disabled="!form.$valid" ng-if="!disabledEdition" class="mics-btn mics-btn-finish" ng-click="saveAndRefresh()">Save &amp; Refresh</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

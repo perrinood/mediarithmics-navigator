@@ -1,0 +1,12 @@
+<div mcs-form-group="" label-for="property-uri-{{property.id}}" label-text="{{property.technical_name}} URI">
+      <input class="form-control " ng-disabled="ngDisabled" ng-model="property.value.uri" type="text" id="property-uri-{{property.id}}" />
+      <br/>
+      <div mics-pl-upload="micsPlUpload" ng-if="micsPlUpload">
+           <button class="browse-button mics-btn mics-btn-add" ng-disabled="isNotValid(property.value.uri)" ng-show="property.value.uri">Upload and overwrite</button>
+           <a class="mics-btn mics-btn-delete plupload-download" ng-click="download(property.value.uri)" ng-disabled="isNotValid(property.value.uri)" >Download File</a>
+      </div>
+
+</div>
+<div mcs-form-group="" label-for="property-last-modified-{{property.id}}" label-text="{{property.technical_name}} last modified date">
+      <input class="form-control " ng-disabled="ngDisabled" ng-model="property.value.last_modified" type="text" id="property-last-modified-{{property.id}}" />
+</div>

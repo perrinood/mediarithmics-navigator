@@ -1,0 +1,145 @@
+<div class="mcs-default-container edit-campaign-external" ng-controller="core/campaigns/external/EditCampaignController">
+
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-campaign-type ">
+      <h4>External Campaign</h4>
+    </div>
+  </div>
+
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form">
+
+    <!------------------------ Basic Info ------------------------>
+    <div class="mcs-default-heading">
+      <h1>Campaign</h1>
+    </div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="name" label-text="Campaign name">
+      <input ng-model="campaign.name" type="text" class="form-control input-lg" id="name">
+    </div>
+
+    <!-- Technical Name -->
+    <div mcs-form-group="" label-for="technical-name" label-text="Technical name">
+      <input ng-model="campaign.technical_name" type="text" class="form-control input-lg" id="technical-name">
+    </div>
+
+    <!------------------------ Select ad groups ------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-add" ng-click="newAdGroup()">Create new Ad Group</a>
+        </div>
+        <span>Ad groups</span>
+      </div>
+      <table class="fragment-list-creatives list-ads" ng-show="adGroups.length">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Visibility</th>
+          <th>Creatives</th>
+          <th>Audience Segments</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="adGroup in adGroups|orderBy:'id'">
+          <td>{{adGroup.name}}</td>
+          <td>{{adGroup.visibility | constant:'adgroup_visibility'}}</td>
+          <td>{{getAds(adGroup.id).length}}</td>
+          <td>{{getAudienceSegments(adGroup.id).length}}</td>
+          <td class="actions">
+            <a ng-click="editAdGroup(adGroup)" class="mics-btn mics-btn-action">Edit</a>
+            <a ng-click="removeAdGroup(adGroup)" class="mics-btn mics-btn-delete">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!------------------------ Select Goals   ------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <span>Goals</span>
+      </div>
+      <div class="mics-default-block">
+        <div class="row goals-selection" ng-repeat="goalType in goalTypes">
+          <div class="col-xs-2">
+            <hr ng-show="isConversionType(goalType.key)"/>
+            <label>
+              <input type="checkbox" ng-change="selectConversion(goalType)" ng-model="checkedGoalTypes[goalType.key]">
+              <strong> {{goalType.name}}</strong>
+            </label>
+          </div>
+          <div class="col-xs-2">{{goalType.description}}</div>
+        </div>
+        <!--List Conversion Goals-->
+        <div ng-show="conversionGoals.length">
+          <h4>Selected Conversion Goals</h4>
+          <table class="fragment-list-keyword-list">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th class="actions">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="source in goalSelections | filter: { goal_selection_type: getConversionType() }">
+              <td>{{source.goal_name}}</td>
+              <td>{{source.goal_selection_type || json}}</td>
+              <td><input type="radio" ng-checked="source.default" ng-disabled="true"/></td>
+              <td class="actions">
+                <button class="mics-btn mics-btn-delete" ng-click="removeGoalSelection(source)">Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!------------------------ Advanced options ------------------------>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+              Advanced Options
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div mcs-form-group="" label-for="user_activation_segments" label-text="Create following user activation segments">
+              <label><input type="checkbox" ng-change="addUserActivationSegment('clickers')" ng-model="checkedUserActivationSegments['clickers']" ng-disabled="disabledUserActivationSegments['clickers']"/> Clickers
+                <span class="badge" uib-popover="Create a segment with all users that clicked in this campaign" popover-trigger="mouseenter" popover-placement="right">?</span>
+              </label><br/>
+              <label><input type="checkbox" ng-change="addUserActivationSegment('exposed')" ng-model="checkedUserActivationSegments['exposed']" ng-disabled="disabledUserActivationSegments['exposed']"/> Exposed
+                <span class="badge" uib-popover="Create a segment with all users exposed to this campaign" popover-trigger="mouseenter" popover-placement="right">?</span>
+              </label>
+            </div>
+
+            <div mcs-form-group="" label-for="campaign_time_zone" label-text="Time Zone">
+              <select ng-model="campaign.time_zone" type="text" id="campaign_time_zone">
+                <option value="Europe/Paris">Europe/Paris</option>
+                <option value="America/New_York">America/New_York</option>
+                <option value="America/Los_Angeles">America/Los_Angeles</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Save or cancel -->
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-finish" ng-click="save()">Save</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

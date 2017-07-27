@@ -1,0 +1,6 @@
+{
+  "name": "core/common/files",
+  "dependencies": [
+    "core/common/files/upload"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "core/creatives/plugins/display-ad/common",
+  "dependencies": [
+    "restangular"
+  ]
+}

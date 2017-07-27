@@ -1,0 +1,39 @@
+<div ng-controller="core/bidOptimizer/ViewAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Bid Optimizers</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class="col-md-6">
+        <div uib-dropdown>
+          <a class="mics-btn mics-btn-add" ng-click="createBidOptimizer()">
+            New Bid Optimizer
+          </a>
+        </div>
+      </div>
+    </div>
+    <table class="mics-table js-auto-hide-actions" ng-show="bidOptimizers.length">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Bid Optimizer Engine</th>
+        <th>Data Miner</th>
+        <th class="actions">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="bidOptimizer in bidOptimizers"
+          fetch-plugin-from-version="bidOptimizer.engine_version_id as engine"
+          fetch-plugin-properties="engine.id as engineProperties">
+        <td>{{bidOptimizer.name}}</td>
+        <td>{{engineProperties['name'].value}}</td>
+        <td>{{engineProperties['provider'].value}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/bidOptimizers/{{bidOptimizer.id}}/models/{{bidOptimizersUsedModel[bidOptimizer.id]}}/report" ng-show="bidOptimizersUsedModel[bidOptimizer.id]">Details</a>
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/bidOptimizers/{{bidOptimizer.id}}">Edit</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

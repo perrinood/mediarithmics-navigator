@@ -1,0 +1,20 @@
+<div class="choose-existing-display-network">
+  <div class="modal-header">
+      <h3 ng-show="type == 'DISPLAY'">Create a Display Campaign</h3>
+      <h3 ng-show="type == 'EMAIL'">Create an Email Campaign</h3>
+  </div>
+    <form>
+  <div class="modal-body">
+
+      <div mcs-form-group="" label-for="name" label-text="Campaign name">
+          <input  ng-model="campaign.name" type="text" class="form-control input-lg" id="name">
+      </div>
+  </div>
+
+  <div class="modal-footer">
+      <a class="mics-btn mics-btn-finish "  ng-click="create()">Create</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+    </form>
+</div>
+

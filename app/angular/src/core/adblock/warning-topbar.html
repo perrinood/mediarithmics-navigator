@@ -1,0 +1,12 @@
+<div ng-controller="core/adblock/ShowWarningController">
+  <div ng-show="messages.length" class="row top-warning vcenter">
+    <div class="col-xs-11">
+      <div ng-repeat="message in messages">
+        {{message}}
+      </div>
+    </div>
+    <div class="col-xs-1" align="right">
+      <button class="mics-btn mics-btn-cancel" ng-click="closeWarning()"><strong>x</strong></button>
+    </div>
+  </div>
+</div>

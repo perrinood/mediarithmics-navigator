@@ -1,0 +1,13 @@
+<div class="updatable-item-status updatable-item-status-{{adGroup.status}}" uib-dropdown>
+  <button class="updatable-item-status-state mics-btn btn-xs" uib-dropdown-toggle>
+    <span></span>
+    {{adGroup.status}}
+    &nbsp;
+    <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li><a ng-click="activateAdGroup(adGroup)">Activate Ad Group</a></li>
+    <li><a ng-click="pauseAdGroup(adGroup)">Pause Ad Group</a></li>
+  </ul>
+</div>
+

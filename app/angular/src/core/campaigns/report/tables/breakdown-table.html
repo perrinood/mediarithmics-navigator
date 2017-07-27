@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th ng-repeat="header in startHeaders">{{header}}</th>
+    <th ng-repeat="header in reportView.columns_headers | filter:'!id' | filter:'!name'">{{header | tableHeader}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="row in reportView.rows">
+    <td ng-repeat="col in row track by $index">
+      <span ng-if="!(col | number)">{{col}}</span>
+      {{col | number}}
+      {{$index}}
+    </td>
+  </tr>
+  </tbody>
+</table>

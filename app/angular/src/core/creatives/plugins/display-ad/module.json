@@ -1,0 +1,10 @@
+{
+  "name": "core/creatives/plugins/display-ad",
+  "dependencies": [
+    "restangular",
+    "core/creatives/plugins/display-ad/common",
+    "core/creatives/plugins/display-ad/facebook",
+    "core/creatives/plugins/display-ad/default-editor",
+    "core/creatives/plugins/display-ad/basic-editor"
+  ]
+}

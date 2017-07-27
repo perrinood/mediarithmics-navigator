@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-md-12">
+    <h4>Audit Status</h4>
+    <input type="text" size="25" ng-model="videoAd.audit_status" disabled class="pull-left">
+
+    <div ng-repeat="action in videoAd.available_user_audit_actions">
+      <a class="mics-btn mics-btn-action" ng-click="doAction(action)" ng-if="action == 'START_AUDIT' && videoAd.audit_status != 'AUDIT_FAILED'">Submit to Audit</a>
+      <a class="mics-btn mics-btn-action" ng-click="doAction(action)" ng-if="action == 'START_AUDIT' && videoAd.audit_status == 'AUDIT_FAILED'">Re-submit to Audit</a>
+      <a class="mics-btn mics-btn-cancel" ng-click="doAction(action)" ng-if="action == 'RESET_AUDIT'">Reset Audit</a>
+    </div>
+  </div>
+</div>

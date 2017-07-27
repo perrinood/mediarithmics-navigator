@@ -1,0 +1,83 @@
+<div class="mics-creative-list mcs-default-container" ng-controller="core/creatives/DisplayAdListController">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Display Ads</h1>
+    </div>
+
+    <div class="mics-table-toolbar">
+      <div class="col-md-4">
+        <div uib-dropdown>
+          <button class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">New Creative</button>
+          <ul class="dropdown-menu" role="menu">
+            <li role="presentation" ng-repeat="template in creativeTemplates">
+              <a role="menuitem" tabindex="-1" ng-click="create(template)">
+                {{template.name}}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <!-- <label><input type="checkbox" ng-model="displayArchived"> Display archived</label> -->
+      </div>
+      <div class="form-group col-md-3">
+        <select
+            class="form-control"
+            ng-model="creativeformat"
+            ng-options="creative.format as creative.format for creative in creatives | unique:'format' | orderBy:'format'">
+          <option value="">All Sizes</option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <input
+            class="form-control"
+            type="text"
+            ng-model="creativename"
+            placeholder="Search">
+      </div>
+    </div>
+
+    <table class="mics-table js-auto-hide-actions table-hover">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Subtype</th>
+        <th>Audit Status</th>
+        <th>Creation Date</th>
+        <th ng-if="administrator">Organisation</th>
+        <th class="actions">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="creative in filteredCreatives()|offset: (currentPageCreative - 1)*itemsPerPage | limitTo: itemsPerPage">
+        <td>
+          <div class="mics-small-thumbnail">
+            <a href="#{{getEditUrlForCreative(creative).url}}">
+              <img creative-thumbnail="creative.id" fetch-display-ad-renderer-properties="creative.id as properties" title="{{properties.destination_url.value.url}}"/>
+              <span class="caption">{{creative.format}}</span>
+              <!--<span class="caption">{{creative.format.height + "x" + creative.format.width}}</span>-->
+            </a>
+          </div>
+        </td>
+        <td><a href="#{{getEditUrlForCreative(creative).url}}">{{creative.name}}</a></td>
+        <td>{{creative.type}}</td>
+        <td>{{creative.subtype}}</td>
+        <td>{{creative.audit_status}}</td>
+        <td>{{creative.creation_date | date}}</td>
+        <td ng-if="administrator">{{organisationName(creative.organisation_id)}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#{{getEditUrlForCreative(creative).url}}">Edit</a>
+          <a class="mics-btn mics-btn-create" ng-show="creative.archived" ng-click="unArchiveCreative(creative)">Un-archive</a>
+          <a class="mics-btn mics-btn-delete" ng-show="creative.archived" ng-click="deleteCreative(creative)">Delete</a>
+          <a class="mics-btn mics-btn-delete" ng-show="!creative.archived"
+             ng-click="archiveCreative(creative)">Archive</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <uib-pagination total-items="filteredCreatives().length" ng-model="currentPageCreative"
+                items-per-page="itemsPerPage"></uib-pagination>
+  </div>
+</div>

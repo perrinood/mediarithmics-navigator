@@ -1,0 +1,6 @@
+{"name": "core/visitanalysers",
+  "dependencies": [
+    "restangular",
+    "core/plugin"
+  ]
+}

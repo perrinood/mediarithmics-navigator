@@ -1,0 +1,9 @@
+{
+  "name": "core/common/ads",
+  "dependencies": [
+    "restangular"
+  ]
+}
+
+
+

@@ -1,0 +1,5 @@
+{"name": "core/placementlists", "dependencies": [
+
+  "restangular",
+  "ngTable"
+]}

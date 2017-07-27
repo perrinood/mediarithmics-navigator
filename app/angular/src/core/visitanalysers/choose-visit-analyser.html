@@ -1,0 +1,19 @@
+<div ng-controller="core/visitAnalysers/ChooseVisitAnalyserController">
+    <div uib-dropdown>
+        <button class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">
+            Select Activity Analyser
+        </button>
+        <ul uib-dropdown-menu role="menu" aria-labelledby="change visit analyser">
+            <li role="presentation">
+                <a role="menuitem" ng-click="visitAnalyserChooseFromLibrary()">
+                    Choose from library
+                </a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" ng-click="visitAnalyserSetToDefault()">
+                    Set to default
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

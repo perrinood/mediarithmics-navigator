@@ -1,0 +1,55 @@
+<div ng-controller="core/stylesheets/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="!editMode">New Style Sheet Version</h1>
+      <h1 ng-if="editMode">Edit Style Sheet Version</h1>
+    </div>
+
+    <div class="row">
+      <div class="col-md-1">
+        <div mcs-form-group="full" label-for="styleSheetId" label-text="Style Sheet Name">
+          <input ng-disabled="true" class="input-lg" ng-model="styleSheet.name" type="text" id="styleSheetId">
+        </div>
+      </div>
+
+      <div class="col-md-1">
+        <div mcs-form-group="full" label-for="styleSheetVersionStatus" label-text="Version Status">
+          <input ng-disabled="true" class="input-lg" ng-model="styleSheetVersion.status" type="text" id="styleSheetVersionStatus">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div mcs-form-group="full" label-for="styleSheetDescription" label-text="Description">
+          <input class="input-lg" ng-model="styleSheetVersion.description" type="text" id="styleSheetDescription" pattern="[a-zA-Z0-9-_ ]{2,}">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Version Properties</h3>
+        <div ng-repeat="property in properties">
+          <mcs-number-property ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'INT'"></mcs-number-property>
+          <mcs-url-property ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'URL'"></mcs-url-property>
+          <mcs-pixel-property ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'PIXEL_TAG'"></mcs-pixel-property>
+          <mcs-data-file-property ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'DATA_FILE'"></mcs-data-file-property>
+          <mcs-asset-property ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'ASSET'"></mcs-asset-property>
+          <mcs-text-property  ng-disabled="disabledEdition || property.origin == 'PLUGIN_STATIC'" property="property" ng-if="property.property_type == 'STRING'"></mcs-text-property>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button ng-click="done()" class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>

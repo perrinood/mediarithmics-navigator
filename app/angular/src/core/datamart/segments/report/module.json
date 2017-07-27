@@ -1,0 +1,9 @@
+{
+  "name": "core/datamart/segments/report",
+  "dependencies": [
+    "restangular",
+    "ngResource",
+    "core/common",
+    "ui.bootstrap"
+  ]
+}

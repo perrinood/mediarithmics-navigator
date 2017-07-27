@@ -1,0 +1,1 @@
+define(["angular"],function(){"use strict";return angular.module("core/layout", ["core/common","core/layout/header","core/layout/sidebar"]);});

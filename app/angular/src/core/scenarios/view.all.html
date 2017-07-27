@@ -1,0 +1,43 @@
+<div ng-controller="core/scenarios/EditAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Scenarios</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class ="col-md-6">
+        <div class="dropdown" uib-dropdown>
+          <button class="mics-btn mics-btn-add" type="button" ng-click="createScenario()">
+            New Scenario
+            <!-- <span class="caret"></span> -->
+          </button>
+
+
+
+        </div>
+      </div>
+    </div>
+    <table class="mics-table table-hover js-auto-hide-actions" ng-show="scenarios.length">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Name</th>
+          <th>Technical Id</th>
+          <th>Type</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="scenario in scenarios">
+        <td><div mics-scenario-status="scenario"></div></td>
+        <td class="clickable-box"><a ng-href="#{{getEditScenarioUrl(scenario)}}">{{scenario.name}}</a></td>
+        <td class="clickable-box" ><a ng-href="#{{getEditScenarioUrl(scenario)}}">{{scenario.technical_name}}</a></td>
+        <td class="clickable-box"><a ng-href="#{{getEditScenarioUrl(scenario)}}">{{scenario.type}}</a></td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" ng-href="#{{getEditScenarioUrl(scenario)}}">Edit</a>
+          <a class="mics-btn mics-btn-delete" ng-click="deleteScenario(scenario, $event)">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

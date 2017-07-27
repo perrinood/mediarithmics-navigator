@@ -1,0 +1,37 @@
+<div class="choose-existing-display-network">
+  <div class="modal-header">
+    <h3>Select Display Networks</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="mics-table">
+      <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="availableInventorySource in availableInventorySources">
+        <td>
+          <input type="checkbox" checklist-model="selectedInventorySources" id="availableInventorySource.{{availableInventorySource.id}}" checklist-value="availableInventorySource">
+        </td>
+        <td>
+          <label for="availableInventorySource.{{availableInventorySource.id}}">
+            {{availableInventorySource.display_network_name}}
+            <span ng-if="availableInventorySource.name && availableInventorySource.deal_id">({{availableInventorySource.name}}, deal Id = {{availableInventorySource.deal_id}})</span>
+            <span ng-if="availableInventorySource.name && !availableInventorySource.deal_id">({{availableInventorySource.name}})</span>
+            <span ng-if="availableInventorySource.deal_id && !availableInventorySource.name">(deal Id = {{availableInventorySource.deal_id}})</span>
+          </label>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selectedInventorySources.length" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>
+

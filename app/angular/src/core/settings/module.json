@@ -1,0 +1,12 @@
+{
+  "name": "core/settings",
+  "dependencies": [
+    "core/common",
+    "restangular",
+    "core/settings/sites",
+    "core/settings/mobileapplications",
+    "core/settings/useraccount",
+    "core/settings/datamarts",
+    "core/settings/serviceusage"
+  ]
+}

@@ -1,0 +1,7 @@
+<div mcs-form-group="" label-for="property-{{property.id}}" label-text="{{property.technical_name}}" >
+    <select ng-model="property.value"
+            class="form-control"
+            id="property-{{property.id}}"
+            ng-options="option.value for option in options track by option.value"
+            ></select>
+</div>

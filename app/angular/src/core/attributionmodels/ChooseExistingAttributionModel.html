@@ -1,0 +1,55 @@
+<div class="choose-existing-attribution-model">
+  <div class="modal-header">
+    <h3>Select Attribution Model</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="fragment-list-attribution-model">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Name</th>
+          <th>Attribution Model Processor</th>
+          <th>Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          ng-repeat="availableAttributionModel in availableAttributionModels"
+          fetch-plugin-properties="availableAttributionModel.attribution_processor_id as processorProperties"
+        >
+          <td>
+            <input
+              type="radio"
+              name="available_attribution_model"
+              value="{{availableAttributionModel.id}}"
+              ng-model="selectedAttributionModel.id"
+              id="available_attribution_model_{{availableAttributionModel.id}}"
+            />
+          </td>
+          <td>
+            <label for="available_attribution_model_{{availableAttributionModel.id}}">
+              {{availableAttributionModel.name}}
+            </label>
+          </td>
+          <td>
+            <label for="available_attribution_model_{{availableAttributionModel.id}}">
+              {{processorProperties['name'].value}}
+            </label>
+          </td>
+          <td>
+            <label for="available_attribution_model_{{availableAttributionModel.id}}">
+              {{processorProperties['provider'].value}}
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selectedAttributionModel.id" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>
+

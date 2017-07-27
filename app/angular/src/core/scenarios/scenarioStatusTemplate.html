@@ -1,0 +1,13 @@
+<div class="updatable-item-status updatable-item-status-{{scenario.status}}" uib-dropdown >
+  <button class="updatable-item-status-state mics-btn btn-xs dropdown-toggle" uib-dropdown-toggle>
+    <span></span>
+    {{scenario.status}}
+    &nbsp;
+    <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li><a ng-click="activateScenario(scenario)">Activate Scenario</a></li>
+    <li><a ng-click="pauseScenario(scenario)">Pause Scenario</a></li>
+  </ul>
+</div>
+

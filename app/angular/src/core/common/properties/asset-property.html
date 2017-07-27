@@ -1,0 +1,9 @@
+<div mcs-form-group="" label-for="property-{{property.id}}" label-text="{{property.technical_name}}" >
+      <p class="form-control-static " type="text" id="property-{{property.id}}" >{{property.value.original_filename}}</p>
+      
+      <br>
+      <a ng-disabled="ngDisabled" class="mics-btn mics-btn-action" ng-click="uploadAsset()">Upload</a>
+      <a ng-disabled="ngDisabled" class="mics-btn mics-btn-action" ng-click="viewFile()">View file</a>
+      <br>
+<img ng-src="{{image}}" ng-show="toggleImage">
+</div>

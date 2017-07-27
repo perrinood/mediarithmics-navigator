@@ -1,0 +1,32 @@
+<div class="mcs-default-container" ng-controller="core/settings/datamarts/EditOneController">
+
+  <div class="mcs-default-content settings-content">
+    <div class="mcs-default-heading">
+      <h1 ng-show="!editMode">New Datamart</h1>
+      <h1 ng-show="editMode">Edit Datamart</h1>
+    </div>
+
+    <form class="mcs-full-page-form">
+
+      <div class="row">
+        <div class="col-xs-3">
+          <div mcs-form-group="full">
+            <label for="token">Token
+              <span class="badge" uib-popover="A unique random identifier (e.g. ABCD123)" popover-trigger="mouseenter" popover-placement="right">?</span>
+            </label>
+            <input class="form-control input-md" ng-model="datamart.token" type="text" id="token">
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+        <mcs-event-rules rules="rules"></mcs-event-rules>
+
+      <div class="mcs-actions-group">
+        <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+        <button ng-disabled="!datamart.token.length" class="mics-btn mics-btn-finish" ng-click="done()">Done</button>
+      </div>
+    </form>
+  </div>
+</div>

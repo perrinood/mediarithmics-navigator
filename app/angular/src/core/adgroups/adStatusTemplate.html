@@ -1,0 +1,13 @@
+<div class="updatable-item-status updatable-item-status-{{ad.status}}" uib-dropdown>
+  <button class="updatable-item-status-state mics-btn btn-xs" uib-dropdown-toggle>
+    <span></span>
+    {{ad.status}}
+    &nbsp;
+    <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li><a ng-click="activateAd(ad)">Activate Ad</a></li>
+    <li><a ng-click="pauseAd(ad)">Pause Ad</a></li>
+  </ul>
+</div>
+

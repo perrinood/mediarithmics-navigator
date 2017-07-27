@@ -1,0 +1,33 @@
+<div class="choose-existing-scenarios">
+  <div class="modal-header">
+    <h3>Select Scenarios</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="fragment-list-scenarios">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Scenario Name</th>
+          <th>Target or Exclude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="availableScenario in availableScenarios">
+          <td><input type="checkbox" checklist-model="selectedScenarios" checklist-value="availableScenario"></td>
+          <td>
+            {{availableScenario.name}}
+          </td>
+          <td>
+            <div mics-exclude-toggle="availableScenario.exclude"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selectedScenarios.length" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>

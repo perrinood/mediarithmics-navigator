@@ -1,0 +1,33 @@
+<form ng-submit="done()">
+  <div class="modal-header">
+    <h3>Add Ad</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <!-- Name -->
+      <div class="form-group col-md-9">
+        <div mcs-form-group="" label-for="name" label-text="Ad name">
+          <input ng-model="ad.name" type="text" class="form-control input-md" id="name">
+        </div>
+      </div>
+
+      <!-- Format -->
+      <div class="form-group col-md-3">
+        <div mcs-form-group="full" label-for="format" label-text="Format">
+          <select class="form-control" ng-model="ad.format" ng-options="iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Name -->
+    <div mcs-form-group="" label-for="technical-name" label-text="Technical name">
+      <input ng-model="ad.technical_name" type="text" class="form-control input-md" id="technical-name">
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="mics-btn mics-btn-finish" ng-disabled="!canSave()">Done</button>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,44 @@
+<div ng-controller="core/exports/ViewAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Exports</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class="form-group col-md-3 pull-right">
+        <input class="form-control" type="text" ng-model="searchInput" placeholder="Search">
+      </div>
+    </div>
+    <table class="mics-table js-auto-hide-actions" ng-show="exports.length">
+      <thead>
+        <tr>
+          <th ng-click="sortType = 'name'; reverseSort = !reverseSort">Name
+            <span ng-show="sortType == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th ng-click="sortType = 'type'; reverseSort = !reverseSort">Type
+            <span ng-show="sortType == 'type'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+          </th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="export in filteredExports() | orderBy:sortType:reverseSort | offset: (currentPage - 1)*itemsPerPage | limitTo: itemsPerPage">
+        <td class="clickable-box">
+          <a href="#/{{currentWorkspaceId}}/library/exports/{{export.id}}">
+            {{export.name}}
+          </a>
+        </td>
+        <td>{{export.type}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/exports/{{export.id}}">Details</a>
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/exports/{{export.id}}/edit">Edit</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <uib-pagination 
+      total-items="filteredExports().length" 
+      ng-model="currentPage" 
+      items-per-page="itemsPerPage">
+    </uib-pagination>
+  </div>
+</div>

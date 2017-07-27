@@ -1,0 +1,24 @@
+<!--display campaign creation -->
+<div class="mcs-default-container" ng-controller="core/campaigns/CreateController">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form">
+    <div class="campaign-list-heading">
+      <h1>New Campaign </h1>
+    </div>
+    <div class="row">
+      <div class="col-md-3" ng-repeat="editor in campaignEditors">
+        <img style="height:150px" ng-src="{{editor.image}}">
+        <h4>{{editor.name}}</h4>
+        <a class="mics-btn mics-btn-add" ng-click="create(editor)">New</a>
+      </div>
+    </div>
+    <div class="mcs-actions-group" style="margin-top:70px">
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+      <br>
+    </div>
+  </form>
+</div>

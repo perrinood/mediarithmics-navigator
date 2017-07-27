@@ -1,0 +1,26 @@
+<div ng-controller="core/stylesheets/CreateOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <h1>Create Style Sheet</h1>
+
+    <div class="row">
+      <!-- Name -->
+      <div class="col-md-4">
+        <div mcs-form-group="full" label-for="stylesheetName" label-text="Name">
+          <input required class="input-lg" ng-model="stylesheet.name" type="text" id="stylesheetName" pattern="[a-zA-Z0-9-_ ]{2,}">
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+      <button ng-disabled="!stylesheet.name.length" class="mics-btn mics-btn-finish" ng-click="done()">Done</button>
+      <button ng-disabled="!stylesheet.name.length" class="mics-btn mics-btn-add" ng-click="saveAndCreateNewVersion()">Create New Version</button>
+    </div>
+  </form>
+</div>

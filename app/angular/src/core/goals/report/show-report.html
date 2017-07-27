@@ -1,0 +1,243 @@
+<div class="mcs-default-container goal-report" ng-controller="core/goals/report/GoalReportController">
+  <div class="report mcs-default-content">
+
+    <div class="report-heading">
+      <h2>
+          <div class="pull-right">
+              <a ng-href="#/{{goal.organisation_id}}/goals/{{goal.id}}" class="mics-btn mics-btn-action" ng-click="editCampaign(campaign)">Edit Goal</a>
+          </div>
+          <span>{{goal.name}}</span>
+          <button type="button" class="mics-btn mics-btn-action btn-xs" ng-click="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span>
+            Refresh
+          </button>
+      </h2>
+    </div>
+
+    <div class="chart-controller">
+      <div class="report-type-controller">
+        <ul class="nav nav-pills">
+          <li class="active"><a>Overview</a></li>
+          <!-- <li class=""><a href="#">Intraday</a></li> -->
+          <!-- <li><a href="#">Trading Reports</a></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="report-toolbar">
+        <div class="date-export-toolbar">
+            <div class="report-date-controller">
+                <form class="form-inline pull-right" role="form">
+                    <input type="daterange" ng-model="reportDateRange" class="form-control range" format="L"
+                           ranges="reportDefaultDateRanges" opens="'left'">
+                </form>
+                <!-- div class="dropdown pull-right" uib-dropdown>
+                    <button class="btn btn-default" uib-dropdown-toggle type="button">Export <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="Choose Export Format">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="export('xlsx')">Excel (.xlsx)</a></li>
+                    </ul>
+                </div -->
+
+            </div>
+        </div>
+    </div>
+
+    <div ng-class="chartArea">
+      <div class="kpi-area">
+        <dl>
+          <dt>Conversions</dt>
+          <dd>{{kpis.conversions | number }}</dd>
+          <dt>Conversion value</dt>
+          <dd>{{kpis.value | number:2 | currencyWithSymbol:goal.goal_value_currency }}</dd>
+        </dl>
+        <!--<hr>-->
+        <!--<button ng-click="showDetails()" class="mics-btn mics-btn-continue">Details</button>-->
+      </div>
+      <div ng-show="details" class="kpi-details">
+      </div>
+      <div class="medium-chart">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="chart"
+                 mics-double-line-chart
+                 interpolate="linear"
+                 clipEdge="true"
+                 data="chartData"
+                 height="110%"
+                 width="100%"
+                 singleday="dateRangeIsToday()"
+                 hourlymode="isHourlyMode()"
+                 timefilter="chartTimeFilter">
+            </div>
+          </div>
+        </div>
+        <div class="row chart-legend">
+          <div class="col-xs-6">
+            <span class="y2-legend">{{getChartName(charts[0])}}</span>
+            <span class="y1-legend">{{getChartName(charts[1])}}</span>
+            <button class="mics-btn mics-btn-continue selection-button" ng-click="chooseCharts()">
+              <span class="caret"></span></button>
+          </div>
+          <div class="col-xs-offset-4 col-xs-2">
+            <select id="role" ng-model="timeFilter" class="form-control precision-filter" ng-click="refresh()" ng-options="timeFilter for timeFilter in timeFilters" ng-disabled="dateRangeIsToday()"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3>Conversions Attributions</h3> 
+
+    <!-- Tab set: Ads, Creatives and Sources -->
+    <div class="attributions" ng-repeat="attributionModel in attributionModels">
+        <h4>Attribution model: {{attributionModel.attribution_model_name}}</h4>
+    <hr/>
+        <div class="attribution-kpis">
+                <div class="attribution-kpi">
+                    <div class="kpi-title">Weighted conversions:</div>
+                    <div class="kpi-value">{{attributionModel.stats.global.weighted_conversions | number }}</div>
+                </div>
+                <div class="attribution-kpi">
+                    <div class="kpi-title">Post view:</div>
+                    <div class="kpi-value">{{attributionModel.stats.global.post_view | number }} in {{attributionModel.stats.global.post_view_duration | humanDuration }}</div>
+                </div>
+                <div class="attribution-kpi">
+                    <div class="kpi-title">Post click:</div>
+                    <div class="kpi-value">{{attributionModel.stats.global.post_click | number }} in {{attributionModel.stats.global.post_click_duration | humanDuration }}</div>
+                </div>
+                <div class="attribution-kpi">
+                    <div class="kpi-title">Interaction to conversion duration:</div>
+                    <div class="kpi-value">{{attributionModel.stats.global.interaction_to_conversion_duration | humanDuration}} </div>
+                </div>
+        </div>
+     <div class="breakdown-area">
+      <div class="panel-body">
+        <uib-tabset class="breakdown">
+          <!--Sources Tab-->
+          <uib-tab heading="Sources">
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortSourcesBy('marketing_channel')">
+                  Marketing channel
+                  <span ng-show="orderBy == 'marketing_channel'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('source')">
+                  Source
+                  <span ng-show="orderBy == 'source'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('interaction_type')">
+                  Weighted Conversions
+                  <span ng-show="orderBy == 'interaction_type'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_conversions')">
+                  Weighted Value
+                  <span ng-show="orderBy == 'weighted_conversions'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post View Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post Click Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="site in attributionModel.stats.sources.getObjectRows()">
+                <td>{{ site.marketing_channel}}</td>
+                <td>{{ site.source}}</td>
+                <td>{{ site["weighted_conversions.TOTAL"] | number }}</td>
+                <td>{{ site["weighted_value.TOTAL"] |  number:2 | currencyWithSymbol:goal.goal_value_currency  }}</td>
+                <td>{{ site["weighted_conversions.POST_VIEW"]  | number  }}</td>
+                <td>{{ site["weighted_conversions.POST_CLICK"] | number  }}</td>
+
+              </tr>
+              </tbody>
+            </table>
+          </uib-tab>
+
+          <!--Campaigns Tab-->
+          <uib-tab heading="Campaigns">
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortCampaignsBy('campaign_name')">
+                  Campaign Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('interaction_type')">
+                  Weighted Conversions
+                  <span ng-show="orderBy == 'interaction_type'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_conversions')">
+                  Weighted Value
+                  <span ng-show="orderBy == 'weighted_conversions'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post View Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post Click Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="campaign in attributionModel.stats.campaigns.getObjectRows()">
+                  <td ng-show='{{campaign.campaign_id == null}}'>{{campaign.campaign_name}}</td>
+                  <td ng-show='{{campaign.campaign_id != null}}'><span fetch-campaign="campaign.campaign_id as campaignResource"><a ng-click="goToCampaign(campaignResource)">{{campaignResource.name}}</a></span></td>
+                  <td>{{campaign["weighted_conversions.TOTAL"] |number }}</td>
+                  <td>{{campaign["weighted_value.TOTAL"] | number:2 | currencyWithSymbol:goal.goal_value_currency  }}</td>
+                  <td>{{campaign["weighted_conversions.POST_VIEW"] |number}}</td>
+                  <td>{{campaign["weighted_conversions.POST_CLICK"] |number }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </uib-tab>
+
+          <!--Creatives Tab -->
+          <uib-tab heading="Creatives">
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th class="status" ng-click="sortCreativesBy('status')">
+                  Creative Name
+                  <span ng-show="orderBy == 'status'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('interaction_type')">
+                  Weighted Conversions
+                  <span ng-show="orderBy == 'interaction_type'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_conversions')">
+                  Weighted Value
+                  <span ng-show="orderBy == 'weighted_conversions'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post View Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSourcesBy('weighted_value')">
+                  Post Click Weighted Conversions
+                  <span ng-show="orderBy == 'weighted_value'"><span ng-show="!reverseSort">▼</span><span ng-show="reverseSort">▲</span></span>
+                </th>
+             </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="creative in attributionModel.stats.creatives.getObjectRows()">
+                <td>{{creative.campaign_name}}</td>
+                <td>{{creative["weighted_conversions.TOTAL"] |number }}</td>
+                <td>{{creative["weighted_value.TOTAL"] | number:2 | currencyWithSymbol:goal.goal_value_currency   }}</td>
+                <td>{{creative["weighted_conversions.POST_VIEW"] |number}}</td>
+                <td>{{creative["weighted_conversions.POST_CLICK"] |number }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </uib-tab>
+
+        </uib-tabset>
+      </div>
+    </div>
+      
+    </div>
+   </div>
+</div>

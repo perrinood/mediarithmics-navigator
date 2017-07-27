@@ -1,0 +1,38 @@
+<div ng-controller="core/attributionmodels/ViewAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Attribution Models</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class ="col-md-6">
+        <div uib-dropdown>
+          <a class="mics-btn mics-btn-add" ng-click="createAttributionModel()">
+            New Attribution Model
+          </a>
+        </div>
+      </div>
+    </div>
+    <table class="mics-table js-auto-hide-actions" ng-show="attributionModels.length">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attribution Model Processor</th>
+          <th>Provider</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="attributionModel in attributionModels"
+          fetch-plugin-properties="attributionModel.attribution_processor_id as processorProperties"
+      >
+        <td>{{attributionModel.name}}</td>
+        <td>{{pocessorProperties['name'].value}}</td>
+        <td>{{processorProperties['provider'].value}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/attributionmodels/{{attributionModel.id}}">Edit</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

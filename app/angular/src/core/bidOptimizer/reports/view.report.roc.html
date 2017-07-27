@@ -1,0 +1,20 @@
+<div class="roc-report-template">
+  <div class="content">
+
+    <div class="col-xs-6">
+      <div class="chart">
+
+        <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
+
+      </div>
+    </div>
+
+    <div class="kpi-roc-area">
+      <dl>
+        <dt>Area Under Curve</dt>
+        <dd class="ng-binding">{{auc * 100 | number:2}} %</dd>
+      </dl>
+    </div>
+
+  </div>
+</div>

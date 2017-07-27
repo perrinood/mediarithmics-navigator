@@ -1,0 +1,35 @@
+<div ng-controller="core/visitanalysers/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-show="isEdit">Edit Visit Analyser</h1>
+      <h1 ng-show="!isEdit">New Visit Analyser</h1>
+    </div>
+
+    <div mcs-form-group="" label-for="activity_analyser_name" label-text="Name">
+      <input required class="input-lg" ng-model="activityAnalyser.name" type="text" id="activity_analyser_name">
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h4>Properties</h4>
+        <div ng-repeat="property in properties">
+          <mcs-data-file-property property="property.value" ng-if="property.value.property_type == 'DATA_FILE'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-data-file-property>
+          <mcs-text-property property="property.value" ng-if="property.value.property_type == 'STRING'"  ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-text-property>
+          <mcs-boolean-property property="property.value" ng-if="property.value.property_type == 'BOOLEAN'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-boolean-property>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>
+

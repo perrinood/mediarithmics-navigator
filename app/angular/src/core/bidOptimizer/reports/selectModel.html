@@ -1,0 +1,41 @@
+<div class="bid-optimizer-model-selection">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span
+          aria-hidden="true">&times;</span></button>
+      <h3 class="modal-title">Select Bid Optimizer Model</h3>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row">
+          <div>
+            <table class="mics-table">
+              <tbody>
+              <tr ng-repeat="model in modelsIdDate | offset: (currentPage - 1)*itemsPerPage | limitTo: itemsPerPage">
+                <td>
+                  <label>
+                    <a href="#/{{currentWorkspaceId}}/library/bidOptimizers/{{bidOptimizer.id}}/models/{{model.modelId}}/report">
+                      Model id {{model.modelId}} Date {{model.date | date:'MM/dd/yyyy'}}
+                      <span ng-show="model.modelId==currentModel"> (Current Model)</span></a>
+                  </label>
+                </td>
+
+              </tr>
+              </tbody>
+            </table>
+            <div>
+              <uib-pagination total-items="modelsIdDate.length" ng-model="currentPage"
+                              items-per-page="itemsPerPage"></uib-pagination>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="mics-btn mics-btn-cancel" data-dismiss="modal" ng-click="cancel()">Close
+      </button>
+    </div>
+  </div>
+
+</div>

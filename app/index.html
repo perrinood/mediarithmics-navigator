@@ -1,202 +1,168 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Mediarithmics</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
-    <!-- endbower -->
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- the page title is init with the organisation name in Session init -->
+  <title>mediarithmics</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <link rel="stylesheet" href="bower_components/nvd3/nv.d3.css">
-    <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css">
-    <!-- endbuild -->
-    <!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-    <link rel="stylesheet" href="styles/font/stylesheet.css">
-  </head>
-  <body ng-app="navigatorApp" class="mcs-app">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+  <!-- CSS -->
+  <!-- build:css styles/vendor.css -->
+  <link rel="stylesheet" href="angular/bower_components/ng-table/dist/ng-table.css"/>
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" href="angular/bower_components/nvd3/build/nv.d3.css">
+  <link rel="stylesheet" href="angular/bower_components/joint/dist/joint.min.css">
+  <link rel="stylesheet" href="angular/bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css">
+  <!-- endbuild -->
+  <!-- build:css styles/video.css -->
+  <link rel="stylesheet" href="angular/bower_components/videojs-contrib-ads/src/videojs.ads.css">
+  <link rel="stylesheet" href="angular/bower_components/videojs-vast/videojs.vast.css">
+  <link rel="stylesheet" href="angular/bower_components/video.js/dist/video-js/video-js.css">
+  <!-- endbuild -->
+  <link rel="stylesheet" href="styles/font/stylesheet.css">
 
-    <div ng-include src="'src/core/layout/top-navbar.html'"></div>
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
+  <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
+<div id="mcs-app" class="mcs-app" ng-controller="LayoutController">
+  <div ng-include="'angular/src/core/layout/header/header.html'"></div>
 
-    <div class="sidebar-placeholder" ng-show="sidebar"></div>
-    <!-- Add your site or application content here -->
-    <div ng-view="" class="container-fluid"></div>
+  <div ng-include="'angular/src/core/layout/sidebar/sidebar.html'" ng-class="{'hidden': !showSidebar }"></div>
 
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-    <![endif]-->
+  <div ng-class="{'content-with-sidebar': showSidebar }">
+    <div ui-view="" class="container-fluid"></div>
+  </div>
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/jquery-cookie/jquery.cookie.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-    <script src="bower_components/restangular/dist/restangular.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/nvd3/nv.d3.js"></script>
-    <script src="bower_components/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js"></script>
-    <script src="bower_components/momentjs/moment.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/ng-bs-daterangepicker/src/ng-bs-daterangepicker.js"></script>
-    <script src="bower_components/autofill-event/src/autofill-event.js"></script>
-    <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
-    <script src="bower_components/checklist-model/checklist-model.js"></script>
-    <!-- endbower -->
-    <script src="bower_components/async/lib/async.js"></script>
-    <script src="bower_components/plupload/js/moxie.js"></script>
-    <script src="bower_components/plupload/js/plupload.dev.js"></script>
+  <div id="mics_loading">
+    <div id="mics_loading_progress">
+      <img src="./images/ajax-loader.gif" alt="The application is loading, please wait." class="ajax-loader" />
+      <!-- <h1>Navigator is loading&nbsp;<small>please wait</small></h1> -->
+      <!-- <span id="mics_loading_progress_current"></span> -->
+    </div>
+    <div id="mics_loading_error" style="display:none;">
+      An unexpected error occured while loading the application.<br /> Try reloading the page or contact your support.
+    </div>
+  </div>
+  
+</div>
 
-    <script type="text/javascript" src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <script type="text/javascript" src="bower_components/ng-bs-daterangepicker/dist/ng-bs-daterangepicker.min.js"></script>
-    <!-- endbuild -->
+<div id="mcs-react-app" class="mcs-react-app"></div>
 
+<script>
+  function switchApp(newUrl) {
 
-    <script src="conf/app-configuration.js"></script>
+    var angularContainer = document.getElementById("mcs-app");
+    var reactContainer = document.getElementById("mcs-react-app");
 
+    function isReactApp(url) {
+      return url.match(/v2/);
+    }
 
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    if (!isReactApp(newUrl)) {
+      angularContainer.style.display = "block";
+      reactContainer.style.display = "none";
+    } else {
+      angularContainer.style.display = "none";
+      reactContainer.style.display = "block";
+    }
 
-    <!-- find src -name "*.js"|grep index|sed 's@\(.*\)@<script src="\1"></script>@g' -->
+  }
 
-    <script src="src/core/layout/index.js"></script>
-    <script src="src/core/keywords/index.js"></script>
-    <script src="src/core/campaigns/expert/index.js"></script>
-    <script src="src/core/campaigns/report/index.js"></script>
+  function onHashChange(location) {
+    return switchApp(location.newURL);
+  }
 
-    <script src="src/core/campaigns/index.js"></script>
-    <script src="src/core/adgroups/index.js"></script>
-    <script src="src/core/usergroups/index.js"></script>
-    <script src="src/core/usergroups/EditAllController.js"></script>
-    <script src="src/core/usergroups/EditOneController.js"></script>
-    <script src="src/core/usergroups/DeleteController.js"></script>
-    <script src="src/core/datamart/index.js"></script>
-    <script src="src/core/login/index.js"></script>
-    <script src="src/core/common/auth/index.js"></script>
-    <script src="src/core/common/properties/index.js"></script>
-    <script src="src/core/common/index.js"></script>
-    <script src="src/core/common/CurrencyService.js"></script>
-    <script src="src/core/common/ConstantsService.js"></script>
-    <script src="src/core/common/pagination.js"></script>
-    <script src="src/core/common/promiseUtils.js"></script>
-    <script src="src/core/common/NumberFilter.js"></script>
+  switchApp(window.location.href);
+  window.onhashchange = onHashChange;
 
-    <script src="src/core/layout/HeaderController.js"></script>
-    <script src="src/core/keywords/ViewAllController.js"></script>
-    <script src="src/core/keywords/DeleteController.js"></script>
-    <script src="src/core/keywords/EditOneController.js"></script>
-    <script src="src/core/keywords/EditOneIncController.js"></script>
-    <script src="src/core/keywords/KeywordListContainer.js"></script>
-    <script src="src/core/keywords/ChooseExistingKeywordListController.js"></script>
-    <script src="src/core/keywords/ChooseKeywordListController.js"></script>
-    <script src="src/core/keywords/KeywordListContainer.js"></script>
-    <script src="src/core/keywords/KeywordDirective.js"></script>
-    <script src="src/core/keywords/ImportListController.js"></script>
+</script>
 
-    <script src="src/core/placementlists/index.js"></script>
-    <script src="src/core/placementlists/PlacementDirective.js"></script>
-    <script src="src/core/placementlists/ChooseExistingPlacementListController.js"></script>
-    <script src="src/core/placementlists/ChoosePlacementListController.js"></script>
-    <script src="src/core/placementlists/EditAllController.js"></script>
-    <script src="src/core/placementlists/EditOneController.js"></script>
-    <script src="src/core/placementlists/DeleteController.js"></script>
+<!--[if lt IE 9]>
+<script src="angular/bower_components/es5-shim/es5-shim.js"></script>
+<script src="angular/bower_components/json3/lib/json3.min.js"></script>
+<![endif]-->
+
+<noscript>
+  <h1>Mediarithmics navigator</h1>
+
+  <h2>This website requires javascript to work properly.</h2>
+
+  <p>
+    If you don't know how to enable javascript in your browser, please see
+    <a href="http://www.enable-javascript.com/" target="_blank">here</a>.
+  </p>
+
+  <p>
+    <!--   TODO : explain why our website is awesome and you should allow js here to manage your campaigns. -->
+  </p>
+</noscript>
 
 
-    <script src="src/core/campaigns/index.js"></script>
-    <script src="src/core/campaigns/CreateController.js"></script>
-    <script src="src/core/campaigns/expert/EditAdGroupController.js"></script>
-    <script src="src/core/campaigns/expert/EditCampaignController.js"></script>
-    <script src="src/core/campaigns/AdGroupContainer.js"></script>
-    <script src="src/core/campaigns/DisplayCampaignContainer.js"></script>
-    <script src="src/core/campaigns/EmailCampaignContainer.js"></script>
-    <script src="src/core/campaigns/ListController.js"></script>
-    <script src="src/core/campaigns/DisplayCampaignService.js"></script>
-    <script src="src/core/campaigns/EmailCampaignService.js"></script>
-    <script src="src/core/campaigns/CampaignPluginService.js"></script>
-    <script src="src/core/campaigns/DeleteController.js"></script>
+<!-- Scripts -->
+<!-- The scripts included below are used for video support. The production minification,
+and the videojs-vast plugin expecting from the vast-client plugin to to always be globally declared,
+are two of the factors making these dependencies injections impossible. -->
+<!-- build:js scripts/video.js -->
+<script src="angular/bower_components/video.js/dist/video-js/video.js"></script>
+<script src="angular/bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
+<script src="angular/bower_components/vast-client-js/vast-client.js"></script>
+<script src="angular/bower_components/videojs-vast/videojs.vast.js"></script>
+<!-- The xlsx lib checks if jszip exists before anything. AGAIN we need jszip and then xlsx after minification.-->
+<script src="angular/bower_components/js-xlsx/jszip.js"></script>
+<!-- endbuild -->
+<script>
+var require = {
+  waitSeconds: 60,
+  paths: {'core/configuration': '../../conf/app-configuration'}
+};
+</script>
+<script src="conf/plugins-configuration.js"></script>
+<script src="conf/react-configuration.js"></script>
+<script data-main="main.js" src="angular/bower_components/requirejs/require.js"></script>
 
-    <script src="src/core/adgroups/ChooseAdsController.js"></script>
-    <script src="src/core/adgroups/UploadAdController.js"></script>
-    <script src="src/core/adgroups/ChooseExistingAdsController.js"></script>
-    <script src="src/core/adgroups/ListNewCreativesDirective.js"></script>
-    <script src="src/core/adgroups/AssetThumbnailDirective.js"></script>
-    <script src="src/core/usergroups/ChooseUserGroupsController.js"></script>
-    <script src="src/core/usergroups/ChooseExistingUserGroupsController.js"></script>
+<script>
+  require.onResourceLoad = function(context, map, depArray) {
+    var elt = document.getElementById("mics_loading_progress_current");
 
-    <script src="src/core/datamart/IndexController.js"></script>
-    <script src="src/core/datamart/common/Common.js"></script>
-    <script src="src/core/datamart/common/Grid.js"></script>
-    <script src="src/core/datamart/items/ViewAllController.js"></script>
-    <script src="src/core/datamart/items/ViewOneController.js"></script>
-    <script src="src/core/datamart/categories/BrowseController.js"></script>
-    <script src="src/core/datamart/users/ViewAllController.js"></script>
-    <script src="src/core/datamart/users/ViewOneController.js"></script>
+    if (elt) {
+      elt.innerHTML = "Loaded " + map.name;
+    }
+  };
+  // This warning is for developers : if a plugin can't load a dependency, I don't really want to throw an `alert`...
+  requirejs.onError = function (err) {
+    if (!err.requireModules) {
+      // happens when a dependency tries to load an other dependency with requirejs: some libs does a "try{require("my_dep")} catch () {window.my_dep}"
+      // which triggers an error here. This is not a fatal error, just a warning.
+      console.warn(err);
+      return;
+    }
+    console.error("the scripts " + err.requireModules + " couldn't be loaded. Do you have an ad blocker ?", err);
 
-    <script src="src/core/login/constants.js"></script>
-    <script src="src/core/login/InitSessionController.js"></script>
-    <script src="src/core/login/RememberMeController.js"></script>
-    <script src="src/core/login/MainController.js"></script>
-    <script src="src/core/login/LogoutController.js"></script>
-    <script src="src/core/common/auth/Session.js"></script>
-    <script src="src/core/common/auth/AuthenticationService.js"></script>
-    <script src="src/core/common/IdGenerator.js"></script>
-    <script src="src/core/common/plupload.js"></script>
-    <script src="src/core/common/charts.js"></script>
-    <script src="src/core/common/formGroupDirective.js"></script>
-    <script src="src/core/common/properties/propertiesDirectives.js"></script>
-    <script src="src/core/common/properties/AssetPropertyController.js"></script>    
-    <script src="src/core/common/properties/AssetUploadController.js"></script>
+    var progressElt = document.getElementById("mics_loading_progress");
+    var errorElt = document.getElementById("mics_loading_error");
+    if (progressElt && errorElt) {
+      progressElt.style.display = "none";
+      errorElt.style.display = "block";
+    }
 
-    <script src="src/core/campaigns/emails/index.js"></script>
-    <script src="src/core/campaigns/emails/MainController.js"></script>
+    throw err;
+  };
+</script>
 
-    <script src="src/core/campaigns/keywords/index.js"></script>
-    <script src="src/core/campaigns/keywords/MainController.js"></script>
-    <script src="src/core/campaigns/keywords/Step1Controller.js"></script>
-    <script src="src/core/campaigns/keywords/Step2Controller.js"></script>
-    <script src="src/core/campaigns/keywords/Step3Controller.js"></script>
-    <script src="src/core/campaigns/keywords/Step4Controller.js"></script>
-
-    <script src="src/core/campaigns/report/index.js"></script>
-    <script src="src/core/campaigns/report/BasicReportCampaignController.js"></script>
-    <script src="src/core/campaigns/report/tables/BreakdownTableDirective.js"></script>
-    <script src="src/core/campaigns/report/CampaignAnalyticsReportService.js"></script>
-    <script src="src/core/campaigns/report/WebsiteFilter.js"></script>
-
-    <script src="src/core/creatives/index.js"></script>
-    <script src="src/core/creatives/CreativeDirective.js"></script>
-    <script src="src/core/creatives/PropertyContainer.js"></script>
-    <script src="src/core/creatives/DisplayAdContainer.js"></script>
-    <script src="src/core/creatives/ListController.js"></script>
-    <script src="src/core/creatives/CreateController.js"></script>
-    <script src="src/core/creatives/CreativeTemplateService.js"></script>    
-    <script src="src/core/creatives/DisplayAdService.js"></script>
-    <script src="src/core/creatives/display-ads/standard-banner/index.js"></script>
-    <script src="src/core/creatives/display-ads/standard-banner/EditDisplayAdController.js"></script>
-    
-    <script src="src/nvd3-templates/doubleLineChart.js"></script>
-
-    <script src="src/app.js"></script>
-
-    <!-- endbuild -->
-    </body>
+</body>
 </html>

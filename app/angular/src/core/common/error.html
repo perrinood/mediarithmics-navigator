@@ -1,0 +1,21 @@
+<div class="error-modal">
+  <div class="modal-header">
+    <h3>An error occured</h3>
+  </div>
+
+  <div class="modal-body">
+    <p ng-show="message">{{message}}</p>
+    <p ng-show="!message">Something went wrong... Please try again later.</p>
+    <p ng-show="errorId">The id of the error is <code>{{errorId}}</code>, the support team will need it to help you !</p>
+
+  </div>
+
+  <div class="modal-footer" ng-if="messageType == 'full'">
+    <a class="mics-btn mics-btn-action" ng-click="close()">Close and stay on this page</a>
+    <a class="mics-btn mics-btn-cancel" ng-click="abort()">Abort and go back to the home page</a>
+  </div>
+  <div class="modal-footer" ng-if="messageType == 'simple'">
+    <a class="mics-btn mics-btn-action" ng-click="close()">Close this message</a>
+  </div>
+</div>
+

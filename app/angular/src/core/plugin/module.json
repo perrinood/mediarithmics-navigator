@@ -1,0 +1,5 @@
+{"name": "core/plugin",
+  "dependencies": [
+    "restangular"
+  ]
+}

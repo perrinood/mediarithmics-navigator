@@ -1,0 +1,53 @@
+<div class="mcs-default-container " ng-controller="core/datamart/categories/BrowseController">
+  <div class="mcs-default-content">
+
+    <!-- Search form -->
+    <div class="mics-table-toolbar">
+      <div class="col-md-12">
+
+        <!-- Catalog view -->
+        <div ng-hide="currentCategory !== null">
+
+          <!-- Search form -->
+          <form class="datamart clearfix" role="form">
+            <div class="form-group pull-left right-spaced not-bottom-spaced">
+              <label for="catalogSelect">Catalog</label>
+              <select id="catalogSelect" class="form-control" ng-model="catalog" ng-options="c.token for c in catalogs" ng-change="changeCatalog()">
+                <option value="">Select a catalog</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <!-- Single category view -->
+        <div class="clearfix" ng-hide="currentCategory == null">
+
+          <!-- Current category -->
+          <div class="pull-left">
+            <label class="blue">Current category</label>
+            <div class="category-item">
+              {{ currentCategory.category_id }}
+            </div>
+          </div>
+
+          <!-- Parent-categories  -->
+          <div class="pull-left left-spaced">
+            <div>
+              <label class="blue">Parents</label>
+            </div>
+            <div class="category-list">
+              <a href="{{ baseUrl  + '/'+ element.category_id }}" ng-repeat="element in parents" class="category-item">{{ element.category_id }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-categories -->
+    <div mics-datamart-grid template="'angular/src/core/datamart/categories/category-grid.template.html'" element-template="'angular/src/core/datamart/categories/category-grid-element.template.html'" data="categories" refresh="refreshCategories" url-prefix="baseUrl" page-size="categoriesPerPage" ng-show="categories.length > 0"></div>
+
+
+    <div mics-datamart-grid element-template="'angular/src/core/datamart/items/item-grid-element.template.html'" data="datasheets" refresh="refreshDatasheets" url-prefix="itemUrl"></div>
+
+  </div>
+</div>

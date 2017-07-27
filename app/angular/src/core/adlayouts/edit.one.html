@@ -1,0 +1,34 @@
+<div ng-controller="core/adlayouts/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="!editMode">Create Ad Layout Version</h1>
+      <h1 ng-if="editMode">Edit Ad Layout Version</h1>
+    </div>
+
+    <div mics-pl-upload="pluploadOptions" automatic-upload="false" files="selectedFiles">
+      <h4 class="" ng-show="adLayoutVersion.filename.length"><strong>Selected file: </strong>{{adLayoutVersion.filename}}</h4>
+      <div class="row">
+        <div class="col-xs-2">
+          <button class="browse-button mics-btn mics-btn-add">
+            <span ng-show="!selectedFiles.length">Select Template</span>
+            <span ng-show="selectedFiles.length">Change Template</span>
+          </button>
+        </div>
+        <div class="col-xs-2">
+          <button ng-show="selectedFiles.length" ng-click="removeSelectedFiles()" class="mics-btn mics-btn-cancel">Remove Template</button>
+        </div>
+      </div>
+      <div class="alert alert-danger" ng-if="uploadError">{{ uploadError }}</div>
+      <div class="mcs-actions-group">
+        <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+        <button ng-click="done()" class="mics-btn mics-btn-finish">Done</button>
+      </div>
+    </div>
+  </form>
+</div>

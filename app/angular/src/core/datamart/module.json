@@ -1,0 +1,17 @@
+{
+  "name": "core/datamart",
+  "dependencies": [
+    "core/datamart/common",
+    "core/datamart/items",
+    "core/datamart/monitoring",
+    "core/datamart/users",
+    "core/datamart/categories",
+    "core/datamart/queries",
+    "core/datamart/queries/common",
+    "core/datamart/segments",
+    "core/datamart/partitions",
+    "core/common/auth",
+    "core/common",
+    "restangular"
+  ]
+}

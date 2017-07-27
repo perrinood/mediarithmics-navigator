@@ -1,0 +1,38 @@
+<div ng-controller="core/bidOptimizer/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1>Edit Bid Optimizer</h1>
+    </div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="bid_optimizer_name" label-text="Bid Optimizer Name">
+      <input required class="input-lg" ng-model="bidOptimizer.name" type="text" id="bid_optimizer_name">
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-12">
+        <h4>Properties</h4>
+
+        <div ng-repeat="property in properties">
+          <mcs-data-file-property property="property.value" ng-if="property.value.property_type == 'DATA_FILE'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-data-file-property>
+          <mcs-double-property property="property.value" ng-if="property.value.property_type == 'DOUBLE'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-double-property>
+          <mcs-text-property property="property.value" ng-if="property.value.property_type == 'STRING'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-text-property>
+          <mcs-number-property property="property.value" ng-if="property.value.property_type == 'INT'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-number-property>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>
+

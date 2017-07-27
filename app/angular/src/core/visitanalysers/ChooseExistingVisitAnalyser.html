@@ -1,0 +1,55 @@
+<div>
+    <div class="modal-header">
+        <h3>Select Visit Analyser</h3>
+    </div>
+
+    <div class="modal-body">
+        <table class="mics-table">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>Visit Analyser Processor</th>
+                <th>Provider</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+                    ng-repeat="availableVisitAnalyser in availableVisitAnalysers"
+                    fetch-plugin-properties-from-version="availableVisitAnalyser.visit_analyzer_plugin_id as visitAnalyserProperties"
+            >
+                <td>
+                    <input
+                            type="radio"
+                            name="available_visit_analyser"
+                            value="{{availableVisitAnalyser.id}}"
+                            ng-model="selectedVisitAnalyser.id"
+                            id="available_visit_analyser_{{availableVisitAnalyser.id}}"
+                    />
+                </td>
+                <td>
+                    <label for="available_visit_analyser_{{availableVisitAnalyser.id}}">
+                        {{availableVisitAnalyser.name}}
+                    </label>
+                </td>
+                <td>
+                    <label for="available_visit_analyser_{{availableVisitAnalyser.id}}">
+                        {{visitAnalyserProperties['name'].value}}
+                    </label>
+                </td>
+                <td>
+                    <label for="available_visit_analyser_{{availableVisitAnalyser.id}}">
+                        {{visitAnalyserProperties['provider'].value}}
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <a class="mics-btn mics-btn-finish" ng-show="selectedVisitAnalyser.id" ng-click="done()">Done</a>
+        <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+    </div>
+</div>
+

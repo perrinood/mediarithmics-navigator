@@ -1,0 +1,25 @@
+<div mcs-form-group="">
+  {{property.technical_name}}
+  <div class="row">
+    <div class="col-xs-12">
+      <table ng-show="selectedStyleSheet.styleSheet" class="mics-table table-fixed">
+        <thead>
+        <tr>
+          <th class="col-xs-4">Style Sheet</th>
+          <th class="col-xs-4">Version</th>
+          <th class="col-xs-4">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-xs-4">{{selectedStyleSheet.styleSheet.name}}</td>
+          <td class="col-xs-4">{{selectedStyleSheet.version.id}}</td>
+          <td class="col-xs-4">{{selectedStyleSheet.version.status}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <button ng-show="!selectedStyleSheet.styleSheet" ng-click="selectStyleSheet()" class="mics-btn mics-btn-create">Select Style Sheet</button>
+      <button ng-show="selectedStyleSheet.styleSheet" ng-click="selectStyleSheet()" class="mics-btn mics-btn-edit">Change Selected Style Sheet</button>
+    </div>
+  </div>
+</div>

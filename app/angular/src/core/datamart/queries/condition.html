@@ -1,0 +1,106 @@
+<div class="row vertical-align">
+<div class="col-md-4">
+    <span class="btn-expression-default" ng-show="condition.value.property_selector_expression">{{condition.value.property_selector_expression}}</span>
+    {{condition.getSelectorLabel()}}
+</div>
+<div class="col-md-3">
+    <select class="form-control input-sm" ng-model="condition.value.operator" ng-change="initConditionValue(condition)">
+        <option ng-repeat="propertyOperator in operators" ng-selected="{{condition.value.operator == propertyOperator.operator}}" value="{{propertyOperator.operator}}">{{propertyOperator.label}}</option>
+    </select>
+</div>
+<div class="col-md-5">
+    <div class="row">
+        <div ng-switch="condition.getSelectorValueType()">
+            <div ng-switch-when="ID">
+              <div class="col-md-12">
+                <mcs-query-condition-value-id condition="condition"></mcs-query-condition-value-id>
+              </div>
+            </div>
+            <div ng-switch-when="STRING">
+                <div ng-show="condition.value.operator != 'IS_EMPTY' && condition.value.operator != 'IS_NOT_EMPTY'">
+                    <div class="col-md-12">
+                        <input type="search" class="form-control" ng-model="condition.value.value">
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="TEXT">
+                <div ng-show="condition.value.operator != 'IS_EMPTY' && condition.value.operator != 'IS_NOT_EMPTY'">
+                    <div class="col-md-12">
+                        <input type="search" class="form-control" ng-model="condition.value.value">
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="LIST_OF_STRING">
+                <div ng-show="condition.value.operator != 'IS_EMPTY' && condition.value.operator != 'IS_NOT_EMPTY'">
+                    <div class="col-md-12">
+                        <input type="search" class="form-control" ng-model="condition.value.value">
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="LIST_OF_TEXT">
+                <div ng-show="condition.value.operator != 'IS_EMPTY' && condition.value.operator != 'IS_NOT_EMPTY'">
+                    <div class="col-md-12">
+                        <input type="search" class="form-control" ng-model="condition.value.value">
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="INTEGER">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="DOUBLE">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="LONG">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="LIST_OF_INTEGER">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="LIST_OF_DOUBLE">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="LIST_OF_LONG">
+                <div class="col-md-12">
+                    <input type="search" class="form-control" ng-model="condition.value.value">
+                </div>
+            </div>
+            <div ng-switch-when="BOOLEAN">
+                <div class="col-md-12">
+                    <select class="form-control input-sm" ng-model="condition.value.value">
+                        <option value="true">TRUE</option>
+                        <option value="false">FALSE</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-switch-when="DATE">
+                <div ng-switch="condition.value.operator">
+                    <div ng-switch-when="RELATIVE_GT">
+                        <mcs-query-condition-value-relative-date condition="condition"></mcs-query-condition-value-relative-date>
+                    </div>
+                    <div ng-switch-when="RELATIVE_LT">
+                        <mcs-query-condition-value-relative-date condition="condition"></mcs-query-condition-value-relative-date>
+                    </div>
+                    <div ng-switch-when="BETWEEN">
+                        <mcs-query-condition-value-date-range condition="condition"></mcs-query-condition-value-date-range>
+                    </div>
+                    <div ng-switch-default>
+                        <mcs-query-condition-value-simple-date condition="condition"></mcs-query-condition-value-simple-date>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default></div>
+        </div>
+    </div>
+
+</div>
+</div>

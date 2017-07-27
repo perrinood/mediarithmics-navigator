@@ -1,0 +1,180 @@
+<h3>Event Rules</h3>
+<div class="mics-table-background">
+  <div class="mics-table-inline right-spaced">
+    <div class="row">
+      <div class="form-group col-md-8">
+        <input class="form-control" type="text" ng-model="filteredRule" placeholder="Search">
+      </div>
+      <div class='col-md-4'>
+        <div class="dropdown" uib-dropdown>
+          <button class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">New Rule</button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a role="menuItem" tabindex="0" ng-click="newRule('CATALOG_AUTO_MATCH')">Catalog Auto Match</a></li>
+            <li><a role="menuItem" tabindex="1" ng-click="newRule('USER_IDENTIFIER_INSERTION')">User Identifier Insertion</a></li>
+            <li><a role="menuItem" tabindex="2" ng-click="newRule('URL_MATCH')">Url Match</a></li>
+            <li><a role="menuItem" tabindex="3" ng-click="newRule('PROPERTY_TO_ORIGIN_COPY')">Property To Origin Copy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="mics-table mics-clickable-table mics-table-event-rule js-auto-hide-actions table-hover">
+          <thead>
+          <tr>
+            <th class="first-column">Event Rule Type</th>
+            <th class="second-column">Summary</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="rule in filteredEventRules() " ng-click="showDetails(rule)">
+            <td class="first-column">{{ruleTypes[rule.type]}}</td>
+            <td class="second-column">{{getSummary(rule)}}</td>
+          </tr>
+          <tr ng-show="ruleCreationMode">
+            <td class="first-column">{{ruleTypes[tmpRule.type]}}</td>
+            <td class="second-column">{{getSummary(tmpRule)}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="mics-table-inline details fixed">
+    <!--Title-->
+    <h3 class="selected-title ">{{ruleTypes[selectedRule.type]}}</h3>
+
+    <!--Catalog Auto Match Content-->
+    <div class="selected-editing" ng-show="selectedRule.type == 'CATALOG_AUTO_MATCH'">
+      <label for="autoMatchType"><strong>Auto match type</strong>
+        <span class="badge site" uib-popover="Match urls with products and/or categories urls" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <select required="required" class="form-control" ng-model="tmpRule.auto_match_type" ng-options="key as value for (key, value) in autoMatchTypes" id="autoMatchType"></select>
+      </div>
+      <div ng-show="!ruleEditMode">{{autoMatchTypes[selectedRule.auto_match_type]}}</div>
+    </div>
+
+    <!--User Account Id Creation Content-->
+    <div class="selected-editing" ng-show="selectedRule.type === 'USER_IDENTIFIER_INSERTION'">
+      <label for="identifierTypeProperty"><strong>Type</strong>
+        <span class="badge site" uib-popover="The user identifier type to create" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <select class="form-control" ng-model="tmpRule.identifier_creation"  ng-options="hash for hash in identifierTypes"  id="identifier_creation">
+	</select>
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.identifier_creation, 70)}}</div>
+      <br>
+      <label for="userAccountIdProperty"><strong>Property</strong>
+        <span class="badge site" uib-popover="The name of the property containing the data used to compute the user identifier" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <input class="form-control input-md" ng-model="tmpRule.property_source" type="text" id="userAccountIdProperty">
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.property_source, 70)}}</div>
+      <br>
+      <label label-for="hash"><strong>Transformation Function</strong>
+        <span class="badge site" uib-popover-html="'The function used to compute<br>the User Account Id'" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <select class="form-control" ng-model="tmpRule.hash_function" ng-options="hash for hash in hashFunctions" id="hash"></select>
+      </div>
+      <div ng-show="!ruleEditMode">{{selectedRule.hash_function}}</div>
+      <br>
+      <label><input ng-disabled="!ruleEditMode" type="checkbox" ng-model="tmpRule.to_lower_case"> Lower case before transform</label>
+    </div>
+
+    <!--Pattern Matching Content-->
+    <div class="selected-editing" ng-show="selectedRule.type === 'URL_MATCH'">
+      <div class="url-matching">
+        <label for="urlPattern"><strong>Url Pattern</strong>
+          <span class="badge site" uib-popover="The matching url pattern" popover-trigger="mouseenter" popover-placement="right">?</span>
+        </label>
+        <div ng-show="ruleEditMode">
+          <input class="form-control input-md" ng-model="tmpRule.pattern" type="text" id="urlPattern">
+        </div>
+        <div ng-show="!ruleEditMode">{{shortenString(selectedRule.pattern, 70)}}</div>
+        <br>
+      </div>
+
+      <label for="patternEventName"><strong>Event Name</strong>
+        <span class="badge site" uib-popover="The name of the event" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <input class="form-control input-md" ng-model="tmpRule.event_template.$event_name" type="text" id="patternEventName">
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.event_template.$event_name, 70)}}</div>
+      <br>
+
+
+      <div class="row">
+        <div class="col-xs-12">
+          <table class="mics-table mics-table-auto-match js-auto-hide-actions" ng-class="{'table-hover': ruleEditMode}">
+            <thead>
+            <tr>
+              <th class="first-column">Property Name</th>
+              <th class="second-column">Value</th>
+              <th class="third-column">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key, value) in tmpRuleProperties">
+              <td class="first-column">{{key}}</td>
+              <td class="second-column">{{value}}</td>
+              <td class="third-column">
+                <a ng-disabled="!ruleEditMode" class="mics-btn mics-btn-delete btn-xs" ng-click="removeEventTemplateProperty(key)">Remove</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPERTY TO ORIGIN COPY -->
+    <div class="selected-editing" ng-show="selectedRule.type === 'PROPERTY_TO_ORIGIN_COPY'">
+
+      <label for="property_name"><strong>Property Name</strong>
+        <span class="badge site" uib-popover="The name of the property" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <input class="form-control input-md" ng-model="tmpRule.property_name" type="text" id="property_name">
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.property_name, 70)}}</div>
+      <br>
+
+      <label label-for="propertyToOriginCopyProperty"><strong>Property Source</strong>
+        <span class="badge site" uib-popover="The source of the property to copy" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <select class="form-control" ng-model="tmpRule.property_source" ng-options="originPropertySource for originPropertySource in originPropertySources" id="propertyToOriginCopyProperty"></select>
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.property_source, 70)}}</div>
+      <br>
+      <br>
+      <label for="destination"><strong>Destination</strong>
+        <span class="badge site" uib-popover="The destination where to copy the property" popover-trigger="mouseenter" popover-placement="right">?</span>
+      </label>
+      <div ng-show="ruleEditMode">
+        <input class="form-control input-md" ng-model="tmpRule.destination" type="text" id="destination">
+      </div>
+      <div ng-show="!ruleEditMode">{{shortenString(selectedRule.destination, 70)}}</div>
+      <br>
+
+    </div>
+
+
+    <div ng-show="selectedRule" class="selected-action-buttons">
+      <button ng-show="!ruleEditMode" class="mics-btn mics-btn-continue pull-right" ng-click="editRule()">Edit</button>
+      <button ng-show="!ruleEditMode" class="mics-btn mics-btn-cancel pull-right" ng-click="removeRule(selectedRule)">Remove</button>
+      <button ng-show="ruleEditMode && selectedRule.type === 'URL_MATCH'" class="mics-btn mics-btn-add pull-left" ng-click="newEventTemplateProperty()">New Property</button>
+      <button ng-show="ruleEditMode"
+              ng-disabled="selectedRule.type === 'USER_IDENTIFIER_INSERTION' && !tmpRule.property_source.length ||
+                    selectedRule.type === 'URL_MATCH' && !tmpRule.event_template.event_name.length && !tmpRule.pattern.length"
+              class="mics-btn mics-btn-finish pull-right" ng-click="confirmRuleEdit()">Done
+      </button>
+      <button ng-show="ruleEditMode" class="mics-btn mics-btn-cancel pull-right" ng-click="cancelRuleEdit()">Cancel</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="mcs-default-container" ng-controller="core/creatives/plugins/email-template/default-editor/CreateController">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-creative-type">
+      <img ng-src="{{creativeTemplate.image}}">
+      <h4>{{creativeTemplate.name}}</h4>
+    </div>
+  </div>
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form" ng-submit="done()">
+    <h1>New Email Template</h1>
+
+    <div class="row">
+      <div class="col-md-10">
+        <div mcs-form-group="full">
+          <label for="name">Template Name</label>
+          <input ng-model="wrapper.emailTemplateName" type="text" class="form-control input-lg" id="name">
+        </div>
+
+        <div ng-repeat="renderer in emailTemplateRenderers">
+          <label><input type="radio" name="{{renderer.id}}" ng-model="wrapper.selectedRenderer" ng-value="renderer"> {{getRendererLabel(renderer)}}</label><br>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-finish">Done</button>
+      <button type="button" class="mics-btn mics-btn-finish" ng-click="doneAndEdit()">Done &amp; Edit</button>
+      <button type="button" class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

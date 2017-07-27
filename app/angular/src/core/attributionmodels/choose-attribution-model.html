@@ -1,0 +1,25 @@
+<div ng-controller="core/attributionmodels/ChooseAttributionModelController">
+<div uib-dropdown>
+  <button class="mics-btn mics-btn-add" uib-dropdown-toggle type="button">
+    change
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="change attribution model">
+    <li role="presentation">
+      <a role="menuitem" ng-click="attributionModelChooseFromLibrary(adGroup)" uib-dropdown-toggle>
+        Choose from library
+      </a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" ng-click="attributionModelCreateNew(adGroup)" uib-dropdown-toggle>
+        Create New
+      </a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" ng-click="attributionModelSetToDefault(adGroup)" uib-dropdown-toggle>
+        Set To Default
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+

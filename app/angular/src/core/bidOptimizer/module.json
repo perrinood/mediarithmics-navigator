@@ -1,0 +1,8 @@
+{
+  "name": "core/bidOptimizer",
+  "dependencies": [
+    "restangular",
+    "core/plugin",
+    "core/bidOptimizer/reports"
+  ]
+}

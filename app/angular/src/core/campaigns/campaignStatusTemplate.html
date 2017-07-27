@@ -1,0 +1,12 @@
+<div class="updatable-item-status updatable-item-status-{{campaign.status}}" uib-dropdown ng-show="campaign.subtype != 'EXTERNAL' && campaign.editor_artifact_id != 'external-campaign-editor'">
+  <button class="updatable-item-status-state mics-btn btn-xs" uib-dropdown-toggle>
+    <span></span>
+    {{campaign.status}}
+    &nbsp;
+    <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li><a ng-click="activateCampaign(campaign)">Activate Campaign</a></li>
+    <li><a ng-click="pauseCampaign(campaign)">Pause Campaign</a></li>
+  </ul>
+</div>

@@ -1,0 +1,56 @@
+<div class="choose-existing-style-sheets-list">
+  <div class="modal-header">
+    <h3>Select Style Sheet</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-6">
+        <table class="mics-table table-fixed table-hover">
+          <thead>
+          <tr>
+            <th class="col-xs-1">&nbsp;</th>
+            <th class="col-xs-5">Style Sheet</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-click="selectStyleSheet(styleSheet)" class="clickableRow" ng-repeat="styleSheet in styleSheets">
+            <td class="col-xs-1"><input type="checkbox" id="styleSheet.id" ng-checked="styleSheet.id === selectedStyleSheet.id"></td>
+            <td class="col-xs-5">{{styleSheet.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div ng-show="!styleSheets.length" style="color: indianred"> Please create a Style Sheet in the library</div>
+      </div>
+
+      <div class="col-xs-6">
+        <div ng-show="!selectedStyleSheet" style="color: indianred"> Please Select a Style Sheet</div>
+        <div ng-show="selectedStyleSheet && versions && !versions.length" style="color: indianred"> Please create a version for {{selectedStyleSheet.name}}</div>
+        <table ng-show="selectedStyleSheet && versions.length" class="mics-table table-fixed table-hover">
+          <thead>
+          <tr>
+            <th class="col-xs-1">&nbsp;</th>
+            <th class="col-xs-1">Version</th>
+            <th class="col-xs-2">Description</th>
+            <th class="col-xs-2">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-click="selectVersion(version)" class="clickableRow" ng-repeat="version in versions">
+            <td class="col-xs-1"><input type="checkbox" id="version.id" ng-checked="version.id === selectedVersion.id"></td>
+            <td class="col-xs-1">{{version.id}}</td>
+            <td class="col-xs-2">{{version.description}}</td>
+            <td class="col-xs-2">{{version.status}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+    <a ng-disabled="!selectedStyleSheet || !selectedVersion" ng-click="done()" class="mics-btn mics-btn-finish">Ok</a>
+  </div>
+</div>

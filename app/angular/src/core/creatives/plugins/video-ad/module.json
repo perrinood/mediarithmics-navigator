@@ -1,0 +1,8 @@
+{
+  "name": "core/creatives/plugins/video-ad",
+  "dependencies": [
+    "restangular",
+    "core/creatives/plugins/video-ad/common",
+    "core/creatives/plugins/video-ad/default-editor"
+  ]
+}

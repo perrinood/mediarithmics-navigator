@@ -1,0 +1,8 @@
+{
+  "name": "core/creatives/plugins/display-ad/basic-editor",
+  "dependencies": [
+    "restangular",
+    "core/creatives",
+    "core/creatives/plugins/display-ad/common"
+  ]
+}

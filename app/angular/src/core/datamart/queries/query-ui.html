@@ -1,0 +1,273 @@
+<div class="query-toolbox">
+  <div class="row" ng-show="error">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert">{{error}}</div>
+    </div>
+  </div>
+  <div class="row" ng-show="!error">
+    <div class="col-md-3">
+      <h4>List of criteria</h4>
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default" ng-repeat="family in criteriaContainer.families | orderBy: 'name'">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion"
+                 data-target="#criteria_{{cleanupId(family.id)}}">
+                {{family.name}}
+              </a>
+            </h4>
+          </div>
+          <div id="criteria_{{cleanupId(family.id)}}" class="panel-collapse collapse">
+            <div class="panel-body selector-panel">
+              <div ng-repeat="selector in family.selectors">
+                <div ng-if="selector.value.selector_name !== 'INDEX'" x-lvl-draggable='true' data-family="{{family.name}}">
+                  <span ng-if="selector.value.indexed" id="{{selector.id}}"><strong>{{selector.value.expression}} {{selector.label}}</strong></span>
+                  <span ng-if="!selector.value.indexed" id="{{selector.id}}"><strong>{{selector.value.expression}}</strong> {{selector.label}}</span>
+                </div>
+              </div>
+              <!--<hr/>
+              <div>
+                  <button type="button" class="btn btn-link" ng-click="addPropertySelector(family)">
+                      Add custom property
+                  </button>
+              </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9" id="query-toolbox-right-pane">
+      <div class="row">
+        <div ng-if="statisticsEnabled" class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <span class="pull-right" ng-show="statistics.executionTimeInMs">took {{toHumanReadableDuration(statistics.executionTimeInMs)}}</span>
+
+              <h3 class="panel-title">Statistics</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row" ng-show='statsError'>
+                <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">{{statsError}}</div>
+                </div>
+              </div>
+              <div class="row">
+
+                <div ng-show="statsLoading" class="loading">
+                  <img src="./images/ajax-loader.gif" class="ajax-loader">
+                </div>
+                <div ng-show="!statsLoading">
+                  <div class="col-sm-3">
+                    <div class="query-stats">
+                      <span title="Total users" class="glyphicon glyphicon-user btn-lg total-user"></span>
+                      <span class="stats">{{statistics.total | number}}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="query-stats">
+                      <span title="Total users with user account" class="glyphicon glyphicon-user btn-lg"></span>
+                      <span class="stats">{{statistics.hasUserAccountId | number}}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="query-stats">
+                      <span title="Total users with email" class="glyphicon glyphicon-envelope btn-lg"></span>
+                      <span class="stats">{{statistics.hasEmail | number}}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="query-stats">
+                      <img class="stats-image" src="images/datamart/device_pc.svg" width="35" height="35">
+                      <span class="stats">{{statistics.hasCookie | number}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div ng-if="statisticsEnabled" class="pull-right">
+            <a class="mics-btn mics-btn-action" ng-click="refreshQuery()"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+          </div>
+          <uib-tabset>
+            <uib-tab heading="Query conditions">
+              <div class="query-tab" ng-class="{'ongoing-drag-decorate':onGoingDrag}">
+                <span class="help-block" ng-if="!queryContainer.hasConditions()">No conditions defined, query matchs all</span>
+                <div ng-repeat="(i,groupContainer) in queryContainer.groupContainers">
+                  <div ng-class="{'panel panel-success':!groupContainer.value.excluded, 'panel panel-danger':groupContainer.value.excluded}">
+                    <div class="panel-heading drop-allowed" x-lvl-drop-target='true'
+                         x-on-drop='addElement(dragEl, dropEl , groupContainer)'>
+                      <div class="pull-right">
+
+                        <button type="button" class="btn btn-default btn-xs" aria-label="copy"
+                                ng-click="copyGroup(queryContainer,groupContainer)">
+                          <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs" aria-label="remove"
+                                ng-click="removeGroup(queryContainer,groupContainer)">
+                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                      </div>
+                      Group #{{i+1}}
+                      <span ng-if="!groupContainer.value.excluded" class="glyphicon glyphicon-ok"
+                            aria-hidden="true" title="Include group"
+                            ng-click="toggleExclude(groupContainer)"></span>
+                      <span ng-if="groupContainer.value.excluded"
+                            class="glyphicon glyphicon-remove-circle" aria-hidden="true"
+                            title="Exclude group" ng-click="toggleExclude(groupContainer)"></span>
+                    </div>
+                    <div class="panel-body">
+                      <div id="group {{groupContainer.id}}"
+                           ng-repeat="(j,elementContainer) in groupContainer.elementContainers">
+                        <div class="panel panel-default">
+                          <div class="panel-heading" x-lvl-drop-target='true'
+                               x-on-drop='addCondition(dragEl, dropEl , elementContainer)'
+                               ng-class="{
+                                                      'drop-allowed': familyMatchesForDrop(elementContainer.family)
+                                                   }"
+                          >
+                            <div class="pull-right">
+                              <button type="button" class="btn btn-default btn-xs"
+                                      aria-label="remove"
+                                      ng-click="removeElem(groupContainer,elementContainer)">
+                                                        <span class="glyphicon glyphicon-remove"
+                                                              aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div ng-show="!elementContainer.hasIndexSelector()">
+                              {{elementContainer.family}}
+                            </div>
+                            <div ng-show="elementContainer.hasIndexSelector()">
+                              <select class="form-control index_selector" ng-model="elementContainer.selectedIndexOptionId" ng-change="elementContainer.changeIndexSelector()">
+                                <option ng-repeat="option in elementContainer.indexOptions" value="{{option.id}}" ng-selected="option.id === elementContainer.selectedIndexOptionId">{{option.label}}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="panel-body">
+                            <div ng-repeat="(k,condition) in elementContainer.conditions">
+                              <div ng-if="condition.value.property_selector_name !== 'INDEX'">
+                                <div class="form-group">
+                                  <div class="row">
+                                    <div class="col-md-10">
+                                      <mcs-query-condition
+                                          condition="condition"></mcs-query-condition>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <button type="button" class="btn btn-default pull-right"
+                                              aria-label="remove"
+                                              ng-click="removeCond(groupContainer, elementContainer, condition)">
+                                                                    <span class="glyphicon glyphicon-remove"
+                                                                          aria-hidden="true"></span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!--ng-class="isDropAllowedOnElement(dragEl, elementContainer)"-->
+                            <!-- <div class="droppable-zone" x-lvl-drop-target='true'
+                                 ng-class="{
+                                                        'drop-allowed': familyMatchesForDrop(elementContainer.family),
+                                                        'drop-forbidden': !familyMatchesForDrop(elementContainer.family)
+                                                     }"
+                                 x-on-drop='addCondition(dragEl, dropEl , elementContainer)'></div> -->
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="droppable-zone drop-allowed" x-lvl-drop-target='true'
+                           x-on-drop='addElement(dragEl, dropEl , groupContainer)'></div> -->
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-default" ng-click="addGroup(queryContainer, $event)">Add a group of conditions</button>
+              </div>
+            </uib-tab>
+            <uib-tab ng-if="selectedValuesEnabled" heading="Selected values">
+              <div class="query-tab">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="btn-toolbar" role="toolbar">
+                      <div class="btn-group" role="group" ng-repeat="expression in propertySelectorExpressions">
+                        <!-- <a x-lvl-draggable='true' data-family="selector_expression" class="btn btn-info btn-xs" name="{{expression}}">{{expression}}</a> -->
+                        <span x-lvl-draggable='true' data-family="selector_expression" class="btn-expression-info" name="{{expression.name}}">{{expression.name}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row selected-value vertical-align" ng-class="{'ongoing-drag-expression-decorate':onGoingDragExpression}" ng-repeat="selectedValue in queryContainer.selectedValues">
+
+                      <div class="col-md-1">
+                                                <span class="expression-drop-zone" ng-class="{'drop-allowed': isExpressionApplicable(selectedValue),'drop-forbidden': !isExpressionApplicable(selectedValue)}" x-lvl-drop-target='true' x-on-drop='addExpressionToSelectedValue(dragEl, dropEl, selectedValue)'>
+                                                    <span class="btn-expression-default" ng-show="selectedValue.value.expression">{{selectedValue.value.expression}}</span>
+                                                </span>
+                      </div>
+                      <div class="col-md-3">
+                        <strong>{{selectedValue.getFamilyName()}}</strong> : {{selectedValue.getSelectorLabel()}}
+                      </div>
+                      <div class="col-md-7">
+                        <form class="form-inline">
+                          <div class="form-group">
+                            <label for="asInput">as &nbsp;</label>
+                            <input type="text" class="form-control" id="asInput" ng-model="selectedValue.value.alias">
+                          </div>
+                        </form>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="button" class="btn btn-default btn-xs" aria-label="remove"
+                                ng-click="removeSelectedValue(queryContainer,selectedValue)">
+                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                      </div>
+                    </div>
+                    <div ng-class="{'ongoing-drag-decorate':onGoingDrag}" x-lvl-drop-target='true' x-on-drop='addSelectedValue(dragEl, dropEl , queryContainer)'>
+                      <div class="col-md-12 droppable-zone"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </uib-tab>
+            <uib-tab ng-if="statisticsEnabled" heading="Results" select="resultsTabSelect()" deselect="resultsTabDeselect()">
+              <div class="query-tab">
+                <div ng-show="resultsLoading" class="loading">
+                  <img src="./images/ajax-loader.gif" class="ajax-loader">
+                </div>
+                <div ng-show="resultsError" class="alert alert-danger" role="alert">{{resultsError}}</div>
+                <div ng-show="!resultsLoading && !resultsError">
+                  <div ng-show="statistics.total == 0">No Results</div>
+                  <div ng-show="results.length == 0 && statistics.total != 0">Click refresh to
+                                                                              view results
+                  </div>
+
+                </div>
+                <table class="mics-table results-tab" ng-show="results && results.metadata">
+                  <thead>
+                  <tr>
+                    <th class="col-md-1">Action</th>
+                    <th ng-show="queryContainer.selectedValues.length == 0">No Selected values</th>
+                    <th ng-show="queryContainer.selectedValues.length != 0" ng-repeat="family in families" colspan="{{results.metadata[family.familyJson].length}}">{{family.familyLabel}}</th>
+                  </tr>
+                  <tr>
+                    <th ng-show="queryContainer.selectedValues.length != 0" class="col-md-1"></th>
+                    <th ng-show="queryContainer.selectedValues.length != 0" ng-repeat="column in selectedColumns">{{column.columnLabel}}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="row in results.rows">
+                    <td>
+                      <a class="mics-btn mics-btn-action btn-xs" target="_blank"
+                         ng-href="{{goToTimeline(row['user_point_id'])}}">User overview</a>
+                    </td>
+                    <td ng-repeat="column in selectedColumns">{{displayValue(row['cells'][column.json_path],column)}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </uib-tab>
+          </uib-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

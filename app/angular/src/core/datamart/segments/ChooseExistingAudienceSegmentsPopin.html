@@ -1,0 +1,33 @@
+<div>
+  <div class="modal-header">
+    <h3>Select Audience Segments</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="fragment-list-audience-segment">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Segment Name</th>
+          <th ng-if="segmentSelectionType === 'DISPLAY'">Target or Exclude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="segment in segments">
+          <td><input type="checkbox" checklist-model="selectedSegments" checklist-value="segment"></td>
+          <td>
+            {{segment.name}}
+          </td>
+          <td ng-if="segmentSelectionType === 'DISPLAY'">
+            <div mics-exclude-toggle="segment.exclude"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selectedSegments.length" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>

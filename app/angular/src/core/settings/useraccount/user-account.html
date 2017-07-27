@@ -1,0 +1,76 @@
+<div class="mcs-default-container" ng-controller="core/settings/UserAccountController">
+
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>User Account</h1>
+    </div>
+
+    <h3>Basic Information</h3>
+    <table class="table">
+      <thead></thead>
+      <tbody>
+      <tr>
+        <td><strong>Name</strong></td>
+        <td>{{firstName}} {{lastName}}</td>
+      </tr>
+      <tr>
+        <td><strong>Email</strong></td>
+        <td>{{email}}</td>
+      </tr>
+      <tr>
+        <td><strong>Password</strong></td>
+        <td>
+          <button class="mics-btn mics-btn-action" ng-click="changePasswordRequest()">Change password</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!--Keep it for later-->
+    <!--<div ng-show="workspaces">-->
+      <!--<h3>Workspaces</h3>-->
+      <!--<table class="table table-hover" id="searchWorkspaces">-->
+        <!--<thead>-->
+        <!--<tr>-->
+          <!--<th>Id</th>-->
+          <!--<th>Name</th>-->
+          <!--<th>Role</th>-->
+          <!--<th>Administrator</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr ng-repeat="workspace in workspaces">-->
+          <!--<td>{{workspace.organisation_id}}</td>-->
+          <!--<td>{{workspace.organisation_name}}</td>-->
+          <!--<td>{{workspace.role}}</td>-->
+          <!--<td>{{workspace.administrator}}</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+      <!--</table>-->
+    <!--</div>-->
+
+    <div ng-show="plugins">
+      <h3>Plugins</h3>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>name</th>
+          <th>url</th>
+          <th>enabled<th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="plugin in plugins">
+          <td>{{plugin.name}}</td>
+          <td><a href="#{{plugin.urn}}/home" target="_blank">{{plugin.urn}}/home</a></td>
+          <td> <input type="checkbox" ng-model="plugin.enabled" ng-change="savePlugins()"/></td>
+        </tr>
+        </tbody>
+      </table>
+      <div ng-show="plugins_updated" class="alert alert-info" role="alert">
+        Remember to reload the page to apply new plugin configuration !
+      </div>
+    </div>
+  </div>
+
+</div>

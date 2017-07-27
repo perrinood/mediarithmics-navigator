@@ -1,0 +1,41 @@
+<div>
+    <div class="modal-header">
+        <h1>Create Property</h1>
+    </div>
+
+    <div class="modal-body">
+        <div class="col-md-12" ng-show='error'>
+            <div class="alert alert-danger"  role="alert">{{error}}</div>
+        </div>
+
+        <form class="form-group form-inline">
+            <div class="form-group">
+                <label for="family">Family</label>
+                <input disabled ng-model="propertySelector.selector_family" type="text" class="form-control" id="family">
+            </div>
+        </form>
+
+        <form class="form-group form-inline">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input ng-model="propertySelector.selector_parameters" type="text" class="form-control" id="name">
+        </div>
+        </form>
+
+        <form class="form-group form-inline">
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select class="form-control" id="type" ng-model="propertySelector.value_type" ng-options="type for type in propertyTypes">
+                    <!--<option ng-repeat="type in propertyTypes" value="{{type}}">{{type}}</option>-->
+                </select>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="modal-footer">
+        <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+        <button class="mics-btn mics-btn-finish" ng-click="done()">Done</button>
+    </div>
+
+</div>

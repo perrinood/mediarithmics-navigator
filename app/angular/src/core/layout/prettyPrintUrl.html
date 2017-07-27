@@ -1,0 +1,12 @@
+<div ng-show="parser.host" class="pretty-print-url">
+  <span ng-click="toggleExpand()">
+    {{parser.protocol}}//{{parser.host}}{{parser.pathname}}<span class="ellipsis" ng-show="!expand && params.length">...</span>
+    <span ng-show="!expand && params.length" class="toggle">more<span class="caret"></span></span>
+    <span ng-show="expand && params.length"  class="toggle dropup">less<span class="caret"></span></span>
+  </span>
+  <a class="url" href="{{url}}" target="_blank">direct link</a>
+
+  <span ng-repeat="fragment in params" class="url-search-item" ng-show="expand">
+    <span class="key"><span class="separator">{{getSeparator($index)}}</span>{{fragment.key}}</span>=<span class="value">{{fragment.value}}</span>
+  </span>
+</div>

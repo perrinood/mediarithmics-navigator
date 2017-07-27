@@ -1,0 +1,36 @@
+<div>
+<form ng-submit="submit()">
+  <div class="modal-header">
+    <h1>New Query Export</h1>
+  </div>
+
+  <div class="modal-body">
+
+    <div ng-show='error'>
+      <div class="alert alert-danger"  role="alert">{{error}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div mcs-form-group label-for="name" label-text="Name">
+          <input required class="form-control" ng-model="queryExport.name" type="text" id="name">
+        </div>
+
+        <br>
+
+        <div mcs-form-group="select" label-for="queryExport.outputFormat" label-text="Output format">
+          <select class="form-control" id="queryExport.outputFormat" ng-model="queryExport.outputFormat">
+            <option value="CSV">CSV</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+    <button class="mics-btn mics-btn-finish">Save</button>
+  </div>
+</form>
+</div>

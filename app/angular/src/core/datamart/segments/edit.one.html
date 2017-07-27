@@ -1,0 +1,218 @@
+<div ng-controller="core/datamart/segments/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form segment-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="isCreationMode">Create Audience Segment</h1>
+      <h1 ng-if="!isCreationMode">Edit Audience Segment</h1>
+    </div>
+
+    <div class="row" ng-show='error'>
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">{{error}}</div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="row">
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="audience_segment_name">Name</label>
+            <input ng-disabled="segment.type == 'USER_ACTIVATION'"  required class="form-control input-lg" ng-model="segment.name" type="text" id="audience_segment_name" >
+            
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="audience_segment_type">Type</label>
+            <input class="form-control input-lg" ng-model="segment.type" type="text" id="audience_segment_type" disabled>
+          </div>
+        </div>
+
+    </div>
+
+
+    <div class="row" ng-if="segment.type != 'USER_QUERY'">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Default lifetime</h3>
+          </div>
+          <div class="panel-body">
+              <div class="form-inline">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="lifetimeRadios" id="optionsRadios1" value="never" ng-model="segmentLifetime">
+                    Never ending
+                  </label>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="lifetimeRadios" id="optionsRadios2" value="expire" ng-model="segmentLifetime">
+                    Expires in
+                  </label>
+                </div>
+                  <input type="number" class="form-control input-sm" id="exampleInputEmail3" style="width: 100px;" ng-model="segmentLifetimeNumber">
+                  <select class="form-control input-sm" ng-model="segmentLifetimeUnit">
+                    <option value="hours">Hour</option>
+                    <option value="days">Day</option>
+                    <option value="weeks">Week</option>
+                    <option value="months">Month</option>
+                  </select>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <br>
+
+    <div ng-if="segment.type == 'USER_QUERY'">
+      <div class="mics-block-heading">
+        <span>Query</span>
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-edit" ng-click="editQuery()">Edit query</a>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <mcs-query-read-only-view query-container="queryContainer"></mcs-query-read-only-view>
+      </div>
+      
+    </div>
+
+    <div ng-if="segment.type == 'USER_LOOK_ALIKE'">
+      <div class="mics-block-heading">
+        <span>Look alike</span>
+      </div>
+          <!-- <a class="mics-btn mics-btn-action" ng-click="refreshQuery()">Refresh</a> -->
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+          <span>Goals</span>
+          <a class="mics-btn mics-btn-add" uib-dropdown-toggle type="button" ng-click="addGoal()">Add a goal</a>
+        </div>
+      </div>
+      <br>
+
+      <div class="row" ng-show="goals.length">
+        <div class="col-md-12">
+          <table class="mics-table" >
+            <thead>
+            <tr>
+              <th>Goal</th>
+              <th class="actions">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="goal in goals">
+              <td>{{goal.name}}</td>
+              <td class="actions">
+                <a class="mics-btn mics-btn-delete" ng-click="removeGoal(goal)">Remove</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <br>
+      <div class="row">
+        <div class="col-md-12">
+        <div mcs-form-group="" label-for="look-alike-algorithm" label-text="Look alike algorithm">
+          <select class="form-control input-lg">
+            <option value="mics_algo">mediarithmics - profile distance</option>
+          </select>
+        </div></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+        <div mcs-form-group="" label-for="look-alike-distance" label-text="Look alike distance">
+          <input type="text" class="form-control input-lg" id="look-alike-distance">
+        </div>
+      </div></div>
+      <br>
+    </div>
+
+
+
+
+
+    <div ng-if="!isCreationMode">
+    <div class="mics-block-heading">
+      <span>Audience External Feed</span>
+      <div class="btn-group">
+        <a class="mics-btn mics-btn-add" ng-click="addActivation()">Add an activation</a>
+      </div>
+    </div>
+    <table class="mics-table" ng-show="activations.length">
+      <thead>
+      <tr>
+        <th>Audience segment feed connector</th>
+        <th>Properties</th>
+        <th>Status</th>
+        <th class="actions">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="activation in activations">
+        <td>{{activation.value.artifact_id}}</td>
+        <td>
+            <ul>
+                <li ng-repeat="property in activation.properties">{{property.value.technical_name}}: {{property.value.value.value}}</li>
+            </ul>
+        </td>
+        <td ><span mics-segment-external-feed-status="activation.value"></span></td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" ng-click="editActivation(activation)">Edit</a>
+          <a class="mics-btn mics-btn-delete" ng-click="removeActivation(activation)">Remove</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+              Advanced Options
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div mcs-form-group="" label-for="audience_segment_technical_name" label-text="Technical Name">
+              <input ng-model="segment.technical_name" type="text" id="audience_segment_technical_name">              
+            </div>
+            <div class="form-inline" ng-if="segment.type == 'USER_QUERY'">
+              <div class="radio">
+                <label>
+                  <input type="checkbox" ng-model="realTime.active" />
+                  Enforce real time evaluation frequency
+                </label>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>

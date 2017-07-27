@@ -1,0 +1,16 @@
+<div ng-if="!readOnly">
+  <div class="col-md-4">
+      <input type="search" class="form-control" ng-model="relativeDate.number">
+  </div>
+  <div class="col-md-5">
+      <select class="form-control input-sm" ng-model="relativeDate.magnitude"
+        ng-options="magnitude.label for magnitude in magnitudes track by magnitude.letter">
+      </select>
+  </div>
+  <div class="col-md-3">
+      ago
+  </div>
+</div>
+<div ng-if="readOnly">
+  <span>{{relativeDate.number}} {{relativeDate.magnitude.label}} ago</span>
+</div>

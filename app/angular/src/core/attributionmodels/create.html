@@ -1,0 +1,47 @@
+<div class="choose-existing-attribution-model">
+  <div class="modal-header">
+    <h3>Create Attribution Model</h3>
+  </div>
+
+  <div class="modal-body form-inline">
+    <label for="new_attribution_model_name">Name</label>
+    <input id="new_attribution_model_name" ng-model="attributionModel.name" class="form-control" /><br/>
+    <br />
+    <table class="fragment-list-attribution-model-processor">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Attribution Model Processor</th>
+          <th>Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="availableAttributionModelProcessor in availableAttributionModelProcessors" fetch-plugin-properties="availableAttributionModelProcessor.id as properties">
+          <td>
+            <input
+              type="radio"
+              name="available_attribution_model_processor"
+              ng-model="attributionModel.attributionModelProcessor"
+              value="{{availableAttributionModelProcessor.group_id}}/{{availableAttributionModelProcessor.artifact_id}}"
+              id="available_attribution_model_processor_{{availableAttributionModelProcessor.id}}"
+            />
+          </td>
+          <td>
+            <label ng-show="properties['name']" for="available_attribution_model_processor_{{availableAttributionModelProcessor.id}}">{{properties['name'].value}}</label>
+            <label ng-show="!properties['name']" for="available_attribution_model_processor_{{availableAttributionModelProcessor.id}}">{{availableAttributionModelProcessor.artifact_id}}</label>
+          </td>
+          <td>
+            <label ng-show="properties['provider']"  for="available_attribution_model_processor_{{availableAttributionModelProcessor.id}}">{{properties['provider'].value}}</label>
+            <label ng-show="!properties['provider']" for="available_attribution_model_processor_{{availableAttributionModelProcessor.id}}">{{availableAttributionModelProcessor.group_id}}</label>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="attributionModelIsOk()" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>

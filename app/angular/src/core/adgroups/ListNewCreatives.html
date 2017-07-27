@@ -1,0 +1,21 @@
+<table class="fragment-list-creatives">
+  <thead>
+  <tr>
+    <th>Size</th>
+    <th>Ad Name</th>
+    <th ng-if="showDelete">Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="wrapper in wrappers">
+    <td mics-asset-thumbnail asset="wrapper.asset">
+    </td>
+    <td>
+      <input class="form-control" required ng-model="wrapper.creative.name">
+    </td>
+    <td ng-if="showDelete" class="delete-action">
+      <a ng-click="onDelete(wrapper)">x</a>
+    </td>
+  </tr>
+  </tbody>
+</table>

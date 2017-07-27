@@ -1,0 +1,7 @@
+{"name": "core/goals", "dependencies": [
+  "restangular",
+  "core/attributionmodels",
+  "core/goals/report",
+  "core/datamart/queries",
+  "checklist-model"
+]}

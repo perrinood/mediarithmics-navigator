@@ -1,0 +1,249 @@
+<div ng-controller="core/datamart/users/ViewOneController" class="mcs-default-container">
+<div class="mcs-default-content user-overview">
+
+    <div class="mcs-default-heading">
+        <h2>
+            User Overview
+        </h2>
+
+    </div>
+
+    <uib-tabset class="breakdown">
+        <uib-tab heading="Timeline">
+            <div class="col-md-12 mics-timeline-menu">
+              <div class="pull-right">
+                <div class="mics-timeline-toggle-block">
+                  <div class="toggle-text toggle-text-target">Show Platform activities</div>
+                  <div class="mics-timeline-toggle" ng-class="toggle.showPlatform ? 'mics-timeline-toggle-checked' : 'mics-timeline-toggle-unchecked'">
+                    <input type="checkbox" id="toggleShowPlatform" name="check" ng-model="toggle.showPlatform" />
+                    <label for="toggleShowPlatform"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <mcs-timeline timelines="timelines" load-more-actions="loadMoreActions" show-more="showMore"
+                          organisation-id="organisationId" debug="debug"></mcs-timeline>
+        </uib-tab>
+        <uib-tab heading="Profile">
+
+            <div class="col-md-6 col-xs-6">
+                <table class="datamart table table-hover user-profile">
+                    <tr ng-hide="user.$first_name == null">
+                        <td>First name</td>
+                        <td><strong>{{ user.$first_name }}</strong></td>
+                    </tr>
+                    <tr ng-hide="user.$last_name == null">
+                        <td>Last name</td>
+                        <td><strong>{{ user.$last_name }}</strong></td>
+                    </tr>
+                    <tr ng-hide="user.$birth_date == null">
+                        <td>Birth date</td>
+                        <td>{{ user.$birth_date  | date:'MM/dd/yyyy'}}</td>
+                    </tr>
+                    <tr ng-hide="user.$email == null">
+                        <td>Email</td>
+                        <td>{{ user.$email }}</td>
+                    </tr>
+                    <tr ng-hide="user.$user_account_id == null">
+                        <td>Account ID</td>
+                        <td><code>{{ user.$user_account_id }}</code></td>
+                    </tr>
+                    <tr ng-hide="user.$creation_date == null">
+                        <td>Creation date</td>
+                        <td><code>{{ user.$creation_date | date:'medium' }}</code></td>
+                    </tr>
+                    <!-- display custom properties -->
+                    <tr ng-repeat="(key,value) in user">
+                        <td> {{key}}</td>
+                        <td> {{ value }}</td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </uib-tab>
+        <uib-tab heading="Identifiers">
+          <div class="identifiers">
+
+            <div ng-show="userAccountId">
+              <h4><strong>User Account Id</strong></h4>
+              <span>{{userAccountId.user_account_id}}</span>
+              <hr>
+            </div>
+
+            <div ng-show="emails && emails.length > 0">
+              <h4><strong>Email Addresses</strong></h4>
+
+              <div ng-repeat="email in emails" class="email-element">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="envelope">
+                      <span class="glyphicon glyphicon-envelope btn-lg"></span>
+                    </div>
+                    <div>
+                      <ul>
+                        <li>
+                          Email: <span>{{email.email}}</span>
+                        </li>
+                        <li>
+                          Hash: <span>{{email.hash}}</span>
+                        </li>
+                        <li>
+                          Creation date: <span>{{email.creation_ts | date:'MM/dd/yyyy h:mm a'}}</span>
+                        </li>
+                        <li>
+                          Last activity date: <span>{{email.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</span>
+                        </li>
+                        <br>
+                        <li ng-show="email.providers && email.providers.length > 0">
+                          <strong>Providers :</strong>
+                          <table class="mics-table">
+                            <thead>
+                              <tr>
+                                <th>Technical name</th>
+                                <th>Creation date</th>
+                                <th>Last activity date</th>
+                                <th>Last modified date</th>
+                                <th>Expiration date</th>
+                                <th>Active</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="provider in email.providers">
+                                <td>{{provider.technical_name}}</td>
+                                <td>{{provider.creation_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.last_modified_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.expiration_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.active}}</td>
+                                <td>{{provider.status}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </li>
+                      </ul>
+                    </div></div>
+                  </div>
+                </div>
+              <hr>
+            </div>
+
+            <div ng-show="devices && devices.length > 0">
+              <h4><strong>Devices</strong></h4>
+
+              <div ng-repeat="device in devices">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="device-icon">
+                      <span ng-switch on="device.device.form_factor">
+
+                        <img ng-switch-when="PERSONAL_COMPUTER" src="images/datamart/device_pc.svg" height="24" width="24">
+                        <img ng-switch-when="SMARTPHONE" src="images/datamart/device_phone.svg" height="24"
+                        width="24">
+                        <img ng-switch-when="TABLET" src="images/datamart/device_tablet.svg" height="24"
+                        width="24">
+                      </span>
+
+                    </div>
+                    <div class="device-content">
+
+                      <ul>
+                        <li ng-hide="!device.device.form_factor && !device.device.os_family">
+                          <h4>
+                            <span>{{device.device.browser_family | browserFamilyLabel}} - {{device.device.form_factor | formFactorLabel}} - {{device.device.os_family | operatingSystemFamilyLabel}}</span>
+                          </h4>
+                        </li>
+                        <li>
+                          <span>Last Seen : </span>
+                          <span ng-show="device.last_activity_ts">{{device.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</span>
+                          <span ng-show="!device.last_activity_ts">-</span>
+                        </li>
+                        <br>
+                        <li ng-show="device.mappings && device.mappings.length > 0">
+                          <strong>Mappings :</strong>
+                          <table class="mics-table">
+                            <thead>
+                              <tr>
+                                <th>Realm</th>
+                                <th>User Agent Id</th>
+                                <th>Last activity date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="mapping in device.mappings">
+                                <td>{{mapping.realm_name}}</td>
+                                <td>{{mapping.user_agent_id}}</td>
+                                <td>{{mapping.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </li>
+                        <li ng-show="device.providers && device.providers.length > 0">
+                          <strong>Providers :</strong>
+                          <table class="mics-table">
+                            <thead>
+                              <tr>
+                                <th>Technical name</th>
+                                <th>Creation date</th>
+                                <th>Last activity date</th>
+                                <th>Expiration date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="provider in device.providers">
+                                <td>{{provider.technical_name}}</td>
+                                <td>{{provider.creation_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.last_activity_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                                <td>{{provider.expiration_ts | date:'MM/dd/yyyy h:mm a'}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+
+          </div>
+
+        </uib-tab>
+        <uib-tab heading="Audience Segments">
+          <div ng-show="segments.length == 0">
+              <br/>
+              <span class="ng-binding">No audience segment associated to this user.</span>
+          </div>
+          <div ng-hide="segments.length == 0">
+                <div ng-repeat="segment in segments" class="col-xs-12 segment">
+                    <h3><span>Name : {{audienceSegments[segment.segment_id].name }}</span></h3>
+                    <br/>
+
+                    <div class="col-xs-4">
+                        <dl>
+                          <dd>
+                            <span>Type : {{audienceSegments[segment.segment_id].type}}</span>
+                          </dd>
+                            <dd>
+                                <span>Creation date : {{segment.creation_ts | date:'MM/dd/yyyy'}}</span>
+                            </dd>
+                            <dd>
+                                <span>Expiration date : {{segment.expiration_ts | date:'MM/dd/yyyy'}}</span>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-xs-4">
+                        <h5>Data bag:</h5>
+                        <pre class="col-xs-10">{{segment.data_bag}}</pre>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+
+</div>
+
+
+</div>

@@ -1,0 +1,133 @@
+<div class="mcs-default-container" ng-controller="core/campaigns/emails/EditCampaignController">
+
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+    <div class="mcs-campaign-type ">
+      <img src="/images/plugins/email-campaign-expert-small.png"><br/>
+      <h4>Email Campaign</h4>
+    </div>
+  </div>
+
+  <form role="form" class="mcs-default-edit-content mcs-full-page-form">
+
+    <!------------------------ Basic Info ------------------------>
+    <div class="mcs-default-heading">
+      <h1>Campaign</h1>
+    </div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="name" label-text="Campaign name">
+      <input ng-model="campaignCtn.value.name" type="text" class="form-control input-lg" id="name">
+    </div>
+
+    <!-- Subject line -->
+    <div mcs-form-group="large" label-for="subject_line" label-text="Subject line">
+      <input ng-model="campaignCtn.value.subject_line" type="text" class="form-control input-lg" id="subject_line"/>
+    </div>
+
+    <!-- From email -->
+    <div mcs-form-group="number" label-for="from_email" label-text="From email">
+      <input ng-model="campaignCtn.value.from_email" type="text" class="form-control input-lg" id="from_email"/>
+    </div>
+
+    <!-- Reply to -->
+    <div mcs-form-group="number" label-for="reply_to" label-text="Reply to">
+      <input ng-model="campaignCtn.value.reply_to" type="text" class="form-control input-lg" id="reply_to"/>
+    </div>
+
+    <!-- from name -->
+    <div mcs-form-group="number" label-for="from_name" label-text="From name">
+      <input ng-model="campaignCtn.value.from_name" type="text" class="form-control input-lg" id="from_name"/>
+    </div>
+
+    <br/>
+    <!--<div>-->
+      <!--<div mcs-form-group="number" label-for="send_email" label-text="">-->
+        <!--<input placeholder="Email" ng-model="recipient" type="email" class="form-control input-lg" id="send_email"/>-->
+      <!--</div>-->
+      <!--<button ng-disabled="recipient.length === 0" class="mics-btn mics-btn-continue" type="button" ng-click="sendEmail()">Send</button>-->
+
+    <!--</div>-->
+    <!--<p>{{messageSent}}</p>-->
+
+    <!------------------------ Select template (creative)------------------------>
+    <div class="mcs-form-group">
+      <div class="mics-block-heading">
+        <div class="btn-group">
+          <a class="mics-btn mics-btn-add" ng-click="selectExistingEmailTemplates()">Select email template</a>
+        </div>
+        <span>Email template</span>
+      </div>
+      <div class="row" ng-show="emailRenderResponse">
+        <div class="col-md-12">
+          <h3>Preview</h3>
+          <iframe id="email-preview-html" class="creative-preview" frameborder="0" width="{{previewWidth}}" height="{{previewHeight}}"></iframe>
+        </div>
+      </div>
+    </div>
+
+
+    <!------------------------ Advanced options ------------------------>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+              Advanced Options
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div mcs-form-group="" label-for="campaign_technical_name" label-text="Technical Name">
+                  <input ng-model="campaignCtn.value.technical_name" type="text" id="campaign_technical_name">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <span>Email routers</span>
+                <a class="mics-btn mics-btn-add" uib-dropdown-toggle type="button" ng-click="addEmailRouters()">Add Email Router</a>
+              </div>
+            </div>
+            <br>
+            <div class="row" ng-show="campaignCtn.emailRouters.length">
+              <div class="col-md-12">
+                <table class="mics-table">
+                  <thead>
+                  <tr>
+                    <th>Email Router Name</th>
+                    <th>Provider</th>
+                    <th class="actions">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="router in campaignCtn.emailRouters"
+                      fetch-plugin-from-version="router.email_router_version_id as pluginRouter"
+                      fetch-plugin-properties="pluginRouter.id as properties">
+                    <td>{{properties['name'].value}}</td>
+                    <td>{{properties['provider'].value}}</td>
+                    <td class="actions">
+                      <a class="mics-btn mics-btn-delete" ng-click="removeRouter(router)">Remove</a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save or cancel -->
+    <div class="mcs-actions-group">
+      <button class="mics-btn mics-btn-finish" ng-click="save()">Save</button>
+      <button class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

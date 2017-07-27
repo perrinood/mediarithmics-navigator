@@ -1,0 +1,36 @@
+<div ng-controller="core/visitanalysers/ViewAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Visit Analysers</h1>
+    </div>
+    <!--<div class="mics-table-toolbar">-->
+      <!--<div class="col-md-6">-->
+        <!--<div class="dropdown" dropdown>-->
+          <!--<a class="mics-btn mics-btn-add" href="#/{{currentWorkspaceId}}/library/visitanalysers/new">-->
+            <!--New Visit Analyser-->
+          <!--</a>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <table class="mics-table js-auto-hide-actions" ng-show="visitAnalysersModels.length">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Visit Analyser Processor</th>
+        <th>Provider</th>
+        <th class="actions">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="visitAnalyser in visitAnalysersModels" fetch-plugin-properties-from-version="visitAnalyser.visit_analyzer_plugin_id as visitAnalyserProperties">
+        <td>{{visitAnalyser.name}}</td>
+        <td>{{visitAnalyserProperties['name'].value}}</td>
+        <td>{{visitAnalyserProperties['provider'].value}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/visitanalysers/{{visitAnalyser.id}}">Edit</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

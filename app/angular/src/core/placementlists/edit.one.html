@@ -1,0 +1,132 @@
+<div ng-controller="core/placementlists/EditOneController" class="mcs-default-container" xmlns="">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="isCreationMode">Create Placement List</h1>
+      <h1 ng-if="!isCreationMode">Edit Placement List</h1>
+    </div>
+
+    <div ng-show="isCreationMode">CSV upload will be available after creation<br></div>
+
+    <!-- Name -->
+    <div mcs-form-group="" label-for="placement_list_name" label-text="Placement List Name">
+      <input required class="input-lg" ng-model="placementList.name" type="text" id="placement_list_name">
+    </div>
+
+    <uib-tabset ng-if="!isCreationMode" class="mics-page-main-tabs">
+      <!--WEB DESCRIPTORS-->
+      <uib-tab active="activeTab[0]" ng-show="webPlacementListParams.data.length">
+        <uib-tab-heading>
+          Web Pages
+        </uib-tab-heading>
+
+        <!--List Web Placement Descriptors-->
+        <table class="mics-table" ng-table="webPlacementListParams">
+          <thead>
+          <tr>
+            <th>Value</th>
+            <th>Descriptor Type</th>
+            <th>Holder</th>
+            <th>Url Keywords</th>
+            <th class="actions">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="descriptor in $data">
+            <td><a ng-href="{{descriptor.value}}" target="_blank">{{descriptor.value}}</a></td>
+            <td>{{descriptor.descriptor_type}}</td>
+            <td>{{descriptor.placement_holder}}</td>
+            <td><span ng-show="descriptor.descriptor_type == 'PATTERN'" ng-repeat="keyword in descriptor.keywords">{{keyword + ' '}}</span></td>
+            <td class="actions">
+              <a class="mics-btn mics-btn-edit" ng-click="editPlacement(descriptor)">Edit</a>
+              <a class="mics-btn mics-btn-delete" ng-click="deletePlacement(descriptor)">Delete</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </uib-tab>
+
+      <!--APPLICATIONS DESCRIPTORS-->
+      <uib-tab active="activeTab[1]" ng-show="appPlacementListParams.data.length">
+        <uib-tab-heading>
+          Applications
+        </uib-tab-heading>
+
+        <!--List App Placement Descriptors-->
+        <table class="mics-table" ng-table="appPlacementListParams">
+          <thead>
+          <tr>
+            <th>Value</th>
+            <th>Descriptor Type</th>
+            <th>Holder</th>
+            <th>App Keywords</th>
+            <th class="actions">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="descriptor in $data">
+            <td><a ng-href="{{descriptor.value}}" target="_blank">{{descriptor.value}}</a></td>
+            <td>{{descriptor.descriptor_type}}</td>
+            <td>{{descriptor.placement_holder}}</td>
+            <td><span ng-show="descriptor.descriptor_type == 'PATTERN'" ng-repeat="keyword in descriptor.keywords">{{keyword + ' '}}</span></td>
+            <td class="actions">
+              <a class="mics-btn mics-btn-edit" ng-click="editPlacement(descriptor)">Edit</a>
+              <a class="mics-btn mics-btn-delete" ng-click="deletePlacement(descriptor)">Delete</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </uib-tab>
+    </uib-tabset>
+
+    <div ng-show="!!uploadError" class="alert alert-danger">{{uploadError}}</div>
+
+    <!--Add Or Search Placement Lists-->
+    <div ng-show="!isCreationMode && !webPlacementListParams.data.length && !appPlacementListParams.data.length" mics-pl-upload="pluploadOptions">
+      <button class="mics-btn mics-btn-add browse-button" type="button">New Placement List</button>
+      <br>
+    </div>
+
+    <!--Current placement list actions-->
+    <div class="row" ng-show="webPlacementListParams.data.length || appPlacementListParams.data.length" mics-pl-upload="pluploadOptions">
+      <div class="col-xs-12">
+        <a ng-click="addPlacement()" class="mics-btn mics-btn-add">Add Placement</a>
+        <a class="browse-button mics-btn mics-btn-add">Replace with CSV</a>
+        <a ng-click="downloadCSV()" class="mics-btn mics-btn-action pull-right">Download CSV</a>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+              Advanced Options
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div mcs-form-group="" label-for="placement_list_technical_name" label-text="Technical Id">
+              <input ng-model="placementList.technical_name" type="text" id="placement_list_technical_name">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>
+

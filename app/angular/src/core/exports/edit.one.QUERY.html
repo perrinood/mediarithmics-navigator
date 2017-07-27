@@ -1,0 +1,48 @@
+<div ng-controller="core/exports/EditOneQueryController" class="mcs-default-container">
+<div class="mcs-default-sidebar">
+  <div class="organisation-name-block">
+    {{currentOrganisation}}
+  </div>
+</div>
+<form ng-submit="done()" class="mcs-default-edit-content mcs-full-page-form segment-form">
+
+  <div class="mcs-default-heading">
+    <h1>Edit Query Export</h1>
+  </div>
+
+  <!-- Name -->
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="export.name">Name</label>
+        <input required class="form-control input-lg" ng-model="export.name" type="text" id="export.name">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="export.output_format">Output format</label>
+        <select class="form-control input-lg" id="export.output_format" ng-model="export.output_format">
+          <option value="CSV">CSV</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+  <div class="mics-block-heading">
+    <span>Query</span>
+    <div class="btn-group">
+      <a class="mics-btn mics-btn-edit" ng-click="editQuery()">Edit query</a>
+    </div>
+  </div>
+
+  <br>
+  <mcs-query-read-only-view query-container="queryContainer"></mcs-query-read-only-view>
+
+  <div class="mcs-actions-group">
+    <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+    <button class="mics-btn mics-btn-finish">Done</button>
+  </div>
+</form>
+
+</div>

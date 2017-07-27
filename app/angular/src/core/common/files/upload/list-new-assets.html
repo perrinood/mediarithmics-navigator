@@ -1,0 +1,18 @@
+<table class="fragment-list-creatives">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th ng-if="showDelete">Remove</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="asset in assets">
+    <td>{{asset.name}}</td>
+    <td>{{asset.type}}</td>
+    <td ng-if="showDelete" class="delete-action">
+      <button class="btn btn-default" ng-click="delete(asset)"><i class="glyphicon glyphicon-trash"></i></button>
+    </td>
+  </tr>
+  </tbody>
+</table>

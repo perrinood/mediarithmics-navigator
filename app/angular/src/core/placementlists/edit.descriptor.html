@@ -1,0 +1,41 @@
+<div ng-controller="core/placementlists/EditDescriptorController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form class="mcs-default-edit-content mcs-full-page-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="!editMode">Add Placement Descriptor</h1>
+      <h1 ng-if="editMode">Edit Placement Descriptor</h1>
+    </div>
+
+    <!-- Name -->
+    <div class="row">
+      <div class="col-md-6" mcs-form-group="" label-for="descriptor_name" label-text="Value">
+        <input required class="input-md" ng-model="descriptor.value" type="text" id="descriptor_name">
+      </div>
+    </div>
+
+    <!-- Type -->
+    <div class="row">
+      <div class="col-md-6" mcs-form-group="" label-for="descriptor_type" label-text="Type">
+        <select ng-model="descriptor.descriptor_type" ng-options="key as value for (key , value) in descriptorTypes" id="descriptor_type"></select>
+      </div>
+    </div>
+
+    <!-- Holder -->
+    <div class="row">
+      <div class="col-md-6" mcs-form-group="" label-for="descriptor_holder" label-text="Holder">
+        <select ng-model="descriptor.placement_holder" ng-options="key as value for (key, value) in placementHolders" id="descriptor_holder"></select>
+      </div>
+    </div>
+
+    <div class="alert alert-danger" ng-if="uploadError">{{ uploadError }}</div>
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <a class="mics-btn mics-btn-finish" ng-disabled="!descriptor.value.length" ng-click="done()">Done</a>
+    </div>
+  </form>
+</div>

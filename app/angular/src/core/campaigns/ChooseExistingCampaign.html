@@ -1,0 +1,39 @@
+<div class="choose-existing-display-network">
+  <div class="modal-header">
+    <h3>Select Campaign</h3>
+  </div>
+  {{selectedCampaign | json}}
+  <form>
+    <div class="modal-body">
+
+      <table class="mics-table">
+        <thead>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="availableCampaign in availableCampaigns">
+          <td>
+            {{availableCampaign.type}}
+          </td>
+          <td>
+            {{availableCampaign.name}}
+          </td>
+
+          <td ng-if="availableCampaign.type === 'EMAIL'"><a class="mics-btn mics-btn-finish btn-xs" ng-click="choose(availableCampaign)">Choose</a></td>
+          <td ng-if="availableCampaign.type === 'DISPLAY'">
+              <div ng-repeat="adGroup in adGroupsForCampaign[availableCampaign.id]" ><a class="mics-btn mics-btn-finish btn-xs" ng-click="choose(availableCampaign, adGroup)">Choose {{adGroup.name}}</a> </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-footer">
+      <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+    </div>
+  </form>
+</div>

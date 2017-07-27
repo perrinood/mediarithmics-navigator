@@ -1,0 +1,71 @@
+<div ng-controller="core/datamart/partitions/EditOneController" class="mcs-default-container">
+  <div class="mcs-default-sidebar">
+    <div class="organisation-name-block">
+      {{currentOrganisation}}
+    </div>
+  </div>
+  <form ng-submit="next()" class="mcs-default-edit-content mcs-full-page-form segment-form">
+
+    <div class="mcs-default-heading">
+      <h1 ng-if="isCreationMode">Create Audience Partition</h1>
+      <h1 ng-if="!isCreationMode">Edit Audience Partition</h1>
+    </div>
+
+    <div class="row" ng-show='error'>
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">{{error}}</div>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="audience_partition_name">Name</label>
+            <input required class="form-control input-lg" ng-model="audiencePartition.name" type="text" id="audience_partition_name" >
+            
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="audience_partition_type">Type</label>
+            <input class="form-control input-lg" ng-model="audiencePartition.type" type="text" id="audience_partition_type" disabled>
+          </div>
+        </div>            
+    </div>
+
+    <div class="row">
+      <div class="col-md-1">
+        <div class="form-group">
+          <label for="audience_partition_part_count">Part Count</label>
+          <input ng-required="audiencePartition.status != 'PUBLISHED'" ng-disabled="audiencePartition.status == 'PUBLISHED'" class="form-control input-lg" ng-model="audiencePartition.part_count" type="number" id="audience_partition_part_count">
+        </div>
+      </div>
+    </div>
+
+    <div class="row" ng-if="audiencePartition.type == 'CLUSTERING'">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="audience_partition_clustering_model">Clustering Model</label>
+          <input ng-required="audiencePartition.status != 'PUBLISHED'" ng-disabled="audiencePartition.status == 'PUBLISHED'" class="form-control input-lg"
+            ng-model="audiencePartition.clustering_model_data_file_uri" type="text" id="audience_partition_clustering_model">
+        </div>
+      </div>
+    </div>    
+
+    <div class="row" ng-show="audiencePartition.status">
+      <div class="col-md-12">
+        <h3>Status : {{ audiencePartition.status }}</h3>
+        <div class="row">
+          <div class="col-md-2">
+            <a class="mics-btn mics-btn-action" ng-click="publish()" ng-if="audiencePartition.status != 'PUBLISHED'">Publish</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcs-actions-group">
+      <a class="mics-btn mics-btn-cancel" ng-click="cancel()">Cancel</a>
+      <button class="mics-btn mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>

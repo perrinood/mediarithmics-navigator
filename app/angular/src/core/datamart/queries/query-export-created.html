@@ -1,0 +1,19 @@
+<div>
+  <div class="modal-header">
+    <h1>Query export created</h1>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="alert alert-success" role="alert">
+      You created a Query Export. It is accessible in the library in exports.
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <a ng-click="stayHere()" class="mics-btn mics-btn-action">Close</a>
+    <a class="mics-btn mics-btn-action" ng-href="#{{exportPageUrl}}">Go to the export page</a>
+    <button class="mics-btn mics-btn-finish" ng-click="triggerExecution()">Run the export now</button>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="create-event-template-property">
+  <div class="modal-header">
+    <h3>New Property</h3>
+  </div>
+
+  <form ng-submit="key.length && value.length && done()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-xs-6">
+          <label for="propKey">Name</label>
+          <input class="form-control input-md" ng-model="key" type="text" id="propKey">
+        </div>
+        <div class="col-xs-6">
+          <label for="propValue">Value</label>
+          <input class="form-control input-md" ng-model="value" type="text" id="propValue">
+        </div>
+      </div>
+      <br>
+      <div ng-show="error" class="alert alert-warning" role="alert">
+        {{error}}
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+      <button type="submit" id="submit" ng-disabled="!(key.length && value.length)" class="mics-btn btn-primary mics-btn-finish">Done</button>
+    </div>
+  </form>
+</div>

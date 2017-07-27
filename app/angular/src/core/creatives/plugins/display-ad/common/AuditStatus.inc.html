@@ -1,0 +1,39 @@
+<div class="row audit-status">
+  <div class="col-md-12">
+    <h3>Audit Status</h3>
+    <div class="row">
+      <div class="col-xs-2">
+        <div
+           popover-title="Audits details"
+           uib-popover-template="'audit-status-inc-detail-popover'"
+           popover-trigger="click"
+           popover-placement="right"
+           class="show-details-button"
+           >
+           <div class="status failed" ng-show="displayAd.audit_status == 'AUDIT_FAILED'">Failed</div>
+           <div class="status success" ng-show="displayAd.audit_status == 'AUDIT_PASSED'">Success</div>
+           <div class="status pending" ng-show="displayAd.audit_status == 'AUDIT_PENDING'">Pending</div>
+           <div class="status partially-passed" ng-show="displayAd.audit_status == 'AUDIT_PARTIALLY_PASSED'">Partially Passed</div>
+        </div>
+        <script id="audit-status-inc-detail-popover" type="text/ng-template">
+          <div class="detail-popover">
+            <ul>
+              <li ng-repeat="audit in audits">
+                {{audit.display_network}}: <span class="status {{audit.status}}">{{audit.status}}</span><br>
+                <span ng-show="audit.feedback">({{audit.feedback}})<br></span>
+                Last update {{audit.date|date:'short'}}<br>
+              </li>
+            </ul>
+          </div>
+        </script>
+      </div>
+      <div class="col-xs-2">
+        <div ng-repeat="action in displayAd.available_user_audit_actions">
+          <a class="mics-btn mics-btn-action" ng-click="doAction(action)" ng-if="action == 'START_AUDIT' && displayAd.audit_status != 'AUDIT_FAILED'">Submit to Audit</a>
+          <a class="mics-btn mics-btn-action" ng-click="doAction(action)" ng-if="action == 'START_AUDIT' && displayAd.audit_status == 'AUDIT_FAILED'">Re-submit to Audit</a>
+          <a class="mics-btn mics-btn-cancel" ng-click="doAction(action)" ng-if="action == 'RESET_AUDIT'">Reset Audit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

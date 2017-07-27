@@ -1,0 +1,3 @@
+{"name": "core/datamart/queries", "dependencies": [
+  "lvl.directives.dragdrop"
+]}

@@ -1,0 +1,56 @@
+<div class="choose-existing-bid-optimizer">
+  <div class="modal-header">
+    <h3>Select Bid Optimizer</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="fragment-list-bid-optimizer">
+      <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Name</th>
+        <th>Bid Optimizer Engine</th>
+        <th>Data Miner</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+          ng-repeat="availableBidOptimizer in availableBidOptimizers"
+          fetch-plugin-from-version="availableBidOptimizer.engine_version_id as engine"
+          fetch-plugin-properties="engine.id as engineProperties"
+      >
+        <td>
+          <input
+              type="radio"
+              name="available_bid_optimizer"
+              value="{{availableBidOptimizer.id}}"
+              ng-model="selectedBidOptimizer.id"
+              id="available_bid_optimizer_{{availableBidOptimizer.id}}"
+          />
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{availableBidOptimizer.name}}
+          </label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{engineProperties['name'].value}}
+          </label>
+        </td>
+        <td>
+          <label for="available_bid_optimizer_{{availableBidOptimizer.id}}">
+            {{engineProperties['provider'].value}}
+          </label>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selectedBidOptimizer.id" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>
+

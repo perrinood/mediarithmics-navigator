@@ -1,0 +1,34 @@
+<div class="choose-existing-display-network">
+    <div class="modal-header">
+        <h3>Add/Edit External programmatic activation</h3>
+    </div>
+    <div ng-if="step == 'STEP_1'">
+        <div class="modal-body">
+            <div mcs-form-group="" label-for="plugin" label-text="Host">
+                <select class="form-control input-lg" id="plugin" ng-model="plugin.id">
+                    <option ng-repeat="plugin in plugins" value="{{plugin.id}}">{{plugin.artifact_id}}</option>
+                </select>
+            </div><br>
+        </div>
+        <div class="modal-footer">
+            <a class="mics-btn mics-btn-finish" ng-if="plugin.id" ng-click="next()">Configure properties</a>
+            <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+        </div>
+    </div>
+    <div ng-if="step == 'STEP_2'">
+        <div class="modal-body" ng-if="step == 'STEP_2'">
+            <div ng-repeat="property in properties">
+                <mcs-double-property property="property.value" ng-if="property.value.property_type == 'DOUBLE'"  ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-double-property>
+                <mcs-text-property property="property.value" ng-if="property.value.property_type == 'STRING'"  ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-text-property>
+                <mcs-boolean-property property="property.value" ng-if="property.value.property_type == 'BOOLEAN'" ng-disabled="property.value.origin == 'PLUGIN_STATIC'"></mcs-boolean-property>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <a class="mics-btn mics-btn-finish" ng-click="done()">Done</a>
+            <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+        </div>
+    </div>
+
+
+</div>

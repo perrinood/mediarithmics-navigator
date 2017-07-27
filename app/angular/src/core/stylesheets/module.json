@@ -1,0 +1,6 @@
+{
+  "name": "core/stylesheets",
+  "dependencies": [
+    "restangular"
+  ]
+}

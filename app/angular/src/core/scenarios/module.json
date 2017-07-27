@@ -1,0 +1,7 @@
+{"name": "core/scenarios", "dependencies": [
+  "restangular",
+  "core/campaigns/expert",
+  "core/datamart/queries",
+  "checklist-model",
+  "contenteditable"
+]}

@@ -1,0 +1,7 @@
+{
+  "name": "core/password",
+  "dependencies": [
+    "core/common",
+    "restangular"
+  ]
+}

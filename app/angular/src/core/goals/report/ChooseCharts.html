@@ -1,0 +1,61 @@
+<div class="double-line-chart-selection">
+  <div class="modal-header">
+    <h3>Select Charts</h3>
+  </div>
+  <form>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-xs-6">
+          <table class="mics-table">
+            <thead>
+            <tr>
+              <th><span class="chart1">__</span> Chart</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key, value) in chartsList">
+              <td>
+                <label>
+                  <input ng-disabled="key == selectedCharts[1]" type="radio" ng-model="selectedCharts[0]" ng-value="key">
+                  {{value}}
+                </label>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-xs-6">
+          <table class="mics-table">
+            <thead>
+            <tr>
+              <th><span class="chart2">__</span> Chart</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key, value) in chartsList">
+              <td>
+                <label>
+                  <input ng-disabled="key == selectedCharts[0]" type="radio" ng-model="selectedCharts[1]" ng-value="key">
+                  {{value}}
+                </label>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="row">
+        <div class="col-xs-8">
+          <button class="mics-btn mics-btn-continue pull-left" ng-click="swap()">Swap</button>
+        </div>
+        <div class="col-xs-4">
+          <a ng-click="save()" class="mics-btn mics-btn-finish">Save</a>
+          <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

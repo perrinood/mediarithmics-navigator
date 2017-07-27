@@ -1,0 +1,7 @@
+<!-- dont change the controller when copying this page when creating a new sidebar  -->
+<ul class="mcs-lm-nav mcs-lm-nav-pills mcs-lm-nav-stacked" ng-controller="SidebarContentController">
+    <li ng-class="subCategory == 'display_campaigns' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/campaigns/display">Display Campaigns</a></li>
+    <li ng-class="subCategory == 'email_campaigns' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/campaigns/email">Email Campaigns</a></li>
+    <li ng-class="subCategory == 'scenarios' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/library/scenarios">Scenarios</a></li>
+    <li ng-class="subCategory == 'goals' ? 'active' : ''"><a href="#/{{currentWorkspaceId}}/library/goals">Goals</a></li>
+</ul>

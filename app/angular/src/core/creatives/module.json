@@ -1,0 +1,10 @@
+{
+  "name": "core/creatives",
+  "dependencies": [
+    "restangular",
+    "ngSanitize",
+    "core/creatives/plugins/video-ad",
+    "core/creatives/plugins/display-ad",
+    "core/creatives/plugins/email-template"
+  ]
+}

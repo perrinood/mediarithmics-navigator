@@ -1,0 +1,23 @@
+<div class="mcs-default-container " ng-controller="core/datamart/queries/IndexController">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h2>
+        <span>Audience Segment Query</span>
+        <div uib-dropdown>
+          <button ng-disabled="queryContainer === undefined" class="mics-btn mics-btn-add" type="button" uib-dropdown-toggle>
+            Save as
+          </button>
+
+          <ul uib-dropdown-menu role="menu" aria-labelledby="save as">
+            <li role="menuitem"><a ng-click="newSegment()">New segment</a></li>
+            <li role="menuitem"><a ng-click="newQueryExport()">New query export</a></li>
+          </ul>
+
+        </div>
+      </h2>
+    </div>
+
+    <mcs-query-tool ng-if="queryContainer" query-container="queryContainer" statistics-enabled="true" selected-values-enabled="true"></mcs-query-tool>
+
+  </div>
+</div>

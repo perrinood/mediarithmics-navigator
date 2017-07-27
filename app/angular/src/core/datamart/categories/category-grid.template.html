@@ -1,0 +1,20 @@
+<!-- List -->
+<div class="list-group">
+  <div class="list-group-label">Categories</div>
+
+  <div class="list-group-header-item">
+    <div class="list-group-cell-element">Name</div>
+    <div class="list-group-cell-element">Market</div>
+    <div class="list-group-cell-element">Language</div>
+  </div>
+
+  <div ng-include="elementTemplate"></div>
+</div>
+
+<!-- Pagination -->
+<div style="text-align:center">
+  <ul class="datamart pagination bordered" style="margin-top: 0;" ng-hide="pageCount == 0">
+    <li ng-class="{disabled: currentPage == 0}" ng-click="previousPage()"><a href>&laquo;</a></li>
+    <li ng-class="{disabled: currentPage == pageCount}"><a href ng-click="nextPage()">&raquo;</a></li>
+  </ul>
+</div>

@@ -1,0 +1,37 @@
+<div ng-controller="core/placementlists/EditAllController" class="mcs-default-container">
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>All Placement Lists</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class ="col-md-6">
+        <div class="dropdown" uib-dropdown>
+          <a class="mics-btn mics-btn-add" href="#/{{currentWorkspaceId}}/library/placementlists/new">
+            New Placement List
+          </a>
+        </div>
+      </div>
+    </div>
+    <table class="mics-table js-auto-hide-actions" ng-show="placementLists.length">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Technical Id</th>
+          <th>Type</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="placementList in placementLists">
+        <td>{{placementList.name}}</td>
+        <td>{{placementList.technical_name}}</td>
+        <td>{{placementList.group_type}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-action" href="#/{{currentWorkspaceId}}/library/placementlists/{{placementList.id}}">Edit</a>
+          <a class="mics-btn mics-btn-delete" ng-click="deletePlacementList(placementList, $event)">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

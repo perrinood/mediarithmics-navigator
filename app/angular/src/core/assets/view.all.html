@@ -1,0 +1,75 @@
+<div ng-controller="core/assets/ViewAllController" class="mcs-default-container">
+  <div ng-show="successMessage" class="alert alert-success">{{successMessage}}</div>
+
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Assets</h1>
+    </div>
+    <div class="mics-table-toolbar">
+      <div class="col-md-6">
+        <mcs-upload-asset upload-options="uploadOptions" plupload-options="pluploadOptions"></mcs-upload-asset>
+      </div>
+      <div class="col-md-2"></div>
+      <div class="form-group col-md-3">
+        <input class="form-control"
+               type="text"
+               ng-model="assetName"
+               placeholder="Search">
+      </div>
+
+      <div class="col-md-1">
+        <div ng-click="listMode = !listMode" class="col-md-1 btn btn-default" ng-class="{active: listMode}" style="width: 50%">
+          <i class="glyphicon glyphicon-list"></i>
+        </div>
+        <div ng-click="listMode = !listMode" class="col-md-1 btn btn-default" ng-class="{active: !listMode}" style="width: 50%">
+          <i class="glyphicon glyphicon-th-large"></i>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="!listMode" ng-repeat="asset in filteredAssets() | offset: (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <!--TODO outsideClick trigger to close the popover when user clicks outside will be available with uib-bootstrap 1.0 -->
+      <!--TODO This release should come not far away from today (24/12/2015). See https://github.com/angular-ui/bootstrap/pull/4419 -->
+      <div class="mics-large-thumbnail" uib-popover-template="'assetPopover'" popover-trigger="click outsideClick">
+        <span class="thumbnail-helper"></span>
+        <img ng-src='{{assetsUrl + asset.file_path}}'/>
+      </div>
+      <script type="text/ng-template" id="assetPopover">
+        <a class="mics-btn mics-btn-finish mics-btn-clipboard" data-clipboard-text="{{assetsUrl + asset.file_path}}">Copy Url To Clipboard</a>
+      </script>
+    </div>
+
+    <table id="assetsTable" ng-show="assets.length && listMode" class="mics-table table-hover js-auto-hide-actions">
+      <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Filename</th>
+        <th>Type</th>
+        <th>Dimension (in pixels)</th>
+        <th class="actions">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="asset in filteredAssets() | offset: (currentPageCreative - 1) * itemsPerPage | limitTo: itemsPerPage">
+        <td>
+          <div class="mics-small-thumbnail">
+            <a href="{{assetsUrl + asset.file_path}}">
+              <span class="thumbnail-helper"></span>
+              <img ng-src='{{assetsUrl + asset.file_path}}'>
+            </a>
+          </div>
+        </td>
+        <td><a href="{{assetsUrl + asset.file_path}}" target="_blank">{{asset.original_filename}}</a></td>
+        <td>{{asset.mime_type}}</td>
+        <td>{{asset.height}}x{{asset.width}}</td>
+        <td class="actions">
+          <a class="mics-btn mics-btn-finish mics-btn-clipboard" data-clipboard-text="{{assetsUrl + asset.file_path}}">Copy Url To Clipboard</a>
+          <a ng-click="archive(asset.id)" class="mics-btn mics-btn-delete">Archive</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <uib-pagination total-items="filteredAssets().length" ng-model="currentPageCreative" items-per-page="itemsPerPage" class="pagination-selector"></uib-pagination>
+</div>

@@ -1,0 +1,30 @@
+
+<div class="mcs-default-container" ng-controller="core/settings/datamarts/ViewAllController">
+
+  <div class="mcs-default-content">
+    <div class="mcs-default-heading">
+      <h1>Datamarts</h1>
+    </div>
+  </div>
+
+  <table class="mics-table js-auto-hide-actions table-hover">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Token</th>
+      <th>Creation Date</th>
+      <th class="actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="datamart in datamarts| offset : (currentPage - 1) * itemsPerPage | limitTo: itemsPerPage">
+      <td>{{datamart.id}}</td>
+      <td>{{datamart.token}}</td>
+      <td>{{datamart.creation_date | date}}</td>
+      <td class="actions">
+        <a class="mics-btn mics-btn-edit" ng-click="edit(datamart)">Edit</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

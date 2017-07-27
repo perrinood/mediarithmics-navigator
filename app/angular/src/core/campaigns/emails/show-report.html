@@ -1,0 +1,221 @@
+<div class="mcs-default-container email-campaign-report" ng-controller="core/campaigns/emails/CampaignReportController">
+  <div class="report mcs-default-content">
+    <div class="report-heading">
+      <h2>
+        <div class="pull-right">
+          <a class="mics-btn mics-btn-action" ng-click="editCampaign(campaign)">Edit Campaign</a>
+        </div>
+        <span>{{campaign.name}}</span>
+      </h2>
+    </div>
+
+    <uib-tabset class="mics-page-main-tabs">
+      <uib-tab>
+        <uib-tab-heading>
+          Overview
+        </uib-tab-heading>
+
+        <div class="report-toolbar">
+          <div class="date-export-toolbar">
+            <div class="report-date-controller">
+              <!-- date picker https://github.com/sagivf/ng-bs-daterangepicker -->
+              <form class="form-inline pull-right" role="form">
+                <input type="daterange" ng-model="date.reportDateRange" class="form-control range" format="L"
+                       ranges="reportDefaultDateRanges" opens="'left'">
+              </form>
+              <span ng-show="statisticsQuery.isRunning || exportQuery.isRunning" class="pull-right">
+                    <img src="./images/ajax-loader.gif" alt="computing..." class="inline-ajax-loader">
+                  </span>
+            </div>
+          </div>
+        </div>
+
+        <div ng-class="chartArea">
+          <div class="row">
+            <div class="col-xs-3">
+              <nvd3 options="options1" data="dataOpenedEmail"></nvd3>
+              <div class="info-details">
+                <h2 class="main-info">{{emailStats.uniq_impressions}}<br><span>Opened</span></h2>
+                <br>
+                <table class="mics-table">
+                  <tbody>
+                  <tr>
+                    <td>Total opened</td>
+                    <td>{{emailStats.impressions}}</td>
+                  </tr>
+                  <!--<tr>
+                    <td>Average time to open</td>
+                    <td>{{mainInfo.timeToOpen}}</td>
+                  </tr>-->
+                  <tr>
+                    <td>Complaints</td>
+                    <td>{{emailStats.email_complaints}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-3">
+
+              <nvd3 options="options2" data="dataClickedEmail"></nvd3>
+              <div class="info-details">
+                <h2 class="main-info">{{emailStats.uniq_clicks}}<br><span>Clicked</span></h2>
+                <br>
+                <table class="mics-table">
+                  <tbody>
+                  <tr>
+                    <td>Total clicks</td>
+                    <td>{{emailStats.clicks}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <nvd3 options="options3" data="dataUnsubscribedEmail"></nvd3>
+              <div class="info-details">
+                <table class="mics-table">
+                  <h2 class="main-info">{{emailStats.uniq_email_unsubscribed}}<br><span>Unsubscribed</span></h2>
+                  <br>
+                  <tbody>
+                  <tr>
+                    <td>Total sent</td>
+                    <td>{{emailStats.email_sent}}</td>
+                  </tr>
+                  <tr>
+                    <td>Soft bounced</td>
+                    <td>{{emailStats.email_soft_bounced}}</td>
+                  </tr>
+                  <tr>
+                    <td>Hard bounced</td>
+                    <td>{{emailStats.email_hard_bounced}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--<div class="col-xs-3">
+              <div class="side-info">
+                <p>Sent on</p>
+                <h3>{{mainInfo.date}}</h3>
+              </div>
+            </div>-->
+          </div>
+        </div>
+
+        <hr/>
+
+        <!-- Tab set: Ads, AdGroups and Sites -->
+
+        <div class="breakdown-area" ng-hide="true">
+      <div class="panel-body">
+        <uib-tabset class="breakdown">
+
+          <!--Sites Tab-->
+          <uib-tab heading="Domain">
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortSitesBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortSitesBy(info.key)" class="metrics" ng-repeat="info in sites[0].info">
+                  {{ adPerformance.getMetricName(info.key) }}
+                  <span ng-show="orderBy == info.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </uib-tab>
+
+          <!--Audience Segment Tab-->
+          <uib-tab heading="Audience Segments">
+            <h4>Targeted Segments</h4>
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortDiscoveredSegmentsBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                  {{ adPerformance.getMetricName(metric.key) }}
+                  <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="segment in targetedSegments">
+              <td>{{segment.name}}</td>
+              <td class="metrics" ng-repeat="metric in segment.metrics">
+              <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+              <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+              <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+              <span ng-if="!metric.type || metric.value == undefined"> - </span>
+              </td>
+              </tr>
+              </tbody>
+            </table>
+            <br>
+            <h4>Discovered Segments</h4>
+            <table class="mics-table">
+              <thead>
+              <tr>
+                <th ng-click="sortDiscoveredSegmentsBy('name')">
+                  Name
+                  <span ng-show="orderBy == 'name'"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+                <th ng-click="sortDiscoveredSegmentsBy(metric.key)" class="metrics" ng-repeat="metric in discoveredSegments[0].metrics">
+                  {{ adPerformance.getMetricName(metric.key) }}
+                  <span ng-show="orderBy == metric.key"><span ng-show="reverseSort">▼</span><span ng-show="!reverseSort">▲</span></span>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="segment in discoveredSegments">
+              <td>{{segment.name}}</td>
+              <td class="metrics" ng-repeat="metric in segment.metrics">
+              <span ng-if="metric.type == 'currency' && metric.value != undefined">{{metric.value | number:2 | currencyWithSymbol:campaign.currency_code}}</span>
+              <span ng-if="metric.type == 'percent' && metric.value != undefined">{{metric.value | number}} %</span>
+              <span ng-if="metric.type == 'number' && metric.value != undefined">{{metric.value | number}}</span>
+              <span ng-if="!metric.type || metric.value == undefined"> - </span>
+              </td>
+              </tr>
+              </tbody>
+            </table>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+    </div>
+     </uib-tab>
+
+      <uib-tab>
+        <uib-tab-heading>
+          Test Tools
+        </uib-tab-heading>
+        <div>
+          <div class="row">
+            <div class="col-xs-3">
+              Send a test Email
+            </div>
+            <br/>
+            <div>
+              <div class="col-xs-3">
+                <input type="email" class="form-control input-lg" placeholder="Email" ng-model="recipient.email">
+              </div>
+              <div class="col-xs-2">
+                <button ng-disabled="recipient.email.length === 0" class="mics-btn mics-btn-continue input-lg" type="button" ng-click="sendEmail()">Send</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p>{{messageSent}}</p>
+          </div>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+</div>

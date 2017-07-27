@@ -1,0 +1,38 @@
+<div class="choose-existing-ads">
+  <div class="modal-header">
+    <h3>Select templates</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="filtered-content">
+            <table class="fragment-list-creatives">
+              <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Template name</th>
+                <th>Created</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="template in emailTemplates | offset: (currentPageCreative - 1)*itemsPerPage | limitTo: itemsPerPage">
+                  <td><input type="radio" name="email-template-selection" ng-model="selected.template" ng-value="template"></td>
+                  <td>{{template.name}}</td>
+                  <td>{{template.creation_date|date:'shortDate'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <uib-pagination total-items="emailTemplates.length" ng-model="currentPage" items-per-page="itemsPerPage"></uib-pagination>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <a class="mics-btn mics-btn-finish" ng-show="selected.template" ng-click="done()">Done</a>
+    <a ng-click="cancel()" class="mics-btn mics-btn-cancel">Cancel</a>
+  </div>
+</div>

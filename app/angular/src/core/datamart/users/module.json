@@ -1,0 +1,4 @@
+{"name": "core/datamart/users", "dependencies": [
+  "core/datamart/common",
+  "core/datamart/timeline"
+]}

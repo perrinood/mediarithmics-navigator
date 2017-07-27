@@ -1,0 +1,5 @@
+{"name": "core/keywords",
+  "dependencies": [
+    "restangular"
+  ]
+}
