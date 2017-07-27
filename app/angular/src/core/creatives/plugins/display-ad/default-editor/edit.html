@@ -24,9 +24,13 @@
       <!-- Format -->
       <div class="col-md-4">
         <div mcs-form-group="full" label-for="format" label-text="Format">
-          <select ng-disabled="disabledEdition" ng-model="displayAd.format" required ng-options="iabAdSize as iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+          <select ng-show="!isCustomFormat" ng-disabled="disabledEdition" ng-model="displayAd.format" required ng-options="iabAdSize as iabAdSize for iabAdSize in iabAdSizes" id="format"></select>
+          <input ng-show="isCustomFormat" ng-model="displayAd.format" />
+          <a href="" ng-show="!isCustomFormat" ng-click="isCustomFormat = true">custom format</a>
+          <a href="" ng-show="isCustomFormat" ng-click="isCustomFormat = false">standard format</a>
         </div>
       </div>
+
     </div>
 
     <div class="row">
